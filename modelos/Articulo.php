@@ -1,0 +1,176 @@
+<?php
+//Incluímos inicialmente la conexión a la base de datos
+require "../config/Conexion.php";
+
+class Articulo
+{
+	//Implementamos nuestro constructor
+	public function __construct()
+	{
+	}
+
+	//Implementamos un método para insertar registros
+	public function insertar($idcategoria, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen)
+	{
+		$sql = "INSERT INTO articulo (idcategoria,idlocal,idmarca,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,imagen,condicion)
+		VALUES ('$idcategoria','$idlocal','$idmarca','$codigo','$codigo_producto','$nombre','$stock', '$stock_minimo','$descripcion','$imagen','1')";
+		return ejecutarConsulta($sql);
+	}
+
+	public function verificarCodigoExiste($codigo)
+	{
+		$sql = "SELECT * FROM articulo WHERE codigo = '$codigo'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El código ya existe en la tabla
+			return true;
+		}
+		// El código no existe en la tabla
+		return false;
+	}
+
+	public function verificarCodigoProductoExiste($codigo_producto)
+	{
+		$sql = "SELECT * FROM articulo WHERE codigo_producto = '$codigo_producto'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El código ya existe en la tabla
+			return true;
+		}
+		// El código no existe en la tabla
+		return false;
+	}
+
+	public function verificarStockMinimo($idarticulo, $cantidad)
+	{
+		$sql = "SELECT stock_minimo, stock FROM articulo WHERE idarticulo = '$idarticulo'";
+		$resultado = ejecutarConsulta($sql);
+
+		if (mysqli_num_rows($resultado) > 0) {
+			$row = mysqli_fetch_assoc($resultado);
+			$resultado = $row['stock'] - $cantidad;
+
+			if ($resultado > 0 && $resultado <= $row['stock_minimo']) {
+				return true; // Está dentro del rango del stock mínimo
+			} else {
+				return false; // Está fuera del rango del stock mínimo
+			}
+		} else {
+			return false; // El artículo no existe en la tabla
+		}
+	}
+
+	public function identificarStockMinimo($idarticulo)
+	{
+		$sql = "SELECT stock_minimo as stock_minimo FROM articulo WHERE idarticulo = '$idarticulo'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para editar registros
+	public function editar($idarticulo, $idcategoria, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen)
+	{
+		$sql = "UPDATE articulo SET idcategoria='$idcategoria',idlocal='$idlocal',idmarca='$idmarca',codigo='$codigo',codigo_producto='$codigo_producto',nombre='$nombre',stock='$stock',stock_minimo='$stock_minimo',descripcion='$descripcion',imagen='$imagen' WHERE idarticulo='$idarticulo'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function verificarCodigoProductoEditarExiste($codigo_producto, $idarticulo)
+	{
+		$sql = "SELECT * FROM articulo WHERE codigo_producto = '$codigo_producto' AND idarticulo != '$idarticulo'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El código de artículo ya existe en la tabla
+			return true;
+		}
+		// El código de artículo no existe en la tabla
+		return false;
+	}
+
+	//Implementamos un método para desactivar registros
+	public function desactivar($idarticulo)
+	{
+		$sql = "UPDATE articulo SET condicion='0' WHERE idarticulo='$idarticulo'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para activar registros
+	public function activar($idarticulo)
+	{
+		$sql = "UPDATE articulo SET condicion='1' WHERE idarticulo='$idarticulo'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementamos un método para eliminar registros
+	public function eliminar($idarticulo)
+	{
+		$sql = "DELETE FROM articulo WHERE idarticulo='$idarticulo'";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para mostrar los datos de un registro a modificar
+	public function mostrar($idarticulo)
+	{
+		$sql = "SELECT * FROM articulo WHERE idarticulo='$idarticulo'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	//Implementar un método para listar los registros
+	public function listar()
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros
+	public function listarPorUsuario($idusuario)
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idusuario = '$idusuario' ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros activos
+	public function listarActivos()
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,a.codigo,a.codigo_producto,a.nombre,a.stock,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros activos, su último precio y el stock (vamos a unir con el último registro de la tabla detalle_ingreso)
+	public function listarActivosVenta()
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria, m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros activos, su último precio y el stock (vamos a unir con el último registro de la tabla detalle_ingreso)
+	public function listarActivosVentaPorArticulo($idarticulo)
+	{
+		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idarticulo = $idarticulo ORDER BY a.idarticulo DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	/* ======================= SELECTS ======================= */
+
+	public function listarTodosActivos()
+	{
+		$sql = "SELECT 'categoria' AS tabla, b.idcategoria AS id, b.titulo, u.nombre AS usuario, NULL AS ruc FROM categoria b LEFT JOIN usuario u ON b.idusuario = u.idusuario WHERE b.estado='activado' AND b.eliminado='0'
+			UNION ALL
+			SELECT 'marca' AS tabla, o.idmarca AS id, o.titulo, u.nombre AS usuario, NULL AS ruc FROM marcas o LEFT JOIN usuario u ON o.idusuario = u.idusuario WHERE o.estado='activado' AND o.eliminado='0'
+			UNION ALL
+			SELECT 'local' AS tabla, l.idlocal AS id, l.titulo, u.nombre AS usuario, local_ruc AS ruc FROM locales l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idusuario <> 0 AND l.estado='activado' AND l.eliminado='0'";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarTodosActivosPorUsuario($idusuario)
+	{
+		$sql = "SELECT 'categoria' AS tabla, b.idcategoria AS id, b.titulo, u.nombre AS usuario, NULL AS ruc FROM categoria b LEFT JOIN usuario u ON b.idusuario = u.idusuario WHERE b.idusuario='$idusuario' AND b.estado='activado' AND b.eliminado='0'
+			UNION ALL
+			SELECT 'marca' AS tabla, o.idmarca AS id, o.titulo, u.nombre AS usuario, NULL AS ruc FROM marcas o LEFT JOIN usuario u ON o.idusuario = u.idusuario WHERE o.idusuario='$idusuario' AND o.estado='activado' AND o.eliminado='0'
+			UNION ALL
+			SELECT 'local' AS tabla, l.idlocal AS id, l.titulo, u.nombre AS usuario, local_ruc AS ruc FROM locales l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idusuario='$idusuario' AND l.idusuario <> 0 AND l.estado='activado' AND l.eliminado='0'
+			UNION ALL
+			SELECT 'correlativo' AS tabla, 0 AS id, (SELECT num_ticket FROM tickets ORDER BY num_ticket DESC LIMIT 1) AS correlativo, NULL AS usuario, NULL AS ruc";
+
+		return ejecutarConsulta($sql);
+	}
+}
