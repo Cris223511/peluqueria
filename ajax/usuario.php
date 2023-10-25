@@ -14,6 +14,7 @@ require_once "../modelos/Usuario.php";
 $usuario = new Usuario();
 
 $idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
+$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
 $tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 $num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
@@ -54,7 +55,7 @@ switch ($_GET["op"]) {
 					} else if ($usuarioExiste) {
 						echo "El nombre del usuario que ha ingresado ya existe.";
 					} else {
-						$rspta = $usuario->insertar($nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $_POST['permiso']);
+						$rspta = $usuario->insertar($idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $_POST['permiso']);
 						echo $rspta ? "Usuario registrado" : "Usuario no se pudo registrar.";
 					}
 				} else {
@@ -62,7 +63,7 @@ switch ($_GET["op"]) {
 					if ($usuarioExiste) {
 						echo "El nombre del usuario que ha ingresado ya existe.";
 					} else {
-						$rspta = $usuario->editar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $_POST['permiso']);
+						$rspta = $usuario->editar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $_POST['permiso']);
 						echo $rspta ? "Usuario actualizado" : "Usuario no se pudo actualizar";
 					}
 				}
@@ -146,8 +147,7 @@ switch ($_GET["op"]) {
 								((($reg->condicion) ?
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') :
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i class="fa fa-check"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
 						"1" => $reg->login,
@@ -157,8 +157,10 @@ switch ($_GET["op"]) {
 						"5" => $reg->num_documento,
 						"6" => $reg->telefono,
 						"7" => $reg->email,
-						"8" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
-						"9" => ($reg->condicion) ? '<span class="label bg-green">Activado</span>' :
+						"8" => $reg->local,
+						"9" => $reg->local_ruc,
+						"10" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+						"11" => ($reg->condicion) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -194,6 +196,22 @@ switch ($_GET["op"]) {
 					break;
 			}
 			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo . '</option>';
+		}
+		break;
+
+	case 'selectUsuarios':
+		$idusuarioSession = $_SESSION["idusuario"];
+		$cargoSession = $_SESSION["cargo"];
+
+		if ($cargoSession == "superadmin" || $cargoSession == "admin") {
+			$rspta = $usuario->listarASC();
+		} else {
+			$rspta = $usuario->listarPorUsuario($idusuarioSession);
+		}
+
+		echo '<option value="">- Seleccione -</option>';
+		while ($reg = $rspta->fetch_object()) {
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre . ' - ' . $reg->cargo . '</option>';
 		}
 		break;
 

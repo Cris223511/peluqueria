@@ -1,4 +1,5 @@
 var tabla;
+let select = $("#idlocal"); // select
 
 //Función que se ejecuta al inicio
 function init() {
@@ -19,14 +20,52 @@ function init() {
 	$('#lUsuarios').addClass("active");
 }
 
+function cargarLocalDisponible() {
+	$("#locales").empty().append("Locales disponibles(*):");
+	select.empty();
+	// Cargamos los items al select "local principal"
+	$.post("../ajax/locales.php?op=selectLocalDisponible", function (data) {
+		// console.log(data);
+		objSelects = JSON.parse(data);
+		console.log(objSelects);
+		if (objSelects.length != 0) {
+			select.html('<option value="">- Seleccione -</option>');
+
+			objSelects.locales.forEach(function (opcion) {
+				select.append('<option value="' + opcion.idlocal + '" data-local-ruc="' + opcion.local_ruc + '">' + opcion.titulo + '</option>');
+			});
+			select.selectpicker('refresh');
+		} else {
+			console.log("no hay datos =)")
+		}
+		limpiar();
+	});
+}
+
+function actualizarRUC() {
+	const selectLocal = document.getElementById("idlocal");
+	const localRUCInput = document.getElementById("local_ruc");
+	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
+
+	if (selectedOption.value !== "") {
+		const localRUC = selectedOption.getAttribute('data-local-ruc');
+		localRUCInput.value = localRUC;
+	} else {
+		localRUCInput.value = "";
+	}
+}
+
 //Función limpiar
 function limpiar() {
 	$("#nombre").val("");
+	$("#idlocal").val($("#idlocal option:first").val());
+	$("#idlocal").selectpicker('refresh');
 	$("tipo_documento").val("");
 	$("#num_documento").val("");
 	$("#direccion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
+	$("#local_ruc").val("");
 	$("#cargo").val("administrador");
 	$("#cargo").selectpicker('refresh');
 	$("#login").val("");
@@ -48,6 +87,7 @@ function mostrarform(flag) {
 		$("#listadoregistros").show();
 		$("#formularioregistros").hide();
 		$("#btnagregar").show();
+		cargarLocalDisponible();
 
 		// desenmarcamos los selects
 		$("#permisos input[type='checkbox']").each(function () {
@@ -131,32 +171,43 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
-	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-		// console.log(data);
-		data = JSON.parse(data);
-		console.log(data);
-		mostrarform(true);
+	select.empty();
+	$("#locales").empty().append("Local principal(*):");
+	$.post("../ajax/locales.php?op=selectLocalUsuario", { idusuariolocal: idusuario }, function (r) {
+		console.log(r);
+		$("#idlocal").html(r);
+		$('#idlocal').selectpicker('refresh');
 
-		$("#nombre").val(data.nombre);
-		$("#tipo_documento").val(data.tipo_documento);
-		$("#tipo_documento").trigger("change");
-		$("#tipo_documento").selectpicker('refresh');
-		$("#num_documento").val(data.num_documento);
-		$("#direccion").val(data.direccion);
-		$("#telefono").val(data.telefono);
-		$("#email").val(data.email);
-		$("#cargo").val(data.cargo);
-		$("#cargo").selectpicker('refresh');
-		$("#login").val(data.login);
-		$("#clave").val(data.clave);
-		$("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
-		$("#imagenactual").val(data.imagen);
-		$("#idusuario").val(data.idusuario);
-	});
+		$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
+			// console.log(data);
+			data = JSON.parse(data);
+			console.log(data);
+			mostrarform(true);
 
-	$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-		$("#permisos").html(r);
+			$("#nombre").val(data.nombre);
+			$("#tipo_documento").val(data.tipo_documento);
+			$("#tipo_documento").trigger("change");
+			$("#tipo_documento").selectpicker('refresh');
+			$("#num_documento").val(data.num_documento);
+			$("#direccion").val(data.direccion);
+			$("#telefono").val(data.telefono);
+			$("#email").val(data.email);
+			$("#idlocal").val(data.idlocal);
+			$("#idlocal").selectpicker('refresh');
+			$("#local_ruc").val(data.local_ruc);
+			$("#cargo").val(data.cargo);
+			$("#cargo").selectpicker('refresh');
+			$("#login").val(data.login);
+			$("#clave").val(data.clave);
+			$("#imagenmuestra").show();
+			$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
+			$("#imagenactual").val(data.imagen);
+			$("#idusuario").val(data.idusuario);
+		});
+
+		$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
+			$("#permisos").html(r);
+		});
 	});
 }
 
@@ -191,6 +242,7 @@ function eliminar(idusuario) {
 			$.post("../ajax/usuario.php?op=eliminar", { idusuario: idusuario }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
+				cargarLocalDisponible();
 			});
 		}
 	})

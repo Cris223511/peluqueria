@@ -17,13 +17,14 @@ if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['almacen'] == 1) {
+	if ($_SESSION['perfilu'] == 1) {
 		require_once "../modelos/Locales.php";
 
 		$locales = new Local();
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
+		$idlocal_session = $_SESSION['idlocal'];
 		$cargo = $_SESSION["cargo"];
 
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
@@ -101,15 +102,16 @@ if (!isset($_SESSION["nombre"])) {
 							(($reg->estado == 'activado') ?
 								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>')) :
+								(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
 						"1" => ucwords($reg->nombre),
 						"2" => ucwords($cargo_detalle),
-						"3" => $reg->titulo,
-						"4" => $reg->local_ruc,
-						"5" => $reg->descripcion,
-						"6" => $reg->fecha,
+						"3" => $reg->fecha,
+						"4" => $reg->titulo,
+						"5" => $reg->local_ruc,
+						"6" => $reg->descripcion,
 						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
