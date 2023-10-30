@@ -37,8 +37,13 @@ if (!isset($_SESSION["nombre"])) {
 						echo $rspta ? "Local registrado" : "El local no se pudo registrar";
 					}
 				} else {
-					$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion);
-					echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
+					$nombreExiste = $locales->verificarNombreEditarExiste($titulo, $idlocal);
+					if ($nombreExiste) {
+						echo "El nombre del local ya existe.";
+					} else {
+						$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion);
+						echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
+					}
 				}
 				break;
 
@@ -83,10 +88,10 @@ if (!isset($_SESSION["nombre"])) {
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" STYLE="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="width: 35px; height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
-						"1" => $reg->fecha,
-						"2" => $reg->titulo,
-						"3" => $reg->local_ruc,
-						"4" => $reg->descripcion,
+						"1" => $reg->titulo,
+						"2" => $reg->local_ruc,
+						"3" => $reg->descripcion,
+						"4" => $reg->fecha,
 						"5" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);

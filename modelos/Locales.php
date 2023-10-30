@@ -9,14 +9,27 @@ class Local
 
 	public function agregar($idusuario, $titulo, $local_ruc, $descripcion)
 	{
+		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO locales (idusuario, titulo, local_ruc, descripcion, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$titulo','$local_ruc','$descripcion', NOW(), 'activado', '0')";
+            VALUES ('$idusuario','$titulo','$local_ruc','$descripcion', SYSDATE(), 'activado', '0')";
 		return ejecutarConsulta($sql);
 	}
 
 	public function verificarNombreExiste($titulo)
 	{
 		$sql = "SELECT * FROM locales WHERE titulo = '$titulo' AND eliminado = '0'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El titulo ya existe en la tabla
+			return true;
+		}
+		// El titulo no existe en la tabla
+		return false;
+	}
+
+	public function verificarNombreEditarExiste($titulo, $idlocal)
+	{
+		$sql = "SELECT * FROM locales WHERE titulo = '$titulo' AND idlocal != '$idlocal' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El titulo ya existe en la tabla

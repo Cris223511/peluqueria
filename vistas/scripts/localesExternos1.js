@@ -2,35 +2,13 @@ var tabla;
 
 function init() {
 	mostrarform(false);
-	mostrarform2(false);
 	listar();
 
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
-
-	$("#formulario2").on("submit", function (e) {
-		guardaryeditar2(e);
-	});
-
 	$('#mPerfilUsuario').addClass("treeview active");
-	$('#lLocalesDisponibles').addClass("active");
-
-	cargarLocalesDisponibles();
-
-	$.post("../ajax/usuario.php?op=listarUsuariosActivos", function (r) {
-		console.log(r);
-		$("#idusuario_asignar").html(r);
-		$('#idusuario_asignar').selectpicker('refresh');
-	});
-}
-
-function cargarLocalesDisponibles() {
-	$.post("../ajax/localesDisponibles.php?op=selectLocalDisponible", function (r) {
-		console.log(r);
-		$("#idlocal_asignar").html(r);
-		$('#idlocal_asignar').selectpicker('refresh');
-	});
+	$('#lLocalesExternos').addClass("active");
 }
 
 function limpiar() {
@@ -38,12 +16,6 @@ function limpiar() {
 	$("#titulo").val("");
 	$("#local_ruc").val("");
 	$("#descripcion").val("");
-
-	$("#idlocal_asignar").val($("#idlocal_asignar option:first").val());
-	$("#idlocal_asignar").selectpicker('refresh');
-
-	$("#idusuario_asignar").val($("#idusuario_asignar option:first").val());
-	$("#idusuario_asignar").selectpicker('refresh');
 }
 
 function mostrarform(flag) {
@@ -53,41 +25,17 @@ function mostrarform(flag) {
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
-		$("#btnasignar").hide();
 	}
 	else {
 		$("#listadoregistros").show();
 		$("#formularioregistros").hide();
 		$("#btnagregar").show();
-		$("#btnasignar").show();
-	}
-}
-
-function mostrarform2(flag) {
-	limpiar();
-	if (flag) {
-		$("#listadoregistros").hide();
-		$("#formularioasignacion").show();
-		$("#btnGuardar2").prop("disabled", false);
-		$("#btnagregar").hide();
-		$("#btnasignar").hide();
-	}
-	else {
-		$("#listadoregistros").show();
-		$("#formularioasignacion").hide();
-		$("#btnagregar").show();
-		$("#btnasignar").show();
 	}
 }
 
 function cancelarform() {
 	limpiar();
 	mostrarform(false);
-}
-
-function cancelarform2() {
-	limpiar();
-	mostrarform2(false);
 }
 
 function listar() {
@@ -104,7 +52,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/localesDisponibles.php?op=listar',
+				url: '../ajax/localesExternos.php?op=listar',
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -125,7 +73,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -142,7 +90,7 @@ function guardaryeditar(e) {
 	}
 
 	$.ajax({
-		url: "../ajax/localesDisponibles.php?op=guardaryeditar",
+		url: "../ajax/localesExternos.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -158,35 +106,12 @@ function guardaryeditar(e) {
 			bootbox.alert(datos);
 			mostrarform(false);
 			tabla.ajax.reload();
-			cargarLocalesDisponibles();
-		}
-	});
-}
-
-function guardaryeditar2(e) {
-	e.preventDefault();
-	$("#btnGuardar2").prop("disabled", true);
-	var formData = new FormData($("#formulario2")[0]);
-
-	$.ajax({
-		url: "../ajax/localesDisponibles.php?op=guardaryeditar2",
-		type: "POST",
-		data: formData,
-		contentType: false,
-		processData: false,
-
-		success: function (datos) {
-			limpiar();
-			bootbox.alert(datos);
-			mostrarform2(false);
-			tabla.ajax.reload();
-			cargarLocalesDisponibles();
 		}
 	});
 }
 
 function mostrar(idlocal) {
-	$.post("../ajax/localesDisponibles.php?op=mostrar", { idlocal: idlocal }, function (data, status) {
+	$.post("../ajax/localesExternos.php?op=mostrar", { idlocal: idlocal }, function (data, status) {
 		// console.log(data);
 		data = JSON.parse(data);
 		mostrarform(true);
@@ -203,10 +128,9 @@ function mostrar(idlocal) {
 function desactivar(idlocal) {
 	bootbox.confirm("¿Está seguro de desactivar el local?", function (result) {
 		if (result) {
-			$.post("../ajax/localesDisponibles.php?op=desactivar", { idlocal: idlocal }, function (e) {
+			$.post("../ajax/localesExternos.php?op=desactivar", { idlocal: idlocal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
-				cargarLocalesDisponibles();
 			});
 		}
 	})
@@ -215,10 +139,9 @@ function desactivar(idlocal) {
 function activar(idlocal) {
 	bootbox.confirm("¿Está seguro de activar el local?", function (result) {
 		if (result) {
-			$.post("../ajax/localesDisponibles.php?op=activar", { idlocal: idlocal }, function (e) {
+			$.post("../ajax/localesExternos.php?op=activar", { idlocal: idlocal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
-				cargarLocalesDisponibles();
 			});
 		}
 	})
@@ -227,10 +150,9 @@ function activar(idlocal) {
 function eliminar(idlocal) {
 	bootbox.confirm("¿Estás seguro de eliminar el local?", function (result) {
 		if (result) {
-			$.post("../ajax/localesDisponibles.php?op=eliminar", { idlocal: idlocal }, function (e) {
+			$.post("../ajax/localesExternos.php?op=eliminar", { idlocal: idlocal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
-				cargarLocalesDisponibles();
 			});
 		}
 	})

@@ -50,6 +50,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th>Opciones</th>
+                    <th>Dueño</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th style="width: 20%; min-width: 220px; white-space: nowrap;">Ubicación del local</th>
@@ -65,6 +66,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
+                    <th>Dueño</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
@@ -172,7 +174,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articulo3.js"></script>
+  <script type="text/javascript" src="scripts/articulo6.js"></script>
 <?php
 }
 ob_end_flush();

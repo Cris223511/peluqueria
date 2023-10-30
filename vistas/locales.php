@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['almacen'] == 1) {
+  if ($_SESSION['perfilu'] == 1) {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                 <h1 class="box-title">locales <!-- Configuración de locales -->
+                <h1 class="box-title">Mis locales <!-- Configuración de locales -->
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
@@ -33,7 +33,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th>Opciones</th>
-                    <th style="white-space: nowrap;">Agregado por</th>
+                    <th style="white-space: nowrap;">Dueño</th>
                     <th>Cargo</th>
                     <th>Local</th>
                     <th style="white-space: nowrap;">N° RUC</th>
@@ -45,7 +45,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
-                    <th>Agregado por</th>
+                    <th>Dueño</th>
                     <th>Cargo</th>
                     <th>Local</th>
                     <th>N° RUC</th>
@@ -88,7 +88,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/locales14.js"></script>
+  <script type="text/javascript" src="scripts/locales16.js"></script>
 <?php
 }
 ob_end_flush();

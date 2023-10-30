@@ -14,13 +14,15 @@ class Usuario
 		// Primero, verifique si el nombre de usuario ya existe en la tabla
 		$nombreExiste = $this->verificarNombreExiste($login);
 
-		if ($nombreExiste) {
+		if ($nombreExiste)
 			// El nombre de usuario ya existe, no se puede insertar
 			return false;
-		}
+
+		if (empty($imagen))
+			$imagen = "default.png";
 
 		$sql1 = "INSERT INTO usuario (idlocal,nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,clave,imagen,condicion,eliminado)
-		VALUES ('$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen','1','0')";
+					VALUES ('$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen','1','0')";
 		//return ejecutarConsulta($sql1);
 		$idusuarionew = ejecutarConsulta_retornarID($sql1);
 
@@ -289,7 +291,7 @@ class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login, $clave)
 	{
-		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,condicion,eliminado FROM usuario WHERE login='$login' AND clave='$clave'";
+		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,condicion,eliminado FROM usuario WHERE login='$login' AND clave='$clave' AND eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 }

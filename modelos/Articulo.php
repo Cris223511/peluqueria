@@ -10,10 +10,10 @@ class Articulo
 	}
 
 	//Implementamos un método para insertar registros
-	public function insertar($idcategoria, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen)
+	public function insertar($idusuario, $idcategoria, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen)
 	{
-		$sql = "INSERT INTO articulo (idcategoria,idlocal,idmarca,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,imagen,condicion)
-		VALUES ('$idcategoria','$idlocal','$idmarca','$codigo','$codigo_producto','$nombre','$stock', '$stock_minimo','$descripcion','$imagen','1')";
+		$sql = "INSERT INTO articulo (idusuario,idcategoria,idlocal,idmarca,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,imagen,condicion)
+		VALUES ('$idusuario','$idcategoria','$idlocal','$idmarca','$codigo','$codigo_producto','$nombre','$stock', '$stock_minimo','$descripcion','$imagen','1')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -116,14 +116,14 @@ class Articulo
 	//Implementar un método para listar los registros
 	public function listar()
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listarPorUsuario($idusuario)
 	{
-		$sql = "SELECT a.idarticulo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idusuario = '$idusuario' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,(SELECT precio_venta FROM detalle_ingreso WHERE idarticulo=a.idarticulo order by iddetalle_ingreso desc limit 0,1) as precio_venta,a.descripcion,a.imagen,a.condicion FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idusuario = '$idusuario' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 

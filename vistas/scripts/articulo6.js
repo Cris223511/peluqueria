@@ -14,7 +14,7 @@ function init() {
 	$('#lArticulos').addClass("active");
 
 	$.post("../ajax/articulo.php?op=listarTodosActivos", function (data) {
-		// console.log(data)
+		console.log(data)
 		const obj = JSON.parse(data);
 		console.log(obj);
 
@@ -34,9 +34,9 @@ function init() {
 					select.html('<option value="">- Seleccione -</option>');
 					obj[atributo].forEach(function (opcion) {
 						if (atributo != "local") {
-							select.append('<option value="' + opcion.id + '">' + opcion.titulo + ' - ' + opcion.usuario + '</option>');
+							select.append('<option value="' + opcion.id + '">' + opcion.titulo + '</option>');
 						} else {
-							select.append('<option value="' + opcion.id + '" data-local-ruc="' + opcion.ruc + '">' + opcion.titulo + ' - ' + opcion.usuario + '</option>');
+							select.append('<option value="' + opcion.id + '" data-local-ruc="' + opcion.ruc + '">' + opcion.titulo + '</option>');
 						}
 					});
 					select.selectpicker('refresh');
@@ -83,8 +83,8 @@ function limpiar() {
 	$("#idcategoria").selectpicker('refresh');
 	$("#idlocal").val($("#idlocal option:first").val());
 	$("#idlocal").selectpicker('refresh');
-	$("#idmarcas").val($("#idmarcas option:first").val());
-	$("#idmarcas").selectpicker('refresh');
+	$("#idmarca").val($("#idmarca option:first").val());
+	$("#idmarca").selectpicker('refresh');
 	actualizarRUC();
 }
 
@@ -152,7 +152,7 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -194,7 +194,7 @@ function guardaryeditar(e) {
 
 function mostrar(idarticulo) {
 	mostrarform(true);
-	
+
 	$(".caja1").show();
 	$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
 	$(".botones").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
@@ -207,8 +207,8 @@ function mostrar(idarticulo) {
 		$('#idcategoria').selectpicker('refresh');
 		$("#idlocal").val(data.idlocal);
 		$('#idlocal').selectpicker('refresh');
-		$("#idmarcas").val(data.idmarcas);
-		$('#idmarcas').selectpicker('refresh');
+		$("#idmarca").val(data.idmarca);
+		$('#idmarca').selectpicker('refresh');
 		$("#codigo").val(data.codigo);
 		$("#codigo_producto").val(data.codigo_producto);
 		$("#nombre").val(data.nombre);

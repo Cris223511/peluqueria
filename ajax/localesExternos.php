@@ -18,9 +18,9 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
 	if ($_SESSION['perfilu'] == 1) {
-		require_once "../modelos/Locales.php";
+		require_once "../modelos/LocalesExternos.php";
 
-		$locales = new Local();
+		$locales = new LocalExterno();
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
@@ -76,13 +76,11 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				$rspta = $locales->listarPorUsuario($idusuario);
-
-				// if ($cargo == "superadmin") {
-				// 	$rspta = $locales->listar();
-				// } else {
-				// 	$rspta = $locales->listarPorUsuario($idusuario);
-				// }
+				if ($cargo == "superadmin") {
+					$rspta = $locales->listar();
+				} else {
+					$rspta = $locales->listarPorUsuario($idusuario);
+				}
 
 				$data = array();
 

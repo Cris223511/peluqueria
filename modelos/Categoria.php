@@ -9,8 +9,9 @@ class Categoria
 
 	public function agregar($idusuario, $titulo, $descripcion)
 	{
+		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO categoria (idusuario, titulo, descripcion, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$titulo', '$descripcion', NOW(), 'activado','0')";
+            VALUES ('$idusuario','$titulo', '$descripcion', SYSDATE(), 'activado','0')";
 		return ejecutarConsulta($sql);
 	}
 

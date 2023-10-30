@@ -37,13 +37,8 @@ switch ($_GET["op"]) {
 				} else {
 					$ext = explode(".", $_FILES["imagen"]["name"]);
 					if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-						if (isset($imagen)) {
-							$imagen = round(microtime(true)) . '.' . end($ext);
-							move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
-						} else {
-							$imagen = "default.jpg";
-							move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
-						}
+						$imagen = round(microtime(true)) . '.' . end($ext);
+						move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/usuarios/" . $imagen);
 					}
 				}
 
@@ -255,6 +250,7 @@ switch ($_GET["op"]) {
 
 			//Declaramos las variables de sesión
 			$_SESSION['idusuario'] = $fetch->idusuario;
+			$_SESSION['idlocal'] = $fetch->idlocal;
 			$_SESSION['nombre'] = $fetch->nombre;
 			$_SESSION['imagen'] = $fetch->imagen;
 			$_SESSION['login'] = $fetch->login;

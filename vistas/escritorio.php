@@ -29,7 +29,7 @@ if (!isset($_SESSION["nombre"])) {
     </div>
   <?php
   } else {
-    header("Location: login.html");
+    require 'noacceso.php';
   }
 
   require 'footer.php';

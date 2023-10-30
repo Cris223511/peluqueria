@@ -258,6 +258,14 @@ $cargo_login = $_SESSION['cargo_detalle'];
             </a>
             <ul class="treeview-menu">
               <li id="lConfUsuario"><a href="confUsuario.php"><i class="fa fa-circle-o"></i> Configuración de perfil</a></li>
+              ';
+            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
+              echo '
+              <li id="lLocalesExternos"><a href="localesExternos.php"><i class="fa fa-circle-o"></i> Locales externos</a></li>
+              <li id="lLocalesDisponibles"><a href="localesDisponibles.php"><i class="fa fa-circle-o"></i> Locales disponibles</a></li>
+              ';
+            }
+            echo '
             </ul>
           </li>';
           }
