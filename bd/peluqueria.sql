@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-10-2023 a las 16:32:55
+-- Tiempo de generación: 30-10-2023 a las 20:33:47
 -- Versión del servidor: 10.4.28-MariaDB
--- Versión de PHP: 8.2.4
+-- Versión de PHP: 8.0.28
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -29,6 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `articulo` (
   `idarticulo` int(11) NOT NULL,
+  `idusuario` int(11) NOT NULL,
   `idcategoria` int(11) NOT NULL,
   `idlocal` int(11) NOT NULL,
   `idmarca` int(11) NOT NULL,
@@ -46,13 +47,13 @@ CREATE TABLE `articulo` (
 -- Volcado de datos para la tabla `articulo`
 --
 
-INSERT INTO `articulo` (`idarticulo`, `idcategoria`, `idlocal`, `idmarca`, `codigo`, `codigo_producto`, `nombre`, `stock`, `stock_minimo`, `descripcion`, `imagen`, `condicion`) VALUES
-(1, 1, 1, 1, '7 75 6631 5 0049 8', '2344232348567', 'RETEN DE EMBOLO', 0, 10, '', '1627845886.png', 1),
-(2, 1, 2, 1, '7 75 5328 6 0088 1', '2345345893452', 'RETEN DE EMBOLO', 43, 10, '', '1627845886.png', 1),
-(3, 1, 2, 1, '7 75 9222 9 0033 9', '6645456821243', 'RETEN DE EMBOLO', 38, 10, '', '1627845886.png', 1),
-(4, 1, 1, 1, '7 75 3137 1 0057 8', '2343454566456', 'RETEN DE EMBOLO', 2, 10, '', '1627845886.png', 1),
-(5, 1, 1, 1, '7 75 7982 6 0018 8', '2866038989324', 'RETEN DE EMBOLO', 3, 10, '', '1627845886.png', 1),
-(6, 2, 2, 0, '7 75 9395 6 0093 1', '6645678756', 'productonuevo', 34, 10, 'producto de buena calidad', '1697897579.jpg', 1);
+INSERT INTO `articulo` (`idarticulo`, `idusuario`, `idcategoria`, `idlocal`, `idmarca`, `codigo`, `codigo_producto`, `nombre`, `stock`, `stock_minimo`, `descripcion`, `imagen`, `condicion`) VALUES
+(1, 1, 1, 1, 1, '7 75 6631 5 0049 8', '2344232348567', 'RETEN DE EMBOLO', 0, 10, '', '1627845886.png', 1),
+(2, 1, 1, 2, 1, '7 75 5328 6 0088 1', '2345345893452', 'RETEN DE EMBOLO', 43, 10, '', '1627845886.png', 1),
+(3, 1, 1, 2, 1, '7 75 9222 9 0033 9', '6645456821243', 'RETEN DE EMBOLO', 38, 10, '', '1627845886.png', 1),
+(4, 3, 1, 1, 1, '7 75 3137 1 0057 8', '2343454566456', 'RETEN DE EMBOLO', 2, 10, '', '1627845886.png', 1),
+(5, 2, 1, 1, 1, '7 75 7982 6 0018 8', '2866038989324', 'RETEN DE EMBOLO', 3, 10, '', '1627845886.png', 1),
+(7, 2, 1, 7, 1, '7 75 7057 8 0019 6', '6645678756', 'asdasd', 20, 25, 'asdasdasd', '1698694256.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -78,6 +79,26 @@ INSERT INTO `categoria` (`idcategoria`, `idusuario`, `titulo`, `descripcion`, `f
 (1, 1, 'tecnologia', 'materiales tecnológicos para el corte de cabello.', '2023-10-18 19:07:28', 'activado', 0),
 (2, 1, 'cortes', 'materiales para el corte de cabello.', '2023-10-17 19:07:31', 'activado', 0),
 (3, 1, 'asdasd', 'asdads', '2023-10-19 14:30:24', 'activado', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `clientes`
+--
+
+CREATE TABLE `clientes` (
+  `idcliente` int(11) NOT NULL,
+  `idlocal` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `tipo_documento` varchar(20) NOT NULL,
+  `num_documento` varchar(20) NOT NULL,
+  `direccion` varchar(70) NOT NULL,
+  `telefono` varchar(20) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `fecha_nac` date NOT NULL,
+  `estado` varchar(20) NOT NULL,
+  `eliminado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -179,8 +200,9 @@ CREATE TABLE `locales` (
 
 INSERT INTO `locales` (`idlocal`, `idusuario`, `titulo`, `local_ruc`, `descripcion`, `fecha_hora`, `estado`, `eliminado`) VALUES
 (1, 1, 'Local de Chorrillos, Lima', '55849586943', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 13:27:21', 'activado', 0),
-(2, 1, 'Local de Los Olivos, Lima', '78549384595', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 12:33:38', 'activado', 0),
-(3, 1, 'Local de Ate Vitarte, Lima', '44839384560', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 11:40:28', 'activado', 0);
+(2, 2, 'Local de Los Olivos, Lima', '78549384595', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 12:33:38', 'activado', 0),
+(3, 3, 'Local de Ate Vitarte, Lima', '44839384560', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 11:40:28', 'activado', 0),
+(7, 3, 'Local nuevo', '12342343243', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-25 19:18:30', 'activado', 0);
 
 -- --------------------------------------------------------
 
@@ -206,8 +228,7 @@ INSERT INTO `marcas` (`idmarca`, `idusuario`, `titulo`, `descripcion`, `fecha_ho
 (1, 1, 'nike', 'la mejor marca del Peru', '2023-10-18 18:50:53', 'activado', 0),
 (2, 1, 'cielo', 'agua hidratante', '2023-10-18 13:24:15', 'activado', 0),
 (3, 1, 'mateo', 'la mejor marca de agua del peru', '2023-10-17 08:26:52', 'activado', 0),
-(4, 1, 'adiddas', 'zapatillas a buen precio', '2023-10-17 14:36:51', 'activado', 0),
-(5, 2, 'ASDASD', 'ASDASD', '2023-10-19 11:07:17', 'activado', 1);
+(4, 1, 'adiddas', 'zapatillas a buen precio', '2023-10-17 14:36:51', 'activado', 0);
 
 -- --------------------------------------------------------
 
@@ -228,7 +249,28 @@ INSERT INTO `permiso` (`idpermiso`, `nombre`) VALUES
 (1, 'Escritorio'),
 (2, 'Acceso'),
 (3, 'Perfil usuario'),
-(4, 'Almacén');
+(4, 'Almacén'),
+(5, 'Personas');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `trabajadores`
+--
+
+CREATE TABLE `trabajadores` (
+  `idtrabajador` int(11) NOT NULL,
+  `idlocal` int(11) NOT NULL,
+  `nombre` varchar(50) NOT NULL,
+  `tipo_documento` varchar(20) NOT NULL,
+  `num_documento` varchar(20) NOT NULL,
+  `direccion` varchar(70) NOT NULL,
+  `telefono` varchar(20) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `fecha_nac` date NOT NULL,
+  `estado` varchar(20) NOT NULL,
+  `eliminado` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -258,9 +300,9 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`idusuario`, `idlocal`, `nombre`, `tipo_documento`, `num_documento`, `direccion`, `telefono`, `email`, `cargo`, `login`, `clave`, `imagen`, `condicion`, `eliminado`) VALUES
-(1, 0, 'christopher PS', 'DNI', '66559348', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'superadmin', 'admin', 'admin', '1487132068.jpg', 1, 0),
-(2, 0, 'julio RH', 'DNI', '66448963', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'admin', 'admin2', 'admin2', '1487132068.jpg', 1, 0),
-(3, 0, 'luis FG', 'DNI', '54845893', 'Lima, La Molina, Perú', '931742904', 'cajero@cajero.com', 'admin', 'cajero', 'cajero', '1487132068.jpg', 1, 0);
+(1, 1, 'christopher PS', 'DNI', '66559348', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'superadmin', 'admin', 'admin', '1487132068.jpg', 1, 0),
+(2, 2, 'julio RH', 'DNI', '66448963', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'admin', 'admin2', 'admin2', '1487132068.jpg', 1, 0),
+(3, 3, 'luis FG', 'DNI', '54845893', 'Lima, La Molina, Perú', '931742904', 'cajero@cajero.com', 'cajero', 'cajero', 'cajero', '1487132068.jpg', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -289,7 +331,25 @@ INSERT INTO `usuario_permiso` (`idusuario_permiso`, `idusuario`, `idpermiso`) VA
 (8, 2, 4),
 (21, 3, 1),
 (22, 3, 3),
-(23, 3, 4);
+(23, 3, 4),
+(24, 6, 1),
+(25, 6, 2),
+(26, 6, 3),
+(27, 6, 4),
+(28, 7, 1),
+(29, 7, 2),
+(30, 7, 3),
+(31, 7, 4),
+(32, 8, 1),
+(33, 8, 2),
+(34, 8, 3),
+(35, 8, 4),
+(36, 8, 5),
+(37, 9, 1),
+(38, 9, 2),
+(39, 9, 3),
+(40, 9, 4),
+(41, 9, 5);
 
 --
 -- Índices para tablas volcadas
@@ -303,7 +363,8 @@ ALTER TABLE `articulo`
   ADD KEY `fk_articulo_categoria_idx` (`idcategoria`),
   ADD KEY `idalmacen` (`idlocal`),
   ADD KEY `idmarcas` (`idmarca`),
-  ADD KEY `idmarca` (`idmarca`);
+  ADD KEY `idmarca` (`idmarca`),
+  ADD KEY `idusuario` (`idusuario`);
 
 --
 -- Indices de la tabla `categoria`
@@ -311,6 +372,13 @@ ALTER TABLE `articulo`
 ALTER TABLE `categoria`
   ADD PRIMARY KEY (`idcategoria`),
   ADD KEY `idusuario` (`idusuario`);
+
+--
+-- Indices de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  ADD PRIMARY KEY (`idcliente`),
+  ADD KEY `idlocal` (`idlocal`);
 
 --
 -- Indices de la tabla `detalle_ingreso`
@@ -341,6 +409,13 @@ ALTER TABLE `permiso`
   ADD PRIMARY KEY (`idpermiso`);
 
 --
+-- Indices de la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  ADD PRIMARY KEY (`idtrabajador`),
+  ADD KEY `idlocal` (`idlocal`);
+
+--
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
@@ -361,13 +436,19 @@ ALTER TABLE `usuario_permiso`
 -- AUTO_INCREMENT de la tabla `articulo`
 --
 ALTER TABLE `articulo`
-  MODIFY `idarticulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `idarticulo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `categoria`
 --
 ALTER TABLE `categoria`
   MODIFY `idcategoria` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT de la tabla `clientes`
+--
+ALTER TABLE `clientes`
+  MODIFY `idcliente` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_ingreso`
@@ -379,7 +460,7 @@ ALTER TABLE `detalle_ingreso`
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
-  MODIFY `idlocal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idlocal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
@@ -391,19 +472,25 @@ ALTER TABLE `marcas`
 -- AUTO_INCREMENT de la tabla `permiso`
 --
 ALTER TABLE `permiso`
-  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `idpermiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `trabajadores`
+--
+ALTER TABLE `trabajadores`
+  MODIFY `idtrabajador` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `idusuario` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario_permiso`
 --
 ALTER TABLE `usuario_permiso`
-  MODIFY `idusuario_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `idusuario_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
