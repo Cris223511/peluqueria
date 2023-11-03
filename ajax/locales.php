@@ -76,13 +76,11 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				$rspta = $locales->listarPorUsuario($idusuario);
-
-				// if ($cargo == "superadmin") {
-				// 	$rspta = $locales->listar();
-				// } else {
-				// 	$rspta = $locales->listarPorUsuario($idusuario);
-				// }
+				if ($cargo == "superadmin" || $cargo == "admin") {
+					$rspta = $locales->listar();
+				} else {
+					$rspta = $locales->listarPorUsuario($idusuario);
+				}
 
 				$data = array();
 
@@ -105,18 +103,57 @@ if (!isset($_SESSION["nombre"])) {
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							(($reg->estado == 'activado') ?
-								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
-						"1" => ucwords($reg->nombre),
-						"2" => ucwords($cargo_detalle),
-						"3" => $reg->titulo,
-						"4" => $reg->local_ruc,
-						"5" => $reg->descripcion,
+						"0" => ($cargo == "admin") ?
+							('<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+								(($reg->estado == 'activado') ?
+									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') : ('')) .
+									(('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>')) .
+									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>') : ('')) :
+									(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
+									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>') : (''))) . '</div>')
+							: ('<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+								(($reg->estado == 'activado') ?
+									('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
+									(('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>')) .
+									('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>') :
+									(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
+									('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>')) . '</div>'),
+						"1" => $reg->titulo,
+						"2" => $reg->local_ruc,
+						"3" => $reg->descripcion,
+						"4" => ucwords($reg->nombre),
+						"5" => ucwords($cargo_detalle),
+						"6" => $reg->fecha,
+						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+							'<span class="label bg-red">Desactivado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1,
+					"iTotalRecords" => count($data),
+					"iTotalDisplayRecords" => count($data),
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+				break;
+
+			case 'listarTrabajadores':
+
+				$idlocal2 = isset($_GET["idlocal"]) ? limpiarCadena($_GET["idlocal"]) : "";
+
+				$rspta = $locales->listarTrabajadores($idlocal2);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$data[] = array(
+						"0" => ucwords($reg->nombre),
+						"1" => $reg->tipo_documento,
+						"2" => $reg->num_documento,
+						"3" => $reg->direccion,
+						"4" => $reg->telefono,
+						"5" => $reg->email,
 						"6" => $reg->fecha,
 						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
@@ -154,6 +191,14 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+			case 'selectLocales':
+				$rspta = $locales->listarActivos();
+
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
+				}
 				break;
 
 			case 'selectLocalUsuario':

@@ -14,10 +14,22 @@ class Marca
             VALUES ('$idusuario','$titulo', '$descripcion', SYSDATE(), 'activado','0')";
 		return ejecutarConsulta($sql);
 	}
- 
+
 	public function verificarNombreExiste($titulo)
 	{
 		$sql = "SELECT * FROM marcas WHERE titulo = '$titulo' AND eliminado = '0'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El titulo ya existe en la tabla
+			return true;
+		}
+		// El titulo no existe en la tabla
+		return false;
+	}
+
+	public function verificarNombreEditarExiste($titulo, $idmarca)
+	{
+		$sql = "SELECT * FROM marcas WHERE titulo = '$titulo' AND idmarca != '$idmarca' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El titulo ya existe en la tabla

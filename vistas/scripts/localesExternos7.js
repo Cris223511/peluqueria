@@ -1,14 +1,46 @@
 var tabla;
 
+var globalIdlocal;
+var globalNombre;
+var globalTitulo;
+
 function init() {
 	mostrarform(false);
+	mostrarform2(false);
 	listar();
 
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
+
+	$("#formulario2").on("submit", function (e) {
+		guardaryeditar2(e);
+	});
+
 	$('#mPerfilUsuario').addClass("treeview active");
 	$('#lLocalesExternos').addClass("active");
+
+	actualizarSelectLocales();
+
+	$.post("../ajax/usuario.php?op=listarUsuariosActivos", function (r) {
+		console.log(r);
+		$("#idusuario_asignar").html(r);
+		$('#idusuario_asignar').selectpicker('refresh');
+	});
+}
+
+function actualizarSelectLocales() {
+	$.post("../ajax/locales.php?op=selectLocales", function (r) {
+		console.log(r);
+		$("#idlocal_actual").html(r);
+		$('#idlocal_actual').selectpicker('refresh');
+	});
+
+	$.post("../ajax/localesDisponibles.php?op=selectLocalDisponible", function (r) {
+		console.log(r);
+		$("#idlocal_asignar").html(r);
+		$('#idlocal_asignar').selectpicker('refresh');
+	});
 }
 
 function limpiar() {
@@ -16,6 +48,12 @@ function limpiar() {
 	$("#titulo").val("");
 	$("#local_ruc").val("");
 	$("#descripcion").val("");
+
+	$("#idlocal_asignar").val($("#idlocal_asignar option:first").val());
+	$("#idlocal_asignar").selectpicker('refresh');
+
+	$("#idusuario_asignar").val($("#idusuario_asignar option:first").val());
+	$("#idusuario_asignar").selectpicker('refresh');
 }
 
 function mostrarform(flag) {
@@ -33,9 +71,30 @@ function mostrarform(flag) {
 	}
 }
 
+function mostrarform2(flag) {
+	limpiar();
+	if (flag) {
+		$("#listadoregistros").hide();
+		$("#formularioasignacion").show();
+		$("#btnGuardar2").prop("disabled", false);
+		$("#btnagregar").hide();
+		$("#btnasignar").hide();
+	} else {
+		$("#listadoregistros").show();
+		$("#formularioasignacion").hide();
+		$("#btnagregar").show();
+		$("#btnasignar").show();
+	}
+}
+
 function cancelarform() {
 	limpiar();
 	mostrarform(false);
+}
+
+function cancelarform2() {
+	limpiar();
+	mostrarform2(false);
 }
 
 function listar() {
@@ -73,7 +132,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -110,6 +169,45 @@ function guardaryeditar(e) {
 	});
 }
 
+function guardaryeditar2(e) {
+	e.preventDefault();
+
+	var localSeleccionado = $("#idlocal_asignar option:selected").text();
+	// console.log(localSeleccionado);
+
+	bootbox.confirm("¿Está seguro de reasignar el local <strong>" + globalTitulo + "</strong> por el local <strong>" + localSeleccionado + "</strong> al usuario <strong>" + globalNombre + "</strong>?, esta acción reemplazará al local actual del usuario.", function (result) {
+		if (result) {
+			$("#btnGuardar2").prop("disabled", true);
+			$("#idusuario_asignar").prop("disabled", false);
+			var formData = new FormData($("#formulario2")[0]);
+			$("#idusuario_asignar").prop("disabled", true);
+
+			// for (var pair of formData.entries()) {
+			// 	console.log(pair[0] + ': ' + pair[1]);
+			// }
+
+			// Agrega los valores al objeto formData
+			formData.append("idlocal", globalIdlocal);
+
+			$.ajax({
+				url: "../ajax/localesExternos.php?op=guardaryeditar2",
+				type: "POST",
+				data: formData,
+				contentType: false,
+				processData: false,
+
+				success: function (datos) {
+					limpiar();
+					bootbox.alert(datos);
+					mostrarform2(false);
+					tabla.ajax.reload();
+					actualizarSelectLocales();
+				}
+			});
+		}
+	})
+}
+
 function mostrar(idlocal) {
 	$.post("../ajax/localesExternos.php?op=mostrar", { idlocal: idlocal }, function (data, status) {
 		// console.log(data);
@@ -122,6 +220,29 @@ function mostrar(idlocal) {
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idlocal").val(data.idlocal);
+	})
+}
+
+function mostrar2(idlocal, nombre, titulo) {
+	$.post("../ajax/localesExternos.php?op=mostrar", { idlocal: idlocal }, function (data, status) {
+		// console.log(data);
+		data = JSON.parse(data);
+		mostrarform2(true);
+
+		console.log(data);
+
+		globalIdlocal = idlocal;
+		globalNombre = nombre;
+		globalTitulo = titulo;
+
+		// console.log(idlocal);
+		// console.log(nombre);
+		// console.log(titulo);
+
+		$("#idlocal_actual").val(data.idlocal);
+		$("#idlocal_actual").selectpicker('refresh');
+		$("#idusuario_asignar").val(data.idusuario);
+		$("#idusuario_asignar").selectpicker('refresh');
 	})
 }
 

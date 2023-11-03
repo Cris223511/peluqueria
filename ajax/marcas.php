@@ -36,8 +36,13 @@ if (!isset($_SESSION["nombre"])) {
 						echo $rspta ? "Marca registrada" : "La marca no se pudo registrar";
 					}
 				} else {
-					$rspta = $marcas->editar($idmarca, $titulo, $descripcion);
-					echo $rspta ? "Marca actualizada" : "La marca no se pudo actualizar";
+					$nombreExiste = $marcas->verificarNombreEditarExiste($titulo, $idmarca);
+					if ($nombreExiste) {
+						echo "El nombre de la marca ya existe.";
+					} else {
+						$rspta = $marcas->editar($idmarca, $titulo, $descripcion);
+						echo $rspta ? "Marca actualizada" : "La marca no se pudo actualizar";
+					}
 				}
 				break;
 
@@ -97,10 +102,10 @@ if (!isset($_SESSION["nombre"])) {
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmarca . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmarca . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmarca . ')"><i class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmarca . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
-						"1" => ucwords($reg->nombre),
-						"2" => ucwords($cargo_detalle),
-						"3" => $reg->titulo,
-						"4" => $reg->descripcion,
+						"1" => $reg->titulo,
+						"2" => $reg->descripcion,
+						"3" => ucwords($reg->nombre),
+						"4" => ucwords($cargo_detalle),
 						"5" => $reg->fecha,
 						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'

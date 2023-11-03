@@ -277,20 +277,19 @@ function generarNumero(max, min) {
 	return numeroFormateado;
 }
 
-
-//función para generar el código de barras
+// Función para generar el código de barras
 function generarbarcode() {
-	codigo = $("#codigo").val();
+	var codigo = $("#codigo").val().replace(/\D/g, ''); // Elimina cualquier carácter que no sea un dígito
 
-	var codigoBarra = $("#codigo").val();
-	var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
-	if (!formatoValido && codigoBarra != "") {
-		bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
-		$("#btnGuardar").prop("disabled", false);
+	if (codigo.length <= 13) {
+		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+	} else {
+		bootbox.alert("El número debe tener 13 dígitos.");
 		return;
 	}
 
 	JsBarcode("#barcode", codigo);
+	$("#codigo").val(codigo);
 	$("#print").show();
 }
 

@@ -33,6 +33,9 @@ if (!isset($_SESSION["nombre"])) {
 		$local_ruc = isset($_POST["local_ruc"]) ? limpiarCadena($_POST["local_ruc"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
+		$idlocal_asignar = isset($_POST["idlocal_asignar"]) ? limpiarCadena($_POST["idlocal_asignar"]) : "";
+		$idusuario_asignar = isset($_POST["idusuario_asignar"]) ? limpiarCadena($_POST["idusuario_asignar"]) : "";
+
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idlocal)) {
@@ -52,6 +55,11 @@ if (!isset($_SESSION["nombre"])) {
 						echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
 					}
 				}
+				break;
+
+			case 'guardaryeditar2':
+				$rspta = $locales->asignar($idlocal, $idlocal_asignar, $idusuario_asignar);
+				echo $rspta ? "Local asignado correctamente" : "El local no se pudo asignar";
 				break;
 
 			case 'desactivar':
@@ -76,7 +84,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin") {
 					$rspta = $locales->listar();
 				} else {
 					$rspta = $locales->listarPorUsuario($idusuario);
@@ -106,15 +114,14 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'activado') ?
 								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idlocal . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
-						"1" => ucwords($reg->nombre),
-						"2" => ucwords($cargo_detalle),
-						"3" => $reg->titulo,
-						"4" => $reg->local_ruc,
-						"5" => $reg->descripcion,
+								(('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ',\'' . $reg->nombre . '\',\'' . $reg->titulo . '\');"><i class="fa fa-sign-in"></i></button>')) .
+								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i class="fa fa-check"></i></button>'))) . '</div>',
+						"1" => $reg->titulo,
+						"2" => $reg->local_ruc,
+						"3" => $reg->descripcion,
+						"4" => ucwords($reg->nombre),
+						"5" => ucwords($cargo_detalle),
 						"6" => $reg->fecha,
 						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'

@@ -50,12 +50,13 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
                     <th>Opciones</th>
-                    <th>Dueño</th>
+                    <th style="white-space: nowrap;">Agregado por</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th style="width: 20%; min-width: 220px; white-space: nowrap;">Ubicación del local</th>
                     <th>Marca</th>
                     <th style="white-space: nowrap;">C. producto</th>
+                    <th style="white-space: nowrap;">C. de barra</th>
                     <th style="white-space: nowrap;">Stock normal</th>
                     <th style="white-space: nowrap;">Stock mínimo</th>
                     <th style="white-space: nowrap;">Precio de venta</th>
@@ -66,12 +67,13 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
-                    <th>Dueño</th>
+                    <th>Agregado por</th>
                     <th>Nombre</th>
                     <th>Categoría</th>
                     <th>Ubicación del local</th>
                     <th>Marca</th>
                     <th>C. producto</th>
+                    <th>C. de barra</th>
                     <th>Stock normal</th>
                     <th>Stock mínimo</th>
                     <th>Precio de venta</th>
@@ -134,7 +136,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-6 col-md-12">
                       <div>
                         <label>Código de barra(*):</label>
-                        <input type="text" class="form-control" name="codigo" id="codigo" maxlength="18" placeholder="Código de barra">
+                        <input type="text" class="form-control" name="codigo" id="codigo" maxlength="13" placeholder="Código de barra">
                       </div>
                       <div style="margin-top: 10px;">
                         <button class="btn btn-bcp" type="button" onclick="generarbarcode()">Visualizar</button>
@@ -174,7 +176,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articulo6.js"></script>
+  <script type="text/javascript" src="scripts/articulo7.js"></script>
 <?php
 }
 ob_end_flush();

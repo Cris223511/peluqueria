@@ -36,8 +36,13 @@ if (!isset($_SESSION["nombre"])) {
 						echo $rspta ? "Categoria registrada" : "La categoría no se pudo registrar";
 					}
 				} else {
-					$rspta = $categorias->editar($idcategoria, $titulo, $descripcion);
-					echo $rspta ? "Categoria actualizada" : "La categoría no se pudo actualizar";
+					$nombreExiste = $categorias->verificarNombreEditarExiste($titulo, $idcategoria);
+					if ($nombreExiste) {
+						echo "El nombre de la categoría ya existe.";
+					} else {
+						$rspta = $categorias->editar($idcategoria, $titulo, $descripcion);
+						echo $rspta ? "Categoria actualizada" : "La categoría no se pudo actualizar";
+					}
 				}
 				break;
 
@@ -97,10 +102,10 @@ if (!isset($_SESSION["nombre"])) {
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcategoria . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idcategoria . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcategoria . ')"><i class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcategoria . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
-						"1" => ucwords($reg->nombre),
-						"2" => ucwords($cargo_detalle),
-						"3" => $reg->titulo,
-						"4" => $reg->descripcion,
+						"1" => $reg->titulo,
+						"2" => $reg->descripcion,
+						"3" => ucwords($reg->nombre),
+						"4" => ucwords($cargo_detalle),
 						"5" => $reg->fecha,
 						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'

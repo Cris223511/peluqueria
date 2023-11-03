@@ -227,6 +227,34 @@ class Usuario
 	}
 
 	//Implementar un método para listar los registros
+	public function listarASCactivos()
+	{
+		$sql = "SELECT
+				  u.idusuario,
+				  u.idlocal,
+				  u.nombre,
+				  l.titulo as local,
+				  l.local_ruc as local_ruc,
+				  u.tipo_documento,
+				  u.num_documento,
+				  u.direccion,
+				  u.telefono,
+				  u.email,
+				  u.cargo,
+				  u.login,
+				  u.clave,
+				  u.imagen,
+				  u.condicion
+				FROM usuario u
+				LEFT JOIN locales l ON u.idlocal = l.idlocal
+				WHERE u.eliminado = '0'
+				AND u.condicion='1'
+				ORDER BY idusuario ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	//Implementar un método para listar los registros
 	public function listarPorUsuario($idusuarioSession)
 	{
 		$sql = "SELECT
@@ -291,7 +319,7 @@ class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login, $clave)
 	{
-		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,condicion,eliminado FROM usuario WHERE login='$login' AND clave='$clave' AND eliminado = '0'";
+		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,condicion,eliminado FROM usuario WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
 	}
 }

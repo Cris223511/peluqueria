@@ -17,7 +17,7 @@ class LocalDisponible
 
 	public function verificarNombreExiste($titulo)
 	{
-		$sql = "SELECT * FROM locales WHERE titulo = '$titulo'";
+		$sql = "SELECT * FROM locales WHERE titulo = '$titulo' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El titulo ya existe en la tabla

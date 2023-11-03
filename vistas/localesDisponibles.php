@@ -20,9 +20,9 @@ if (!isset($_SESSION["nombre"])) {
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <button class="btn btn-success" id="btnasignar" onclick="mostrarform2(true)">
+                  <!-- <button class="btn btn-success" id="btnasignar" onclick="mostrarform2(true)">
                     <i class="fa fa-sign-out"></i> Asignar
-                  </button>
+                  </button> -->
                   <a href="../reportes/rptlocalesdisponibles.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte

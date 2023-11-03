@@ -73,7 +73,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -124,6 +124,31 @@ function mostrar(idlocal) {
 		$("#idlocal").val(data.idlocal);
 	})
 }
+
+function trabajadores(idlocal, titulo) {
+	$("#local").text(titulo);
+	tabla = $('#tbltrabajadores').DataTable({
+		"aProcessing": true,
+		"aServerSide": true,
+		"dom": 'Bfrtip',
+		"buttons": [],
+		"ajax": {
+			url: '../ajax/locales.php?op=listarTrabajadores&idlocal=' + idlocal,
+			type: "GET",
+			dataType: "json",
+			error: function (e) {
+				console.log(e.responseText);
+			}
+		},
+		"bDestroy": true,
+		"iDisplayLength": 5,
+		"order": [],
+		"createdRow": function (row, data, dataIndex) {
+			$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+		}
+	});
+}
+
 
 function desactivar(idlocal) {
 	bootbox.confirm("¿Está seguro de desactivar el local?", function (result) {

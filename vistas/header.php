@@ -234,6 +234,22 @@ $cargo_login = $_SESSION['cargo_detalle'];
           ?>
 
           <?php
+          if ($_SESSION['personas'] == 1) {
+            echo '<li id="mPersonas" class="treeview">
+              <a href="#">
+                <i class="fa fa-laptop"></i>
+                <span>Personas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li id="lTrabajadores"><a href="articulo.php"><i class="fa fa-circle-o"></i> Productos</a></li>
+                <li id="lClientes"><a href="marcas.php"><i class="fa fa-circle-o"></i> Marcas</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['acceso'] == 1) {
             echo '<li id="mAcceso" class="treeview">
               <a href="#">

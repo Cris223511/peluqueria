@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
 						echo "El código de barra del producto que ha ingresado ya existe.";
 					} else {
 						$rspta = $articulo->insertar($idcategoria, $idusuario, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen);
-						echo $rspta ? "producto registrado" : "El producto no se pudo registrar";
+						echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
 					}
 				} else {
 					$nombreExiste = $articulo->verificarCodigoProductoEditarExiste($codigo_producto, $idarticulo);
@@ -69,24 +69,24 @@ if (!isset($_SESSION["nombre"])) {
 						echo "El código del producto que ha ingresado ya existe.";
 					} else {
 						$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $imagen);
-						echo $rspta ? "producto actualizado" : "El producto no se pudo actualizar";
+						echo $rspta ? "Producto actualizado" : "El producto no se pudo actualizar";
 					}
 				}
 				break;
 
 			case 'desactivar':
 				$rspta = $articulo->desactivar($idarticulo);
-				echo $rspta ? "producto desactivado" : "El producto no se puede desactivar";
+				echo $rspta ? "Producto desactivado" : "El producto no se puede desactivar";
 				break;
 
 			case 'activar':
 				$rspta = $articulo->activar($idarticulo);
-				echo $rspta ? "producto activado" : "El producto no se puede activar";
+				echo $rspta ? "Producto activado" : "El producto no se puede activar";
 				break;
 
 			case 'eliminar':
 				$rspta = $articulo->eliminar($idarticulo);
-				echo $rspta ? "producto eliminado" : "El producto no se puede eliminar";
+				echo $rspta ? "Producto eliminado" : "El producto no se puede eliminar";
 				break;
 
 			case 'mostrar':
@@ -115,11 +115,12 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->local,
 						"5" => $reg->marca,
 						"6" => $reg->codigo_producto,
-						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"8" => $reg->stock_minimo,
-						"9" => $reg->precio_venta == '' ? "0.00" : $reg->precio_venta,
-						"10" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
-						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"7" => $reg->codigo,
+						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"9" => $reg->stock_minimo,
+						"10" => $reg->precio_venta == '' ? "0.00" : $reg->precio_venta,
+						"11" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"12" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

@@ -109,6 +109,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'selectLocalDisponible':
 				$rspta = $locales->listarLocalesDisponiblesActivos();
 
+				echo '<option value="">- Seleccione -</option>';
 				while ($reg = $rspta->fetch_object()) {
 					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
 				}

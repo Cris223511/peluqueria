@@ -69,6 +69,14 @@ class LocalExterno
 		return ejecutarConsulta($sql);
 	}
 
+	public function asignar($idlocal, $idlocal_asignar, $idusuario_asignar)
+	{
+		$sql1 = "UPDATE locales SET idusuario = '0' WHERE idlocal='$idlocal'";
+		$sql2 = "UPDATE locales SET idusuario = '$idusuario_asignar' WHERE idlocal='$idlocal_asignar'";
+		ejecutarConsulta($sql1);
+		return ejecutarConsulta($sql2);
+	}
+
 	// todos los locales
 
 	public function listar()

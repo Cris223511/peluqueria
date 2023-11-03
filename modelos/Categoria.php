@@ -27,6 +27,18 @@ class Categoria
 		return false;
 	}
 
+	public function verificarNombreEditarExiste($titulo, $idcategoria)
+	{
+		$sql = "SELECT * FROM categoria WHERE titulo = '$titulo' AND idcategoria != '$idcategoria' AND eliminado = '0'";
+		$resultado = ejecutarConsulta($sql);
+		if (mysqli_num_rows($resultado) > 0) {
+			// El titulo ya existe en la tabla
+			return true;
+		}
+		// El titulo no existe en la tabla
+		return false;
+	}
+
 	public function editar($idcategoria, $titulo, $descripcion)
 	{
 		$sql = "UPDATE categoria SET titulo='$titulo',descripcion='$descripcion' WHERE idcategoria='$idcategoria'";

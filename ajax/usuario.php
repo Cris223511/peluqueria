@@ -198,11 +198,7 @@ switch ($_GET["op"]) {
 		$idusuarioSession = $_SESSION["idusuario"];
 		$cargoSession = $_SESSION["cargo"];
 
-		if ($cargoSession == "superadmin" || $cargoSession == "admin") {
-			$rspta = $usuario->listarASC();
-		} else {
-			$rspta = $usuario->listarPorUsuario($idusuarioSession);
-		}
+		$rspta = $usuario->listarASCactivos();
 
 		echo '<option value="">- Seleccione -</option>';
 		while ($reg = $rspta->fetch_object()) {
@@ -238,13 +234,13 @@ switch ($_GET["op"]) {
 		$fetch = $rspta->fetch_object();
 
 		if (isset($fetch)) {
-			if ($fetch->condicion == "0") {
-				echo 0;
-				return;
-			}
-
 			if ($fetch->eliminado == "1") {
 				echo 1;
+				return;
+			}
+			
+			if ($fetch->condicion == "0") {
+				echo 0;
 				return;
 			}
 
