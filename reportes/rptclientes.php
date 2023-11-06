@@ -20,7 +20,7 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
-    $pdf->Cell(100, 6, 'LISTA DE TRABAJADORES', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'LISTA DE CLIENTES', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);
@@ -33,16 +33,16 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->Cell(25, 6, 'Fecha Nac.', 1, 0, 'C', 1);
 
     $pdf->Ln(10);
-    require_once "../modelos/Trabajadores.php";
-    $trabajadores = new Trabajador();
+    require_once "../modelos/Clientes.php";
+    $clientes = new Cliente();
 
-    $idlocal = $_SESSION["idlocal"];
+    $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin") {
-      $rspta = $trabajadores->listarTrabajadoresFechaNormal();
+      $rspta = $clientes->listarClientesFechaNormal();
     } else {
-      $rspta = $trabajadores->listarTrabajadoresFechaNormalPorLocal($idlocal);
+      $rspta = $clientes->listarclientesFechaNormalPorUsuario($idusuario);
     }
 
     $pdf->SetWidths(array(35, 25, 28, 22, 51, 25));

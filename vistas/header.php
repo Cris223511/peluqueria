@@ -228,7 +228,62 @@ $cargo_login = $_SESSION['cargo_detalle'];
                 <li id="lCategorias"><a href="categoria.php"><i class="fa fa-circle-o"></i> Categorías</a></li>
                 <li id="lLocales"><a href="locales.php"><i class="fa fa-circle-o"></i> Locales</a></li>
                 <li id="lMarcas"><a href="marcas.php"><i class="fa fa-circle-o"></i> Marcas</a></li>
+                <li id="lMedidas"><a href="medidas.php"><i class="fa fa-circle-o"></i> Unidades de medidas</a></li>
               </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['ventas'] == 1) {
+            echo '<li id="mVentas" class="treeview">
+              <a href="#">
+                <i class="fa fa-shopping-cart"></i>
+                <span>Ventas</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li id="lVentas"><a href="ventas.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
+                <li id="lProformas"><a href="proformas.php"><i class="fa fa-circle-o"></i> Proformas</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['cajas'] == 1) {
+            echo '<li id="mCajas" class="treeview">
+              <a href="#">
+                <i class="fa fa-archive"></i>
+                <span>Flujo de caja</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li id="lAperturas"><a href="aperturas.php"><i class="fa fa-circle-o"></i> Aperturas</a></li>
+                <li id="lCierres"><a href="cierres.php"><i class="fa fa-circle-o"></i> Cierres</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['pagos'] == 1) {
+            echo '<li id="mPagos" class="treeview">
+              <a href="#">
+                <i class="fa fa-credit-card"></i>
+                <span>Métodos de pago</span>
+              </a>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['servicios'] == 1) {
+            echo '<li id="mServicios" class="treeview">
+              <a href="#">
+                <i class="fa fa-cogs"></i>
+                <span>Servicios</span>
+              </a>
             </li>';
           }
           ?>

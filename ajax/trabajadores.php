@@ -19,6 +19,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
+		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
 		$idtrabajador = isset($_POST["idtrabajador"]) ? limpiarCadena($_POST["idtrabajador"]) : "";
@@ -26,7 +27,6 @@ if (!isset($_SESSION["nombre"])) {
 		$nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
 		$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 		$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
-		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
 		$fecha_nac = isset($_POST["fecha_nac"]) ? limpiarCadena($_POST["fecha_nac"]) : "";
@@ -34,19 +34,19 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idtrabajador)) {
-					$nombreExiste = $trabajadores->verificarNombreExiste($nombre);
+					$nombreExiste = $trabajadores->verificarDniExiste($num_documento);
 					if ($nombreExiste) {
-						echo "El nombre del trabajador ya existe.";
+						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $trabajadores->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						$rspta = $trabajadores->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $telefono, $email, $fecha_nac);
 						echo $rspta ? "Trabajador registrado" : "El trabajador no se pudo registrar";
 					}
 				} else {
-					$nombreExiste = $trabajadores->verificarNombreEditarExiste($nombre, $idtrabajador);
+					$nombreExiste = $trabajadores->verificarDniEditarExiste($nombre, $idtrabajador);
 					if ($nombreExiste) {
-						echo "El nombre del trabajador ya existe.";
+						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $trabajadores->editar($idtrabajador, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						$rspta = $trabajadores->editar($idtrabajador, $idlocal, $nombre, $tipo_documento, $num_documento, $telefono, $email, $fecha_nac);
 						echo $rspta ? "Trabajador actualizado" : "El trabajador no se pudo actualizar";
 					}
 				}
@@ -77,21 +77,30 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin") {
 					$rspta = $trabajadores->listarTrabajadores();
 				} else {
-					$rspta = $trabajadores->listarTrabajadoresPorUsuario($idusuario);
+					$rspta = $trabajadores->listarTrabajadoresPorLocal($idlocalSession);
 				}
 
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
+					$telefono = number_format($reg->telefono, 0, '', ' ');
 					$data[] = array(
-						"0" => ucwords($reg->nombre),
-						"1" => $reg->tipo_documento,
-						"2" => $reg->num_documento,
-						"3" => $reg->direccion,
-						"4" => $reg->telefono,
-						"5" => $reg->email,
-						"6" => $reg->fecha,
-						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+							(($reg->estado == 'activado') ?
+								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idtrabajador . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idtrabajador . ')"><i class="fa fa-close"></i></button>')) .
+								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idtrabajador . ')"><i class="fa fa-trash"></i></button>')) :
+								(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idtrabajador . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idtrabajador . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
+								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idtrabajador . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
+						"1" => ucwords($reg->nombre),
+						"2" => $reg->tipo_documento,
+						"3" => $reg->num_documento,
+						"4" => $reg->local,
+						"5" => $telefono,
+						"6" => $reg->email,
+						"7" => $reg->fecha,
+						"8" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

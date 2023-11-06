@@ -21,7 +21,7 @@ class Usuario
 		if (empty($imagen))
 			$imagen = "default.png";
 
-		$sql1 = "INSERT INTO usuario (idlocal,nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,clave,imagen,condicion,eliminado)
+		$sql1 = "INSERT INTO usuario (idlocal,nombre,tipo_documento,num_documento,direccion,telefono,email,cargo,login,clave,imagen,estado,eliminado)
 					VALUES ('$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono','$email','$cargo','$login','$clave','$imagen','1','0')";
 		//return ejecutarConsulta($sql1);
 		$idusuarionew = ejecutarConsulta_retornarID($sql1);
@@ -127,14 +127,14 @@ class Usuario
 	//Implementamos un método para desactivar categorías
 	public function desactivar($idusuario)
 	{
-		$sql = "UPDATE usuario SET condicion='0' WHERE idusuario='$idusuario'";
+		$sql = "UPDATE usuario SET estado='0' WHERE idusuario='$idusuario'";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementamos un método para activar categorías
 	public function activar($idusuario)
 	{
-		$sql = "UPDATE usuario SET condicion='1' WHERE idusuario='$idusuario'";
+		$sql = "UPDATE usuario SET estado='1' WHERE idusuario='$idusuario'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -155,7 +155,7 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 	  			WHERE u.idusuario='$idusuario'";
@@ -190,7 +190,7 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 				WHERE u.eliminado = '0'
@@ -217,7 +217,7 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 				WHERE u.eliminado = '0'
@@ -244,11 +244,11 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 				WHERE u.eliminado = '0'
-				AND u.condicion='1'
+				AND u.estado='1'
 				ORDER BY idusuario ASC";
 
 		return ejecutarConsulta($sql);
@@ -272,7 +272,7 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 				WHERE u.eliminado = '0'
@@ -299,11 +299,11 @@ class Usuario
 				  u.login,
 				  u.clave,
 				  u.imagen,
-				  u.condicion
+				  u.estado
 				FROM usuario u
 				LEFT JOIN locales l ON u.idlocal = l.idlocal
 				WHERE u.eliminado = '0'
-				AND u.condicion='1'
+				AND u.estado='1'
 				ORDER BY idusuario DESC";
 
 		return ejecutarConsulta($sql);
@@ -319,7 +319,7 @@ class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login, $clave)
 	{
-		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,condicion,eliminado FROM usuario WHERE login='$login' AND clave='$clave'";
+		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,estado,eliminado FROM usuario WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
 	}
 }

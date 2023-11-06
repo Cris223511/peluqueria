@@ -14,14 +14,20 @@ function init() {
 		$('#idlocal').selectpicker('refresh');
 	});
 
-	$('#mAlmacen').addClass("treeview active");
-	$('#lMarcas').addClass("active");
+	$('#mPersonas').addClass("treeview active");
+	$('#lTrabajadores').addClass("active");
 }
 
 function limpiar() {
-	$("#idmarca").val("");
-	$("#titulo").val("");
-	$("#descripcion").val("");
+	$("#idtrabajador").val("");
+	$("#nombre").val("");
+	$("#idlocal").val(0);
+	$('#idlocal').selectpicker('refresh');
+	$("#tipo_documento").val("");
+	$("#num_documento").val("");
+	$("#telefono").val("");
+	$("#email").val("");
+	$("#fecha_nac").val("");
 }
 
 function mostrarform(flag) {
@@ -79,7 +85,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -97,7 +103,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El nombre del trabajador ya existe.") {
+			if (datos == "El número de documento que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -110,23 +116,29 @@ function guardaryeditar(e) {
 	});
 }
 
-function mostrar(idmarca) {
-	$.post("../ajax/trabajadores.php?op=mostrar", { idmarca: idmarca }, function (data, status) {
+function mostrar(idtrabajador) {
+	$.post("../ajax/trabajadores.php?op=mostrar", { idtrabajador: idtrabajador }, function (data, status) {
 		data = JSON.parse(data);
 		mostrarform(true);
 
 		console.log(data);
 
-		$("#titulo").val(data.titulo);
-		$("#descripcion").val(data.descripcion);
-		$("#idmarca").val(data.idmarca);
+		$("#nombre").val(data.nombre);
+		$("#idlocal").val(data.idlocal);
+		$('#idlocal').selectpicker('refresh');
+		$("#tipo_documento").val(data.tipo_documento);
+		$("#num_documento").val(data.num_documento);
+		$("#telefono").val(data.telefono);
+		$("#email").val(data.email);
+		$("#fecha_nac").val(data.fecha_nac);
+		$("#idtrabajador").val(data.idtrabajador);
 	})
 }
 
-function desactivar(idmarca) {
+function desactivar(idtrabajador) {
 	bootbox.confirm("¿Está seguro de desactivar al trabajador?", function (result) {
 		if (result) {
-			$.post("../ajax/trabajadores.php?op=desactivar", { idmarca: idmarca }, function (e) {
+			$.post("../ajax/trabajadores.php?op=desactivar", { idtrabajador: idtrabajador }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -134,10 +146,10 @@ function desactivar(idmarca) {
 	})
 }
 
-function activar(idmarca) {
+function activar(idtrabajador) {
 	bootbox.confirm("¿Está seguro de activar al trabajador?", function (result) {
 		if (result) {
-			$.post("../ajax/trabajadores.php?op=activar", { idmarca: idmarca }, function (e) {
+			$.post("../ajax/trabajadores.php?op=activar", { idtrabajador: idtrabajador }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -145,10 +157,10 @@ function activar(idmarca) {
 	})
 }
 
-function eliminar(idmarca) {
+function eliminar(idtrabajador) {
 	bootbox.confirm("¿Estás seguro de eliminar al trabajador?", function (result) {
 		if (result) {
-			$.post("../ajax/trabajadores.php?op=eliminar", { idmarca: idmarca }, function (e) {
+			$.post("../ajax/trabajadores.php?op=eliminar", { idtrabajador: idtrabajador }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});

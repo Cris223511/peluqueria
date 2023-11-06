@@ -83,11 +83,11 @@ class Local
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarTrabajadores($idlocal)
+	public function listarTrabajadoresPorLocal($idlocal)
 	{
-		$sql = "SELECT nombre, tipo_documento, num_documento, direccion, telefono, email, 
-				CONCAT(DAY(fecha_nac), ' de ', 
-				CASE MONTH(fecha_nac)
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, 
+				CONCAT(DAY(t.fecha_nac), ' de ', 
+				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
 					WHEN 2 THEN 'Febrero'
 					WHEN 3 THEN 'Marzo'
@@ -100,8 +100,10 @@ class Local
 					WHEN 10 THEN 'Octubre'
 					WHEN 11 THEN 'Noviembre'
 					WHEN 12 THEN 'Diciembre'
-				END, ' del ', YEAR(fecha_nac)) as fecha,
-				estado FROM trabajadores WHERE idlocal = '$idlocal' AND estado='activado' AND eliminado = '0' ORDER BY idtrabajador DESC";
+				END, ' del ', YEAR(t.fecha_nac)) as fecha, t.estado
+				FROM trabajadores t
+				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				WHERE t.idlocal = '$idlocal' AND t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 

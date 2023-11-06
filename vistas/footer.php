@@ -32,6 +32,12 @@
         return palabra.toUpperCase();
       }
 
+      const thElements = document.querySelectorAll("#tbllistado th");
+
+      thElements.forEach((th) => {
+        th.textContent = th.textContent.toUpperCase();
+      });
+
       function changeValue(dropdown) {
         var option = dropdown.options[dropdown.selectedIndex].value;
         var field = $('#num_documento');

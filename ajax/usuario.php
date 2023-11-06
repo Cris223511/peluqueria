@@ -136,26 +136,28 @@ switch ($_GET["op"]) {
 							break;
 					}
 
+					$telefono = number_format($reg->telefono, 0, '', ' ');
+
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(!($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin') ?
-								((($reg->condicion) ?
+								((($reg->estado) ?
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . ')"><i class="fa fa-pencil"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i class="fa fa-check"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
 						"1" => $reg->login,
 						"2" => $cargo,
 						"3" => $reg->nombre,
 						"4" => $reg->tipo_documento,
 						"5" => $reg->num_documento,
-						"6" => $reg->telefono,
+						"6" => $telefono,
 						"7" => $reg->email,
 						"8" => $reg->local,
 						"9" => $reg->local_ruc,
 						"10" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
-						"11" => ($reg->condicion) ? '<span class="label bg-green">Activado</span>' :
+						"11" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -239,7 +241,7 @@ switch ($_GET["op"]) {
 				return;
 			}
 			
-			if ($fetch->condicion == "0") {
+			if ($fetch->estado == "0") {
 				echo 0;
 				return;
 			}
@@ -279,6 +281,10 @@ switch ($_GET["op"]) {
 			in_array(3, $valores) ? $_SESSION['perfilu'] = 1 : $_SESSION['perfilu'] = 0;
 			in_array(4, $valores) ? $_SESSION['almacen'] = 1 : $_SESSION['almacen'] = 0;
 			in_array(5, $valores) ? $_SESSION['personas'] = 1 : $_SESSION['personas'] = 0;
+			in_array(6, $valores) ? $_SESSION['ventas'] = 1 : $_SESSION['ventas'] = 0;
+			in_array(7, $valores) ? $_SESSION['cajas'] = 1 : $_SESSION['cajas'] = 0;
+			in_array(8, $valores) ? $_SESSION['pagos'] = 1 : $_SESSION['pagos'] = 0;
+			in_array(9, $valores) ? $_SESSION['servicios'] = 1 : $_SESSION['servicios'] = 0;
 		}
 		echo json_encode($fetch);
 		break;

@@ -100,7 +100,7 @@ if (!isset($_SESSION["nombre"])) {
 								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcategoria . ')"><i class="fa fa-pencil"></i></button>')) .
 								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idcategoria . ')"><i class="fa fa-close"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcategoria . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idcategoria . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcategoria . ')"><i class="fa fa-check"></i></button>')) .
+								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcategoria . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcategoria . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->descripcion,
@@ -121,18 +121,18 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
-			case 'selectCategoria':
-				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $categorias->listar();
-				} else {
-					$rspta = $categorias->listarPorUsuario($idusuario);
-				}
+			// case 'selectCategoria':
+			// 	if ($cargo == "superadmin" || $cargo == "admin") {
+			// 		$rspta = $categorias->listar();
+			// 	} else {
+			// 		$rspta = $categorias->listarPorUsuario($idusuario);
+			// 	}
 
-				echo '<option value="">- Seleccione -</option>';
-				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idcategoria . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
-				}
-				break;
+			// 	echo '<option value="">- Seleccione -</option>';
+			// 	while ($reg = $rspta->fetch_object()) {
+			// 		echo '<option value="' . $reg->idcategoria . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
+			// 	}
+			// 	break;
 		}
 	} else {
 		require 'noacceso.php';

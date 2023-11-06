@@ -7,41 +7,41 @@ class Trabajador
 	{
 	}
 
-	public function agregar($idusuario, $titulo, $descripcion)
+	public function agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $telefono, $email, $fecha_nac)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO trabajadores (idusuario, titulo, descripcion, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$titulo', '$descripcion', SYSDATE(), 'activado','0')";
+		$sql = "INSERT INTO trabajadores (idusuario, idlocal, nombre, tipo_documento, num_documento, telefono, email, fecha_nac, estado, eliminado)
+            VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$telefono', '$email', '$fecha_nac', 'activado','0')";
 		return ejecutarConsulta($sql);
 	}
 
-	public function verificarNombreExiste($titulo)
+	public function verificarDniExiste($num_documento)
 	{
-		$sql = "SELECT * FROM trabajadores WHERE titulo = '$titulo' AND eliminado = '0'";
+		$sql = "SELECT * FROM trabajadores WHERE num_documento = '$num_documento' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
-			// El titulo ya existe en la tabla
+			// El número documento ya existe en la tabla
 			return true;
 		}
-		// El titulo no existe en la tabla
+		// El número documento no existe en la tabla
 		return false;
 	}
 
-	public function verificarNombreEditarExiste($titulo, $idtrabajador)
+	public function verificarDniEditarExiste($num_documento, $idtrabajador)
 	{
-		$sql = "SELECT * FROM trabajadores WHERE titulo = '$titulo' AND idtrabajador != '$idtrabajador' AND eliminado = '0'";
+		$sql = "SELECT * FROM trabajadores WHERE num_documento = '$num_documento' AND idtrabajador != '$idtrabajador' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
-			// El titulo ya existe en la tabla
+			// El número documento ya existe en la tabla
 			return true;
 		}
-		// El titulo no existe en la tabla
+		// El número documento no existe en la tabla
 		return false;
 	}
 
-	public function editar($idtrabajador, $titulo, $descripcion)
+	public function editar($idtrabajador, $idlocal, $nombre, $tipo_documento, $num_documento, $telefono, $email, $fecha_nac)
 	{
-		$sql = "UPDATE trabajadores SET titulo='$titulo',descripcion='$descripcion' WHERE idtrabajador='$idtrabajador'";
+		$sql = "UPDATE trabajadores SET idlocal='$idlocal',nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',telefono='$telefono',email='$email',fecha_nac='$fecha_nac' WHERE idtrabajador='$idtrabajador'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -71,9 +71,9 @@ class Trabajador
 
 	public function listarTrabajadores()
 	{
-		$sql = "SELECT nombre, tipo_documento, num_documento, direccion, telefono, email, 
-				CONCAT(DAY(fecha_nac), ' de ', 
-				CASE MONTH(fecha_nac)
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, 
+				CONCAT(DAY(t.fecha_nac), ' de ', 
+				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
 					WHEN 2 THEN 'Febrero'
 					WHEN 3 THEN 'Marzo'
@@ -86,16 +86,27 @@ class Trabajador
 					WHEN 10 THEN 'Octubre'
 					WHEN 11 THEN 'Noviembre'
 					WHEN 12 THEN 'Diciembre'
-				END, ' del ', YEAR(fecha_nac)) as fecha,
-				estado FROM trabajadores WHERE eliminado = '0' ORDER BY idtrabajador DESC";
+				END, ' del ', YEAR(t.fecha_nac)) as fecha, t.estado
+				FROM trabajadores t
+				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				WHERE t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarTrabajadoresPorUsuario($idusuario)
+	public function listarTrabajadoresFechaNormal()
 	{
-		$sql = "SELECT nombre, tipo_documento, num_documento, direccion, telefono, email, 
-				CONCAT(DAY(fecha_nac), ' de ', 
-				CASE MONTH(fecha_nac)
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, t.fecha_nac as fecha, t.estado
+				FROM trabajadores t
+				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				WHERE t.eliminado = '0' ORDER BY t.idtrabajador DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarTrabajadoresPorLocal($idlocal)
+	{
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, 
+				CONCAT(DAY(t.fecha_nac), ' de ', 
+				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
 					WHEN 2 THEN 'Febrero'
 					WHEN 3 THEN 'Marzo'
@@ -108,20 +119,19 @@ class Trabajador
 					WHEN 10 THEN 'Octubre'
 					WHEN 11 THEN 'Noviembre'
 					WHEN 12 THEN 'Diciembre'
-				END, ' del ', YEAR(fecha_nac)) as fecha,
-				estado FROM trabajadores WHERE idusuario = '$idusuario' AND eliminado = '0' ORDER BY idtrabajador DESC";
+				END, ' del ', YEAR(t.fecha_nac)) as fecha, t.estado
+				FROM trabajadores t
+				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				WHERE t.idlocal = '$idlocal' AND t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarPorUsuario($idusuario)
+	public function listarTrabajadoresFechaNormalPorLocal($idlocal)
 	{
-		$sql = "SELECT m.idtrabajador, u.idusuario, u.nombre as nombre, u.cargo as cargo, m.titulo, m.descripcion, DATE_FORMAT(m.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, m.estado FROM trabajadores m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.idusuario = '$idusuario' AND m.eliminado = '0' ORDER BY m.idtrabajador DESC";
-		return ejecutarConsulta($sql);
-	}
-
-	public function listarActivos()
-	{
-		$sql = "SELECT idtrabajador, titulo FROM trabajadores WHERE estado='activado' AND eliminado = '0' ORDER BY idtrabajador DESC";
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, t.fecha_nac as fecha, t.estado
+				FROM trabajadores t
+				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				WHERE t.idlocal = '$idlocal' AND t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 }

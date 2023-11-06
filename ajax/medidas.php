@@ -13,65 +13,65 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
 	if ($_SESSION['almacen'] == 1) {
-		require_once "../modelos/Marcas.php";
+		require_once "../modelos/Medidas.php";
 
-		$marcas = new Marca();
+		$medidas = new Medida();
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
 		$cargo = $_SESSION["cargo"];
 
-		$idmarca = isset($_POST["idmarca"]) ? limpiarCadena($_POST["idmarca"]) : "";
+		$idmedida = isset($_POST["idmedida"]) ? limpiarCadena($_POST["idmedida"]) : "";
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
-				if (empty($idmarca)) {
-					$nombreExiste = $marcas->verificarNombreExiste($titulo);
+				if (empty($idmedida)) {
+					$nombreExiste = $medidas->verificarNombreExiste($titulo);
 					if ($nombreExiste) {
-						echo "El nombre de la marca ya existe.";
+						echo "El nombre de la medida ya existe.";
 					} else {
-						$rspta = $marcas->agregar($idusuario, $titulo, $descripcion);
-						echo $rspta ? "Marca registrada" : "La marca no se pudo registrar";
+						$rspta = $medidas->agregar($idusuario, $titulo, $descripcion);
+						echo $rspta ? "Medida registrada" : "La medida no se pudo registrar";
 					}
 				} else {
-					$nombreExiste = $marcas->verificarNombreEditarExiste($titulo, $idmarca);
+					$nombreExiste = $medidas->verificarNombreEditarExiste($titulo, $idmedida);
 					if ($nombreExiste) {
-						echo "El nombre de la marca ya existe.";
+						echo "El nombre de la medida ya existe.";
 					} else {
-						$rspta = $marcas->editar($idmarca, $titulo, $descripcion);
-						echo $rspta ? "Marca actualizada" : "La marca no se pudo actualizar";
+						$rspta = $medidas->editar($idmedida, $titulo, $descripcion);
+						echo $rspta ? "Medida actualizada" : "La medida no se pudo actualizar";
 					}
 				}
 				break;
 
 			case 'desactivar':
-				$rspta = $marcas->desactivar($idmarca);
-				echo $rspta ? "Marca desactivada" : "La marca no se pudo desactivar";
+				$rspta = $medidas->desactivar($idmedida);
+				echo $rspta ? "Medida desactivada" : "La medida no se pudo desactivar";
 				break;
 
 			case 'activar':
-				$rspta = $marcas->activar($idmarca);
-				echo $rspta ? "Marca activada" : "La marca no se pudo activar";
+				$rspta = $medidas->activar($idmedida);
+				echo $rspta ? "Medida activada" : "La medida no se pudo activar";
 				break;
 
 			case 'eliminar':
-				$rspta = $marcas->eliminar($idmarca);
-				echo $rspta ? "Marca eliminado" : "La marca no se pudo eliminar";
+				$rspta = $medidas->eliminar($idmedida);
+				echo $rspta ? "Medida eliminado" : "La medida no se pudo eliminar";
 				break;
 
 			case 'mostrar':
-				$rspta = $marcas->mostrar($idmarca);
+				$rspta = $medidas->mostrar($idmedida);
 				echo json_encode($rspta);
 				break;
 
 			case 'listar':
 
 				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $marcas->listar();
+					$rspta = $medidas->listar();
 				} else {
-					$rspta = $marcas->listarPorUsuario($idusuario);
+					$rspta = $medidas->listarPorUsuario($idusuario);
 				}
 
 				$data = array();
@@ -97,11 +97,11 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(($reg->estado == 'activado') ?
-								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmarca . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmarca . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmarca . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmarca . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmarca . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmarca . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
+								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmedida . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmedida . ')"><i class="fa fa-close"></i></button>')) .
+								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmedida . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmedida . ')"><i class="fa fa-pencil"></i></button>')) .
+								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmedida . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
+								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmedida . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->descripcion,
 						"3" => ucwords($reg->nombre),
@@ -121,16 +121,16 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
-			// case 'selectMarcas':
+			// case 'selectMedidas':
 			// 	if ($cargo == "superadmin" || $cargo == "admin") {
-			// 		$rspta = $marcas->listar();
+			// 		$rspta = $medidas->listar();
 			// 	} else {
-			// 		$rspta = $marcas->listarPorUsuario($idusuario);
+			// 		$rspta = $medidas->listarPorUsuario($idusuario);
 			// 	}
 
 			// 	echo '<option value="">- Seleccione -</option>';
 			// 	while ($reg = $rspta->fetch_object()) {
-			// 		echo '<option value="' . $reg->idmarca . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
+			// 		echo '<option value="' . $reg->idmedida . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
 			// 	}
 			// 	break;
 		}

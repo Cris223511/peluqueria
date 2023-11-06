@@ -16,11 +16,11 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Trabajadores
+                <h1 class="box-title">Clientes
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <a href="../reportes/rpttrabajadores.php" target="_blank">
+                  <a href="../reportes/rptclientes.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
                     </button>
@@ -36,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Nombres</th>
                     <th style="white-space: nowrap;">Tipo Doc.</th>
                     <th style="white-space: nowrap;">Número Doc.</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Ubicación del local</th>
+                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
                     <th style="white-space: nowrap;">Fecha Nac.</th>
@@ -50,7 +50,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Nombres</th>
                     <th>Tipo Doc.</th>
                     <th>Número Doc.</th>
-                    <th>Ubicación del local</th>
+                    <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
                     <th>Fecha Nac.</th>
@@ -63,14 +63,12 @@ if (!isset($_SESSION["nombre"])) {
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Nombre(*):</label>
-                    <input type="hidden" name="idtrabajador" id="idtrabajador">
-                    <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del trabajador." autocomplete="off" required>
+                    <input type="hidden" name="idcliente" id="idcliente">
+                    <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" required>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Local(*):</label>
-                    <select name="idlocal" id="idlocal" class="form-control" required>
-                      <option value="">- Seleccione -</option>
-                    </select>
+                    <label>Dirección:</label>
+                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="40">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Tipo Documento(*):</label>
@@ -83,15 +81,15 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Número(*):</label>
-                    <input type="number" class="form-control" name="num_documento" id="num_documento" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" placeholder="Documento" required>
+                    <input type="number" class="form-control" name="num_documento" id="num_documento" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" placeholder="Ingrese el documento." required>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Teléfono:</label>
-                    <input type="number" class="form-control" name="telefono" id="telefono" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" placeholder="Teléfono">
+                    <input type="number" class="form-control" name="telefono" id="telefono" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="9" placeholder="Ingrese el teléfono.">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Email:</label>
-                    <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Email">
+                    <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Ingrese el correo electrónico.">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Fecha Nacimiento:</label>
@@ -115,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/trabajadores3.js"></script>
+  <script type="text/javascript" src="scripts/clientes1.js"></script>
 <?php
 }
 ob_end_flush();

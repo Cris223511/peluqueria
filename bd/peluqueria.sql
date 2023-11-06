@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-10-2023 a las 20:33:47
+-- Tiempo de generación: 04-11-2023 a las 00:13:16
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.0.28
 
@@ -40,20 +40,20 @@ CREATE TABLE `articulo` (
   `stock_minimo` int(11) NOT NULL,
   `descripcion` varchar(50) NOT NULL,
   `imagen` varchar(50) DEFAULT NULL,
-  `condicion` tinyint(1) NOT NULL DEFAULT 1
+  `estado` tinyint(1) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Volcado de datos para la tabla `articulo`
 --
 
-INSERT INTO `articulo` (`idarticulo`, `idusuario`, `idcategoria`, `idlocal`, `idmarca`, `codigo`, `codigo_producto`, `nombre`, `stock`, `stock_minimo`, `descripcion`, `imagen`, `condicion`) VALUES
-(1, 1, 1, 1, 1, '7 75 6631 5 0049 8', '2344232348567', 'RETEN DE EMBOLO', 0, 10, '', '1627845886.png', 1),
+INSERT INTO `articulo` (`idarticulo`, `idusuario`, `idcategoria`, `idlocal`, `idmarca`, `codigo`, `codigo_producto`, `nombre`, `stock`, `stock_minimo`, `descripcion`, `imagen`, `estado`) VALUES
+(1, 1, 1, 1, 1, '7 75 6631 5 0049 8', '2344232348567', 'RETEN DE EMBOLO', 20, 10, '', '1627845886.png', 1),
 (2, 1, 1, 2, 1, '7 75 5328 6 0088 1', '2345345893452', 'RETEN DE EMBOLO', 43, 10, '', '1627845886.png', 1),
 (3, 1, 1, 2, 1, '7 75 9222 9 0033 9', '6645456821243', 'RETEN DE EMBOLO', 38, 10, '', '1627845886.png', 1),
 (4, 3, 1, 1, 1, '7 75 3137 1 0057 8', '2343454566456', 'RETEN DE EMBOLO', 2, 10, '', '1627845886.png', 1),
 (5, 2, 1, 1, 1, '7 75 7982 6 0018 8', '2866038989324', 'RETEN DE EMBOLO', 3, 10, '', '1627845886.png', 1),
-(7, 2, 1, 7, 1, '7 75 7057 8 0019 6', '6645678756', 'asdasd', 20, 25, 'asdasdasd', '1698694256.jpg', 1);
+(7, 2, 1, 3, 1, '7 75 7057 8 0019 6', '6645678756', 'asdasd', 20, 25, 'asdasdasd', '1698694256.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -202,7 +202,7 @@ INSERT INTO `locales` (`idlocal`, `idusuario`, `titulo`, `local_ruc`, `descripci
 (1, 1, 'Local de Chorrillos, Lima', '55849586943', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 13:27:21', 'activado', 0),
 (2, 2, 'Local de Los Olivos, Lima', '78549384595', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 12:33:38', 'activado', 0),
 (3, 3, 'Local de Ate Vitarte, Lima', '44839384560', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-18 11:40:28', 'activado', 0),
-(7, 3, 'Local nuevo', '12342343243', 'un local donde se almacenará productos, listo para ser comercializados en el mercado.', '2023-10-25 19:18:30', 'activado', 0);
+(9, 0, 'local nuevo', '23234234234', 'asdasddasasddas', '2023-11-02 00:43:15', 'activado', 0);
 
 -- --------------------------------------------------------
 
@@ -260,17 +260,33 @@ INSERT INTO `permiso` (`idpermiso`, `nombre`) VALUES
 
 CREATE TABLE `trabajadores` (
   `idtrabajador` int(11) NOT NULL,
+  `idusuario` int(11) NOT NULL,
   `idlocal` int(11) NOT NULL,
   `nombre` varchar(50) NOT NULL,
   `tipo_documento` varchar(20) NOT NULL,
   `num_documento` varchar(20) NOT NULL,
-  `direccion` varchar(70) NOT NULL,
   `telefono` varchar(20) NOT NULL,
   `email` varchar(50) NOT NULL,
   `fecha_nac` date NOT NULL,
   `estado` varchar(20) NOT NULL,
   `eliminado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
+
+--
+-- Volcado de datos para la tabla `trabajadores`
+--
+
+INSERT INTO `trabajadores` (`idtrabajador`, `idusuario`, `idlocal`, `nombre`, `tipo_documento`, `num_documento`, `telefono`, `email`, `fecha_nac`, `estado`, `eliminado`) VALUES
+(1, 1, 1, 'Juan Pérez', 'DNI', '12345678', '123456789', 'juan@example.com', '1985-03-15', 'activado', 0),
+(2, 1, 1, 'Pedro López', 'DNI', '98765432', '123456789', 'pedro@example.com', '1988-11-30', 'activado', 0),
+(3, 1, 1, 'Ana Martínez', 'CEDULA', '123487655890', '123456789', 'ana@example.com', '1995-05-10', 'activado', 0),
+(4, 1, 1, 'Luis Rodríguez', 'DNI', '34561234', '123456789', 'luis@example.com', '1982-09-05', 'activado', 0),
+(5, 2, 2, 'Carlos Fernández', 'CEDULA', '234567897920', '123456789', 'carlos@example.com', '1980-04-02', 'activado', 0),
+(6, 2, 2, 'Sofía González', 'DNI', '67891234', '123456789', 'sofia@example.com', '1992-02-15', 'activado', 0),
+(7, 2, 2, 'Jorge Pérez', 'RUC', '45678912528', '123456789', 'jorge@example.com', '1984-08-10', 'activado', 0),
+(8, 3, 3, 'Isabel Martínez', 'CEDULA', '567891236289', '123456789', 'isabel@example.com', '1998-03-20', 'activado', 0),
+(9, 3, 3, 'Miguel González', 'DNI', '87651234', '123456789', 'miguel@example.com', '1987-07-05', 'activado', 0),
+(10, 3, 2, 'Ana Pérez', 'DNI', '99999999', '123456789', 'ana@example.com', '1997-05-20', 'activado', 0);
 
 -- --------------------------------------------------------
 
@@ -291,7 +307,7 @@ CREATE TABLE `usuario` (
   `login` varchar(20) NOT NULL,
   `clave` varchar(64) NOT NULL,
   `imagen` varchar(50) NOT NULL,
-  `condicion` tinyint(1) NOT NULL DEFAULT 1,
+  `estado` tinyint(1) NOT NULL DEFAULT 1,
   `eliminado` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
@@ -299,7 +315,7 @@ CREATE TABLE `usuario` (
 -- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuario` (`idusuario`, `idlocal`, `nombre`, `tipo_documento`, `num_documento`, `direccion`, `telefono`, `email`, `cargo`, `login`, `clave`, `imagen`, `condicion`, `eliminado`) VALUES
+INSERT INTO `usuario` (`idusuario`, `idlocal`, `nombre`, `tipo_documento`, `num_documento`, `direccion`, `telefono`, `email`, `cargo`, `login`, `clave`, `imagen`, `estado`, `eliminado`) VALUES
 (1, 1, 'christopher PS', 'DNI', '66559348', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'superadmin', 'admin', 'admin', '1487132068.jpg', 1, 0),
 (2, 2, 'julio RH', 'DNI', '66448963', 'Lima, La Molina, Perú', '931742904', 'admin@admin.com', 'admin', 'admin2', 'admin2', '1487132068.jpg', 1, 0),
 (3, 3, 'luis FG', 'DNI', '54845893', 'Lima, La Molina, Perú', '931742904', 'cajero@cajero.com', 'cajero', 'cajero', 'cajero', '1487132068.jpg', 1, 0);
@@ -321,17 +337,6 @@ CREATE TABLE `usuario_permiso` (
 --
 
 INSERT INTO `usuario_permiso` (`idusuario_permiso`, `idusuario`, `idpermiso`) VALUES
-(1, 1, 1),
-(2, 1, 2),
-(3, 1, 3),
-(4, 1, 4),
-(5, 2, 1),
-(6, 2, 2),
-(7, 2, 3),
-(8, 2, 4),
-(21, 3, 1),
-(22, 3, 3),
-(23, 3, 4),
 (24, 6, 1),
 (25, 6, 2),
 (26, 6, 3),
@@ -349,7 +354,21 @@ INSERT INTO `usuario_permiso` (`idusuario_permiso`, `idusuario`, `idpermiso`) VA
 (38, 9, 2),
 (39, 9, 3),
 (40, 9, 4),
-(41, 9, 5);
+(41, 9, 5),
+(42, 3, 1),
+(43, 3, 3),
+(44, 3, 4),
+(45, 3, 5),
+(46, 2, 1),
+(47, 2, 2),
+(48, 2, 3),
+(49, 2, 4),
+(50, 2, 5),
+(51, 1, 1),
+(52, 1, 2),
+(53, 1, 3),
+(54, 1, 4),
+(55, 1, 5);
 
 --
 -- Índices para tablas volcadas
@@ -413,7 +432,8 @@ ALTER TABLE `permiso`
 --
 ALTER TABLE `trabajadores`
   ADD PRIMARY KEY (`idtrabajador`),
-  ADD KEY `idlocal` (`idlocal`);
+  ADD KEY `idlocal` (`idlocal`),
+  ADD KEY `idusuario` (`idusuario`);
 
 --
 -- Indices de la tabla `usuario`
@@ -460,7 +480,7 @@ ALTER TABLE `detalle_ingreso`
 -- AUTO_INCREMENT de la tabla `locales`
 --
 ALTER TABLE `locales`
-  MODIFY `idlocal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `idlocal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `marcas`
@@ -478,7 +498,7 @@ ALTER TABLE `permiso`
 -- AUTO_INCREMENT de la tabla `trabajadores`
 --
 ALTER TABLE `trabajadores`
-  MODIFY `idtrabajador` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `idtrabajador` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -490,7 +510,7 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `usuario_permiso`
 --
 ALTER TABLE `usuario_permiso`
-  MODIFY `idusuario_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `idusuario_permiso` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
