@@ -243,8 +243,8 @@ $cargo_login = $_SESSION['cargo_detalle'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li id="lVentas"><a href="ventas.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
-                <li id="lProformas"><a href="proformas.php"><i class="fa fa-circle-o"></i> Proformas</a></li>
+                <li id="lVentas"><a href="#"><i class="fa fa-circle-o"></i> Ventas</a></li>
+                <li id="lProformas"><a href="#"><i class="fa fa-circle-o"></i> Proformas</a></li>
               </ul>
             </li>';
           }
@@ -269,7 +269,7 @@ $cargo_login = $_SESSION['cargo_detalle'];
           <?php
           if ($_SESSION['pagos'] == 1) {
             echo '<li id="mPagos" class="treeview">
-              <a href="#">
+              <a href="metodo_pago.php">
                 <i class="fa fa-credit-card"></i>
                 <span>Métodos de pago</span>
               </a>
