@@ -71,7 +71,7 @@ class Trabajador
 
 	public function listarTrabajadores()
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, 
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo,
 				CONCAT(DAY(t.fecha_nac), ' de ', 
 				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -89,22 +89,24 @@ class Trabajador
 				END, ' del ', YEAR(t.fecha_nac)) as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				LEFT JOIN usuario u ON t.idusuario = u.idusuario
 				WHERE t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarTrabajadoresFechaNormal()
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, t.fecha_nac as fecha, t.estado
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo, t.fecha_nac as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				LEFT JOIN usuario u ON t.idusuario = u.idusuario
 				WHERE t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarTrabajadoresPorLocal($idlocal)
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, 
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo,
 				CONCAT(DAY(t.fecha_nac), ' de ', 
 				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -122,15 +124,17 @@ class Trabajador
 				END, ' del ', YEAR(t.fecha_nac)) as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				LEFT JOIN usuario u ON t.idusuario = u.idusuario
 				WHERE t.idlocal = '$idlocal' AND t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarTrabajadoresFechaNormalPorLocal($idlocal)
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, t.fecha_nac as fecha, t.estado
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo, t.fecha_nac as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
+				LEFT JOIN usuario u ON t.idusuario = u.idusuario
 				WHERE t.idlocal = '$idlocal' AND t.eliminado = '0' ORDER BY t.idtrabajador DESC";
 		return ejecutarConsulta($sql);
 	}

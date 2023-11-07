@@ -28,13 +28,13 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idmetodopago)) {
-					// $nombreExiste = $metodo_pago->verificarNombreExiste($titulo);
-					// if ($nombreExiste) {
-					// 	echo "El nombre del método de pago ya existe.";
-					// } else {
+					$nombreExiste = $metodo_pago->verificarNombreExiste($titulo);
+					if ($nombreExiste) {
+						echo "El nombre del método de pago ya existe.";
+					} else {
 						$rspta = $metodo_pago->agregar($idusuario, $titulo, $descripcion);
 						echo $rspta ? "Método de pago registrado" : "El método de pago no se pudo registrar";
-					// }
+					}
 				} else {
 					$nombreExiste = $metodo_pago->verificarNombreEditarExiste($titulo, $idmetodopago);
 					if ($nombreExiste) {
@@ -76,6 +76,17 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				function mostrarBoton($reg, $cargo, $buttonType)
+				{
+					if ($reg == "admin" && $cargo == "admin") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin" || $cargo == "cajero") {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -96,20 +107,36 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+							mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
+								(mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+							mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') .
+							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->descripcion,
 						"3" => ucwords($reg->nombre),
 						"4" => ucwords($cargo_detalle),
 						"5" => $reg->fecha,
-						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
-							'<span class="label bg-red">Desactivado</span>'
+						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' : '<span class="label bg-red">Desactivado</span>'
 					);
+
+					// $data[] = array(
+					// 	"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+					// 		(($reg->estado == 'activado') ?
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') : (''))) .
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>') : (''))) .
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') : (''))) :
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') : (''))) .
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : (''))) .
+					// 			(($reg->cargo == "admin" && $cargo == "admin") ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') : (($cargo == "superadmin" || $cargo == "cajero") ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') : ('')))) . '</div>',
+					// 	"1" => $reg->titulo,
+					// 	"2" => $reg->descripcion,
+					// 	"3" => ucwords($reg->nombre),
+					// 	"4" => ucwords($cargo_detalle),
+					// 	"5" => $reg->fecha,
+					// 	"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+					// 		'<span class="label bg-red">Desactivado</span>'
+					// );
 				}
 				$results = array(
 					"sEcho" => 1,

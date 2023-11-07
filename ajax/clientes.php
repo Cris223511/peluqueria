@@ -81,17 +81,27 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				function mostrarBoton($reg, $cargo, $buttonType)
+				{
+					if ($reg == "admin" && $cargo == "admin") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin" || $cargo == "cajero") {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				while ($reg = $rspta->fetch_object()) {
 					$telefono = number_format($reg->telefono, 0, '', ' ');
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+							mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idcliente . ')"><i class="fa fa-close"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcliente . ')"><i class="fa fa-trash"></i></button>')) :
-								(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>')) .
-								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcliente . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
-								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcliente . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
+								(mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idcliente . ')"><i class="fa fa-close"></i></button>')) :
+								(mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcliente . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+							mostrarBoton($reg->cargo, $cargo, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcliente . ')"><i class="fa fa-trash"></i></button>') .
+							'</div>',
 						"1" => ucwords($reg->nombre),
 						"2" => $reg->tipo_documento,
 						"3" => $reg->num_documento,

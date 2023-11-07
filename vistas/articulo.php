@@ -190,6 +190,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div id="print" style="overflow-y: hidden;">
                         <img id="barcode">
+                        <div id="barcode-number"></div>
                       </div>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">

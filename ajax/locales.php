@@ -201,7 +201,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'selectLocalesUsuario':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin") {
 					$rspta = $locales->listarActivos();
 				} else {
 					$rspta = $locales->listarPorUsuarioActivos($idusuario);

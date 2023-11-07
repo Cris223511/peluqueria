@@ -71,7 +71,7 @@ class Cliente
 
 	public function listarClientes()
 	{
-		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, 
+		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.cargo as cargo,
 				CONCAT(DAY(c.fecha_nac), ' de ', 
 				CASE MONTH(c.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -88,21 +88,23 @@ class Cliente
 					WHEN 12 THEN 'Diciembre'
 				END, ' del ', YEAR(c.fecha_nac)) as fecha, c.estado
 				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				WHERE c.eliminado = '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarClientesFechaNormal()
 	{
-		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, c.fecha_nac as fecha, c.estado
+		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.cargo as cargo, c.fecha_nac as fecha, c.estado
 				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				WHERE c.eliminado = '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarClientesPorUsuario($idusuario)
 	{
-		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, 
+		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.cargo as cargo,
 				CONCAT(DAY(c.fecha_nac), ' de ', 
 				CASE MONTH(c.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -119,14 +121,16 @@ class Cliente
 					WHEN 12 THEN 'Diciembre'
 				END, ' del ', YEAR(c.fecha_nac)) as fecha, c.estado
 				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				WHERE c.idusuario = '$idusuario' AND c.eliminado = '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarclientesFechaNormalPorUsuario($idusuario)
 	{
-		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, c.fecha_nac as fecha, c.estado
+		$sql = "SELECT c.idcliente, c.nombre, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.cargo as cargo, c.fecha_nac as fecha, c.estado
 				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				WHERE c.idusuario = '$idusuario' AND c.eliminado = '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
