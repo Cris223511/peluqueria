@@ -22,6 +22,7 @@ if (!isset($_SESSION["nombre"])) {
 		$cargo = $_SESSION["cargo"];
 
 		$idcaja = isset($_POST["idcaja"]) ? limpiarCadena($_POST["idcaja"]) : "";
+		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
@@ -32,7 +33,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El nombre de la caja ya existe.";
 					} else {
-						$rspta = $cajas->agregar($idusuario, $titulo, $descripcion);
+						$rspta = $cajas->agregar($idusuario, $idlocal, $titulo, $descripcion);
 						echo $rspta ? "Caja registrada" : "La caja no se pudo registrar";
 					}
 				} else {
@@ -40,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El nombre de la caja ya existe.";
 					} else {
-						$rspta = $cajas->editar($idcaja, $titulo, $descripcion);
+						$rspta = $cajas->editar($idcaja, $idlocal, $titulo, $descripcion);
 						echo $rspta ? "Caja actualizada" : "La caja no se pudo actualizar";
 					}
 				}
@@ -103,11 +104,13 @@ if (!isset($_SESSION["nombre"])) {
 								(('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>')) .
 								(('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>'))) . '</div>',
 						"1" => $reg->titulo,
-						"2" => $reg->descripcion,
-						"3" => ucwords($reg->nombre),
-						"4" => ucwords($cargo_detalle),
-						"5" => $reg->fecha,
-						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"2" => $reg->local,
+						"3" => $reg->descripcion,
+						"4" => ucwords($reg->nombre),
+						"5" => ucwords($cargo_detalle),
+						"6" => $reg->monto,
+						"7" => $reg->fecha,
+						"8" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

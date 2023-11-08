@@ -20,6 +20,8 @@ function init() {
 
 function limpiar() {
 	$("#idcaja").val("");
+	$("#idlocal").val("0");
+	$('#idlocal').selectpicker('refresh');
 	$("#titulo").val("");
 	$("#descripcion").val("");
 }
@@ -118,6 +120,8 @@ function mostrar(idcaja) {
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#idlocal").val(data.idlocal);
+		$('#idlocal').selectpicker('refresh');
 		$("#descripcion").val(data.descripcion);
 		$("#idcaja").val(data.idcaja);
 	})

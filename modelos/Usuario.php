@@ -254,6 +254,34 @@ class Usuario
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarPorUsuarioASCActivos($idusuario)
+	{
+		$sql = "SELECT
+				  u.idusuario,
+				  u.idlocal,
+				  u.nombre,
+				  l.titulo as local,
+				  l.local_ruc as local_ruc,
+				  u.tipo_documento,
+				  u.num_documento,
+				  u.direccion,
+				  u.telefono,
+				  u.email,
+				  u.cargo,
+				  u.login,
+				  u.clave,
+				  u.imagen,
+				  u.estado
+				FROM usuario u
+				LEFT JOIN locales l ON u.idlocal = l.idlocal
+				WHERE u.eliminado = '0'
+				AND u.estado='1'
+				AND u.idusuario = '$idusuario'
+				ORDER BY idusuario ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementar un método para listar los registros
 	public function listarPorUsuario($idusuarioSession)
 	{

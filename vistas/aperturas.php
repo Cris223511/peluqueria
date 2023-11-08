@@ -57,7 +57,7 @@ if (!isset($_SESSION["cajas"])) {
               </div>
               <div class="panel-body" style="height: 400px;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Caja(*):</label>
                     <input type="hidden" name="idcaja" id="idcaja">
                     <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese el nombre de la caja." autocomplete="off" required>
@@ -66,6 +66,12 @@ if (!isset($_SESSION["cajas"])) {
                     <label>Local(*):</label>
                     <select name="idlocal" id="idlocal" class="form-control" required>
                       <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Empleaedo(*):</label>
+                    <select class="form-control" disabled>
+                      <option value=""> <?php echo $_SESSION["nombre"] ?> </option>
                     </select>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">

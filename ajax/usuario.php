@@ -197,14 +197,16 @@ switch ($_GET["op"]) {
 		break;
 
 	case 'selectUsuarios':
-		$idusuarioSession = $_SESSION["idusuario"];
-		$cargoSession = $_SESSION["cargo"];
 
-		$rspta = $usuario->listarASCactivos();
+		if ($cargo == "superadmin") {
+			$rspta = $usuario->listarASCactivos();
+		} else {
+			$rspta = $usuario->listarPorUsuarioASCActivos($idusuario);
+		}
 
 		echo '<option value="">- Seleccione -</option>';
 		while ($reg = $rspta->fetch_object()) {
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre . ' - ' . $reg->cargo . '</option>';
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->titulo . '</option>';
 		}
 		break;
 
@@ -240,7 +242,7 @@ switch ($_GET["op"]) {
 				echo 1;
 				return;
 			}
-			
+
 			if ($fetch->estado == "0") {
 				echo 0;
 				return;
