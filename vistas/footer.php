@@ -34,8 +34,18 @@
 
       const thElements = document.querySelectorAll("#tbllistado th");
 
-      thElements.forEach((th) => {
-        th.textContent = th.textContent.toUpperCase();
+      thElements.forEach((e) => {
+        e.textContent = e.textContent.toUpperCase();
+      });
+
+      const boxTitle = document.querySelectorAll(".box-title");
+
+      boxTitle.forEach((e) => {
+        e.childNodes.forEach((node) => {
+          if (node.nodeType === Node.TEXT_NODE) {
+            node.textContent = node.textContent.toUpperCase();
+          }
+        });
       });
 
       function changeValue(dropdown) {

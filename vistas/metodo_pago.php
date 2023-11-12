@@ -37,6 +37,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del método de pago</th>
                     <th style="white-space: nowrap;">Agregado por</th>
                     <th>Cargo</th>
+                    <th>Foto</th>
                     <th style="white-space: nowrap;">Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
@@ -48,6 +49,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Descripción del método de pago</th>
                     <th>Agregado por</th>
                     <th>Cargo</th>
+                    <th>Foto</th>
                     <th>Fecha y hora</th>
                     <th>Estado</th>
                   </tfoot>
@@ -55,10 +57,16 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="panel-body" style="height: 400px;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Método de pago(*):</label>
                     <input type="hidden" name="idmetodopago" id="idmetodopago">
                     <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese el nombre del método de pago." autocomplete="off" required>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Imagen:</label>
+                    <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg" required>
+                    <input type="hidden" name="imagenactual" id="imagenactual">
+                    <img src="" width="150px" height="120px" id="imagenmuestra">
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
@@ -82,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/metodo_pago1.js"></script>
+  <script type="text/javascript" src="scripts/metodo_pago4.js"></script>
 <?php
 }
 ob_end_flush();

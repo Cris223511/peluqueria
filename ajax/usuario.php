@@ -13,6 +13,8 @@ require_once "../modelos/Usuario.php";
 
 $usuario = new Usuario();
 
+$cargoSession = $_SESSION["cargo"];
+
 $idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
 $idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
@@ -197,16 +199,29 @@ switch ($_GET["op"]) {
 		break;
 
 	case 'selectUsuarios':
-
-		if ($cargo == "superadmin") {
+		if ($cargoSession == "superadmin") {
 			$rspta = $usuario->listarASCactivos();
 		} else {
-			$rspta = $usuario->listarPorUsuarioASCActivos($idusuario);
+			$rspta = $usuario->listarPorUsuarioASCActivos($_SESSION['idusuario']);
 		}
 
 		echo '<option value="">- Seleccione -</option>';
 		while ($reg = $rspta->fetch_object()) {
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->titulo . '</option>';
+			$cargo = "";
+			switch ($reg->cargo) {
+				case 'superadmin':
+					$cargo = "Superadministrador";
+					break;
+				case 'admin':
+					$cargo = "Administrador";
+					break;
+				case 'cajero':
+					$cargo = "Cajero";
+					break;
+				default:
+					break;
+			}
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo . '</option>';
 		}
 		break;
 
@@ -227,6 +242,15 @@ switch ($_GET["op"]) {
 			$sw = in_array($reg->idpermiso, $valores) ? 'checked' : '';
 			echo '<li> <input type="checkbox" ' . $sw . '  name="permiso[]" value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
 		}
+		break;
+
+	case 'getSessionId':
+		$sessionIdData = array(
+			'idusuario' => $_SESSION['idusuario'],
+			'idlocal' => $_SESSION['idlocal']
+		);
+
+		echo json_encode($sessionIdData);
 		break;
 
 	case 'verificar':

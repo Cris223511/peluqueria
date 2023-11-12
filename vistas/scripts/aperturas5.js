@@ -1,4 +1,6 @@
 var tabla;
+var idSession;
+var idLocal;
 
 function init() {
 	mostrarform(false);
@@ -7,13 +9,47 @@ function init() {
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
+
+	$.post("../ajax/locales.php?op=selectLocalesUsuario", function (r) {
+		console.log(r);
+		$("#idlocal").html(r);
+		$('#idlocal').selectpicker('refresh');
+
+		$.post("../ajax/usuario.php?op=getSessionId", function (r) {
+			console.log(r);
+			data = JSON.parse(r);
+			idLocal = data.idlocal;
+			$("#idlocal").val(idLocal);
+			$('#idlocal').selectpicker('refresh');
+		})
+	});
+
+	$.post("../ajax/usuario.php?op=selectUsuarios", function (r) {
+		console.log(r);
+		$("#idusuario").html(r);
+		$('#idusuario').selectpicker('refresh');
+
+		$.post("../ajax/usuario.php?op=getSessionId", function (r) {
+			console.log(r);
+			data = JSON.parse(r);
+			idSession = data.idusuario;
+			$("#idusuario").val(idSession);
+			$('#idusuario').selectpicker('refresh');
+		})
+	})
+
 	$('#mCajas').addClass("treeview active");
-	$('#lCierres').addClass("active");
+	$('#lAperturas').addClass("active");
 }
 
 function limpiar() {
 	$("#idcaja").val("");
+	$("#idlocal").val(idLocal);
+	$('#idlocal').selectpicker('refresh');
+	$("#idusuario").val(idSession);
+	$('#idusuario').selectpicker('refresh');
 	$("#titulo").val("");
+	$("#monto").val("");
 	$("#descripcion").val("");
 }
 
@@ -72,7 +108,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -111,15 +147,20 @@ function mostrar(idcaja) {
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#idlocal").val(data.idlocal);
+		$('#idlocal').selectpicker('refresh');
+		$("#idusuario").val(data.idusuario);
+		$('#idusuario').selectpicker('refresh');
+		$("#monto").val(data.monto);
 		$("#descripcion").val(data.descripcion);
 		$("#idcaja").val(data.idcaja);
 	})
 }
 
-function desactivar(idcaja) {
-	bootbox.confirm("¿Está seguro de desactivar la caja?", function (result) {
+function cerrar(idcaja) {
+	bootbox.confirm("¿Está seguro de cerrar la caja?", function (result) {
 		if (result) {
-			$.post("../ajax/cajas.php?op=desactivar", { idcaja: idcaja }, function (e) {
+			$.post("../ajax/cajas.php?op=cerrar", { idcaja: idcaja }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -127,10 +168,10 @@ function desactivar(idcaja) {
 	})
 }
 
-function activar(idcaja) {
-	bootbox.confirm("¿Está seguro de activar la caja?", function (result) {
+function aperturar(idcaja) {
+	bootbox.confirm("¿Está seguro de aperturar la caja?", function (result) {
 		if (result) {
-			$.post("../ajax/cajas.php?op=activar", { idcaja: idcaja }, function (e) {
+			$.post("../ajax/cajas.php?op=aperturar", { idcaja: idcaja }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});

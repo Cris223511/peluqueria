@@ -71,7 +71,7 @@ class Trabajador
 
 	public function listarTrabajadores()
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo,
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.idusuario, u.cargo as cargo,
 				CONCAT(DAY(t.fecha_nac), ' de ', 
 				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -96,7 +96,7 @@ class Trabajador
 
 	public function listarTrabajadoresFechaNormal()
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo, t.fecha_nac as fecha, t.estado
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.idusuario, u.cargo as cargo, t.fecha_nac as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
 				LEFT JOIN usuario u ON t.idusuario = u.idusuario
@@ -106,7 +106,7 @@ class Trabajador
 
 	public function listarTrabajadoresPorLocal($idlocal)
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo,
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.idusuario, u.cargo as cargo,
 				CONCAT(DAY(t.fecha_nac), ' de ', 
 				CASE MONTH(t.fecha_nac)
 					WHEN 1 THEN 'Enero'
@@ -131,7 +131,7 @@ class Trabajador
 
 	public function listarTrabajadoresFechaNormalPorLocal($idlocal)
 	{
-		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.cargo as cargo, t.fecha_nac as fecha, t.estado
+		$sql = "SELECT t.idtrabajador, t.nombre, l.titulo as local, t.tipo_documento, t.num_documento, t.telefono, t.email, u.idusuario, u.cargo as cargo, t.fecha_nac as fecha, t.estado
 				FROM trabajadores t
 				LEFT JOIN locales l ON t.idlocal = l.idlocal
 				LEFT JOIN usuario u ON t.idusuario = u.idusuario

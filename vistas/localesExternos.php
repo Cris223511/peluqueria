@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Locales externos <!-- Configuración de locales -->
+                <h1 class="box-title">Locales externos (sucursales) <!-- Configuración de locales -->
                   <a href="../reportes/rptlocalesexternos.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte

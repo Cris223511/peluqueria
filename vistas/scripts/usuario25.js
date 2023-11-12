@@ -71,6 +71,7 @@ function limpiar() {
 	$("#login").val("");
 	$("#clave").val("");
 	$("#imagenmuestra").attr("src", "");
+	$("#imagenmuestra").hide();
 	$("#imagenactual").val("");
 	$("#idusuario").val("");
 }

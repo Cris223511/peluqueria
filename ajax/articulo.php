@@ -157,8 +157,8 @@ if (!isset($_SESSION["nombre"])) {
 						"7" => $reg->codigo,
 						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"9" => $reg->stock_minimo,
-						"10" => $reg->precio_compra == '' ? "0.00" : $reg->precio_compra,
-						"11" => $reg->precio_venta == '' ? "0.00" : $reg->precio_venta,
+						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
+						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
 						"12" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
 						"13" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);

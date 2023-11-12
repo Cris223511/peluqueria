@@ -7,11 +7,11 @@ class MetodoPago
 	{
 	}
 
-	public function agregar($idusuario, $titulo, $descripcion)
+	public function agregar($idusuario, $titulo, $descripcion, $imagen)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO metodo_pago (idusuario, titulo, descripcion, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$titulo', '$descripcion', SYSDATE(), 'activado','0')";
+		$sql = "INSERT INTO metodo_pago (idusuario, titulo, descripcion, imagen, fecha_hora, estado, eliminado)
+            VALUES ('$idusuario','$titulo', '$descripcion', '$imagen', SYSDATE(), 'activado','0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -39,9 +39,9 @@ class MetodoPago
 		return false;
 	}
 
-	public function editar($idmetodopago, $titulo, $descripcion)
+	public function editar($idmetodopago, $titulo, $descripcion, $imagen)
 	{
-		$sql = "UPDATE metodo_pago SET titulo='$titulo',descripcion='$descripcion' WHERE idmetodopago='$idmetodopago'";
+		$sql = "UPDATE metodo_pago SET titulo='$titulo',descripcion='$descripcion',imagen='$imagen' WHERE idmetodopago='$idmetodopago'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -71,13 +71,13 @@ class MetodoPago
 
 	public function listar()
 	{
-		$sql = "SELECT m.idmetodopago, u.idusuario, u.nombre as nombre, u.cargo as cargo, m.titulo, m.descripcion, DATE_FORMAT(m.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, m.estado FROM metodo_pago m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.eliminado = '0' ORDER BY m.idmetodopago DESC";
+		$sql = "SELECT m.idmetodopago, u.idusuario, u.nombre as nombre, u.cargo as cargo, m.titulo, m.descripcion, m.imagen, DATE_FORMAT(m.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, m.estado FROM metodo_pago m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.eliminado = '0' ORDER BY m.idmetodopago DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuario($idusuario)
 	{
-		$sql = "SELECT m.idmetodopago, u.idusuario, u.nombre as nombre, u.cargo as cargo, m.titulo, m.descripcion, DATE_FORMAT(m.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, m.estado FROM metodo_pago m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.idusuario = '$idusuario' AND m.eliminado = '0' ORDER BY m.idmetodopago DESC";
+		$sql = "SELECT m.idmetodopago, u.idusuario, u.nombre as nombre, u.cargo as cargo, m.titulo, m.descripcion, m.imagen, DATE_FORMAT(m.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, m.estado FROM metodo_pago m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.idusuario = '$idusuario' AND m.eliminado = '0' ORDER BY m.idmetodopago DESC";
 		return ejecutarConsulta($sql);
 	}
 

@@ -4,15 +4,22 @@ function init() {
 	mostrarform(false);
 	listar();
 
+	$("#imagenmuestra").hide();
+
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
+
 	$('#mPagos').addClass("treeview active");
 }
 
 function limpiar() {
 	$("#idmetodopago").val("");
 	$("#titulo").val("");
+	$("#imagen").val("");
+	$("#imagenmuestra").attr("src", "");
+	$("#imagenmuestra").hide();
+	$("#imagenactual").val("");
 	$("#descripcion").val("");
 }
 
@@ -111,6 +118,9 @@ function mostrar(idmetodopago) {
 
 		$("#titulo").val(data.titulo);
 		$("#descripcion").val(data.descripcion);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/metodo_pago/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
 		$("#idmetodopago").val(data.idmetodopago);
 	})
 }

@@ -76,11 +76,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $locales->listar();
-				} else {
-					$rspta = $locales->listarPorUsuario($idusuario);
-				}
+				$rspta = $locales->listar();
 
 				$data = array();
 
@@ -100,15 +96,17 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
+
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => ($cargo == "admin") ?
+						"0" => ($cargo == "admin" || $cargo == "cajero") ?
 							('<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 								(($reg->estado == 'activado') ?
 									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') : ('')) .
 									(('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>')) .
-									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>') : ('')) : (('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
+									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>') : ('')) :
+									(('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>')) .
 									(($reg->idusuario == $_SESSION["idusuario"]) ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : (''))) . '</div>')
 							: ('<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 								(($reg->estado == 'activado') ?
@@ -202,9 +200,9 @@ if (!isset($_SESSION["nombre"])) {
 			case 'selectLocalesUsuario':
 
 				if ($cargo == "superadmin") {
-					$rspta = $locales->listarActivos();
+					$rspta = $locales->listarActivosASC();
 				} else {
-					$rspta = $locales->listarPorUsuarioActivos($idusuario);
+					$rspta = $locales->listarPorUsuarioActivosASC($idusuario);
 				}
 
 				echo '<option value="">- Seleccione -</option>';
