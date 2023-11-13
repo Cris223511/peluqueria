@@ -75,9 +75,21 @@ class Caja
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarPorParametro($param)
+	{
+		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	public function listarPorUsuario($idlocalSession)
 	{
 		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarPorUsuarioParametro($idlocalSession, $param)
+	{
+		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' AND c.idlocal = '$idlocalSession' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 

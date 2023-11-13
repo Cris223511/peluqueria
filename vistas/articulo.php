@@ -41,6 +41,10 @@ if (!isset($_SESSION["nombre"])) {
           width: 100% !important;
         }
       }
+
+      tbody td:nth-child(12) {
+        white-space: nowrap !important;
+      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -57,19 +61,19 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
                 <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
                   <label>Buscar por marca:</label>
-                  <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="verificar(event)">
+                  <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     <option value="">- Seleccione -</option>
                   </select>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
                   <label>Buscar por categoría:</label>
-                  <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="verificar(event)">
+                  <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     <option value="">- Seleccione -</option>
                   </select>
                 </div>
                 <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
                   <label>Buscar por estado:</label>
-                  <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="verificar(event)">
+                  <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     <option value="">- Seleccione -</option>
                     <option value="1">Disponible</option>
                     <option value="2">Agotándose</option>
@@ -218,7 +222,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Unidad de medida:</label>
-                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
+                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true"></select>
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Peso:</label>
@@ -248,7 +252,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articulo13.js"></script>
+  <script type="text/javascript" src="scripts/articulo17.js"></script>
 <?php
 }
 ob_end_flush();

@@ -102,52 +102,139 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
-				$param1 = $_GET["param1"];
-				$param2 = $_GET["param2"];
+				$param1 = $_GET["param1"]; // valor marca
+				$param2 = $_GET["param2"]; // valor categoria
+				$param3 = $_GET["param3"]; // valor estado
 
 				if ($cargo == "superadmin" || $cargo == "admin") {
-					if ($param1 == "estado") {
-						if ($param2 == "1") {
+					if ($param1 != '' && $param2 == '' && $param3 == '') {
+						$rspta = $articulo->listarPorParametro("a.idmarca = '$param1'");
+					} else if ($param1 == '' && $param2 != '' && $param3 == '') {
+						$rspta = $articulo->listarPorParametro("a.idcategoria = '$param2'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						if ($param3 == "1") {
 							// Disponible
-							$rspta = $articulo->listarPorEstado("a.stock > a.stock_minimo");
-						} else if ($param2 == "2") {
+							$rspta = $articulo->listarPorParametro("a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
 							// Agotándose
-							$rspta = $articulo->listarPorEstado("a.stock > 0 AND a.stock < a.stock_minimo");
+							$rspta = $articulo->listarPorParametro("a.stock > 0 AND a.stock < a.stock_minimo");
 						} else {
 							// Agotado
-							$rspta = $articulo->listarPorEstado("a.stock = 0");
+							$rspta = $articulo->listarPorParametro("a.stock = 0");
 						}
-					} else if ($param1 == '' && $param2 == '') {
-						$rspta = $articulo->listar();
+					} else if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.idcategoria = '$param2'");
+					} else if ($param1 != '' && $param2 == '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.stock = 0");
+						}
+					} else if ($param1 == '' && $param2 != '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorParametro("a.idcategoria = '$param2' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorParametro("a.idcategoria = '$param2' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorParametro("a.idcategoria = '$param2' AND a.stock = 0");
+						}
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorParametro("a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock = 0");
+						}
 					} else {
-						$rspta = $articulo->listarPorParametro($param1, $param2);
+						$rspta = $articulo->listar();
 					}
 				} else {
-					if ($param1 == "estado") {
-						if ($param2 == "1") {
+					if ($param1 != '' && $param2 == '' && $param3 == '') {
+						$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1'");
+					} else if ($param1 == '' && $param2 != '' && $param3 == '') {
+						$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idcategoria = '$param2'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						if ($param3 == "1") {
 							// Disponible
-							$rspta = $articulo->listarPorEstadoUsuario($idusuario, "a.stock > a.stock_minimo");
-						} else if ($param2 == "2") {
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
 							// Agotándose
-							$rspta = $articulo->listarPorEstadoUsuario($idusuario, "a.stock > 0 AND a.stock < a.stock_minimo");
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.stock > 0 AND a.stock < a.stock_minimo");
 						} else {
 							// Agotado
-							$rspta = $articulo->listarPorEstadoUsuario($idusuario, "a.stock = 0");
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.stock = 0");
 						}
-					} else if ($param1 == '' && $param2 == '') {
-						$rspta = $articulo->listarPorUsuario($idusuario);
+					} else if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.idcategoria = '$param2'");
+					} else if ($param1 != '' && $param2 == '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.stock = 0");
+						}
+					} else if ($param1 == '' && $param2 != '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idcategoria = '$param2' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idcategoria = '$param2' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idcategoria = '$param2' AND a.stock = 0");
+						}
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						if ($param3 == "1") {
+							// Disponible
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock > a.stock_minimo");
+						} else if ($param3 == "2") {
+							// Agotándose
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock > 0 AND a.stock < a.stock_minimo");
+						} else {
+							// Agotado
+							$rspta = $articulo->listarPorUsuarioParametro($idusuario, "a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock = 0");
+						}
 					} else {
-						$rspta = $articulo->listarPorUsuarioParametro($idusuario, $param1, $param2);
+						$rspta = $articulo->listarPorUsuario($idusuario);
 					}
 				}
 
 				$data = array();
 
+				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
+				{
+					if ($reg == "admin" && $cargo == "admin" && $idusuario == $_SESSION["idusuario"]) {
+						return $buttonType;
+					} elseif ($cargo == "superadmin" || $cargo == "cajero" && $idusuario == $_SESSION["idusuario"]) {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				while ($reg = $rspta->fetch_object()) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idarticulo . ')"><i class="fa fa-pencil"></i></button>') .
-							('<button class="btn btn-danger "style="height: 35px;" onclick="eliminar(' . $reg->idarticulo . ')"><i class="fa fa-trash"></i></button>') . '</div>',
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idarticulo . ')"><i class="fa fa-pencil"></i></button>') .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger "style="height: 35px;" onclick="eliminar(' . $reg->idarticulo . ')"><i class="fa fa-trash"></i></button>') .
+							'</div>',
 						"1" => $reg->usuario,
 						"2" => $reg->nombre,
 						"3" => $reg->categoria,

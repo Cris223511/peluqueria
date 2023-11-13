@@ -127,7 +127,6 @@ function mostrarform(flag) {
 function frmDetalles(bool) {
 	if (bool == true) { $("#frmDetalles").show(); $("#btnDetalles1").hide(); $("#btnDetalles2").show(); }
 	if (bool == false) { $("#frmDetalles").hide(); $("#btnDetalles1").show(); $("#btnDetalles2").hide(); }
-
 	// $('html, body').animate({ scrollTop: $(document).height() }, 10);
 }
 
@@ -141,6 +140,7 @@ function cancelarform() {
 function listar() {
 	let param1 = "";
 	let param2 = "";
+	let param3 = "";
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -157,7 +157,7 @@ function listar() {
 			{
 				url: '../ajax/articulo.php?op=listar',
 				type: "get",
-				data: { param1: param1, param2: param2 },
+				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: "json",
 				error: function (e) {
 					console.log(e.responseText);
@@ -177,7 +177,7 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -185,16 +185,24 @@ function listar() {
 
 function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
-	$("#btnGuardar").prop("disabled", true);
-	var formData = new FormData($("#formulario")[0]);
 
 	var codigoBarra = $("#codigo").val();
+
 	var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
+
 	if (!formatoValido && codigoBarra != "") {
 		bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
 		$("#btnGuardar").prop("disabled", false);
 		return;
 	}
+
+	if (codigoBarra.length === 0) {
+		bootbox.alert("El código de barra es obligatorio.");
+		return;
+	}
+
+	$("#btnGuardar").prop("disabled", true);
+	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
 		url: "../ajax/articulo.php?op=guardaryeditar",
@@ -311,18 +319,22 @@ function generarNumero(max, min) {
 
 // Función para generar el código de barras
 function generarbarcode() {
-	var codigo = $("#codigo").val().replace(/\D/g, ''); // Elimina cualquier carácter que no sea un dígito
+	var codigo = $("#codigo").val().replace(/\s/g, '');
 
+	console.log(codigo);
 	console.log(codigo.length);
 
-	if (codigo.length == 0) {
+	if (codigo.length === 0) {
 		bootbox.alert("El código de barra es obligatorio.");
 		return;
-	} else if (codigo.length == 13) {
-		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
-	} else {
+	} else if (!/^\d+$/.test(codigo)) {
+		bootbox.alert("El código de barra debe contener solo números.");
+		return;
+	} else if (codigo.length !== 13) {
 		bootbox.alert("El código de barra debe tener 13 dígitos.");
 		return;
+	} else {
+		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
 	}
 
 	JsBarcode("#barcode", codigo);
@@ -335,16 +347,16 @@ function imprimir() {
 	$("#print").printArea();
 }
 
-function verificar(e) {
-	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar"];
+// function verificar(e) {
+// 	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar"];
 
-	for (const selectId of selects) {
-		if (selectId !== e.target.id) {
-			$("#" + selectId).val("");
-			$("#" + selectId).selectpicker('refresh');
-		}
-	}
-}
+// 	for (const selectId of selects) {
+// 		if (selectId !== e.target.id) {
+// 			$("#" + selectId).val("");
+// 			$("#" + selectId).selectpicker('refresh');
+// 		}
+// 	}
+// }
 
 function resetear() {
 	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar"];
@@ -361,6 +373,7 @@ function resetear() {
 function buscar() {
 	let param1 = "";
 	let param2 = "";
+	let param3 = "";
 
 	// Obtener los selectores
 	const selectMarca = document.getElementById("idmarcaBuscar");
@@ -368,24 +381,13 @@ function buscar() {
 	const selectEstado = document.getElementById("estadoBuscar");
 
 	if (selectMarca.value == "" && selectCategoria.value == "" && selectEstado.value == "") {
-		bootbox.alert("Debe seleccionar por lo menos una opción.");
+		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
 		return;
 	}
 
-	// Verificar si algún selector tiene un valor diferente de 0
-	if (selectMarca.value !== "") {
-		param1 = selectMarca.name.replace("Buscar", "");
-		param2 = selectMarca.value;
-	} else if (selectCategoria.value !== "") {
-		param1 = selectCategoria.name.replace("Buscar", "");
-		param2 = selectCategoria.value;
-	} else if (selectEstado.value !== "") {
-		param1 = selectEstado.name.replace("Buscar", "");
-		param2 = selectEstado.value;
-	}
-
-	console.log(param1)
-	console.log(param2)
+	param1 = selectMarca.value;
+	param2 = selectCategoria.value;
+	param3 = selectEstado.value;
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -401,7 +403,7 @@ function buscar() {
 			"ajax":
 			{
 				url: '../ajax/articulo.php?op=listar',
-				data: { param1: param1, param2: param2 },
+				data: { param1: param1, param2: param2, param3: param3 },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -422,7 +424,7 @@ function buscar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }

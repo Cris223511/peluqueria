@@ -71,11 +71,31 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				// if ($cargo == "superadmin" || $cargo == "admin") {
-				$rspta = $cajas->listar();
-				// } else {
-				// $rspta = $cajas->listarPorUsuario($idlocalSession);
-				// }
+				$param1 = $_GET["param1"]; // valor fecha inicio
+				$param2 = $_GET["param2"]; // valor fecha fin
+				$param3 = $_GET["param3"]; // valor local
+
+				if ($cargo == "superadmin" || $cargo == "admin") {
+					if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						$rspta = $cajas->listarPorParametro("c.idlocal = '$param3'");
+					} else {
+						$rspta = $cajas->listar();
+					}
+				} else {
+					if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "c.idlocal = '$param3'");
+					} else {
+						$rspta = $cajas->listarPorUsuario($idlocalSession);
+					}
+				}
 
 				$data = array();
 
@@ -113,8 +133,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado != 'aperturado' && ($cargo == "superadmin" || $cargo == "admin")) ?
-								mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') :
-								('')) .
+								mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
@@ -138,11 +157,30 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar2':
+				$param1 = $_GET["param1"]; // valor fecha inicio
+				$param2 = $_GET["param2"]; // valor fecha fin
+				$param3 = $_GET["param3"]; // valor local
 
 				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $cajas->listar();
+					if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						$rspta = $cajas->listarPorParametro("c.idlocal = '$param3'");
+					} else {
+						$rspta = $cajas->listar();
+					}
 				} else {
-					$rspta = $cajas->listarPorUsuario($idlocalSession);
+					if ($param1 != '' && $param2 != '' && $param3 == '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
+						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "c.idlocal = '$param3'");
+					} else {
+						$rspta = $cajas->listarPorUsuario($idlocalSession);
+					}
 				}
 
 				$data = array();

@@ -70,6 +70,7 @@ function limpiar() {
 	$("#cargo").selectpicker('refresh');
 	$("#login").val("");
 	$("#clave").val("");
+	$("#imagen").val("");
 	$("#imagenmuestra").attr("src", "");
 	$("#imagenmuestra").hide();
 	$("#imagenactual").val("");
