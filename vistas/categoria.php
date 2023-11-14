@@ -82,7 +82,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/categoria5.js"></script>
+  <script type="text/javascript" src="scripts/categoria6.js"></script>
 <?php
 }
 ob_end_flush();

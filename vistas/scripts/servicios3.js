@@ -1,4 +1,21 @@
 var tabla;
+var siguienteCorrelativo = "";
+
+function actualizarCorrelativo() {
+	$.post("../ajax/servicios.php?op=getLastCodigo", function (num) {
+		console.log(num);
+		siguienteCorrelativo = generarSiguienteCorrelativo(num);
+		$("#codigo").val(siguienteCorrelativo);
+	});
+}
+
+function generarSiguienteCorrelativo(correlativoActual) {
+	const numeroActual = parseInt(correlativoActual, 10);
+	const siguienteNumero = numeroActual + 1;
+	const longitud = correlativoActual.length;
+	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
+	return siguienteCorrelativo;
+}
 
 function init() {
 	mostrarform(false);
@@ -7,14 +24,17 @@ function init() {
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
-	$('#mAlmacen').addClass("treeview active");
-	$('#lCategorias').addClass("active");
+	$('#mServicios').addClass("treeview active");
+
+	actualizarCorrelativo();
 }
 
 function limpiar() {
-	$("#idcategoria").val("");
+	$("#idservicio").val("");
 	$("#titulo").val("");
+	$("#codigo").val(siguienteCorrelativo);
 	$("#descripcion").val("");
+	$("#costo").val("");
 }
 
 function mostrarform(flag) {
@@ -51,7 +71,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/categoria.php?op=listar',
+				url: '../ajax/servicios.php?op=listar',
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -72,7 +92,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -83,14 +103,14 @@ function guardaryeditar(e) {
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
-		url: "../ajax/categoria.php?op=guardaryeditar",
+		url: "../ajax/servicios.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El nombre de la categoria ya existe.") {
+			if (datos == "El nombre del servicio ya existe." || datos == "El código del servicio ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -99,27 +119,30 @@ function guardaryeditar(e) {
 			bootbox.alert(datos);
 			mostrarform(false);
 			tabla.ajax.reload();
+			actualizarCorrelativo();
 		}
 	});
 }
 
-function mostrar(idcategoria) {
-	$.post("../ajax/categoria.php?op=mostrar", { idcategoria: idcategoria }, function (data, status) {
+function mostrar(idservicio) {
+	$.post("../ajax/servicios.php?op=mostrar", { idservicio: idservicio }, function (data, status) {
 		data = JSON.parse(data);
 		mostrarform(true);
 
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#codigo").val(data.codigo);
 		$("#descripcion").val(data.descripcion);
-		$("#idcategoria").val(data.idcategoria);
+		$("#costo").val(data.costo);
+		$("#idservicio").val(data.idservicio);
 	})
 }
 
-function desactivar(idcategoria) {
-	bootbox.confirm("¿Está seguro de desactivar la categoria?", function (result) {
+function desactivar(idservicio) {
+	bootbox.confirm("¿Está seguro de desactivar el servicio?", function (result) {
 		if (result) {
-			$.post("../ajax/categoria.php?op=desactivar", { idcategoria: idcategoria }, function (e) {
+			$.post("../ajax/servicios.php?op=desactivar", { idservicio: idservicio }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -127,10 +150,10 @@ function desactivar(idcategoria) {
 	})
 }
 
-function activar(idcategoria) {
-	bootbox.confirm("¿Está seguro de activar la categoria?", function (result) {
+function activar(idservicio) {
+	bootbox.confirm("¿Está seguro de activar el servicio?", function (result) {
 		if (result) {
-			$.post("../ajax/categoria.php?op=activar", { idcategoria: idcategoria }, function (e) {
+			$.post("../ajax/servicios.php?op=activar", { idservicio: idservicio }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -138,12 +161,13 @@ function activar(idcategoria) {
 	})
 }
 
-function eliminar(idcategoria) {
-	bootbox.confirm("¿Estás seguro de eliminar la categoria?", function (result) {
+function eliminar(idservicio) {
+	bootbox.confirm("¿Estás seguro de eliminar el servicio?", function (result) {
 		if (result) {
-			$.post("../ajax/categoria.php?op=eliminar", { idcategoria: idcategoria }, function (e) {
+			$.post("../ajax/servicios.php?op=eliminar", { idservicio: idservicio }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
+				actualizarCorrelativo();
 			});
 		}
 	})

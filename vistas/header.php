@@ -280,7 +280,7 @@ $cargo_login = $_SESSION['cargo_detalle'];
           <?php
           if ($_SESSION['servicios'] == 1) {
             echo '<li id="mServicios" class="treeview">
-              <a href="#">
+              <a href="servicios.php">
                 <i class="fa fa-cogs"></i>
                 <span>Servicios</span>
               </a>

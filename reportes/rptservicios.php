@@ -20,26 +20,26 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
-    $pdf->Cell(100, 6, 'LISTA DE MEDIDAS', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'LISTA DE SERVICIOS', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(40, 6, utf8_decode('Medida'), 1, 0, 'C', 1);
+    $pdf->Cell(40, 6, utf8_decode('Servicio'), 1, 0, 'C', 1);
     $pdf->Cell(110, 6, utf8_decode('Descripción'), 1, 0, 'C', 1);
     $pdf->Cell(40, 6, utf8_decode('Fecha y hora'), 1, 0, 'C', 1);
 
     $pdf->Ln(10);
-    require_once "../modelos/Medidas.php";
-    $medidas = new Medida();
+    require_once "../modelos/Servicios.php";
+    $servicios = new Servicio();
 
     $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin") {
-      $rspta = $medidas->listar();
+      $rspta = $servicios->listar();
     } else {
-      $rspta = $medidas->listarPorUsuario($idusuario);
+      $rspta = $servicios->listarPorUsuario($idusuario);
     }
 
     $pdf->SetWidths(array(40, 110, 40));

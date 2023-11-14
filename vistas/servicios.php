@@ -16,11 +16,11 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Unidades de medida
+                <h1 class="box-title">Servicios
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <a href="../reportes/rptmedidas.php" target="_blank">
+                  <a href="../reportes/rptservicios.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
                     </button>
@@ -34,7 +34,9 @@ if (!isset($_SESSION["nombre"])) {
                   <thead>
                     <th>Opciones</th>
                     <th>Nombre</th>
-                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción de la medida</th>
+                    <th style="white-space: nowrap;">Códgio servicio</th>
+                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del servicio</th>
+                    <th>Costo</th>
                     <th style="white-space: nowrap;">Agregado por</th>
                     <th>Cargo</th>
                     <th style="white-space: nowrap;">Fecha y hora</th>
@@ -45,7 +47,9 @@ if (!isset($_SESSION["nombre"])) {
                   <tfoot>
                     <th>Opciones</th>
                     <th>Nombre</th>
-                    <th>Descripción de la medida</th>
+                    <th>Códgio servicio</th>
+                    <th>Descripción del servicio</th>
+                    <th>Costo</th>
                     <th>Agregado por</th>
                     <th>Cargo</th>
                     <th>Fecha y hora</th>
@@ -55,10 +59,18 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="panel-body" style="height: 400px;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Medida(*):</label>
-                    <input type="hidden" name="idmedida" id="idmedida">
-                    <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese el nombre de la medida." autocomplete="off" required>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label>Servicio(*):</label>
+                    <input type="hidden" name="idservicio" id="idservicio">
+                    <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese el nombre del servicio." autocomplete="off" required>
+                  </div>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <label>Código de servicio(*):</label>
+                    <input type="number" class="form-control" name="codigo" id="codigo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" placeholder="Ingrese el código de servicio." required>
+                  </div>
+                  <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <label>Costo de servicio(*):</label>
+                    <input type="number" class="form-control" name="costo" id="costo" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el costo de servicio." required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
@@ -82,7 +94,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/medidas1.js"></script>
+  <script type="text/javascript" src="scripts/servicios3.js"></script>
 <?php
 }
 ob_end_flush();

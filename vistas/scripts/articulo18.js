@@ -23,6 +23,7 @@ function init() {
 			"idcategoria": $("#idcategoria, #idcategoriaBuscar"),
 			"idlocal": $("#idlocal"),
 			"idmedida": $("#idmedida"),
+			"idservicio": $("#idservicio"),
 		};
 
 		for (const selectId in selects) {
@@ -93,6 +94,8 @@ function limpiar() {
 	$("#idmarca").selectpicker('refresh');
 	$("#idmedida").val($("#idmedida option:first").val());
 	$("#idmedida").selectpicker('refresh');
+	$("#idservicio").val($("#idservicio option:first").val());
+	$("#idservicio").selectpicker('refresh');
 	actualizarRUC();
 }
 
@@ -244,6 +247,8 @@ function mostrar(idarticulo) {
 		$('#idmarca').selectpicker('refresh');
 		$("#idmedida").val(data.idmedida);
 		$('#idmedida').selectpicker('refresh');
+		$("#idservicio").val(data.idservicio);
+		$('#idservicio').selectpicker('refresh');
 		$("#codigo").val(data.codigo);
 		$("#codigo_producto").val(data.codigo_producto);
 		$("#nombre").val(data.nombre);
@@ -346,17 +351,6 @@ function generarbarcode() {
 function imprimir() {
 	$("#print").printArea();
 }
-
-// function verificar(e) {
-// 	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar"];
-
-// 	for (const selectId of selects) {
-// 		if (selectId !== e.target.id) {
-// 			$("#" + selectId).val("");
-// 			$("#" + selectId).selectpicker('refresh');
-// 		}
-// 	}
-// }
 
 function resetear() {
 	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar"];

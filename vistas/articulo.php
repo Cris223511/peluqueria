@@ -139,7 +139,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3686b4 solid; padding: 20px;">
-                    <div class="form-group col-lg-12 col-md-12">
+                    <div class="form-group col-lg-6 col-md-12">
                       <label>Nombre(*):</label>
                       <input type="hidden" name="idarticulo" id="idarticulo">
                       <input type="text" class="form-control" name="nombre" id="nombre" maxlength="100" placeholder="Ingrese el nombre del producto." required>
@@ -151,6 +151,10 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Marca(*):</label>
                       <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" required></select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12">
+                      <label>Servicio(*):</label>
+                      <select id="idservicio" name="idservicio" class="form-control selectpicker" data-live-search="true" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Local(*):</label>
@@ -252,7 +256,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articulo17.js"></script>
+  <script type="text/javascript" src="scripts/articulo18.js"></script>
 <?php
 }
 ob_end_flush();

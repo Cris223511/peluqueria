@@ -8,11 +8,11 @@ function init() {
 		guardaryeditar(e);
 	});
 	$('#mAlmacen').addClass("treeview active");
-	$('#lMedidas').addClass("active");
+	$('#lCategorias').addClass("active");
 }
 
 function limpiar() {
-	$("#idmedida").val("");
+	$("#idcategoria").val("");
 	$("#titulo").val("");
 	$("#descripcion").val("");
 }
@@ -51,7 +51,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/medidas.php?op=listar',
+				url: '../ajax/categoria.php?op=listar',
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -83,14 +83,14 @@ function guardaryeditar(e) {
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
-		url: "../ajax/medidas.php?op=guardaryeditar",
+		url: "../ajax/categoria.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El nombre de la medida ya existe.") {
+			if (datos == "El nombre de la categoría ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -103,8 +103,8 @@ function guardaryeditar(e) {
 	});
 }
 
-function mostrar(idmedida) {
-	$.post("../ajax/medidas.php?op=mostrar", { idmedida: idmedida }, function (data, status) {
+function mostrar(idcategoria) {
+	$.post("../ajax/categoria.php?op=mostrar", { idcategoria: idcategoria }, function (data, status) {
 		data = JSON.parse(data);
 		mostrarform(true);
 
@@ -112,14 +112,14 @@ function mostrar(idmedida) {
 
 		$("#titulo").val(data.titulo);
 		$("#descripcion").val(data.descripcion);
-		$("#idmedida").val(data.idmedida);
+		$("#idcategoria").val(data.idcategoria);
 	})
 }
 
-function desactivar(idmedida) {
-	bootbox.confirm("¿Está seguro de desactivar la medida?", function (result) {
+function desactivar(idcategoria) {
+	bootbox.confirm("¿Está seguro de desactivar la categoria?", function (result) {
 		if (result) {
-			$.post("../ajax/medidas.php?op=desactivar", { idmedida: idmedida }, function (e) {
+			$.post("../ajax/categoria.php?op=desactivar", { idcategoria: idcategoria }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -127,10 +127,10 @@ function desactivar(idmedida) {
 	})
 }
 
-function activar(idmedida) {
-	bootbox.confirm("¿Está seguro de activar la medida?", function (result) {
+function activar(idcategoria) {
+	bootbox.confirm("¿Está seguro de activar la categoria?", function (result) {
 		if (result) {
-			$.post("../ajax/medidas.php?op=activar", { idmedida: idmedida }, function (e) {
+			$.post("../ajax/categoria.php?op=activar", { idcategoria: idcategoria }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -138,10 +138,10 @@ function activar(idmedida) {
 	})
 }
 
-function eliminar(idmedida) {
-	bootbox.confirm("¿Estás seguro de eliminar la medida?", function (result) {
+function eliminar(idcategoria) {
+	bootbox.confirm("¿Estás seguro de eliminar la categoria?", function (result) {
 		if (result) {
-			$.post("../ajax/medidas.php?op=eliminar", { idmedida: idmedida }, function (e) {
+			$.post("../ajax/categoria.php?op=eliminar", { idcategoria: idcategoria }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
