@@ -20,8 +20,6 @@ if (!isset($_SESSION["nombre"])) {
 	if ($_SESSION['perfilu'] == 1) {
 		require_once "../modelos/LocalesExternos.php";
 
-		$cargo = $_SESSION["cargo"];
-
 		$locales = new LocalExterno();
 
 		// Variables de sesión a utilizar.
@@ -34,9 +32,6 @@ if (!isset($_SESSION["nombre"])) {
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 		$local_ruc = isset($_POST["local_ruc"]) ? limpiarCadena($_POST["local_ruc"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
-
-		$idlocal_asignar = isset($_POST["idlocal_asignar"]) ? limpiarCadena($_POST["idlocal_asignar"]) : "";
-		$idusuario_asignar = isset($_POST["idusuario_asignar"]) ? limpiarCadena($_POST["idusuario_asignar"]) : "";
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
@@ -57,11 +52,6 @@ if (!isset($_SESSION["nombre"])) {
 						echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
 					}
 				}
-				break;
-
-			case 'guardaryeditar2':
-				$rspta = $locales->asignar($idlocal, $idlocal_asignar, $idusuario_asignar);
-				echo $rspta ? "Local asignado correctamente" : "El local no se pudo asignar";
 				break;
 
 			case 'desactivar':
@@ -86,19 +76,13 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $locales->listar();
-				} else {
-					$rspta = $locales->listarPorUsuario($idusuario);
-				}
+				$rspta = $locales->listar();
 
 				$data = array();
 
-				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
+				function mostrarBoton($cargo, $buttonType)
 				{
-					if ($reg == "admin" && $cargo == "admin" && $idusuario == $_SESSION["idusuario"]) {
-						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "cajero" && $idusuario == $_SESSION["idusuario"]) {
+					if ($cargo == "superadmin" || $cargo == "admin") {
 						return $buttonType;
 					} else {
 						return '';
@@ -121,23 +105,70 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
+
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; display: flex; justify-content: center;">' .
+							mostrarBoton($cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
+							mostrarBoton($cargo, '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
+							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ',\'' . $reg->nombre . '\',\'' . $reg->titulo . '\');"><i class="fa fa-sign-in"></i></button>')) .
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) :
+								(mostrarBoton($cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local_ruc,
 						"3" => $reg->descripcion,
-						"4" => ucwords($reg->nombre),
-						"5" => ucwords($cargo_detalle),
-						"6" => $reg->fecha,
-						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"4" => $reg->fecha,
+						"5" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+							'<span class="label bg-red">Desactivado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1,
+					"iTotalRecords" => count($data),
+					"iTotalDisplayRecords" => count($data),
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+				break;
+
+			case 'listarTrabajadores':
+
+				$rspta = $locales->listarUsuariosPorLocal($idlocal_session);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo = "";
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo = "Administrador";
+							break;
+						case 'cajero':
+							$cargo = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+
+					$data[] = array(
+						"0" => $reg->login,
+						"1" => $cargo,
+						"2" => $reg->nombre,
+						"3" => $reg->tipo_documento,
+						"4" => $reg->num_documento,
+						"5" => $telefono,
+						"6" => $reg->email,
+						"7" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+						"8" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -152,7 +183,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocal':
-				$rspta = $locales->listarPorUsuarioActivos($idusuario);
+				$rspta = $locales->listarPorUsuarioActivos($idlocal_session);
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
 				$data = [];
@@ -164,7 +195,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocalASC':
-				$rspta = $locales->listarPorUsuarioActivosASC($idusuario);
+				$rspta = $locales->listarPorUsuarioActivosASC($idlocal_session);
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
 				$data = [];
@@ -173,6 +204,28 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+			case 'selectLocales':
+				$rspta = $locales->listarActivos();
+
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
+				}
+				break;
+
+			case 'selectLocalesUsuario':
+
+				if ($cargo == "superadmin" || $cargo == "admin") {
+					$rspta = $locales->listarActivosASC();
+				} else {
+					$rspta = $locales->listarPorUsuarioActivosASC($idusuario);
+				}
+
+				echo '<option value="">- Seleccione -</option>';
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
+				}
 				break;
 
 			case 'selectLocalUsuario':

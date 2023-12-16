@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
+  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin"  || $_SESSION['cargo'] == "admin")) {
 ?>
     <div class="content-wrapper">
       <section class="content">

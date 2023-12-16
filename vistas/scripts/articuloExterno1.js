@@ -11,9 +11,9 @@ function init() {
 
 	$("#imagenmuestra").hide();
 	$('#mAlmacen').addClass("treeview active");
-	$('#lArticulos').addClass("active");
+	$('#lArticulosExternos').addClass("active");
 
-	$.post("../ajax/articulo.php?op=listarTodosActivos", function (data) {
+	$.post("../ajax/articuloExterno.php?op=listarTodosActivos", function (data) {
 		// console.log(data)
 		const obj = JSON.parse(data);
 		console.log(obj);
@@ -158,7 +158,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/articulo.php?op=listar',
+				url: '../ajax/articuloExterno.php?op=listar',
 				type: "get",
 				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: "json",
@@ -180,7 +180,7 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -199,16 +199,11 @@ function guardaryeditar(e) {
 		return;
 	}
 
-	if (codigoBarra.length === 0) {
-		bootbox.alert("El código de barra es obligatorio.");
-		return;
-	}
-
 	$("#btnGuardar").prop("disabled", true);
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
-		url: "../ajax/articulo.php?op=guardaryeditar",
+		url: "../ajax/articuloExterno.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -235,7 +230,7 @@ function mostrar(idarticulo) {
 	$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
 	$(".botones").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
 
-	$.post("../ajax/articulo.php?op=mostrar", { idarticulo: idarticulo }, function (data, status) {
+	$.post("../ajax/articuloExterno.php?op=mostrar", { idarticulo: idarticulo }, function (data, status) {
 		data = JSON.parse(data);
 		console.log(data);
 
@@ -264,7 +259,7 @@ function mostrar(idarticulo) {
 		$("#precio_venta").val(data.precio_venta);
 		$("#imagenactual").val(data.imagen);
 		$("#idarticulo").val(data.idarticulo);
-		generarbarcode();
+		generarbarcode(0);
 		actualizarRUC();
 	})
 }
@@ -273,7 +268,7 @@ function mostrar(idarticulo) {
 function desactivar(idarticulo) {
 	bootbox.confirm("¿Está Seguro de desactivar el producto?", function (result) {
 		if (result) {
-			$.post("../ajax/articulo.php?op=desactivar", { idarticulo: idarticulo }, function (e) {
+			$.post("../ajax/articuloExterno.php?op=desactivar", { idarticulo: idarticulo }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -285,7 +280,7 @@ function desactivar(idarticulo) {
 function activar(idarticulo) {
 	bootbox.confirm("¿Está Seguro de activar el producto?", function (result) {
 		if (result) {
-			$.post("../ajax/articulo.php?op=activar", { idarticulo: idarticulo }, function (e) {
+			$.post("../ajax/articuloExterno.php?op=activar", { idarticulo: idarticulo }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -297,7 +292,7 @@ function activar(idarticulo) {
 function eliminar(idarticulo) {
 	bootbox.confirm("¿Estás seguro de eliminar el producto?", function (result) {
 		if (result) {
-			$.post("../ajax/articulo.php?op=eliminar", { idarticulo: idarticulo }, function (e) {
+			$.post("../ajax/articuloExterno.php?op=eliminar", { idarticulo: idarticulo }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -313,7 +308,7 @@ function generar() {
 	codigo += generarNumero(100, 9) + " ";
 	codigo += Math.floor(Math.random() * 10);
 	$("#codigo").val(codigo);
-	generarbarcode();
+	generarbarcode(1);
 }
 
 function generarNumero(max, min) {
@@ -323,23 +318,23 @@ function generarNumero(max, min) {
 }
 
 // Función para generar el código de barras
-function generarbarcode() {
-	var codigo = $("#codigo").val().replace(/\s/g, '');
+function generarbarcode(param) {
 
-	console.log(codigo);
-	console.log(codigo.length);
+	if (param == 1) {
+		var codigo = $("#codigo").val().replace(/\s/g, '');
+		console.log(codigo.length);
 
-	if (codigo.length === 0) {
-		bootbox.alert("El código de barra es obligatorio.");
-		return;
-	} else if (!/^\d+$/.test(codigo)) {
-		bootbox.alert("El código de barra debe contener solo números.");
-		return;
-	} else if (codigo.length !== 13) {
-		bootbox.alert("El código de barra debe tener 13 dígitos.");
-		return;
+		if (!/^\d+$/.test(codigo)) {
+			bootbox.alert("El código de barra debe contener solo números.");
+			return;
+		} else if (codigo.length !== 13) {
+			bootbox.alert("El código de barra debe tener 13 dígitos.");
+			return;
+		} else {
+			codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+		}
 	} else {
-		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+		var codigo = $("#codigo").val()
 	}
 
 	JsBarcode("#barcode", codigo);
@@ -396,7 +391,7 @@ function buscar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/articulo.php?op=listar',
+				url: '../ajax/articuloExterno.php?op=listar',
 				data: { param1: param1, param2: param2, param3: param3 },
 				type: "get",
 				dataType: "json",
@@ -418,7 +413,7 @@ function buscar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }

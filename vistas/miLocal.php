@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['almacen'] == 1) {
+  if ($_SESSION['perfilu'] == 1) {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -16,11 +16,11 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Locales <!-- Configuración de locales -->
+                <h1 class="box-title">Mi local <!-- Configuración de locales -->
                   <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button> -->
-                  <a href="../reportes/rptlocales.php" target="_blank">
+                  <a href="../reportes/rptmilocal.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
                     </button>
@@ -36,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Local</th>
                     <th style="white-space: nowrap;">N° RUC</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del local</th>
-                    <th style="white-space: nowrap;">Dueño</th>
+                    <th style="white-space: nowrap;">Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -80,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -89,27 +89,28 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-body table-responsive">
             <table id="tbltrabajadores" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
               <thead>
-                <th>Nombre</th>
-                <th style="white-space: nowrap;">Tipo Doc.</th>
-                <th style="white-space: nowrap;">Número Doc.</th>
-                <th style="width: 30%; min-width: 200px; white-space: nowrap;">Local</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th style="white-space: nowrap;">Fecha Nac.</th>
-                <th>Estado</th>
-              </thead>
-              <tbody>
-
-              </tbody>
-              <tfoot>
-                <th>Nombre</th>
-                <th>Tipo Doc.</th>
-                <th>Número Doc.</th>
-                <th>Local</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Fecha Nac.</th>
-                <th>Estado</th>
+                <TH>USUARIO</TH>
+                <TH>CARGO</TH>
+                <TH>NOMBRE</TH>
+                <TH>DOCUMENTO</TH>
+                <TH>NÚMERO</TH>
+                <TH>TELÉFONO</TH>
+                <TH>EMAIL</TH>
+                <TH>FOTO</TH>
+                <TH>ESTADO</TH>
+              </THEAD>
+              <TBODY>
+              </TBODY>
+              <TFOOT>
+                <TH>USUARIO</TH>
+                <TH>CARGO</TH>
+                <TH>NOMBRE</TH>
+                <TH>DOCUMENTO</TH>
+                <TH>NÚMERO</TH>
+                <TH>TELÉFONO</TH>
+                <TH>EMAIL</TH>
+                <TH>FOTO</TH>
+                <TH>ESTADO</TH>
               </tfoot>
             </table>
           </div>
@@ -127,7 +128,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/locales18.js"></script>
+  <script type="text/javascript" src="scripts/miLocal1.js"></script>
 <?php
 }
 ob_end_flush();

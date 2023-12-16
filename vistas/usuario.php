@@ -158,7 +158,7 @@ if (!isset($_SESSION["nombre"])) {
   require 'footer.php';
   ?>
 
-  <script type="text/javascript" src="scripts/usuario25.js"></script>
+  <script type="text/javascript" src="scripts/usuario26.js"></script>
 <?php
 }
 ob_end_flush();

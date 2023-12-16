@@ -77,7 +77,8 @@ function actualizarInfoUsuario() {
 			console.log(data)
 			// actualizar la imagen y el nombre del usuario en la cabecera
 			$('.user-image, .img-circle').attr('src', '../files/usuarios/' + data.imagen);
-			$('.user-info').html(data.nombre + ' - ' + '<strong> Rol: ' + data.cargo + '</strong>');
+			$('.user-menu .local').html('<strong> Local: ' + data.local + '</strong>');
+			$('.user-menu .user').html(data.nombre + ' - ' + '<strong> Rol: ' + data.cargo + '</strong>');
 			$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
 		}
 	});

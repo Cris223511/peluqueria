@@ -5,7 +5,7 @@ if (strlen(session_id()) < 1) {
 }
 
 // si no está logeado o no tiene ningún cargo, no accede a ninguna opción, si está logeado, accede a todas las opciones.
-if ((empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
+if ((empty($_SESSION['idusuario']) || empty($_SESSION['cargo']))) {
 	echo 'No está autorizado para realizar esta acción.';
 	exit();
 }

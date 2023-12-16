@@ -13,8 +13,6 @@ require_once "../modelos/Usuario.php";
 
 $usuario = new Usuario();
 
-$cargoSession = $_SESSION["cargo"];
-
 $idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
 $idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 $nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
@@ -199,6 +197,7 @@ switch ($_GET["op"]) {
 		break;
 
 	case 'selectUsuarios':
+		$cargoSession = $_SESSION["cargo"];
 		if ($cargoSession == "superadmin") {
 			$rspta = $usuario->listarASCactivos();
 		} else {
@@ -275,6 +274,7 @@ switch ($_GET["op"]) {
 			//Declaramos las variables de sesión
 			$_SESSION['idusuario'] = $fetch->idusuario;
 			$_SESSION['idlocal'] = $fetch->idlocal;
+			$_SESSION['local'] = $fetch->local;
 			$_SESSION['nombre'] = $fetch->nombre;
 			$_SESSION['imagen'] = $fetch->imagen;
 			$_SESSION['login'] = $fetch->login;

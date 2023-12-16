@@ -162,3 +162,14 @@ function buscar() {
 }
 
 init();
+
+function cerrar(idcaja) {
+	bootbox.confirm("¿Está seguro de cerrar la caja?", function (result) {
+		if (result) {
+			$.post("../ajax/cajas.php?op=cerrar", { idcaja: idcaja }, function (e) {
+				bootbox.alert(e);
+				tabla.ajax.reload();
+			});
+		}
+	})
+}

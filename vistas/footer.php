@@ -2,7 +2,7 @@
       <div class="pull-right hidden-xs">
         <b>Version</b> 3.0.0
       </div>
-      <strong>Copyright &copy; 2022 <a href="www.DistemaDePeluqueria.com" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
+      <strong>Copyright &copy; 2022 <a href="www.SistemaDePeluqueria.com" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
     </footer>
     <!-- jQuery -->
     <script src="../public/js/jquery-3.1.1.min.js"></script>
@@ -86,6 +86,12 @@
         if (e.key === "-")
           e.preventDefault();
       }
+    </script>
+
+    <script>
+      $('.selectpicker').selectpicker({
+        noneResultsText: 'No se encontraron resultados.'
+      });
     </script>
 
     </body>

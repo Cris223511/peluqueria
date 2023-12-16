@@ -347,7 +347,7 @@ class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login, $clave)
 	{
-		$sql = "SELECT idusuario,idlocal,nombre,tipo_documento,num_documento,telefono,email,cargo,imagen,login,clave,estado,eliminado FROM usuario WHERE login='$login' AND clave='$clave'";
+		$sql = "SELECT u.idusuario,u.idlocal,l.titulo AS local,u.nombre,u.tipo_documento,u.num_documento,u.telefono,u.email,u.cargo,u.imagen,u.login,u.clave,u.estado,u.eliminado FROM usuario u LEFT JOIN locales l ON u.idlocal = l.idlocal WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
 	}
 }

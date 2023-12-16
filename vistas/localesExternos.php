@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
+  if ($_SESSION['perfilu'] == 1) {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -16,7 +16,10 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Locales externos (sucursales) <!-- Configuración de locales -->
+                <h1 class="box-title">Locales Eternos (Sucursales) <!-- Configuración de locales -->
+                  <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
+                    <i class="fa fa-plus-circle"></i> Agregar
+                  </button> -->
                   <a href="../reportes/rptlocalesexternos.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
@@ -34,8 +37,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="white-space: nowrap;">N° RUC</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del local</th>
                     <th style="white-space: nowrap;">Dueño</th>
-                    <th>Cargo</th>
-                    <th style="white-space: nowrap;">Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -45,14 +46,12 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Local</th>
                     <th>N° RUC</th>
                     <th>Descripción del local</th>
-                    <th>Dueño</th>
-                    <th>Cargo</th>
                     <th>Fecha y hora</th>
                     <th>Estado</th>
                   </tfoot>
                 </table>
               </div>
-              <div class="panel-body" style="height: 400px;" id="formularioregistros">
+              <div class="panel-body" style="height: max-content;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Local(*):</label>
@@ -73,37 +72,54 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                 </form>
               </div>
-              <div class="panel-body" style="height: max-content;" id="formularioasignacion">
-                <form name="formulario2" id="formulario2" method="POST">
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Local actual(*):</label>
-                    <select id="idlocal_actual" class="form-control" disabled>
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Local a reasignar(*):</label>
-                    <select id="idlocal_asignar" name="idlocal_asignar" class="form-control selectpicker" data-live-search="true" required>
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Asignar a(*):</label>
-                    <select id="idusuario_asignar" name="idusuario_asignar" class="form-control" disabled>
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <button class="btn btn-warning" onclick="cancelarform2()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                    <button class="btn btn-bcp" type="submit" id="btnGuardar2"><i class="fa fa-save"></i> Guardar</button>
-                  </div>
-                </form>
-              </div>
             </div>
           </div>
         </div>
       </section>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">Trabajadores del local <strong id="local"></strong></h4>
+          </div>
+          <div class="modal-body table-responsive">
+            <table id="tbltrabajadores" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+              <thead>
+                <th>Nombre</th>
+                <th style="white-space: nowrap;">Tipo Doc.</th>
+                <th style="white-space: nowrap;">Número Doc.</th>
+                <th style="width: 30%; min-width: 200px; white-space: nowrap;">Local</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th style="white-space: nowrap;">Fecha Nac.</th>
+                <th>Estado</th>
+              </thead>
+              <tbody>
+
+              </tbody>
+              <tfoot>
+                <th>Nombre</th>
+                <th>Tipo Doc.</th>
+                <th>Número Doc.</th>
+                <th>Local</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Fecha Nac.</th>
+                <th>Estado</th>
+              </tfoot>
+            </table>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin modal -->
   <?php
   } else {
     require 'noacceso.php';

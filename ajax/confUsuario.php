@@ -87,6 +87,7 @@ switch ($_GET["op"]) {
         $info = array(
             'nombre' => $_SESSION['nombre'],
             'imagen' => $_SESSION['imagen'],
+            'local' => $_SESSION['local'],
             'cargo' => $_SESSION['cargo_detalle']
         );
         echo json_encode($info);
