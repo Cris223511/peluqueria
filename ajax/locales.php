@@ -225,7 +225,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin") {
 					$rspta = $locales->listarActivosASC();
 				} else {
-					$rspta = $locales->listarPorUsuarioActivosASC($idusuario);
+					$rspta = $locales->listarPorUsuarioActivosASC($idlocal_session);
 				}
 
 				echo '<option value="">- Seleccione -</option>';

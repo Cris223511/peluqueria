@@ -9,7 +9,7 @@ function init() {
 	});
 
 	$('#mPersonas').addClass("treeview active");
-	$('#lClientes').addClass("active");
+	$('#lPersonales').addClass("active");
 
 	$.post('../ajax/locales.php?op=selectLocalesUsuario', function (r) {
 		console.log(r);
@@ -33,8 +33,9 @@ function actualizarRUC() {
 }
 
 function limpiar() {
-	$("#idcliente").val("");
+	$("#idpersonal").val("");
 	$("#nombre").val("");
+	$("#cargo").val("");
 	$("#tipo_documento").val("");
 	$("#num_documento").val("");
 	$("#direccion").val("");
@@ -82,7 +83,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/clientes.php?op=listar',
+				url: '../ajax/personales.php?op=listar',
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -103,7 +104,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(6) td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5) td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -114,7 +115,7 @@ function guardaryeditar(e) {
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
-		url: "../ajax/clientes.php?op=guardaryeditar",
+		url: "../ajax/personales.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -134,14 +135,15 @@ function guardaryeditar(e) {
 	});
 }
 
-function mostrar(idcliente) {
-	$.post("../ajax/clientes.php?op=mostrar", { idcliente: idcliente }, function (data, status) {
+function mostrar(idpersonal) {
+	$.post("../ajax/personales.php?op=mostrar", { idpersonal: idpersonal }, function (data, status) {
 		data = JSON.parse(data);
 		mostrarform(true);
 
 		console.log(data);
 
 		$("#nombre").val(data.nombre);
+		$("#cargo").val(data.cargo);
 		$("#idlocal").val(data.idlocal);
 		$('#idlocal').selectpicker('refresh');
 		$("#tipo_documento").val(data.tipo_documento);
@@ -150,16 +152,16 @@ function mostrar(idcliente) {
 		$("#telefono").val(data.telefono);
 		$("#email").val(data.email);
 		$("#fecha_nac").val(data.fecha_nac);
-		$("#idcliente").val(data.idcliente);
+		$("#idpersonal").val(data.idpersonal);
 
 		actualizarRUC();
 	})
 }
 
-function desactivar(idcliente) {
-	bootbox.confirm("¿Está seguro de desactivar al cliente?", function (result) {
+function desactivar(idpersonal) {
+	bootbox.confirm("¿Está seguro de desactivar al personal?", function (result) {
 		if (result) {
-			$.post("../ajax/clientes.php?op=desactivar", { idcliente: idcliente }, function (e) {
+			$.post("../ajax/personales.php?op=desactivar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -167,10 +169,10 @@ function desactivar(idcliente) {
 	})
 }
 
-function activar(idcliente) {
-	bootbox.confirm("¿Está seguro de activar al cliente?", function (result) {
+function activar(idpersonal) {
+	bootbox.confirm("¿Está seguro de activar al personal?", function (result) {
 		if (result) {
-			$.post("../ajax/clientes.php?op=activar", { idcliente: idcliente }, function (e) {
+			$.post("../ajax/personales.php?op=activar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -178,10 +180,10 @@ function activar(idcliente) {
 	})
 }
 
-function eliminar(idcliente) {
-	bootbox.confirm("¿Estás seguro de eliminar al cliente?", function (result) {
+function eliminar(idpersonal) {
+	bootbox.confirm("¿Estás seguro de eliminar al personal?", function (result) {
 		if (result) {
-			$.post("../ajax/clientes.php?op=eliminar", { idcliente: idcliente }, function (e) {
+			$.post("../ajax/personales.php?op=eliminar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});

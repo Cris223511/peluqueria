@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Locales Eternos (Sucursales) <!-- Configuración de locales -->
+                <h1 class="box-title">Locales Externos (Sucursales) <!-- Configuración de locales -->
                   <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button> -->

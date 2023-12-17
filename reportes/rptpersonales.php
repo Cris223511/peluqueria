@@ -21,12 +21,13 @@ if (!isset($_SESSION["nombre"])) {
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
 
-    $pdf->Cell(190, 6, 'LISTA DE CLIENTES', 1, 0, 'C');
+    $pdf->Cell(190, 6, 'LISTA DE PERSONALES', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(36, 6, 'Nombre', 1, 0, 'C', 1);
+    $pdf->Cell(36, 6, 'Cargo', 1, 0, 'C', 1);
     $pdf->Cell(50, 6, 'Local', 1, 0, 'C', 1);
     $pdf->Cell(26, 6, 'Documento', 1, 0, 'C', 1);
     $pdf->Cell(33, 6, utf8_decode('Número'), 1, 0, 'C', 1);
@@ -35,22 +36,23 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->Cell(30, 6, 'Fecha Nac.', 1, 0, 'C', 1);
 
     $pdf->Ln(10);
-    require_once "../modelos/Clientes.php";
-    $clientes = new Cliente();
+    require_once "../modelos/Personales.php";
+    $personales = new Personal();
 
     $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin") {
-      $rspta = $clientes->listarClientesFechaNormal();
+      $rspta = $personales->listarPersonalesFechaNormal();
     } else {
-      $rspta = $clientes->listarClientesFechaNormalPorUsuario($idusuario);
+      $rspta = $personales->listarPersonalesFechaNormalPorUsuario($idusuario);
     }
 
-    $pdf->SetWidths(array(36, 50, 26, 33, 22, 44, 30));
+    $pdf->SetWidths(array(36, 36, 50, 26, 33, 22, 44, 30));
 
     while ($reg = $rspta->fetch_object()) {
       $nombre = $reg->nombre;
+      $cargo_personal = $reg->cargo_personal;
       $local = $reg->local;
       $tipo_documento = $reg->tipo_documento;
       $num_documento = $reg->num_documento;
@@ -59,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
       $fecha = $reg->fecha;
 
       $pdf->SetFont('Arial', '', 10);
-      $pdf->Row(array(utf8_decode($nombre), utf8_decode($local), $tipo_documento, $num_documento, $telefono, $email, utf8_decode($fecha)));
+      $pdf->Row(array(utf8_decode($nombre), utf8_decode($cargo_personal), utf8_decode($local), $tipo_documento, $num_documento, $telefono, $email, utf8_decode($fecha)));
     }
 
     $pdf->Output();

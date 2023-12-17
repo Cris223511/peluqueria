@@ -16,11 +16,11 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Clientes
+                <h1 class="box-title">Personales
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <a href="../reportes/rptclientes.php" target="_blank">
+                  <a href="../reportes/rptpersonales.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
                     </button>
@@ -34,6 +34,7 @@ if (!isset($_SESSION["nombre"])) {
                   <thead>
                     <th>Opciones</th>
                     <th>Nombres</th>
+                    <th>Cargo</th>
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Ubicación del local</th>
                     <th style="white-space: nowrap;">Tipo Doc.</th>
                     <th style="white-space: nowrap;">Número Doc.</th>
@@ -49,6 +50,7 @@ if (!isset($_SESSION["nombre"])) {
                   <tfoot>
                     <th>Opciones</th>
                     <th>Nombres</th>
+                    <th>Cargo</th>
                     <th>Ubicación del local</th>
                     <th>Tipo Doc.</th>
                     <th>Número Doc.</th>
@@ -63,10 +65,14 @@ if (!isset($_SESSION["nombre"])) {
 
               <div class="panel-body" style="height: max-content;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Nombre(*):</label>
-                    <input type="hidden" name="idcliente" id="idcliente">
-                    <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" required>
+                    <input type="hidden" name="idpersonal" id="idpersonal">
+                    <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del personal." autocomplete="off" required>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Cargo(*):</label>
+                    <input type="text" class="form-control" name="cargo" id="cargo" maxlength="40" placeholder="Ingrese el cargo del personal." autocomplete="off" required>
                   </div>
                   <div class="form-group col-lg-6 col-md-12">
                     <label>Local(*):</label>
@@ -129,7 +135,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/clientes1.js"></script>
+  <script type="text/javascript" src="scripts/personales1.js"></script>
 <?php
 }
 ob_end_flush();

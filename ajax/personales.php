@@ -13,18 +13,19 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
 	if ($_SESSION['personas'] == 1) {
-		require_once "../modelos/Clientes.php";
+		require_once "../modelos/Personales.php";
 
-		$clientes = new Cliente();
+		$personales = new Personal();
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
 		$idlocal_session = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
-		$idcliente = isset($_POST["idcliente"]) ? limpiarCadena($_POST["idcliente"]) : "";
+		$idpersonal = isset($_POST["idpersonal"]) ? limpiarCadena($_POST["idpersonal"]) : "";
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 		$nombre = isset($_POST["nombre"]) ? limpiarCadena($_POST["nombre"]) : "";
+		$cargo_personal = isset($_POST["cargo"]) ? limpiarCadena($_POST["cargo"]) : "";
 		$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 		$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
 		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
@@ -34,50 +35,50 @@ if (!isset($_SESSION["nombre"])) {
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
-				if (empty($idcliente)) {
-					$nombreExiste = $clientes->verificarDniExiste($num_documento);
+				if (empty($idpersonal)) {
+					$nombreExiste = $personales->verificarDniExiste($num_documento);
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
-						echo $rspta ? "Cliente registrado" : "El cliente no se pudo registrar";
+						$rspta = $personales->agregar($idusuario, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						echo $rspta ? "Personal registrado" : "El personal no se pudo registrar";
 					}
 				} else {
-					$nombreExiste = $clientes->verificarDniEditarExiste($nombre, $idcliente);
+					$nombreExiste = $personales->verificarDniEditarExiste($nombre, $idpersonal);
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
-						echo $rspta ? "Cliente actualizado" : "El cliente no se pudo actualizar";
+						$rspta = $personales->editar($idpersonal, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						echo $rspta ? "Personal actualizado" : "El personal no se pudo actualizar";
 					}
 				}
 				break;
 
 			case 'desactivar':
-				$rspta = $clientes->desactivar($idcliente);
-				echo $rspta ? "Cliente desactivado" : "El cliente no se pudo desactivar";
+				$rspta = $personales->desactivar($idpersonal);
+				echo $rspta ? "Personal desactivado" : "El personal no se pudo desactivar";
 				break;
 
 			case 'activar':
-				$rspta = $clientes->activar($idcliente);
-				echo $rspta ? "Cliente activado" : "El cliente no se pudo activar";
+				$rspta = $personales->activar($idpersonal);
+				echo $rspta ? "Personal activado" : "El personal no se pudo activar";
 				break;
 
 			case 'eliminar':
-				$rspta = $clientes->eliminar($idcliente);
-				echo $rspta ? "Cliente eliminado" : "El cliente no se pudo eliminar";
+				$rspta = $personales->eliminar($idpersonal);
+				echo $rspta ? "Personal eliminado" : "El personal no se pudo eliminar";
 				break;
 
 			case 'mostrar':
-				$rspta = $clientes->mostrar($idcliente);
+				$rspta = $personales->mostrar($idpersonal);
 				echo json_encode($rspta);
 				break;
 
 			case 'listar':
 				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $clientes->listarClientes();
+					$rspta = $personales->listarPersonales();
 				} else {
-					$rspta = $clientes->listarClientesPorUsuario($idlocal_session);
+					$rspta = $personales->listarPersonalesPorUsuario($idlocal_session);
 				}
 
 				$data = array();
@@ -97,21 +98,22 @@ if (!isset($_SESSION["nombre"])) {
 					$telefono = ($telefono == "") ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>') .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idpersonal . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idcliente . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idcliente . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcliente . ')"><i class="fa fa-trash"></i></button>') .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idpersonal . ')"><i class="fa fa-close"></i></button>')) :
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idpersonal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idpersonal . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => ucwords($reg->nombre),
-						"2" => $reg->local,
-						"3" => $reg->tipo_documento,
-						"4" => $reg->num_documento,
-						"5" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
-						"6" => $telefono,
-						"7" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"8" => $reg->fecha,
-						"9" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"2" => $reg->cargo_personal,
+						"3" => $reg->local,
+						"4" => $reg->tipo_documento,
+						"5" => $reg->num_documento,
+						"6" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
+						"7" => $telefono,
+						"8" => ($reg->email == "") ? "Sin registrar" : $reg->email,
+						"9" => $reg->fecha,
+						"10" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
