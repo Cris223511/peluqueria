@@ -36,16 +36,16 @@ switch ($_GET["op"]) {
 						$data = array();
 
 						while ($reg = $rspta->fetch_object()) {
-							$cargo = "";
+							$cargo_detalle = "";
 							switch ($reg->cargo) {
 								case 'superadmin':
-									$cargo = "Superadministrador";
+									$cargo_detalle = "Superadministrador";
 									break;
 								case 'admin':
-									$cargo = "Administrador";
+									$cargo_detalle = "Administrador";
 									break;
 								case 'cajero':
-									$cargo = "Cajero";
+									$cargo_detalle = "Cajero";
 									break;
 								default:
 									break;
@@ -55,7 +55,7 @@ switch ($_GET["op"]) {
 
 							$data[] = array(
 								"0" => $reg->login,
-								"1" => $cargo,
+								"1" => $cargo_detalle,
 								"2" => $reg->nombre,
 								"3" => $reg->tipo_documento,
 								"4" => $reg->num_documento,

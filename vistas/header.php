@@ -129,6 +129,10 @@ $local_login = $_SESSION['local'];
   body {
     padding-right: 0 !important
   }
+
+  .table-responsive {
+    border: none !important;
+  }
 </style>
 
 <!DOCTYPE html>
@@ -220,6 +224,17 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['servicios'] == 1) {
+            echo '<li id="mServicios" class="treeview">
+              <a href="servicios.php">
+                <i class="fa fa-cogs"></i>
+                <span>Servicios</span>
+              </a>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['almacen'] == 1) {
             echo '<li id="mAlmacen" class="treeview">
               <a href="#">
@@ -282,17 +297,6 @@ $local_login = $_SESSION['local'];
               <a href="metodo_pago.php">
                 <i class="fa fa-credit-card"></i>
                 <span>Métodos de pago</span>
-              </a>
-            </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['servicios'] == 1) {
-            echo '<li id="mServicios" class="treeview">
-              <a href="servicios.php">
-                <i class="fa fa-cogs"></i>
-                <span>Servicios</span>
               </a>
             </li>';
           }

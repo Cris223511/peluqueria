@@ -45,8 +45,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Número</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Local</th>
-                    <th style="white-space: nowrap;">RUC local</th>
                     <th>Foto</th>
                     <th>Estado</th>
                   </thead>
@@ -61,8 +59,6 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Número</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Local</th>
-                    <th style="white-space: nowrap;">RUC local</th>
                     <th>Foto</th>
                     <th>Estado</th>
                   </tfoot>
@@ -76,16 +72,6 @@ if (!isset($_SESSION["nombre"])) {
                     <input type="text" class="form-control" name="nombre" id="nombre" maxlength="20" placeholder="Nombre" required>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label id="locales">Locales disponibles(*):</label>
-                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" required onchange="actualizarRUC()">
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>RUC local(*):</label>
-                    <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Tipo Documento(*):</label>
                     <select class="form-control select-picker" name="tipo_documento" id="tipo_documento" onchange="changeValue(this);" required>
                       <option value="">- Seleccione -</option>
@@ -97,6 +83,16 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Número(*):</label>
                     <input type="number" class="form-control" name="num_documento" id="num_documento" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" placeholder="Documento" required>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label id="locales">Local principal(*):</label>
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" required onchange="actualizarRUC()">
+                      <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>RUC local(*):</label>
+                    <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Dirección:</label>
@@ -133,7 +129,6 @@ if (!isset($_SESSION["nombre"])) {
                     <ul style="list-style: none;" id="permisos">
                     </ul>
                   </div>
-
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Imagen:</label>
                     <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">

@@ -30,7 +30,6 @@ if (!isset($_SESSION["nombre"])) {
 		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
-		$fecha_nac = isset($_POST["fecha_nac"]) ? limpiarCadena($_POST["fecha_nac"]) : "";
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
@@ -39,7 +38,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						$rspta = $clientes->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
 						echo $rspta ? "Cliente registrado" : "El cliente no se pudo registrar";
 					}
 				} else {
@@ -47,7 +46,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac);
+						$rspta = $clientes->editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
 						echo $rspta ? "Cliente actualizado" : "El cliente no se pudo actualizar";
 					}
 				}
@@ -74,7 +73,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin") {
 					$rspta = $clientes->listarClientes();
 				} else {
 					$rspta = $clientes->listarClientesPorUsuario($idlocal_session);
@@ -94,7 +93,24 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				while ($reg = $rspta->fetch_object()) {
-					$telefono = ($telefono == "") ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>') .
@@ -110,8 +126,10 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"6" => $telefono,
 						"7" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"8" => $reg->fecha,
-						"9" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"8" => ucwords($reg->nombre),
+						"9" => ucwords($cargo_detalle),
+						"10" => $reg->fecha,
+						"11" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

@@ -180,17 +180,17 @@ class Articulo
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarTodosActivosPorUsuario($idusuario)
+	public function listarTodosActivosPorUsuario($idusuario, $idlocal)
 	{
-		$sql = "SELECT 'categoria' AS tabla, b.idcategoria AS id, b.titulo, u.nombre AS usuario, NULL AS ruc FROM categoria b LEFT JOIN usuario u ON b.idusuario = u.idusuario WHERE b.idusuario='$idusuario' AND b.estado='activado' AND b.eliminado='0'
+		$sql = "SELECT 'categoria' AS tabla, b.idcategoria AS id, b.titulo, u.nombre AS usuario, NULL AS ruc FROM categoria b LEFT JOIN usuario u ON b.idusuario = u.idusuario WHERE b.estado='activado' AND b.eliminado='0'
 			UNION ALL
-			SELECT 'marca' AS tabla, o.idmarca AS id, o.titulo, u.nombre AS usuario, NULL AS ruc FROM marcas o LEFT JOIN usuario u ON o.idusuario = u.idusuario WHERE o.idusuario='$idusuario' AND o.estado='activado' AND o.eliminado='0'
+			SELECT 'marca' AS tabla, o.idmarca AS id, o.titulo, u.nombre AS usuario, NULL AS ruc FROM marcas o LEFT JOIN usuario u ON o.idusuario = u.idusuario WHERE o.estado='activado' AND o.eliminado='0'
 			UNION ALL
-			SELECT 'local' AS tabla, l.idlocal AS id, l.titulo, u.nombre AS usuario, local_ruc AS ruc FROM locales l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idusuario='$idusuario' AND l.idusuario <> 0 AND l.estado='activado' AND l.eliminado='0'
+			SELECT 'local' AS tabla, l.idlocal AS id, l.titulo, u.nombre AS usuario, local_ruc AS ruc FROM locales l LEFT JOIN usuario u ON l.idusuario = u.idusuario WHERE l.idlocal='$idlocal' AND l.idusuario <> 0 AND l.estado='activado' AND l.eliminado='0'
 			UNION ALL
-			SELECT 'medida' AS tabla, m.idmedida AS id, m.titulo, u.nombre AS usuario, NULL AS ruc FROM medidas m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.idusuario='$idusuario' AND m.estado='activado' AND m.eliminado='0'
+			SELECT 'medida' AS tabla, m.idmedida AS id, m.titulo, u.nombre AS usuario, NULL AS ruc FROM medidas m LEFT JOIN usuario u ON m.idusuario = u.idusuario WHERE m.estado='activado' AND m.eliminado='0'
 			UNION ALL
-			SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo, u.nombre AS usuario, NULL AS ruc FROM servicios s LEFT JOIN usuario u ON s.idusuario = u.idusuario WHERE s.idusuario='$idusuario' AND s.estado='activado' AND s.eliminado='0'";
+			SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo, u.nombre AS usuario, NULL AS ruc FROM servicios s LEFT JOIN usuario u ON s.idusuario = u.idusuario WHERE s.estado='activado' AND s.eliminado='0'";
 
 		return ejecutarConsulta($sql);
 	}

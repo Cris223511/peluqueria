@@ -41,7 +41,6 @@ function limpiar() {
 	$("#direccion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
-	$("#fecha_nac").val("");
 
 	$("#idlocal").val($("#idlocal option:first").val());
 	$("#idlocal").selectpicker('refresh');
@@ -104,7 +103,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5) td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5) td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -151,7 +150,6 @@ function mostrar(idpersonal) {
 		$("#direccion").val(data.direccion);
 		$("#telefono").val(data.telefono);
 		$("#email").val(data.email);
-		$("#fecha_nac").val(data.fecha_nac);
 		$("#idpersonal").val(data.idpersonal);
 
 		actualizarRUC();

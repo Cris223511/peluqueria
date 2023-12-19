@@ -68,7 +68,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin" || $cargo == "admin" || $cargo == "cajero") {
 					$rspta = $medidas->listar();
 				} else {
 					$rspta = $medidas->listarPorUsuario($idusuario);

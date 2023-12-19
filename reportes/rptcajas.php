@@ -34,12 +34,13 @@ if (!isset($_SESSION["nombre"])) {
     $cajas = new Caja();
 
     $idusuario = $_SESSION["idusuario"];
+    $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin") {
       $rspta = $cajas->listar();
     } else {
-      $rspta = $cajas->listarPorUsuario($idusuario);
+      $rspta = $cajas->listarPorUsuario($idlocal_session);
     }
 
     $pdf->SetWidths(array(40, 110, 40));

@@ -84,17 +84,6 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
-				function mostrarBoton($param, $cargo, $buttonType)
-				{
-					if ($param == 0) {
-						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "admin") {
-						return $buttonType;
-					} else {
-						return '';
-					}
-				}
-
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -116,12 +105,8 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; display: flex; justify-content: center;">' .
-							mostrarBoton($param, $cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
-							mostrarBoton($param, $cargo, '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
-							(($reg->estado == 'activado') ?
-								(mostrarBoton($param, $cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($param, $cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+							(($param != 1) ? '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>' : '') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local_ruc,
@@ -148,16 +133,16 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
-					$cargo = "";
+					$cargo_detalle = "";
 					switch ($reg->cargo) {
 						case 'superadmin':
-							$cargo = "Superadministrador";
+							$cargo_detalle = "Superadministrador";
 							break;
 						case 'admin':
-							$cargo = "Administrador";
+							$cargo_detalle = "Administrador";
 							break;
 						case 'cajero':
-							$cargo = "Cajero";
+							$cargo_detalle = "Cajero";
 							break;
 						default:
 							break;
@@ -167,7 +152,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => $reg->login,
-						"1" => $cargo,
+						"1" => $cargo_detalle,
 						"2" => $reg->nombre,
 						"3" => $reg->tipo_documento,
 						"4" => $reg->num_documento,
@@ -213,11 +198,15 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocales':
-				$rspta = $locales->listarActivos();
+				$rspta = $locales->listarActivosASC();
+				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
-				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
+				$data = [];
+				foreach ($result as $row) {
+					$data["locales"][] = $row;
 				}
+
+				echo json_encode($data);
 				break;
 
 			case 'selectLocalesUsuario':
@@ -230,7 +219,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				echo '<option value="">- Seleccione -</option>';
 				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
+					echo '<option value="' . $reg->idlocal . '" data-local-ruc="' . $reg->local_ruc . '"> ' . $reg->titulo . '</option>';
 				}
 				break;
 

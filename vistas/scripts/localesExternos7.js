@@ -16,8 +16,8 @@ function init() {
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	});
-	$('#mAlmacen').addClass("treeview active");
-	$('#lLocales').addClass("active");
+	$('#mPerfilUsuario').addClass("treeview active");
+	$('#lLocalesExternos').addClass("active");
 }
 
 function limpiar() {

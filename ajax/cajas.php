@@ -138,9 +138,9 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
-						"3" => ucwords($reg->nombre),
-						"4" => ucwords($cargo_detalle),
-						"5" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"3" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"4" => ucwords($reg->nombre),
+						"5" => ucwords($cargo_detalle),
 						"6" => $reg->fecha,
 						"7" => ($reg->estado == 'aperturado') ? '<span class="label bg-green">Aperturado</span>' :
 							'<span class="label bg-red">Cerrado</span>'
@@ -222,9 +222,9 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
-						"3" => ucwords($reg->nombre),
-						"4" => ucwords($cargo_detalle),
-						"5" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"3" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"4" => ucwords($reg->nombre),
+						"5" => ucwords($cargo_detalle),
 						"6" => $reg->fecha,
 						"7" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
 						"8" => ($reg->estado == 'aperturado') ? '<span class="label bg-green">Aperturado</span>' :

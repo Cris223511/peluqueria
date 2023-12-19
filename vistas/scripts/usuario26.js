@@ -21,10 +21,9 @@ function init() {
 }
 
 function cargarLocalDisponible() {
-	$("#locales").empty().append("Locales disponibles(*):");
 	select.empty();
 	// Cargamos los items al select "local principal"
-	$.post("../ajax/locales.php?op=selectLocalDisponible", function (data) {
+	$.post("../ajax/locales.php?op=selectLocales", function (data) {
 		// console.log(data);
 		objSelects = JSON.parse(data);
 		console.log(objSelects);
@@ -173,43 +172,35 @@ function guardaryeditar(e) {
 }
 
 function mostrar(idusuario) {
-	select.empty();
-	$("#locales").empty().append("Local principal(*):");
-	$.post("../ajax/locales.php?op=selectLocalUsuario", { idusuariolocal: idusuario }, function (r) {
-		console.log(r);
-		$("#idlocal").html(r);
-		$('#idlocal').selectpicker('refresh');
+	$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
+		// console.log(data);
+		data = JSON.parse(data);
+		console.log(data);
+		mostrarform(true);
 
-		$.post("../ajax/usuario.php?op=mostrar", { idusuario: idusuario }, function (data, status) {
-			// console.log(data);
-			data = JSON.parse(data);
-			console.log(data);
-			mostrarform(true);
+		$("#nombre").val(data.nombre);
+		$("#tipo_documento").val(data.tipo_documento);
+		$("#tipo_documento").trigger("change");
+		$("#tipo_documento").selectpicker('refresh');
+		$("#num_documento").val(data.num_documento);
+		$("#direccion").val(data.direccion);
+		$("#telefono").val(data.telefono);
+		$("#email").val(data.email);
+		$("#idlocal").val(data.idlocal);
+		$("#idlocal").selectpicker('refresh');
+		$("#local_ruc").val(data.local_ruc);
+		$("#cargo").val(data.cargo);
+		$("#cargo").selectpicker('refresh');
+		$("#login").val(data.login);
+		$("#clave").val(data.clave);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
+		$("#idusuario").val(data.idusuario);
+	});
 
-			$("#nombre").val(data.nombre);
-			$("#tipo_documento").val(data.tipo_documento);
-			$("#tipo_documento").trigger("change");
-			$("#tipo_documento").selectpicker('refresh');
-			$("#num_documento").val(data.num_documento);
-			$("#direccion").val(data.direccion);
-			$("#telefono").val(data.telefono);
-			$("#email").val(data.email);
-			$("#idlocal").val(data.idlocal);
-			$("#idlocal").selectpicker('refresh');
-			$("#local_ruc").val(data.local_ruc);
-			$("#cargo").val(data.cargo);
-			$("#cargo").selectpicker('refresh');
-			$("#login").val(data.login);
-			$("#clave").val(data.clave);
-			$("#imagenmuestra").show();
-			$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
-			$("#imagenactual").val(data.imagen);
-			$("#idusuario").val(data.idusuario);
-		});
-
-		$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
-			$("#permisos").html(r);
-		});
+	$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
+		$("#permisos").html(r);
 	});
 }
 

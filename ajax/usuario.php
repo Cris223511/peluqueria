@@ -136,7 +136,7 @@ switch ($_GET["op"]) {
 							break;
 					}
 
-					$telefono = number_format($reg->telefono, 0, '', ' ');
+					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -154,10 +154,8 @@ switch ($_GET["op"]) {
 						"5" => $reg->num_documento,
 						"6" => $telefono,
 						"7" => $reg->email,
-						"8" => $reg->local,
-						"9" => $reg->local_ruc,
-						"10" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
-						"11" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
+						"8" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+						"9" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -178,21 +176,21 @@ switch ($_GET["op"]) {
 		$rspta = $usuario->listarUsuariosActivos();
 
 		while ($reg = $rspta->fetch_object()) {
-			$cargo = "";
+			$cargo_detalle = "";
 			switch ($reg->cargo) {
 				case 'superadmin':
-					$cargo = "Superadministrador";
+					$cargo_detalle = "Superadministrador";
 					break;
 				case 'admin':
-					$cargo = "Administrador";
+					$cargo_detalle = "Administrador";
 					break;
 				case 'cajero':
-					$cargo = "Cajero";
+					$cargo_detalle = "Cajero";
 					break;
 				default:
 					break;
 			}
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo . '</option>';
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo_detalle . '</option>';
 		}
 		break;
 
@@ -206,21 +204,21 @@ switch ($_GET["op"]) {
 
 		echo '<option value="">- Seleccione -</option>';
 		while ($reg = $rspta->fetch_object()) {
-			$cargo = "";
+			$cargo_detalle = "";
 			switch ($reg->cargo) {
 				case 'superadmin':
-					$cargo = "Superadministrador";
+					$cargo_detalle = "Superadministrador";
 					break;
 				case 'admin':
-					$cargo = "Administrador";
+					$cargo_detalle = "Administrador";
 					break;
 				case 'cajero':
-					$cargo = "Cajero";
+					$cargo_detalle = "Cajero";
 					break;
 				default:
 					break;
 			}
-			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo . '</option>';
+			echo '<option value="' . $reg->idusuario . '"> ' . $reg->nombre  . ' - ' . $cargo_detalle . '</option>';
 		}
 		break;
 

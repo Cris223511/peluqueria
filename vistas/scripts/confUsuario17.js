@@ -20,7 +20,7 @@ function init() {
 			select.html('<option value="">- Seleccione -</option>');
 
 			objSelects.locales.forEach(function (opcion) {
-				select.append('<option value="' + opcion.idlocal + '" data-local-ruc="' + opcion.local_ruc + '">' + opcion.titulo + ' - ' + opcion.nombre + '</option>');
+				select.append('<option value="' + opcion.idlocal + '" data-local-ruc="' + opcion.local_ruc + '">' + opcion.titulo + '</option>');
 			});
 			select.selectpicker('refresh');
 			mostrar();

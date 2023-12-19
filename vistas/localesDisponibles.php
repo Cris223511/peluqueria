@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin"  || $_SESSION['cargo'] == "admin")) {
+  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Locales disponibles <!-- Locales disponibles -->
+                <h1 class="box-title">Crear Locales disponibles <!-- Locales disponibles -->
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
@@ -107,7 +107,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/localesDisponibles9.js"></script>
+  <script type="text/javascript" src="scripts/localesDisponibles.js"></script>
 <?php
 }
 ob_end_flush();

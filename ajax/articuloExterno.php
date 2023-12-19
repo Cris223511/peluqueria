@@ -253,19 +253,19 @@ if (!isset($_SESSION["nombre"])) {
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idarticulo . ')"><i class="fa fa-pencil"></i></button>') .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger "style="height: 35px;" onclick="eliminar(' . $reg->idarticulo . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
-						"1" => $reg->usuario,
-						"2" => $cargo_detalle,
-						"3" => $reg->nombre,
-						"4" => $reg->categoria,
-						"5" => $reg->local,
-						"6" => $reg->marca,
-						"7" => $reg->codigo_producto,
-						"8" => $reg->codigo,
-						"9" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"10" => $reg->stock_minimo,
-						"11" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
-						"12" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
-						"13" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"1" => "<img src='../files/articulos/" . $reg->imagen . "' height='50px' width='50px' >",
+						"2" => $reg->nombre,
+						"3" => $reg->categoria,
+						"4" => $reg->local,
+						"5" => $reg->marca,
+						"6" => $reg->codigo_producto,
+						"7" => $reg->codigo,
+						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"9" => $reg->stock_minimo,
+						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
+						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
+						"12" => $reg->usuario,
+						"13" => $cargo_detalle,
 						"14" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
@@ -285,7 +285,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin") {
 					$rspta = $articulo->listarTodosActivos();
 				} else {
-					$rspta = $articulo->listarTodosActivosPorUsuario($idusuario);
+					$rspta = $articulo->listarTodosActivosPorUsuario($idusuario, $idlocalSession);
 				}
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);

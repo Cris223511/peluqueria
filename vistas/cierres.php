@@ -56,9 +56,9 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Opciones</th>
                       <th>Nombre</th>
                       <th style="width: 20%; min-width: 220px; white-space: nowrap;">Ubicación del local</th>
-                      <th style="white-space: nowrap;">Usuario</th>
-                      <th>Cargo</th>
                       <th>Monto</th>
+                      <th style="white-space: nowrap;">Agregado por</th>
+                      <th>Cargo</th>
                       <th style="white-space: nowrap;">Fecha inicio</th>
                       <th style="white-space: nowrap;">Fecha cierre</th>
                       <th>Estado</th>
@@ -69,9 +69,9 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Opciones</th>
                       <th>Nombre</th>
                       <th>Ubicación del local</th>
-                      <th>Usuario</th>
-                      <th>Cargo</th>
                       <th>Monto</th>
+                      <th>Agregado por</th>
+                      <th>Cargo</th>
                       <th>Fecha inicio</th>
                       <th>Fecha cierre</th>
                       <th>Estado</th>

@@ -26,28 +26,29 @@ if (!isset($_SESSION["nombre"])) {
 
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(36, 6, 'Nombre', 1, 0, 'C', 1);
-    $pdf->Cell(50, 6, 'Local', 1, 0, 'C', 1);
+    $pdf->Cell(45, 6, 'Nombre', 1, 0, 'C', 1);
+    $pdf->Cell(55, 6, 'Local', 1, 0, 'C', 1);
     $pdf->Cell(26, 6, 'Documento', 1, 0, 'C', 1);
     $pdf->Cell(33, 6, utf8_decode('Número'), 1, 0, 'C', 1);
     $pdf->Cell(22, 6, utf8_decode('Teléfono'), 1, 0, 'C', 1);
-    $pdf->Cell(44, 6, 'Email', 1, 0, 'C', 1);
-    $pdf->Cell(30, 6, 'Fecha Nac.', 1, 0, 'C', 1);
+    $pdf->Cell(54, 6, 'Email', 1, 0, 'C', 1);
+    $pdf->Cell(40, 6, 'Fecha', 1, 0, 'C', 1);
 
     $pdf->Ln(10);
     require_once "../modelos/Clientes.php";
     $clientes = new Cliente();
 
     $idusuario = $_SESSION["idusuario"];
+    $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin") {
-      $rspta = $clientes->listarClientesFechaNormal();
+      $rspta = $clientes->listarClientes();
     } else {
-      $rspta = $clientes->listarClientesFechaNormalPorUsuario($idusuario);
+      $rspta = $clientes->listarClientesPorUsuario($idlocal_session);
     }
 
-    $pdf->SetWidths(array(36, 50, 26, 33, 22, 44, 30));
+    $pdf->SetWidths(array(45, 55, 26, 33, 22, 54, 40));
 
     while ($reg = $rspta->fetch_object()) {
       $nombre = $reg->nombre;

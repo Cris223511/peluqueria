@@ -109,7 +109,7 @@ if (!isset($_SESSION["nombre"])) {
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; display: flex; justify-content: center;">' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							mostrarBoton($cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
 							mostrarBoton($cargo, '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
@@ -137,21 +137,23 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarTrabajadores':
 
-				$rspta = $locales->listarUsuariosPorLocal($idlocal_session);
+				$idlocal2 = isset($_GET["idlocal"]) ? limpiarCadena($_GET["idlocal"]) : "";
+
+				$rspta = $locales->listarUsuariosPorLocal($idlocal2);
 
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
-					$cargo = "";
+					$cargo_detalle = "";
 					switch ($reg->cargo) {
 						case 'superadmin':
-							$cargo = "Superadministrador";
+							$cargo_detalle = "Superadministrador";
 							break;
 						case 'admin':
-							$cargo = "Administrador";
+							$cargo_detalle = "Administrador";
 							break;
 						case 'cajero':
-							$cargo = "Cajero";
+							$cargo_detalle = "Cajero";
 							break;
 						default:
 							break;
@@ -161,7 +163,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => $reg->login,
-						"1" => $cargo,
+						"1" => $cargo_detalle,
 						"2" => $reg->nombre,
 						"3" => $reg->tipo_documento,
 						"4" => $reg->num_documento,

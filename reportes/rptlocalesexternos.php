@@ -30,19 +30,17 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->Cell(40, 6, utf8_decode('Fecha y hora'), 1, 0, 'C', 1);
 
     $pdf->Ln(10);
-    require_once "../modelos/Locales.php";
-    $locales = new Local();
+    require_once "../modelos/LocalesExternos.php";
+    $locales = new LocalExterno();
 
     $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
-    $rspta = $locales->listar();
-
-    // if ($cargo == "superadmin" || $cargo == "admin") {
-    //   $rspta = $locales->listar();
-    // } else {
-    //   $rspta = $locales->listarPorUsuario($idusuario);
-    // }
+    if ($cargo == "superadmin") {
+      $rspta = $locales->listar();
+    } else {
+      $rspta = $locales->listarPorUsuario($idusuario);
+    }
 
     $pdf->SetWidths(array(40, 110, 40));
 

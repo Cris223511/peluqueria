@@ -7,11 +7,11 @@ class Cliente
 	{
 	}
 
-	public function agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac)
+	public function agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO clientes (idusuario, idlocal, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_nac, estado, eliminado)
-            VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', '$fecha_nac', 'activado','0')";
+		$sql = "INSERT INTO clientes (idusuario, idlocal, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
+            VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -39,9 +39,9 @@ class Cliente
 		return false;
 	}
 
-	public function editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $fecha_nac)
+	public function editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
 	{
-		$sql = "UPDATE clientes SET idlocal='$idlocal',nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email',fecha_nac='$fecha_nac' WHERE idcliente='$idcliente'";
+		$sql = "UPDATE clientes SET idlocal='$idlocal',nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email' WHERE idcliente='$idcliente'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -71,32 +71,8 @@ class Cliente
 
 	public function listarClientes()
 	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.cargo as cargo,
-				CONCAT(DAY(c.fecha_nac), ' de ', 
-				CASE MONTH(c.fecha_nac)
-					WHEN 1 THEN 'Enero'
-					WHEN 2 THEN 'Febrero'
-					WHEN 3 THEN 'Marzo'
-					WHEN 4 THEN 'Abril'
-					WHEN 5 THEN 'Mayo'
-					WHEN 6 THEN 'Junio'
-					WHEN 7 THEN 'Julio'
-					WHEN 8 THEN 'Agosto'
-					WHEN 9 THEN 'Septiembre'
-					WHEN 10 THEN 'Octubre'
-					WHEN 11 THEN 'Noviembre'
-					WHEN 12 THEN 'Diciembre'
-				END, ' del ', YEAR(c.fecha_nac)) as fecha, c.estado
-				FROM clientes c
-				LEFT JOIN usuario u ON c.idusuario = u.idusuario
-				LEFT JOIN locales l ON c.idlocal = l.idlocal
-				WHERE c.eliminado = '0' ORDER BY c.idcliente DESC";
-		return ejecutarConsulta($sql);
-	}
-
-	public function listarClientesFechaNormal()
-	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.cargo as cargo, c.fecha_nac as fecha, c.estado
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				LEFT JOIN locales l ON c.idlocal = l.idlocal
@@ -106,32 +82,8 @@ class Cliente
 
 	public function listarClientesPorUsuario($idlocal_session)
 	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.cargo as cargo,
-				CONCAT(DAY(c.fecha_nac), ' de ', 
-				CASE MONTH(c.fecha_nac)
-					WHEN 1 THEN 'Enero'
-					WHEN 2 THEN 'Febrero'
-					WHEN 3 THEN 'Marzo'
-					WHEN 4 THEN 'Abril'
-					WHEN 5 THEN 'Mayo'
-					WHEN 6 THEN 'Junio'
-					WHEN 7 THEN 'Julio'
-					WHEN 8 THEN 'Agosto'
-					WHEN 9 THEN 'Septiembre'
-					WHEN 10 THEN 'Octubre'
-					WHEN 11 THEN 'Noviembre'
-					WHEN 12 THEN 'Diciembre'
-				END, ' del ', YEAR(c.fecha_nac)) as fecha, c.estado
-				FROM clientes c
-				LEFT JOIN usuario u ON c.idusuario = u.idusuario
-				LEFT JOIN locales l ON c.idlocal = l.idlocal
-				WHERE c.idlocal = '$idlocal_session' AND c.eliminado = '0' ORDER BY c.idcliente DESC";
-		return ejecutarConsulta($sql);
-	}
-
-	public function listarClientesFechaNormalPorUsuario($idlocal_session)
-	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.cargo as cargo, c.fecha_nac as fecha, c.estado
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				LEFT JOIN locales l ON c.idlocal = l.idlocal

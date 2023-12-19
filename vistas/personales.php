@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Personales
+                <h1 class="box-title">Personales del salón
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
@@ -41,7 +41,9 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th style="white-space: nowrap;">Fecha Nac.</th>
+                    <th style="white-space: nowrap;">Agregado por</th>
+                    <th>Cargo</th>
+                    <th style="white-space: nowrap;">Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -57,7 +59,9 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Fecha Nac.</th>
+                    <th>Agregado por</th>
+                    <th>Cargo</th>
+                    <th>Fecha y hora</th>
                     <th>Estado</th>
                   </tfoot>
                 </table>
@@ -76,7 +80,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-12">
                     <label>Local(*):</label>
-                    <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC()">
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>
@@ -86,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12">
                     <label>Descripción:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del producto." autocomplete="off">
+                    <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del personal." autocomplete="off">
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Dirección:</label>
@@ -112,10 +116,6 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Email:</label>
                     <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Ingrese el correo electrónico.">
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <label>Fecha Nacimiento:</label>
-                    <input type="date" class="form-control" name="fecha_nac" id="fecha_nac" required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

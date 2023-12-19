@@ -15,7 +15,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Trabajadores
+                <h1 class="box-title">Trabajadores del sistema (local)
                   <a href="../reportes/rpttrabajadores.php" target="_blank">
                     <button class="btn btn-secondary" style="color: black !important;">
                       <i class="fa fa-clipboard"></i> Reporte
@@ -53,7 +53,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tfoot>
                 </table>
               </div>
-              <div class="panel-body" id="formularioregistros">
+              <!-- <div class="panel-body" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Nombre(*):</label>
@@ -130,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
                     <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                   </div>
                 </form>
-              </div>
+              </div> -->
             </div>
           </div>
         </div>
