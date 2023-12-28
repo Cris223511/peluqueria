@@ -22,6 +22,8 @@ function init() {
 
 function limpiar() {
 	desbloquearCampos();
+	$("#btnGuardar").show();
+
 	$("#idlocal").val("");
 	$("#titulo").val("");
 	$("#local_ruc").val("");
@@ -116,6 +118,20 @@ function guardaryeditar(e) {
 			bootbox.alert(datos);
 			mostrarform(false);
 			tabla1.ajax.reload();
+			actualizarInfoUsuario();
+		}
+	});
+}
+
+// función para actualizar la información del usuario en sesión en tiempo real
+function actualizarInfoUsuario() {
+	$.ajax({
+		url: "../ajax/locales.php?op=actualizarSession",
+		dataType: 'json',
+		success: function (data) {
+			console.log(data)
+			// actualizar la imagen y el nombre del usuario en la cabecera
+			$('.user-menu .local').html('<strong> Local: ' + data.local + '</strong>');
 		}
 	});
 }

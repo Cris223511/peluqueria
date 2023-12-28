@@ -121,16 +121,16 @@ switch ($_GET["op"]) {
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
-					$cargo = "";
+					$cargo_detalle = "";
 					switch ($reg->cargo) {
 						case 'superadmin':
-							$cargo = "Superadministrador";
+							$cargo_detalle = "Superadministrador";
 							break;
 						case 'admin':
-							$cargo = "Administrador";
+							$cargo_detalle = "Administrador";
 							break;
 						case 'cajero':
-							$cargo = "Cajero";
+							$cargo_detalle = "Cajero";
 							break;
 						default:
 							break;
@@ -148,7 +148,7 @@ switch ($_GET["op"]) {
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
 						"1" => $reg->login,
-						"2" => $cargo,
+						"2" => $cargo_detalle,
 						"3" => $reg->nombre,
 						"4" => $reg->tipo_documento,
 						"5" => $reg->num_documento,

@@ -10,6 +10,8 @@
     <script src="../public/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../public/js/app.min.js"></script>
+    <!-- Lightbox JS -->
+    <script src="../public/glightbox/js/glightbox.min.js"></script>
 
     <!-- DATATABLES -->
     <script src="../public/datatables/jquery.dataTables.min.js"></script>
@@ -22,6 +24,18 @@
 
     <script src="../public/js/bootbox.min.js"></script>
     <script src="../public/js/bootstrap-select.min.js"></script>
+
+    <script>
+      function inicializeGLightbox() {
+        const glightbox = GLightbox({
+          selector: '.glightbox'
+        });
+
+        const galelryLightbox = GLightbox({
+          selector: ".galleria-lightbox",
+        });
+      }
+    </script>
 
     <script>
       function capitalizarPalabras(palabra) {
@@ -76,6 +90,17 @@
         }
       });
 
+      $(document).on('draw.dt', function(e, settings) {
+        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tblarticulos')) {
+          const table = $(settings.nTable).DataTable();
+          if (table.rows({
+              page: 'current'
+            }).count() > 0) {
+            inicializeGLightbox();
+          }
+        }
+      });
+
       $(document).ajaxSuccess(function(event, xhr, settings) {
         if (settings.url.includes("op=listar") || settings.url.includes("op=guardaryeditar") || settings.url.includes("op=desactivar") || settings.url.includes("op=activar") || settings.url.includes("op=eliminar")) {
           $(".modal-footer .btn-primary").removeClass("btn-primary").addClass("btn-bcp");
@@ -91,6 +116,20 @@
     <script>
       $('.selectpicker').selectpicker({
         noneResultsText: 'No se encontraron resultados.'
+      });
+    </script>
+
+    <script>
+      var camposNumericos = document.querySelectorAll('input[type="number"]');
+      camposNumericos.forEach(function(campo) {
+        campo.addEventListener('keydown', function(event) {
+          var teclasPermitidas = [46, 8, 9, 27, 13, 110, 190]; // ., delete, tab, escape, enter
+          if ((event.ctrlKey || event.metaKey) && event.which === 65) return; // Permitir Ctrl+A o Command+A
+          if (teclasPermitidas.includes(event.which)) return; // Si es una tecla permitida, no hacer nada
+          if ((event.which < 48 || event.which > 57) && (event.which < 96 || event.which > 105) && event.which !== 190 && event.which !== 110) {
+            event.preventDefault(); // Prevenir cualquier otra tecla no numérica ni punto
+          }
+        });
       });
     </script>
 

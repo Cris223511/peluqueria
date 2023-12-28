@@ -44,6 +44,9 @@ if (!isset($_SESSION["nombre"])) {
 					} else {
 						$rspta = $locales->agregar($idusuario, $titulo, $local_ruc, $descripcion);
 						echo $rspta ? "Local registrado" : "El local no se pudo registrar";
+						if ($rspta) {
+							$_SESSION['local'] = $titulo;
+						}
 					}
 				} else {
 					$nombreExiste = $locales->verificarNombreEditarExiste($titulo, $idlocal);
@@ -52,6 +55,9 @@ if (!isset($_SESSION["nombre"])) {
 					} else {
 						$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion);
 						echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
+						if ($rspta) {
+							$_SESSION['local'] = $titulo;
+						}
 					}
 				}
 				break;
@@ -104,7 +110,8 @@ if (!isset($_SESSION["nombre"])) {
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; display: flex; justify-content: center;">' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							(($param != 1) ? '<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>' : '') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
 							(($param != 1) ? '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>' : '') .
 							'</div>',
@@ -241,6 +248,13 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				echo json_encode($data);
+				break;
+
+			case 'actualizarSession':
+				$info = array(
+					'local' => $_SESSION['local'],
+				);
+				echo json_encode($info);
 				break;
 		}
 	} else {
