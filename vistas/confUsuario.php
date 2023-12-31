@@ -61,7 +61,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Local principal(*):</label>
-                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" required onchange="actualizarRUC()">
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" onchange="actualizarRUC()" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
