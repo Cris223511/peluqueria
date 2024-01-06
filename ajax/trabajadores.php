@@ -61,8 +61,10 @@ switch ($_GET["op"]) {
 								"4" => $reg->num_documento,
 								"5" => $telefono,
 								"6" => $reg->email,
-								"7" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
-								"8" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
+								"7" => $reg->local,
+								"8" => "N° " . $reg->local_ruc,
+								"9" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+								"10" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 									'<span class="label bg-red">Desactivado</span>'
 							);
 						}

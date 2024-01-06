@@ -18,6 +18,16 @@ function init() {
 
 	$('#mAcceso').addClass("treeview active");
 	$('#lUsuarios').addClass("active");
+
+	$("#checkAll").prop("checked", false);
+}
+
+function toggleCheckboxes(checkbox) {
+	var checkboxes = document.querySelectorAll('#permisos input[type="checkbox"]');
+
+	checkboxes.forEach(function (cb) {
+		cb.checked = checkbox.checked;
+	});
 }
 
 function cargarLocalDisponible() {
@@ -74,6 +84,8 @@ function limpiar() {
 	$("#imagenmuestra").hide();
 	$("#imagenactual").val("");
 	$("#idusuario").val("");
+
+	$("#checkAll").prop("checked", false);
 }
 
 //Función mostrar formulario
@@ -197,6 +209,8 @@ function mostrar(idusuario) {
 		$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
 		$("#imagenactual").val(data.imagen);
 		$("#idusuario").val(data.idusuario);
+
+		$("#checkAll").prop("checked", false);
 	});
 
 	$.post("../ajax/usuario.php?op=permisos&id=" + idusuario, function (r) {
