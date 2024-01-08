@@ -20,11 +20,13 @@ if (!isset($_SESSION["nombre"])) {
                   <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button> -->
-                  <a href="../reportes/rptlocalesexternos.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
-                    </button>
-                  </a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptlocalesexternos.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -80,7 +82,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal -->
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 80%; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: hidden;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

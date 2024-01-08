@@ -20,11 +20,13 @@ if (!isset($_SESSION["nombre"])) {
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar
                   </button>
-                  <a href="../reportes/rptclientes.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
-                    </button>
-                  </a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptclientes.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

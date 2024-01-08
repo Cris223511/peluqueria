@@ -23,11 +23,13 @@ if (!isset($_SESSION["nombre"])) {
                   <!-- <button class="btn btn-success" id="btnasignar" onclick="mostrarform2(true)">
                     <i class="fa fa-sign-out"></i> Asignar
                   </button> -->
-                  <a href="../reportes/rptlocalesdisponibles.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
-                    </button>
-                  </a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptlocalesdisponibles.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

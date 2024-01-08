@@ -17,14 +17,18 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Aperturas de caja
-                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
-                    <i class="fa fa-plus-circle"></i> Aperturar
-                  </button>
-                  <a href="../reportes/rptcajas.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
+                      <i class="fa fa-plus-circle"></i> Aperturar
                     </button>
-                  </a>
+                  <?php } ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptcajas.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

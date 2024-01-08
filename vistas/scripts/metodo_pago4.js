@@ -50,11 +50,7 @@ function listar() {
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
-			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
-			],
+			buttons: [],
 			"ajax":
 			{
 				url: '../ajax/metodo_pago.php?op=listar',

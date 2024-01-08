@@ -17,11 +17,13 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Cierre de caja
-                  <a href="../reportes/rptcajas.php" target="_blank">
-                    <button class="btn btn-secondary" style="color: black !important;">
-                      <i class="fa fa-clipboard"></i> Reporte
-                    </button>
-                  </a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptcajas.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

@@ -54,7 +54,13 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">Productos
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
-                  <a href="../reportes/rptarticulos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptarticulos.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right"></div>
               </div>
@@ -182,11 +188,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Stock(*):</label>
-                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3" min="0" placeholder="Ingrese el stock." required>
+                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el stock." required>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Stock mínimo(*):</label>
-                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3" min="0" placeholder="Ingrese el stock mínimo." required>
+                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el stock mínimo." required>
                     </div>
                     <div class="form-group col-lg-12 col-md-12">
                       <label>Imagen:</label>

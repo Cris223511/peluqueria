@@ -75,11 +75,7 @@ function listar() {
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
-			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
-			],
+			buttons: [],
 			"ajax":
 			{
 				url: '../ajax/personales.php?op=listar',

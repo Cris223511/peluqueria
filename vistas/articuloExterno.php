@@ -54,7 +54,13 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">Productos Externos
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
-                  <a href="../reportes/rptarticulosExternos.php" target="_blank"><button class="btn btn-secondary" style="color: black !important;"><i class="fa fa-clipboard"></i> Reporte</button></a>
+                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                    <a href="../reportes/rptarticulosExternos.php" target="_blank">
+                      <button class="btn btn-secondary" style="color: black !important;">
+                        <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                  <?php } ?>
                 </h1>
                 <div class="box-tools pull-right"></div>
               </div>
@@ -91,7 +97,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important; height: max-content;">
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                  <thead>
+                    <thead>
                       <th>Opciones</th>
                       <th>Imagen</th>
                       <th>Nombre</th>
@@ -182,11 +188,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Stock(*):</label>
-                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3" min="0" placeholder="Ingrese el stock." required>
+                      <input type="number" class="form-control" name="stock" id="stock" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el stock." required>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Stock mínimo(*):</label>
-                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="3" min="0" placeholder="Ingrese el stock mínimo." required>
+                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el stock mínimo." required>
                     </div>
                     <div class="form-group col-lg-12 col-md-12">
                       <label>Imagen:</label>
