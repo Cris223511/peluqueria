@@ -117,10 +117,13 @@
     <?php
     if ($_SESSION["cargo"] == "superadmin") {
       echo '<script>
+              let miTabla;
+
               function configurarDataTableConBotones(tabla) {
                   if (tabla && $.fn.DataTable.isDataTable(tabla)) {
                       tabla.DataTable().destroy();
                   }
+                  
                   if (tabla) {
                       tabla.DataTable({
                           dom: \'<Bl<f>rtip>\',
@@ -134,8 +137,15 @@
                                       1: \'1 línea copiada\'
                                   }
                               }
-                          }
+                          },
+                          lengthMenu: [5, 10, 25, 75, 100],
+                          aProcessing: true,
+                          aServerSide: true,
+                          bDestroy: true,
+                          iDisplayLength: 5
                       });
+
+                      miTabla = tabla.DataTable();
                   }
               }
 
