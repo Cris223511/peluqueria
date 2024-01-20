@@ -198,6 +198,22 @@ function guardaryeditar(e) {
 		return;
 	}
 
+	var stock = parseFloat($("#stock").val());
+	var stock_minimo = parseFloat($("#stock_minimo").val());
+
+	if (stock_minimo > stock) {
+		bootbox.alert("El stock mínimo no puede ser mayor que el stock normal.");
+		return;
+	}
+
+	var precio_compra = parseFloat($("#precio_compra").val());
+	var precio_venta = parseFloat($("#precio_venta").val());
+
+	if (precio_compra > precio_venta) {
+		bootbox.alert("El precio de compra no puede ser mayor que el precio de venta.");
+		return;
+	}
+
 	$("#btnGuardar").prop("disabled", true);
 	var formData = new FormData($("#formulario")[0]);
 

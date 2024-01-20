@@ -43,7 +43,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin" || $cargo == "admin") {
+    if ($cargo == "superadmin") {
       $rspta = $personales->listarPersonales();
     } else {
       $rspta = $personales->listarPersonalesPorUsuario($idlocal_session);

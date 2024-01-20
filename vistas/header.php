@@ -138,6 +138,10 @@ $local_login = $_SESSION['local'];
   #total {
     font-weight: bold;
   }
+
+  .box {
+    box-shadow: none !important;
+  }
 </style>
 
 <!DOCTYPE html>
@@ -252,7 +256,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lArticulos"><a href="articulo.php"><i class="fa fa-circle-o"></i> Productos</a></li>
                 ';
-            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
+            if ($_SESSION['cargo'] == "superadmin") {
               echo '<li id="lArticulosExternos"><a href="articuloExterno.php"><i class="fa fa-circle-o"></i> Productos Externos</a></li>';
             }
             echo '

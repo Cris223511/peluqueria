@@ -75,7 +75,7 @@ if (!isset($_SESSION["nombre"])) {
 				$param2 = $_GET["param2"]; // valor fecha fin
 				$param3 = $_GET["param3"]; // valor local
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin") {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
 						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
@@ -99,17 +99,6 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
-				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
-				{
-					if ($reg == "admin" && $cargo == "admin" && $idusuario == $_SESSION["idusuario"]) {
-						return $buttonType;
-					} elseif ($cargo == "superadmin") {
-						return $buttonType;
-					} else {
-						return '';
-					}
-				}
-
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -130,11 +119,12 @@ if (!isset($_SESSION["nombre"])) {
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center">' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado != 'aperturado' && ($cargo == "superadmin" || $cargo == "admin")) ?
 								('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('')) .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
+							((($cargo == "superadmin" || $cargo == "admin")) ?
+								('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') : ('')) .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
@@ -161,7 +151,7 @@ if (!isset($_SESSION["nombre"])) {
 				$param2 = $_GET["param2"]; // valor fecha fin
 				$param3 = $_GET["param3"]; // valor local
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin") {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
 						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
@@ -185,17 +175,6 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
-				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
-				{
-					if ($reg == "admin" && $cargo == "admin" && $idusuario == $_SESSION["idusuario"]) {
-						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "cajero" && $idusuario == $_SESSION["idusuario"]) {
-						return $buttonType;
-					} else {
-						return '';
-					}
-				}
-
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -216,9 +195,9 @@ if (!isset($_SESSION["nombre"])) {
 					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center">' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							(($reg->estado == 'aperturado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>')) : ('')) .
+								('<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>') : ('')) .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
@@ -242,7 +221,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 				// case 'selectCajas':
-				// 	if ($cargo == "superadmin" || $cargo == "admin") {
+				// 	if ($cargo == "superadmin") {
 				// 		$rspta = $cajas->listar();
 				// 	} else {
 				// 		$rspta = $cajas->listarPorUsuario($idusuario);

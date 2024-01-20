@@ -117,7 +117,7 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->local_ruc,
-						"3" => $reg->descripcion,
+						"3" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
 						"4" => $reg->fecha,
 						"5" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
@@ -220,7 +220,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'selectLocalesUsuario':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
+				if ($cargo == "superadmin") {
 					$rspta = $locales->listarActivosASC();
 				} else {
 					$rspta = $locales->listarPorUsuarioActivosASC($idlocal_session);

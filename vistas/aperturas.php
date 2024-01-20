@@ -17,7 +17,7 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Aperturas de caja
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
                     <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                       <i class="fa fa-plus-circle"></i> Aperturar
                     </button>
@@ -105,7 +105,7 @@ if (!isset($_SESSION["cajas"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12">
                     <label>Monto(*):</label>
-                    <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el monto inicial de la caja." required>
+                    <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <label>Descripción:</label>

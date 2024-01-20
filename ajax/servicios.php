@@ -86,9 +86,9 @@ if (!isset($_SESSION["nombre"])) {
 
 				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
 				{
-					if ($reg == "admin" && $cargo == "admin" && $idusuario == $_SESSION["idusuario"]) {
+					if ($reg != "superadmin" && $cargo == "admin") {
 						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "cajero" && $idusuario == $_SESSION["idusuario"]) {
+					} elseif ($cargo == "superadmin" || ($cargo == "cajero" && $idusuario == $_SESSION["idusuario"])) {
 						return $buttonType;
 					} else {
 						return '';
@@ -123,7 +123,7 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->codigo,
-						"3" => $reg->descripcion,
+						"3" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
 						"4" => "S/. " . number_format($reg->costo, 2, '.', ','),
 						"5" => ucwords($reg->nombre),
 						"6" => ucwords($cargo_detalle),
@@ -154,7 +154,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 				
 				// case 'selectServicios':
-				// 	if ($cargo == "superadmin" || $cargo == "admin") {
+				// 	if ($cargo == "superadmin") {
 				// 		$rspta = $servicios->listar();
 				// 	} else {
 				// 		$rspta = $servicios->listarPorUsuario($idusuario);

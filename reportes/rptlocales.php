@@ -38,7 +38,7 @@ if (!isset($_SESSION["nombre"])) {
 
     $rspta = $locales->listarPorUsuario($idusuario);
 
-    // if ($cargo == "superadmin" || $cargo == "admin") {
+    // if ($cargo == "superadmin") {
     //   $rspta = $locales->listar();
     // } else {
     //   $rspta = $locales->listarPorUsuario($idusuario);
