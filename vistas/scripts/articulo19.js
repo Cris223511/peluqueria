@@ -154,7 +154,11 @@ function listar() {
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-			buttons: [],
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+			],
 			"ajax":
 			{
 				url: '../ajax/articulo.php?op=listar',
@@ -360,7 +364,11 @@ function buscar() {
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
-			buttons: [],
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+			],
 			"ajax":
 			{
 				url: '../ajax/articulo.php?op=listar',

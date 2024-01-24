@@ -44,7 +44,11 @@ function listar() {
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
-			buttons: [],
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+			],
 			"ajax":
 			{
 				url: '../ajax/medidas.php?op=listar',

@@ -114,54 +114,6 @@
       }
     </script>
 
-    <?php
-    if ($_SESSION["cargo"] == "superadmin") {
-      echo '<script>
-              let miTabla;
-
-              function configurarDataTableConBotones(tabla) {
-                  if (tabla && $.fn.DataTable.isDataTable(tabla)) {
-                      tabla.DataTable().destroy();
-                  }
-                  
-                  if (tabla) {
-                      tabla.DataTable({
-                          dom: \'<Bl<f>rtip>\',
-                          buttons: [\'copyHtml5\', \'excelHtml5\', \'csvHtml5\'],
-                          language: {
-                              "lengthMenu": "Mostrar : _MENU_ registros",
-                              "buttons": {
-                                  "copyTitle": "Tabla Copiada",
-                                  "copySuccess": {
-                                      _: \'%d líneas copiadas\',
-                                      1: \'1 línea copiada\'
-                                  }
-                              }
-                          },
-                          lengthMenu: [5, 10, 25, 75, 100],
-                          aProcessing: true,
-                          aServerSide: true,
-                          bDestroy: true,
-                          iDisplayLength: 5
-                      });
-
-                      miTabla = tabla.DataTable();
-                  }
-              }
-
-              // Verificar la URL de la petición AJAX y configurar los botones correspondientes
-              $(document).ajaxSuccess(function(event, xhr, settings) {
-                  const tbllistado = $(\'#tbllistado\').length ? $(\'#tbllistado\') : null;
-                  const tblarticulos = $(\'#tblarticulos\').length ? $(\'#tblarticulos\') : null;
-
-                  if (settings.url.includes("op=listar")) configurarDataTableConBotones(tbllistado && tbllistado.DataTable().data().any() ? tbllistado : null);
-                  if (settings.url.includes("op=listararticulos")) configurarDataTableConBotones(tblarticulos && tblarticulos.DataTable().data().any() ? tblarticulos : null);
-              });
-          </script>';
-    }
-    ?>
-
-
     <script>
       $('.selectpicker').selectpicker({
         noneResultsText: 'No se encontraron resultados.'
@@ -209,6 +161,16 @@
 
       aplicarRestrictATodosLosInputs();
     </script>
+
+    <?php
+    if ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
+      echo '<script>
+              $(document).ajaxSuccess(function(event, xhr, settings) {
+                $(".dt-buttons").hide();
+              });
+            </script>';
+    }
+    ?>
 
     </body>
 
