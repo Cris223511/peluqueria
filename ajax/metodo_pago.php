@@ -28,14 +28,28 @@ if (!isset($_SESSION["nombre"])) {
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
-				if (!file_exists($_FILES['imagen']['tmp_name']) || !is_uploaded_file($_FILES['imagen']['tmp_name'])) {
-					$imagen = $_POST["imagenactual"];
-				} else {
-					$ext = explode(".", $_FILES["imagen"]["name"]);
-					if ($_FILES['imagen']['type'] == "image/jpg" || $_FILES['imagen']['type'] == "image/jpeg" || $_FILES['imagen']['type'] == "image/png") {
-						$imagen = round(microtime(true)) . '.' . end($ext);
-						move_uploaded_file($_FILES["imagen"]["tmp_name"], "../files/metodo_pago/" . $imagen);
+				if (!empty($_FILES['imagen']['name'])) {
+					$uploadDirectory = "../files/usuarios/";
+
+					$tempFile = $_FILES['imagen']['tmp_name'];
+					$fileName = pathinfo($_FILES['imagen']['name'], PATHINFO_FILENAME);
+					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+					$newFileName = $fileName . '_' . round(microtime(true)) . '.' . $fileExtension;
+					$targetFile = $uploadDirectory . $newFileName;
+
+					// Verificar si es una imagen y mover el archivo
+					$allowedExtensions = array('jpg', 'jpeg', 'png');
+					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
+						// El archivo se ha movido correctamente, ahora $newFileName contiene el nombre del archivo
+						$imagen = $newFileName;
+					} else {
+						// Error en la subida del archivo
+						echo "Error al subir la imagen.";
+						exit;
 					}
+				} else {
+					// No se ha seleccionado ninguna imagen
+					$imagen = $_POST["imagenactual"];
 				}
 
 				if (empty($idmetodopago)) {
@@ -117,8 +131,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idmetodopago . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idmetodopago . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idmetodopago . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idmetodopago . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,

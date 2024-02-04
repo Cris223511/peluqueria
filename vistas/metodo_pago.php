@@ -58,7 +58,7 @@ if (!isset($_SESSION["nombre"])) {
                 </table>
               </div>
               <div class="panel-body" style="height: max-content;" id="formularioregistros">
-                <form name="formulario" id="formulario" method="POST">
+                <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Método de pago(*):</label>
                     <input type="hidden" name="idmetodopago" id="idmetodopago">
