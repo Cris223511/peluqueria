@@ -9,14 +9,6 @@ function actualizarCorrelativo() {
 	});
 }
 
-function generarSiguienteCorrelativo(correlativoActual) {
-	const numeroActual = parseInt(correlativoActual, 10);
-	const siguienteNumero = numeroActual + 1;
-	const longitud = correlativoActual.length;
-	const siguienteCorrelativo = String(siguienteNumero).padStart(longitud, '0');
-	return siguienteCorrelativo;
-}
-
 function init() {
 	mostrarform(false);
 	listar();
@@ -100,6 +92,7 @@ function listar() {
 function guardaryeditar(e) {
 	e.preventDefault();
 	$("#btnGuardar").prop("disabled", true);
+	formatearNumero();
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({

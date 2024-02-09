@@ -141,6 +141,38 @@
     </script>
 
     <script>
+      function convertirMayus(inputElement) {
+        if (typeof inputElement.value === 'string') {
+          inputElement.value = inputElement.value.toUpperCase();
+        }
+      }
+
+      function onlyNumbersAndMaxLenght(input) {
+        let newValue = "";
+
+        if (input.value.length > input.maxLength)
+          newValue = input.value.slice(0, input.maxLength);
+
+        newValue = input.value.replace(/\D/g, '');
+        input.value = newValue;
+      }
+
+      function onlyNumbers(input) {
+        let newValue = "";
+        newValue = input.value.replace(/\D/g, '');
+        input.value = newValue;
+      }
+
+      function validarNumeroDecimal(input, maxLength) {
+        input.value = input.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+
+        if (input.value.length > maxLength) {
+          input.value = input.value.slice(0, maxLength);
+        }
+      }
+    </script>
+
+    <script>
       function restrict(input) {
         var prev = input.getAttribute("data-prev");
         prev = (prev != '') ? prev : '';
@@ -160,6 +192,32 @@
       }
 
       aplicarRestrictATodosLosInputs();
+    </script>
+
+    <script>
+      function generarSiguienteCorrelativo(numero) {
+        console.log("número recibido por el servidor =): ", numero);
+        let num = parseInt(numero, 10);
+        console.log("número a incrementar =): ", num);
+        num++;
+        let siguienteCorrelativo = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
+        console.log("número a incrementado a setear =): ", siguienteCorrelativo);
+        return siguienteCorrelativo;
+      }
+
+      function formatearNumero() {
+        var campos = ["#codigo"];
+
+        campos.forEach(function(campo) {
+          let numValor = $(campo).val();
+          if (typeof numValor !== 'undefined') {
+            numValor = numValor.trim();
+            let num = parseInt(numValor, 10);
+            let numFormateado = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
+            $(campo).val(numFormateado);
+          }
+        });
+      }
     </script>
 
     <?php
