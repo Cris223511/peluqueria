@@ -7,7 +7,7 @@ if (strlen(session_id()) < 1)
 if (!isset($_SESSION["nombre"])) {
   echo 'Debe ingresar al sistema correctamente para visualizar el reporte';
 } else {
-  if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
+  if ($_SESSION['ventas'] == 1) {
 
     //Inlcuímos a la clase PDF_MC_Table
     require('PDF_MC_Table.php');
@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
     $pdf = new PDF_MC_Table();
 
     //Agregamos la primera página al documento pdf
-    $pdf->AddPage('L');
+    $pdf->AddPage();
 
     //Seteamos el inicio del margen superior en 25 pixeles 
     $y_axis_initial = 25;
@@ -25,45 +25,47 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(40, 6, '', 0, 0, 'C');
-    $pdf->Cell(200, 6, 'LISTA DE ARTICULOS', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'LISTA DE VENTAS', 1, 0, 'C');
     $pdf->Ln(10);
 
     //Creamos las celdas para los títulos de cada columna y le asignamos un fondo gris y el tipo de letra
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
-    $pdf->Cell(60, 6, 'Nombre', 1, 0, 'C', 1);
-    $pdf->Cell(35, 6, utf8_decode('Categoría'), 1, 0, 'C', 1);
-    $pdf->Cell(35, 6, utf8_decode('Código barra'), 1, 0, 'C', 1);
-    $pdf->Cell(35, 6, utf8_decode('Código producto'), 1, 0, 'C', 1);
-    $pdf->Cell(25, 6, utf8_decode('Stock normal'), 1, 0, 'C', 1);
-    $pdf->Cell(25, 6, utf8_decode('Stock mínimo'), 1, 0, 'C', 1);
-    $pdf->Cell(30, 6, utf8_decode('P. compra'), 1, 0, 'C', 1);
-    $pdf->Cell(30, 6, utf8_decode('P. venta'), 1, 0, 'C', 1);
+    $pdf->Cell(37, 6, 'Fecha y hora', 1, 0, 'C', 1);
+    $pdf->Cell(38, 6, 'Usuario', 1, 0, 'C', 1);
+    $pdf->Cell(38, 6, 'Cliente', 1, 0, 'C', 1);
+    $pdf->Cell(33, 6, 'Documento', 1, 0, 'C', 1);
+    $pdf->Cell(25, 6, utf8_decode('Número'), 1, 0, 'C', 1);
+    $pdf->Cell(20, 6, 'Total', 1, 0, 'C', 1);
 
     $pdf->Ln(10);
     //Comenzamos a crear las filas de los registros según la consulta mysql
-    require_once "../modelos/ArticuloExterno.php";
-    $articulo = new ArticuloExterno();
+    require_once "../modelos/Venta.php";
+    $venta = new Venta();
 
+    $idusuario = $_SESSION["idusuario"];
     $idlocalSession = $_SESSION["idlocal"];
+    $cargo = $_SESSION["cargo"];
 
-    $rspta = $articulo->listar($idlocalSession);
+    if ($cargo == "superadmin") {
+      $rspta = $venta->listar();
+    } else {
+      $rspta = $venta->listarPorUsuario($idlocalSession);
+    }
 
     //Table with rows and columns
-    $pdf->SetWidths(array(60, 35, 35, 35, 25, 25, 30, 30));
+    $pdf->SetWidths(array(37, 38, 38, 33, 25, 20));
 
     while ($reg = $rspta->fetch_object()) {
-      $nombre = $reg->nombre;
-      $categoria = $reg->categoria;
-      $codigo_barra = $reg->codigo;
-      $codigo_producto = $reg->codigo_producto;
-      $stock = $reg->stock;
-      $stock_minimo = $reg->stock_minimo;
-      $precio_compra = $reg->precio_compra;
-      $precio_venta = $reg->precio_venta;
+      $fecha = $reg->fecha;
+      $usuario = $reg->usuario . " " . $reg->apellido;
+      $cliente = $reg->cliente;
+      $tipo_comprobante = $reg->tipo_comprobante;
+      $num_comprobante = $reg->num_comprobante;
+      $total_venta = $reg->total_venta;
 
       $pdf->SetFont('Arial', '', 10);
-      $pdf->Row(array(utf8_decode($nombre), utf8_decode($categoria), $codigo_barra, $codigo_producto, $stock, $stock_minimo, $precio_compra, $precio_venta));
+      $pdf->Row(array($fecha, utf8_decode($usuario), utf8_decode($cliente), $tipo_comprobante, $num_comprobante, $total_venta));
     }
 
     //Mostramos el documento pdf

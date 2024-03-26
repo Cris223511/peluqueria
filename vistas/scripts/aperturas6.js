@@ -1,6 +1,7 @@
 var tabla;
 var idSession;
 var idLocal;
+var contador;
 
 function init() {
 	mostrarform(false);
@@ -55,6 +56,17 @@ function limpiar() {
 	$("#descripcion").val("");
 }
 
+function validarCaja() {
+	$.post("../ajax/cajas.php?op=validarCaja", function (e) {
+		console.log(e);
+		if (e == "true" || e == true) {
+			bootbox.alert("Usted ya tiene una caja registrada en su local actual.");
+		} else {
+			mostrarform(true);
+		}
+	});
+}
+
 function mostrarform(flag) {
 	limpiar();
 	if (flag) {
@@ -62,6 +74,10 @@ function mostrarform(flag) {
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
+		$("#monto").attr("name", "monto");
+		$("#monto").prop("disabled", false);
+		$("#desbloquearMonto").hide();
+		$("#desbloquearMonto i").removeClass("fa-unlock-alt").addClass("fa-lock");
 	}
 	else {
 		$(".listadoregistros").show();
@@ -150,8 +166,12 @@ function mostrar(idcaja) {
 	$.post("../ajax/cajas.php?op=mostrar", { idcaja: idcaja }, function (data, status) {
 		data = JSON.parse(data);
 		mostrarform(true);
+		$("#desbloquearMonto").show();
+		$("#monto").removeAttr("name");
 
 		console.log(data);
+
+		contador = data.contador;
 
 		$("#titulo").val(data.titulo);
 		$("#idlocal").val(data.idlocal);
@@ -161,7 +181,33 @@ function mostrar(idcaja) {
 		$("#monto").val(data.monto);
 		$("#descripcion").val(data.descripcion);
 		$("#idcaja").val(data.idcaja);
+
+		$("#monto").prop("disabled", true);
+
+		if (data.contador != 0) {
+			$("#desbloquearMonto").attr("onclick", "verificarMonto(" + contador + ")");
+		} else {
+			$("#desbloquearMonto").removeAttr("onclick");
+		}
 	})
+}
+
+function verificarMonto(contador) {
+	bootbox.confirm("¿Está seguro de modificar el monto? Le queda <strong>" + contador + "</strong> intento(s).", function (result) {
+		if (result) {
+			$("#monto").prop("disabled", false);
+			$("#monto").attr("name", "monto");
+			$("#desbloquearMonto i").removeClass("fa-lock").addClass("fa-unlock-alt");
+			$("#desbloquearMonto").attr("onclick", "bloquearMonto(" + contador + ")");
+		}
+	});
+}
+
+function bloquearMonto(contador) {
+	$("#monto").prop("disabled", true);
+	$("#monto").removeAttr("name");
+	$("#desbloquearMonto i").removeClass("fa-unlock-alt").addClass("fa-lock");
+	$("#desbloquearMonto").attr("onclick", "verificarMonto(" + contador + ")");
 }
 
 function cerrar(idcaja) {

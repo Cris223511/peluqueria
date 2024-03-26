@@ -46,6 +46,10 @@
         return palabra.toUpperCase();
       }
 
+      function minusTodasLasPalabras(palabra) {
+        return palabra.toLowerCase();
+      }
+
       const thElements = document.querySelectorAll("#tblarticulos th, #tbllistado th, #tbltrabajadores th");
 
       thElements.forEach((e) => {
@@ -65,17 +69,28 @@
 
       function changeValue(dropdown) {
         var option = dropdown.options[dropdown.selectedIndex].value;
-        var field = $('#num_documento');
+
+        console.log(option);
 
         $("#num_documento").val("");
 
         if (option == 'DNI') {
-          field.attr('maxLength', 8);
+          setMaxLength('#num_documento', 8);
+          setMaxLength('#num_documento4', 8);
         } else if (option == 'CEDULA') {
-          field.attr('maxLength', 10);
+          setMaxLength('#num_documento', 10);
+          setMaxLength('#num_documento4', 10);
+        } else if (option == 'CARNET DE EXTRANJERIA') {
+          setMaxLength('#num_documento', 20);
+          setMaxLength('#num_documento4', 20);
         } else {
-          field.attr('maxLength', 11);
+          setMaxLength('#num_documento', 11);
+          setMaxLength('#num_documento4', 11);
         }
+      }
+
+      function setMaxLength(fieldSelector, maxLength) {
+        $(fieldSelector).attr('maxLength', maxLength);
       }
 
       $('#mostrarClave').click(function() {
@@ -108,6 +123,20 @@
         }
       });
 
+      // Evento click en el documento
+      $(document).on('click', function(e) {
+        // Comprobar si el clic fue fuera del popover
+        if ($(e.target).closest('[data-toggle="popover"]').length === 0) {
+          // Cerrar el popover
+          $('[data-toggle="popover"]').popover('hide');
+        }
+      });
+
+      // Evitar que el popover se cierre al hacer clic dentro de él
+      $(document).on('click', '.popover', function(e) {
+        e.stopPropagation();
+      });
+
       function evitarNegativo(e) {
         if (e.key === "-")
           e.preventDefault();
@@ -122,11 +151,28 @@
 
     <script>
       function evitarCaracteresEspecialesCamposNumericos() {
-        var camposNumericos = document.querySelectorAll('input[type="number"]');
+        var camposNumericos = document.querySelectorAll('input[type="number"]:not(#ganancia)');
+
         camposNumericos.forEach(function(campo) {
           campo.addEventListener('keydown', function(event) {
             var teclasPermitidas = [46, 8, 9, 27, 13, 110, 190, 37, 38, 39, 40, 17, 82]; // ., delete, tab, escape, enter, flechas, Ctrl+R
-            if ((event.ctrlKey || event.metaKey) && event.which === 65) return; // Permitir Ctrl+A o Command+A
+
+            // Permitir Ctrl+C, Ctrl+V, Ctrl+X y Ctrl+A
+            if ((event.ctrlKey || event.metaKey) && (event.which === 67 || event.which === 86 || event.which === 88 || event.which === 65)) {
+              return;
+            }
+
+            // Permitir Ctrl+Z y Ctrl+Alt+Z
+            if ((event.ctrlKey || event.metaKey) && event.which === 90) {
+              if (!event.altKey) {
+                // Permitir Ctrl+Z
+                return;
+              } else if (event.altKey) {
+                // Permitir Ctrl+Alt+Z
+                return;
+              }
+            }
+
             if (teclasPermitidas.includes(event.which) || (event.which >= 48 && event.which <= 57) || (event.which >= 96 && event.which <= 105) || event.which === 190 || event.which === 110) {
               // Si es una tecla permitida o numérica, no hacer nada
               return;
@@ -145,6 +191,16 @@
         if (typeof inputElement.value === 'string') {
           inputElement.value = inputElement.value.toUpperCase();
         }
+      }
+
+      function convertirMinus(inputElement) {
+        if (typeof inputElement.value === 'string') {
+          inputElement.value = inputElement.value.toLowerCase();
+        }
+      }
+
+      function capitalizarPrimeraLetra(cadena) {
+        return cadena.charAt(0).toUpperCase() + cadena.slice(1).toLowerCase();
       }
 
       function onlyNumbersAndMaxLenght(input) {
@@ -196,13 +252,24 @@
 
     <script>
       function generarSiguienteCorrelativo(numero) {
-        console.log("número recibido por el servidor =): ", numero);
-        let num = parseInt(numero, 10);
-        console.log("número a incrementar =): ", num);
+        console.log("Número recibido por el servidor: ", numero);
+
+        let numFormat = numero.trim();
+        let num = isNaN(parseInt(numFormat, 10)) ? 0 : parseInt(numFormat, 10);
+
+        console.log("Número a incrementar: ", num);
         num++;
-        let siguienteCorrelativo = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
-        console.log("número a incrementado a setear =): ", siguienteCorrelativo);
+
+        let siguienteCorrelativo = num < 10000 ? num.toString().padStart(5, '0') : num.toString();
+
+        console.log("Número incrementado a setear: ", siguienteCorrelativo);
         return siguienteCorrelativo;
+      }
+
+      function limpiarCadena(cadena) {
+        let cadenaLimpia = cadena.trim();
+        cadenaLimpia = cadenaLimpia.replace(/^[\n\r]+/, '');
+        return cadenaLimpia;
       }
 
       function formatearNumero() {
@@ -220,6 +287,35 @@
       }
     </script>
 
+    <script>
+      function inicializegScrollingCarousel() {
+        $(".carousel .items").gScrollingCarousel();
+        $(".carousel-three .items").gScrollingCarousel({
+          mouseScrolling: false,
+          draggable: true,
+          snapOnDrag: false,
+          mobileNative: false,
+        });
+      }
+
+      function buttonsScrollingCarousel() {
+        document.querySelectorAll('.carousel-three').forEach(carousel => {
+          var leftElements = carousel.querySelectorAll('.jc-left');
+          var rightElements = carousel.querySelectorAll('.jc-right');
+
+          leftElements.forEach((element, index) => {
+            if (index > 0) element.remove();
+          });
+
+          rightElements.forEach((element, index) => {
+            if (index > 0) element.remove();
+          });
+
+          inicializegScrollingCarousel();
+        });
+      }
+    </script>
+
     <?php
     if ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
       echo '<script>
@@ -229,6 +325,23 @@
             </script>';
     }
     ?>
+
+    <script>
+      $('.selectpicker').selectpicker({
+        dropupAuto: false
+      });
+    </script>
+
+    <script>
+      $(document).on('show.bs.modal', function(event) {
+        const modal = $(event.target);
+
+        if (modal.hasClass('bootbox') && modal.hasClass('bootbox-confirm')) {
+          modal.find('.modal-footer .btn-default').text('Cancelar');
+          modal.find('.modal-footer .btn-primary').text('Aceptar');
+        }
+      });
+    </script>
 
     </body>
 

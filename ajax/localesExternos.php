@@ -76,7 +76,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listar':
 
-				$rspta = $locales->listar();
+				$rspta = $locales->listar($idlocal_session);
 
 				$data = array();
 
@@ -114,8 +114,7 @@ if (!isset($_SESSION["nombre"])) {
 							mostrarBoton($cargo, '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->local_ruc,
@@ -209,7 +208,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocales':
-				$rspta = $locales->listarActivos();
+				$rspta = $locales->listarActivos($idlocal_session);
 
 				while ($reg = $rspta->fetch_object()) {
 					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
@@ -218,11 +217,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'selectLocalesUsuario':
 
-				if ($cargo == "superadmin" || $cargo == "admin") {
-					$rspta = $locales->listarActivosASC();
-				} else {
-					$rspta = $locales->listarPorUsuarioActivosASC($idusuario);
-				}
+				$rspta = $locales->listarActivosASC($idlocal_session);
 
 				echo '<option value="">- Seleccione -</option>';
 				while ($reg = $rspta->fetch_object()) {
@@ -239,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocalDisponible':
-				$rspta = $locales->listarLocalesDisponiblesActivos();
+				$rspta = $locales->listarLocalesDisponiblesActivos($idlocal_session);
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
 				$data = [];

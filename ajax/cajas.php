@@ -32,6 +32,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'guardaryeditar':
 				if (empty($idcaja)) {
 					$nombreExiste = $cajas->verificarNombreExiste($titulo);
+
 					if ($nombreExiste) {
 						echo "El nombre de la caja ya existe.";
 					} else {
@@ -40,17 +41,28 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				} else {
 					$nombreExiste = $cajas->verificarNombreEditarExiste($titulo, $idcaja);
+					$rspta2 = $cajas->mostrar($idcaja);
+
 					if ($nombreExiste) {
 						echo "El nombre de la caja ya existe.";
 					} else {
-						$rspta = $cajas->editar($idcaja, $idusuario, $idlocal, $titulo, $monto, $descripcion);
+						if (empty($monto) || $rspta2["monto"] == $monto) {
+							$rspta = $cajas->editarSinMonto($idcaja, $idusuario, $idlocal, $titulo, $descripcion);
+						} else {
+							$rspta = $cajas->editar($idcaja, $idusuario, $idlocal, $titulo, $monto, $descripcion);
+						}
 						echo $rspta ? "Caja actualizada" : "La caja no se pudo actualizar";
 					}
 				}
 				break;
 
+			case 'validarCaja':
+				$rspta = $cajas->validarCaja($idlocalSession);
+				echo $rspta ? "true" : "false";
+				break;
+
 			case 'cerrar':
-				$rspta = $cajas->cerrar($idcaja);
+				$rspta = $cajas->agregarCajaCerrada($idcaja);
 				echo $rspta ? "Caja cerrada" : "La caja no se pudo cerrar";
 				break;
 
@@ -61,6 +73,11 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'eliminar':
 				$rspta = $cajas->eliminar($idcaja);
+				echo $rspta ? "Caja eliminada" : "La caja no se pudo eliminar";
+				break;
+
+			case 'eliminarCajaCerrada':
+				$rspta = $cajas->eliminarCajaCerrada($idcaja);
 				echo $rspta ? "Caja eliminada" : "La caja no se pudo eliminar";
 				break;
 
@@ -120,9 +137,9 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
-							('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') .
-							(($reg->estado != 'aperturado' && ($cargo == "superadmin" || $cargo == "admin")) ?
-								('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('')) .
+							(($reg->vendido == '0' && ($cargo == "superadmin" || $cargo == "admin")) ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') : ('')) .
+							(($reg->estado != 'aperturado') ?
+								('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>')) .
 							((($cargo == "superadmin" || $cargo == "admin")) ?
 								('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') : ('')) .
 							'</div>',
@@ -153,23 +170,23 @@ if (!isset($_SESSION["nombre"])) {
 
 				if ($cargo == "superadmin") {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
-						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+						$rspta = $cajas->listarCerradasPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
-						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+						$rspta = $cajas->listarCerradasPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
 					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
-						$rspta = $cajas->listarPorParametro("c.idlocal = '$param3'");
+						$rspta = $cajas->listarCerradasPorParametro("c.idlocal = '$param3'");
 					} else {
-						$rspta = $cajas->listar();
+						$rspta = $cajas->listarCerradas();
 					}
 				} else {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
-						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
+						$rspta = $cajas->listarCerradasPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
-						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
+						$rspta = $cajas->listarCerradasPorUsuarioParametro($idlocalSession, "DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2' AND c.idlocal = '$param3'");
 					} else if ($param1 == '' && $param2 == '' && $param3 != '') {
-						$rspta = $cajas->listarPorUsuarioParametro($idlocalSession, "c.idlocal = '$param3'");
+						$rspta = $cajas->listarCerradasPorUsuarioParametro($idlocalSession, "c.idlocal = '$param3'");
 					} else {
-						$rspta = $cajas->listarPorUsuario($idlocalSession);
+						$rspta = $cajas->listarCerradasPorUsuario($idlocalSession);
 					}
 				}
 
@@ -196,8 +213,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
-							(($reg->estado == 'aperturado') ?
-								('<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>') : ('')) .
+							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
@@ -206,8 +222,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => ucwords($cargo_detalle),
 						"6" => $reg->fecha,
 						"7" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
-						"8" => ($reg->estado == 'aperturado') ? '<span class="label bg-green">Aperturado</span>' :
-							'<span class="label bg-red">Cerrado</span>'
+						"8" => '<span class="label bg-red">Cerrado</span>'
 					);
 				}
 				$results = array(

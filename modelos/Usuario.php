@@ -350,4 +350,12 @@ class Usuario
 		$sql = "SELECT u.idusuario,u.idlocal,l.titulo AS local,l.estado AS estadoLocal,u.nombre,u.tipo_documento,u.num_documento,u.telefono,u.email,u.cargo,u.imagen,u.login,u.clave,u.estado,u.eliminado FROM usuario u LEFT JOIN locales l ON u.idlocal = l.idlocal WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
 	}
+
+	public function localExiste($idlocal)
+	{
+		$sql = "SELECT COUNT(*) AS existe FROM locales WHERE idlocal = '$idlocal'";
+		$resultado = ejecutarConsultaSimpleFila($sql);
+
+		return $resultado['existe'];
+	}
 }

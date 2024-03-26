@@ -50,8 +50,7 @@ $local_login = $_SESSION['local'];
   .btn-danger.focus,
   .btn-warning.focus,
   .btn-info.focus,
-  .btn-success.focus,
-  .btn-secondary.focus {
+  .btn-success.focus {
     color: white !important;
     text-decoration: none;
   }
@@ -60,8 +59,7 @@ $local_login = $_SESSION['local'];
   .btn-danger:focus,
   .btn-warning:focus,
   .btn-info:focus,
-  .btn-success:focus,
-  .btn-secondary:focus {
+  .btn-success:focus {
     color: white !important;
     text-decoration: none;
   }
@@ -141,6 +139,21 @@ $local_login = $_SESSION['local'];
 
   .box {
     box-shadow: none !important;
+    border-top: 3px #002a8e solid !important;
+  }
+
+  input,
+  .form-control,
+  button {
+    border-radius: 5px !important;
+  }
+
+  label {
+    text-transform: uppercase;
+  }
+
+  textarea {
+    resize: none !important;
   }
 </style>
 
@@ -279,7 +292,7 @@ $local_login = $_SESSION['local'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-                <li id="lVentas"><a href="#"><i class="fa fa-circle-o"></i> Ventas</a></li>
+                <li id="lVentas"><a href="venta.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
                 <li id="lProformas"><a href="#"><i class="fa fa-circle-o"></i> Proformas</a></li>
               </ul>
             </li>';
@@ -358,8 +371,10 @@ $local_login = $_SESSION['local'];
               ';
             if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
               echo '
-              <li id="lLocalesExternos"><a href="localesExternos.php"><i class="fa fa-circle-o"></i> Locales externos</a></li>
-              <li id="lLocalesDisponibles"><a href="localesDisponibles.php"><i class="fa fa-circle-o"></i> Locales disponibles</a></li>
+                <li id="lConfPortada"><a href="confPortada.php"><i class="fa fa-circle-o"></i> Configuración de portada</a></li>
+                <li id="lConfBoleta"><a href="confBoleta.php"><i class="fa fa-circle-o"></i> Configuración de boletas</a></li>
+                <li id="lLocalesExternos"><a href="localesExternos.php"><i class="fa fa-circle-o"></i> Locales externos</a></li>
+                <li id="lLocalesDisponibles"><a href="localesDisponibles.php"><i class="fa fa-circle-o"></i> Locales disponibles</a></li>
               ';
             }
             echo '

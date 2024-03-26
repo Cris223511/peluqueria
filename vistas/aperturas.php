@@ -17,11 +17,11 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Aperturas de caja
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
-                    <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
+                  <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
+                    <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
                       <i class="fa fa-plus-circle"></i> Aperturar
                     </button>
-                  <?php } ?>
+                  <?php // } ?>
                   <?php if ($_SESSION["cargo"] == "superadmin") { ?>
                     <a href="../reportes/rptcajas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -87,7 +87,7 @@ if (!isset($_SESSION["cajas"])) {
               <div class="panel-body" style="height: max-content;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                    <label>Empleaedo(*):</label>
+                    <label>Empleado(*):</label>
                     <select name="idusuario" id="idusuario" class="form-control" required>
                       <option value="">- Seleccione -</option>
                     </select>
@@ -105,7 +105,10 @@ if (!isset($_SESSION["cajas"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-12">
                     <label>Monto(*):</label>
-                    <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
+                    <div style="display: flex;">
+                      <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
+                      <a id="desbloquearMonto" class="btn btn-bcp" style="display: flex; align-items: center;"><i class="fa fa-lock"></i></a>
+                    </div>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <label>Descripción:</label>
