@@ -315,19 +315,31 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="box-tools pull-right">
                 </div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                  <div class="form-group col-lg-5 col-md-5 col-sm-6 col-xs-12">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
                     <label>Fecha Inicial:</label>
                     <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
                     <label>Fecha Final:</label>
                     <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
                   </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                    <label id="label">ㅤ</label>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label>Buscar por estado:</label>
+                    <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      <option value="">- Seleccione -</option>
+                      <option value="INICIADO">INICIADO</option>
+                      <option value="ENTREGADO">ENTREGADO</option>
+                      <option value="POR ENTREGAR">POR ENTREGAR</option>
+                      <option value="EN TRANSCURSO">EN TRANSCURSO</option>
+                      <option value="FINALIZADO">FINALIZADO</option>
+                      <option value="ANULADO">ANULADO</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">
+                    <label id="labelCustom">ㅤ</label>
                     <div style="display: flex; gap: 10px;">
-                      <button style="width: 80%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
-                      <button style="width: 20%; height: 32px" class="btn btn-success" onclick="listar()"><i class="fa fa-repeat"></i></button>
+                      <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
+                      <button style="height: 32px;" class="btn btn-success" onclick="listar()"><i class="fa fa-repeat"></i></button>
                     </div>
                   </div>
                 </div>
@@ -447,12 +459,12 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                     </div>
                     <div id="comentarios" style="display: none;">
-                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="40" rows="4" autocomplete="off"></textarea>
-                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="40" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="120" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="120" rows="4" autocomplete="off"></textarea>
                     </div>
                     <select style="display: none;" id="igvFinal" name="impuesto" class="form-control" data-size="2">
                       <option value="0.00">0.00</option>
-                      <option value="0.10">0.18</option>
+                      <option value="0.18">0.18</option>
                     </select>
                     <input type="hidden" id="total_venta_final" name="total_venta" value="">
                     <input type="hidden" id="vuelto_final" name="vuelto" value="">
@@ -547,7 +559,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 3 -->
     <div class="modal fade" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -621,7 +633,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 4 -->
     <div class="modal fade" id="myModal4" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -685,7 +697,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 5 -->
     <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -732,7 +744,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 6 -->
     <div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 85% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+      <div class="modal-dialog" style="width: 85% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -829,11 +841,11 @@ if (!isset($_SESSION["nombre"])) {
               <div class="col-lg-4 col-md-6 col-sm-6">
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO INTERNO (*):</h4>
-                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="40" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off" required></textarea>
+                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="120" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off" required></textarea>
                 </div>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO EXTERNO (*):</h4>
-                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="40" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off" required></textarea>
+                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="120" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off" required></textarea>
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6" style="display: flex; flex-direction: column;">
@@ -852,7 +864,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; padding-top: 15px;">
                 <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 5px 10px; font-weight: bold; text-align: center; display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center;">
-                    <h5 class="infotitulo igvFinal" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">IGV: S/</h5>
+                    <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">IGV: S/</h5>
                     <select id="igv" style="height: 28px; padding: 4px 10px; width: 100px;" class="form-control" data-size="2" onchange="actualizarIGV(this);">
                       <option value="0.00">0.00</option>
                       <option value="0.18">0.18</option>
@@ -1010,7 +1022,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
             </div>
 
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; margin-top: 15px; padding: 0 !important;">
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; margin-top: 10px; padding: 0 !important;">
               <button class="btn btn-warning" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
             </div>
           </div>

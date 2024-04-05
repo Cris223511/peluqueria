@@ -102,9 +102,10 @@ function limpiar() {
 
 	$("#total_venta").html("S/. 0.00");
 	$("#tipo_comprobante").val("NOTA DE VENTA");
+	$("#tipo_comprobante").selectpicker('refresh');
 
-	$("#comentario_interno_final").text("");
-	$("#comentario_externo_final").text("");
+	$("#comentario_interno_final").val("");
+	$("#comentario_externo_final").val("");
 	$("#igvFinal").val("0.00");
 	$("#total_venta_final").val("");
 	$("#vuelto_final").val("");
@@ -162,6 +163,7 @@ function listarDatos() {
 		$("#idlocal").empty();
 		$("#idlocal2").empty();
 		$("#idlocal3").empty();
+		$("#idlocal4").empty();
 
 		listarArticulos(articulo, servicio);
 		listarCategoria(categoria);
@@ -395,6 +397,15 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 		selectLocales3.append(optionHtml);
 	});
 
+	let selectLocales4 = $("#idlocal4");
+	selectLocales4.empty();
+	selectLocales4.append('<option value="">- Seleccione -</option>');
+
+	locales.forEach((local) => {
+		let optionHtml = `<option value="${local.id}" data-local-ruc="${local.local_ruc}">${local.nombre}</option>`;
+		selectLocales4.append(optionHtml);
+	});
+
 	// Después de agregar todas las opciones, actualizamos el plugin selectpicker
 	selectProductos1.selectpicker('refresh');
 	selectProductos2.selectpicker('refresh');
@@ -403,6 +414,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectLocales1.selectpicker('refresh');
 	selectLocales2.selectpicker('refresh');
 	selectLocales3.selectpicker('refresh');
+	selectLocales4.selectpicker('refresh');
 
 	actualizarRUC();
 	actualizarRUC2();
@@ -412,6 +424,49 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('oninput', 'checkDNI(this)');
 	$('#idcliente').closest('.form-group').find('.dropdown-menu.open').addClass('idclienteInput');
+
+	colocarNegritaStocksSelects();
+}
+
+function listarSelectsArticulos(articulos, servicios) {
+	let selectProductos1 = $("#productos1");
+	selectProductos1.empty();
+	selectProductos1.append('<option value="">Lectora de códigos.</option>');
+	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
+
+	articulos.forEach((articulo) => {
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		selectProductos1.append(optionHtml);
+	});
+
+	selectProductos1.append('<option disabled>SERVICIOS:</option>');
+
+	servicios.forEach((servicio, index) => {
+		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		selectProductos1.append(optionHtml);
+	});
+
+	let selectProductos2 = $("#productos2");
+	selectProductos2.empty();
+	selectProductos2.append('<option value="">Buscar productos.</option>');
+	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
+
+	articulos.forEach((articulo) => {
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		selectProductos2.append(optionHtml);
+	});
+
+	selectProductos2.append('<option disabled>SERVICIOS:</option>');
+
+	servicios.forEach((servicio, index) => {
+		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		selectProductos2.append(optionHtml);
+	});
+
+	selectProductos1.selectpicker('refresh');
+	selectProductos2.selectpicker('refresh');
 
 	colocarNegritaStocksSelects();
 }
@@ -1042,12 +1097,17 @@ function mostrarDatosModalPrecuenta() {
 
 	let totalFinal = $("#total_venta").text();
 
+	totalOriginal = Number(totalFinal).toFixed(2);
+
 	$(".totalFinal1").html('TOTAL A PAGAR: ' + totalFinal);
 	$(".totalFinal2").html('OP. GRAVADAS: ' + totalFinal);
 
 	$("#igv").val("0.00");
 
 	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal.toFixed(2));
+
+	totalTemp = 0;
+	totalOriginalBackup = 0;
 }
 
 function actualizarTablaDetallesProductosPrecuenta() {
@@ -1099,26 +1159,35 @@ function actualizarVuelto() {
 	$('#vuelto').val(vuelto.toFixed(2));
 }
 
-let totalOriginal;
+let totalOriginal = 0;
+let totalTemp = 0;
+let totalOriginalBackup = 0;  // Variable para guardar el valor original
 
 function actualizarIGV(igv) {
 	let textoTotal = $(".totalFinal1").text();
+	let numeroTotal = textoTotal.match(/S\/\. (\d+\.\d+)/);
 
-	if (!totalOriginal) {
-		totalOriginal = parseFloat(textoTotal.match(/\d+\.\d+/)[0]);
+	if (numeroTotal && numeroTotal.length > 1) {
+		totalOriginal = parseFloat(numeroTotal[1]);
 	}
 
-	let totalVenta;
+	// Inicializa totalOriginalBackup la primera vez que se llama a la función
+	if (totalOriginalBackup === 0) {
+		totalOriginalBackup = totalOriginal;
+	}
 
-	if (igv.value == 2) {
+	let totalVenta = 0;
+
+	if (igv.value == 0.18) {
 		totalVenta = totalOriginal + (totalOriginal * 0.18);
+		totalTemp = totalVenta;
 	} else {
-		totalVenta = totalOriginal;
+		totalVenta = totalOriginalBackup;  // Restablece al valor original
+		totalTemp = totalOriginalBackup;  // Restablece totalTemp al valor original
 	}
 
-	console.log(totalVenta);
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + totalVenta.toFixed(2));
-	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + totalVenta.toFixed(2));
+	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + Number(totalVenta).toFixed(2));
+	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + Number(totalVenta).toFixed(2));
 
 	actualizarVuelto();
 }
@@ -1173,6 +1242,8 @@ function guardaryeditar7(e) {
 	let totalVentaFinal = $(".totalFinal1").text().match(/\d+\.\d+/)[0];
 	let vueltoFinal = $("#vuelto").val();
 
+	console.log(impuesto);
+
 	$("#comentario_interno_final").text(comentarioInterno);
 	$("#comentario_externo_final").text(comentarioExterno);
 	$("#igvFinal").val(impuesto);
@@ -1190,8 +1261,15 @@ function limpiarModalPrecuenta() {
 	$(".totalFinal2").html('OP. GRAVADAS: S/. 0.00');
 	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. 0.00');
 	$("#detallesProductosPrecuenta tbody").empty();
-	$("#totalItems").html("0");
+	$("#montoMetodoPago").empty();
+
+	cont = 0;
+	$("#totalItems").html(cont);
+
 	$("#igv").val("0.00");
+	$("#vuelto").val("0.00");
+	$("#comentario_interno").val("");
+	$("#comentario_externo").val("");
 }
 
 // PELUQUERÍA
@@ -1228,9 +1306,11 @@ function cancelarform() {
 function listar() {
 	$("#fecha_inicio").val("");
 	$("#fecha_fin").val("");
+	$("#estadoBuscar").val("");
 
 	var fecha_inicio = $("#fecha_inicio").val();
 	var fecha_fin = $("#fecha_fin").val();
+	var estado = $("#estadoBuscar").val();
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -1246,7 +1326,7 @@ function listar() {
 			"ajax":
 			{
 				url: '../ajax/venta.php?op=listar',
-				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, estado: estado },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -1275,8 +1355,9 @@ function listar() {
 function buscar() {
 	var fecha_inicio = $("#fecha_inicio").val();
 	var fecha_fin = $("#fecha_fin").val();
+	var estado = $("#estadoBuscar").val();
 
-	if (fecha_inicio == "" || fecha_fin == "") {
+	if ((fecha_inicio != "" && fecha_fin == "") || (fecha_inicio == "" && fecha_fin != "") || (fecha_inicio != "" && fecha_fin == "" && estado != "") || (fecha_inicio == "" && fecha_fin != "" && estado != "")) {
 		bootbox.alert("Los campos de fecha inicial y fecha final son obligatorios.");
 		return;
 	} else if (fecha_inicio > fecha_fin) {
@@ -1298,7 +1379,7 @@ function buscar() {
 			"ajax":
 			{
 				url: '../ajax/venta.php?op=listar',
-				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, estado: estado },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -1339,22 +1420,36 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (!datos) {
-				console.log("No se recibieron datos del servidor.");
-				return;
-			} else if (datos == "Una de las cantidades superan al stock normal del artículo o servicio." || datos == "El subtotal de uno de los artículos o servicios no puede ser menor a 0." || datos == "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra.") {
-				bootbox.alert(datos);
-				return;
-			} else {
-				console.log(datos);
-				const obj = JSON.parse(datos);
-				console.log(obj);
-				limpiar();
-				// bootbox.alert(datos);
-				mostrarform(false);
-				$("#myModal7").modal("hide");
-				modalPrecuentaFinal(obj[1]);
-				tabla.ajax.reload();
+			let obj;
+
+			try {
+				obj = JSON.parse(datos);
+
+				if (Array.isArray(obj)) {
+					console.log(obj);
+					limpiar();
+					mostrarform(false);
+					$("#myModal7").modal("hide");
+					modalPrecuentaFinal(obj[1]);
+					tabla.ajax.reload();
+				} else {
+					console.log("Datos no son un array.");
+				}
+
+			} catch (e) {
+				// Si la conversión a JSON falla, datos es probablemente una cadena.
+				if (!datos) {
+					console.log(datos);
+					console.log("No se recibieron datos del servidor.");
+					return;
+				} else if (datos == "Una de las cantidades superan al stock normal del artículo o servicio." || datos == "El subtotal de uno de los artículos o servicios no puede ser menor a 0." || datos == "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra." || "El número correlativo que ha ingresado ya existe en el local seleccionado.") {
+					console.log(datos);
+					console.log(typeof (datos));
+					bootbox.alert(datos);
+					return;
+				} else {
+					console.log(datos);
+				}
 			}
 		},
 	});
@@ -1384,10 +1479,10 @@ function opcionesPrecuentaFinal(correlativo, idventa) {
 			window.location.href = "../reporteVentas.php";
 			break;
 		case 4:
-			window.open("../reportes/exTicket.php?id=" + idventa, '_blank');
+			window.open("../reportes/exTicketVenta.php?id=" + idventa, '_blank');
 			break;
 		case 5:
-			window.open("../reportes/exFactura.php?id=" + idventa, '_blank');
+			window.open("../reportes/exA4Venta.php?id=" + idventa, '_blank');
 			break;
 		default:
 	}
@@ -1413,7 +1508,7 @@ function modalImpresion(idventa, num_comprobante) {
 	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
 
 	nombresBotones.forEach(function (texto, index) {
-		var ruta = (index === 0) ? "exTicket" : "exFactura";
+		var ruta = (index === 0) ? "exTicketVenta" : "exA4Venta";
 		$("a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idventa);
 	});
 }
@@ -1465,12 +1560,32 @@ function cambiarEstadoVenta(estado, idventa) {
 	})
 }
 
+function anular(idventa) {
+	bootbox.confirm("¿Está seguro de anular la venta? recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo.", function (result) {
+		if (result) {
+			$.post("../ajax/venta.php?op=anular", { idventa: idventa }, function (e) {
+				bootbox.alert(e);
+				tabla.ajax.reload();
+			});
+		}
+	})
+}
+
 function eliminar(idventa) {
 	bootbox.confirm("¿Estás seguro de eliminar la venta?", function (result) {
 		if (result) {
 			$.post("../ajax/venta.php?op=eliminar", { idventa: idventa }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
+				$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+					const obj = JSON.parse(data);
+
+					let articulo = obj.articulo;
+					let servicio = obj.servicio;
+
+					$("#productos").empty();
+					listarSelectsArticulos(articulo, servicio);
+				});
 			});
 		}
 	})
@@ -1577,6 +1692,10 @@ function modificarSubototales2() {
 	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal2.toFixed(2));
 
 	actualizarVuelto();
+
+	$("#igv").val("0.00");
+	totalTemp = 0;
+	totalOriginalBackup = 0;
 }
 
 function evaluar() {

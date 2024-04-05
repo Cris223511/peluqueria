@@ -15,10 +15,6 @@ if (!isset($_SESSION["nombre"])) {
           padding-right: 0 !important;
         }
 
-        .listadoregistros {
-          padding-bottom: 15px !important;
-        }
-
         .caja1 .contenedor {
           display: flex;
           flex-direction: column;
@@ -63,34 +59,34 @@ if (!isset($_SESSION["nombre"])) {
                   <?php } ?>
                 </h1>
                 <div class="box-tools pull-right"></div>
-              </div>
-              <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Buscar por marca:</label>
-                  <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    <option value="">- Seleccione -</option>
-                  </select>
-                </div>
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Buscar por categoría:</label>
-                  <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    <option value="">- Seleccione -</option>
-                  </select>
-                </div>
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Buscar por estado:</label>
-                  <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    <option value="">- Seleccione -</option>
-                    <option value="1">Disponible</option>
-                    <option value="2">Agotándose</option>
-                    <option value="3">Agotado</option>
-                  </select>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                  <label id="label">ㅤ</label>
-                  <div style="display: flex; gap: 10px;">
-                    <button style="width: 80%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
-                    <button style="width: 20%; height: 32px" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
+                <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label>Buscar por marca:</label>
+                    <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label>Buscar por categoría:</label>
+                    <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label>Buscar por estado:</label>
+                    <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      <option value="">- Seleccione -</option>
+                      <option value="1">Disponible</option>
+                      <option value="2">Agotándose</option>
+                      <option value="3">Agotado</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label id="labelCustom">ㅤ</label>
+                    <div style="display: flex; gap: 10px;">
+                      <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
+                      <button style="height: 32px;" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -154,11 +150,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Categoría(*):</label>
-                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
+                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Marca(*):</label>
-                      <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" data-size="5"required></select>
+                      <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Local(*):</label>

@@ -60,7 +60,7 @@ function validarCaja() {
 	$.post("../ajax/cajas.php?op=validarCaja", function (e) {
 		console.log(e);
 		if (e == "true" || e == true) {
-			bootbox.alert("Usted ya tiene una caja registrada en su local actual.");
+			bootbox.alert("Usted ya tiene una caja registrada en su local actual. <strong>Nota:</strong> Solo puede agregar cuando su local no tenga una caja registrada.");
 		} else {
 			mostrarform(true);
 		}

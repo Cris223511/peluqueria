@@ -17,11 +17,13 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Aperturas de caja
-                  <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { ?>
-                    <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
-                      <i class="fa fa-plus-circle"></i> Aperturar
-                    </button>
-                  <?php // } ?>
+                  <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { 
+                  ?>
+                  <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
+                    <i class="fa fa-plus-circle"></i> Crear nueva caja
+                  </button>
+                  <?php // } 
+                  ?>
                   <?php if ($_SESSION["cargo"] == "superadmin") { ?>
                     <a href="../reportes/rptcajas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -32,27 +34,27 @@ if (!isset($_SESSION["cajas"])) {
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
-              </div>
-              <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Fecha Inicial:</label>
-                  <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
-                </div>
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Fecha Final:</label>
-                  <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
-                </div>
-                <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12">
-                  <label>Buscar por local:</label>
-                  <select id="idlocal2" name="idlocal2" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    <option value="">- Seleccione -</option>
-                  </select>
-                </div>
-                <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12">
-                  <label id="label">ㅤ</label>
-                  <div style="display: flex; gap: 10px;">
-                    <button style="width: 80%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
-                    <button style="width: 20%; height: 32px" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
+                <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                    <label>Fecha Inicial:</label>
+                    <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                    <label>Fecha Final:</label>
+                    <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                    <label>Buscar por local:</label>
+                    <select id="idlocal2" name="idlocal2" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">
+                    <label id="labelCustom">ㅤ</label>
+                    <div style="display: flex; gap: 10px;">
+                      <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
+                      <button style="height: 32px;" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
+                    </div>
                   </div>
                 </div>
               </div>

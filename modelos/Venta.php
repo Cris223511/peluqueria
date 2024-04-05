@@ -32,7 +32,7 @@ class Venta
 		}
 
 		// Luego verificamos si el precio de venta es menor al precio de compra
-		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $idservicio, $precio_compra, $precio_venta);
+		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta);
 		if ($error) {
 			// Si cumple, o sea si es verdadero, no se puede insertar
 			$mensajeError = "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra.";
@@ -45,42 +45,46 @@ class Venta
 
 		// Si no hay errores, continuamos con el registro de la venta
 		$sql = "INSERT INTO venta (idusuario,idlocal,idcliente,idcaja,tipo_comprobante,num_comprobante,fecha_hora,impuesto,total_venta,vuelto,comentario_interno,comentario_externo,estado)
-		VALUES ('$idusuario','$idlocal','$idcliente','$idcaja','$tipo_comprobante','$num_comprobante',SYSDATE(),'$impuesto','$total_venta','$vuelto','$comentario_interno','$comentario_externo','Iniciado')";
+		VALUES ('$idusuario','$idlocal','$idcliente','$idcaja','$tipo_comprobante','$num_comprobante',SYSDATE(),'$impuesto','$total_venta','$vuelto','$comentario_interno','$comentario_externo','Finalizado')";
 		//return ejecutarConsulta($sql);
+
 		$idventanew = ejecutarConsulta_retornarID($sql);
+		$items = array_merge($idarticulo, $idservicio);
 
 		$sw = true;
+
+		for ($i = 0; $i < count($items); $i++) {
+			$esArticulo = $i < count($idarticulo);
+			$esServicio = $i >= count($idarticulo);
+
+			$id = $esArticulo && isset($idarticulo[$i]) ? $idarticulo[$i] : 0;
+			$idServicio = $esServicio && isset($idservicio[$i - count($idarticulo)]) ? $idservicio[$i - count($idarticulo)] : 0;
+
+			$cantidadItem = $cantidad[$i];
+			$idPersonalItem = $idpersonal[$i];
+			$precioVentaItem = $precio_venta[$i];
+			$descuentoItem = $descuento[$i];
+
+			$sql_detalle = "INSERT INTO detalle_venta(idventa,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento) VALUES ('$idventanew','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem')";
+
+			ejecutarConsulta($sql_detalle) or $sw = false;
+
+			if ($esArticulo && $id != 0) {
+				$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
+				ejecutarConsulta($actualizar_art) or $sw = false;
+			} elseif ($esServicio && $idServicio != 0) {
+				$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$idServicio'";
+				ejecutarConsulta($actualizar_serv) or $sw = false;
+			}
+		}
+
 		$num_elementos = 0;
 
-		while ($num_elementos < count($idarticulo)) {
-			$sql_detalle = "INSERT INTO detalle_venta(idventa,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento) VALUES ('$idventanew','$idarticulo[$num_elementos]','0','$idpersonal[$num_elementos]','$cantidad[$num_elementos]','$precio_venta[$num_elementos]','$descuento[$num_elementos]')";
+		while ($num_elementos < count($metodo_pago)) {
+			$sql_detalle = "INSERT INTO detalle_venta_pagos(idventa,idmetodopago,monto) VALUES ('$idventanew','$metodo_pago[$num_elementos]','$monto[$num_elementos]')";
 			ejecutarConsulta($sql_detalle) or $sw = false;
-
-			$actualizar_art = "UPDATE articulo SET precio_venta='$precio_venta[$num_elementos]' WHERE idarticulo='$idarticulo[$num_elementos]'";
-			ejecutarConsulta($actualizar_art) or $sw = false;
 
 			$num_elementos = $num_elementos + 1;
-		}
-
-		$num_elementos2 = 0;
-
-		while ($num_elementos2 < count($idservicio)) {
-			$sql_detalle = "INSERT INTO detalle_venta(idventa,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento) VALUES ('$idventanew','0','$idservicio[$num_elementos2]','$idpersonal[$num_elementos2]','$cantidad[$num_elementos2]','$precio_venta[$num_elementos2]','$descuento[$num_elementos2]')";
-			ejecutarConsulta($sql_detalle) or $sw = false;
-
-			$actualizar_art = "UPDATE servicios SET costo='$precio_venta[$num_elementos2]' WHERE idservicio='$idservicio[$num_elementos2]'";
-			ejecutarConsulta($actualizar_art) or $sw = false;
-
-			$num_elementos2 = $num_elementos2 + 1;
-		}
-
-		$num_elementos3 = 0;
-
-		while ($num_elementos3 < count($metodo_pago)) {
-			$sql_detalle = "INSERT INTO detalle_venta_pagos(idventa,idmetodopago,monto) VALUES ('$idventanew','$metodo_pago[$num_elementos3]','$monto[$num_elementos3]')";
-			ejecutarConsulta($sql_detalle) or $sw = false;
-
-			$num_elementos3 = $num_elementos3 + 1;
 		}
 
 		return [$sw, $idventanew];
@@ -111,11 +115,9 @@ class Venta
 		return false;
 	}
 
-	public function validarPrecioCompraPrecioVenta($idarticulo, $idservicio, $precio_compra, $precio_venta)
+	public function validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta)
 	{
-		$idarticulo_servicio = array_merge($idarticulo, $idservicio);
-
-		for ($i = 0; $i < count($idarticulo_servicio); $i++) {
+		for ($i = 0; $i < count($idarticulo); $i++) {
 			if ($precio_venta[$i] < $precio_compra[$i]) {
 				return true;
 			}
@@ -149,17 +151,34 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para eliminar categorías
-	public function eliminar($idventa)
+	//Implementamos un método para anular la venta
+	public function anular($idventa)
 	{
-		$sql = "DELETE FROM venta WHERE idventa='$idventa'";
+		$sql = "UPDATE venta SET estado='Anulado' WHERE idventa='$idventa'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementar un método para listar los registros
+	//Implementamos un método para eliminar la venta
+	public function eliminar($idventa)
+	{
+		$sql = "DELETE v, dv, dvp
+        		  FROM venta v
+        		LEFT JOIN detalle_venta dv ON v.idventa = dv.idventa
+        		LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
+        		WHERE v.idventa = '$idventa'";
+
+		return ejecutarConsulta($sql);
+	}
+
 	public function listar()
 	{
 		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarEstado($estado)
+	{
+		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.estado = '$estado' ORDER by v.idventa DESC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -169,16 +188,33 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementar un método para listar los registros
+	public function listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado)
+	{
+		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	public function listarPorUsuario($idlocalSession)
 	{
 		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' ORDER by v.idventa DESC";
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarPorUsuarioEstado($idlocalSession, $estado)
+	{
+		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND v.estado = '$estado' ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	public function listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin)
 	{
 		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' ORDER by v.idventa DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado)
+	{
+		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' ORDER by v.idventa DESC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -265,12 +301,21 @@ class Venta
 				  v.idcliente,
 				  v.idcaja,
 				  u.nombre AS usuario,
+				  u.tipo_documento AS tipo_documento_usuario,
+				  u.num_documento AS num_documento_usuario,
+				  u.direccion AS direccion_usuario,
+				  u.telefono AS telefono_usuario,
+				  u.email AS email_usuario,
 				  l.titulo AS local,
+				  l.local_ruc AS local_ruc,
 				  c.nombre AS cliente,
+				  c.telefono AS telefono,
+				  c.tipo_documento AS tipo_documento,
+				  c.num_documento AS num_documento,
 				  ca.titulo AS caja,
 				  v.tipo_comprobante,
 				  v.num_comprobante,
-				  v.fecha_hora,
+				  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha_hora,
 				  v.impuesto,
 				  v.total_venta,
 				  v.vuelto,
@@ -284,21 +329,40 @@ class Venta
 				LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
 				WHERE v.idventa = '$idventa'";
 
-		return ejecutarConsultaSimpleFila($sql);
+		return ejecutarConsulta($sql);
 	}
 
 	public function listarDetallesProductoVenta($idventa)
 	{
 		$sql = "SELECT
 				  dv.idventa,
-				  dv.idarticulo,a.nombre,
+				  dv.idarticulo,
+				  dv.idservicio,
+				  a.nombre AS articulo,
+				  a.codigo AS codigo_articulo,
+				  s.titulo AS servicio,
+				  s.codigo AS cod_servicio,
 				  dv.cantidad,
 				  dv.precio_venta,
-				  dv.precio_compra,
 				  dv.descuento
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
+				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
 				WHERE dv.idventa='$idventa'";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarDetallesMetodosPagoVenta($idventa)
+	{
+		$sql = "SELECT
+				  dvp.idventa,
+				  dvp.idmetodopago,
+				  m.titulo AS metodo_pago,
+				  dvp.monto
+				FROM detalle_venta_pagos dvp
+				LEFT JOIN metodo_pago m ON dvp.idmetodopago = m.idmetodopago
+				WHERE dvp.idventa='$idventa'";
 
 		return ejecutarConsulta($sql);
 	}

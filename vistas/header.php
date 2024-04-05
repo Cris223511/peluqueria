@@ -155,6 +155,12 @@ $local_login = $_SESSION['local'];
   textarea {
     resize: none !important;
   }
+
+  @media (max-width: 991.50px) {
+    #labelCustom {
+      display: none;
+    }
+  }
 </style>
 
 <!DOCTYPE html>

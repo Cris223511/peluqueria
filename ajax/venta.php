@@ -54,6 +54,11 @@ if (!isset($_SESSION["nombre"])) {
 				}
 				break;
 
+			case 'anular':
+				$rspta = $venta->anular($idventa);
+				echo $rspta ? "Venta anulada" : "Venta no se puede anular";
+				break;
+
 			case 'cambiarEstado':
 				$rspta = $venta->cambiarEstado($idventa, $estado);
 				echo $rspta ? "Estado de la venta actualizada con éxito." : "El estado de la venta no se puede actualizar.";
@@ -72,18 +77,27 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listar':
 				$fecha_inicio = $_GET["fecha_inicio"];
 				$fecha_fin = $_GET["fecha_fin"];
+				$estado = $_GET["estado"];
 
 				if ($cargo == "superadmin") {
-					if ($fecha_inicio == "" && $fecha_fin == "") {
+					if ($fecha_inicio == "" && $fecha_fin == "" && $estado == "") {
 						$rspta = $venta->listar();
-					} else {
+					} else if ($fecha_inicio == "" && $fecha_fin == ""  && $estado != "") {
+						$rspta = $venta->listarEstado($estado);
+					} else if ($fecha_inicio != "" && $fecha_fin != ""  && $estado == "") {
 						$rspta = $venta->listarPorFecha($fecha_inicio, $fecha_fin);
+					} else {
+						$rspta = $venta->listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado);
 					}
 				} else {
-					if ($fecha_inicio == "" && $fecha_fin == "") {
+					if ($fecha_inicio == "" && $fecha_fin == "" && $estado == "") {
 						$rspta = $venta->listarPorUsuario($idlocalSession);
-					} else {
+					} else if ($fecha_inicio == "" && $fecha_fin == ""  && $estado != "") {
+						$rspta = $venta->listarPorUsuarioEstado($idlocalSession, $estado);
+					} else if ($fecha_inicio != "" && $fecha_fin != ""  && $estado == "") {
 						$rspta = $venta->listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin);
+					} else {
+						$rspta = $venta->listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado);
 					}
 				}
 
@@ -124,11 +138,12 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
 							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ')"><i class="fa fa-info-circle"></i></button></a>' .
-							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>')) : ('')) .
+							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
+									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idventa . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
-						"1" => '<a target="_blank" href="../reportes/exFactura.php?id=' . $reg->idventa . '"> <button class="btn btn-info" style="color: black !important; margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
+						"1" => '<a target="_blank" href="../reportes/exA4Venta.php?id=' . $reg->idventa . '"> <button class="btn btn-info" style="color: black !important; margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
 						"2" => $reg->cliente,
 						"3" => $reg->local,
 						"4" => $reg->caja,
@@ -137,7 +152,7 @@ if (!isset($_SESSION["nombre"])) {
 						"7" => $reg->total_venta,
 						"8" => $reg->usuario . ' - ' . $cargo_detalle,
 						"9" => $reg->fecha,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-red">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
 					$totalPrecioVenta += $reg->total_venta;
