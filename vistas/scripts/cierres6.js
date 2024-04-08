@@ -1,4 +1,5 @@
 var tabla;
+var tabla2;
 var idSession;
 // var idLocal;
 
@@ -71,7 +72,7 @@ function listar() {
 			'iDisplayLength': 5,
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -156,12 +157,103 @@ function buscar() {
 			'iDisplayLength': 5,//Paginación
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
 init();
+
+function modalDetalles(idcaja, idcaja_cerrada, fecha) {
+	$("#fecha_hora_caja").text(fecha);
+	$("#myModal").modal("show");
+
+	tabla2 = $('#tbldetalles').dataTable(
+		{
+			'lengthMenu': [5, 10, 25, 75, 100],
+			'aProcessing': true,
+			'aServerSide': true,
+			dom: '<Bl<f>rtip>',
+			buttons: [
+				{
+					extend: 'copyHtml5',
+					text: 'Copiar',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					}
+				},
+				{
+					extend: 'excelHtml5',
+					text: 'Excel',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'csvHtml5',
+					text: 'CSV',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'pdfHtml5',
+					text: 'PDF',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
+					}
+				}
+			],
+
+			'ajax':
+			{
+				url: '../ajax/cajas.php?op=listarDetallesProductosCaja',
+				type: 'get',
+				data: { idcaja: idcaja, idcaja_cerrada: idcaja_cerrada },
+				dataType: 'json',
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			'language': {
+				'lengthMenu': 'Mostrar : _MENU_ registros',
+				'buttons': {
+					'copyTitle': 'Tabla Copiada',
+					'copySuccess': {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			'bDestroy': true,
+			'iDisplayLength': 5,
+			'order': [],
+			'createdRow': function (row, data, dataIndex) {
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+			}
+		}).DataTable();
+}
 
 function eliminar(idcaja) {
 	bootbox.confirm("¿Estás seguro de eliminar la caja?", function (result) {

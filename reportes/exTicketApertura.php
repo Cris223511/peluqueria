@@ -1,0 +1,62 @@
+<?php
+ob_start();
+
+require('../modelos/Perfiles.php');
+$perfil = new Perfiles();
+$rspta = $perfil->mostrarReporte();
+
+# Datos de la empresa #
+$logo = $rspta["imagen"];
+$ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
+$empresa = $rspta["titulo"];
+$ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
+$direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
+$telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
+$email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
+
+require('../modelos/Cajas.php');
+$venta = new Caja();
+
+$rspta = $venta->mostrar($_GET["id"]);
+
+$reg = (object) $rspta;
+
+require('ticket/code128.php');
+
+# Modificando el ancho y alto del ticket #
+$pdf = new PDF_Code128('P', 'mm', array(70, 150));
+$pdf->SetAutoPageBreak(false);
+$pdf->SetMargins(4, 10, 4);
+$pdf->AddPage();
+
+$y = 2; // inicialización de variable de posición Y.
+$size = 0; // inicialización de variable de tamaño.
+
+# Encabezado y datos del ticket #
+$y = $pdf->cuerpoCaja(
+    $y,
+    $logo,
+    $ext_logo,
+    $reg->fecha ?? '',
+    $reg->local ?? '',
+    $reg->local_ruc ?? '',
+    $reg->nombre ?? '',
+    $reg->titulo ?? '',
+    $reg->monto ?? '',
+    $reg->descripcion ?? '',
+);
+
+# Créditos #
+$pdf->creditos(
+    $y,
+    $empresa . "\n" .
+        "Ruc: " . $ruc . "\n" .
+        "Dirección: " . $direccion . "\n" .
+        "Teléfono: " . $telefono . "\n" .
+        "Email: " . $email . "\n"
+);
+
+# Nombre del archivo PDF #
+$pdf->Output("I", "ticket_apertura_" . mt_rand(10000000, 99999999) . ".pdf", true);
+
+ob_end_flush();

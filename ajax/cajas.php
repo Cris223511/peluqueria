@@ -87,7 +87,6 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
-
 				$param1 = $_GET["param1"]; // valor fecha inicio
 				$param2 = $_GET["param2"]; // valor fecha fin
 				$param3 = $_GET["param3"]; // valor local
@@ -141,7 +140,9 @@ if (!isset($_SESSION["nombre"])) {
 							(($reg->estado != 'aperturado') ?
 								('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>')) .
 							((($cargo == "superadmin" || $cargo == "admin")) ?
-								('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') : ('')) .
+								('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') : ('')) .
+							('<button class="btn btn-info" style="margin-right: 3px; height: 35px;" onclick="modalDetalles(' . $reg->idcaja . ')"><i class="fa fa-info-circle"></i></button>') .
+							('<a target="_blank" href="../reportes/exTicketApertura.php?id=' . $reg->idcaja . '"> <button class="btn btn-success" style="color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
@@ -214,15 +215,44 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
+							('<a target="_blank" href="../reportes/exTicketCierre.php?id=' . $reg->idcaja . '"> <button class="btn btn-success" style="margin-right: 3px; color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
+							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\')"><i class="fa fa-bars"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
 						"3" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
 						"4" => ucwords($reg->nombre),
 						"5" => ucwords($cargo_detalle),
-						"6" => $reg->fecha,
-						"7" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
-						"8" => '<span class="label bg-red">Cerrado</span>'
+						"6" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
+						"7" => '<span class="label bg-red">Cerrado</span>'
+					);
+				}
+				$results = array(
+					"sEcho" => 1,
+					"iTotalRecords" => count($data),
+					"iTotalDisplayRecords" => count($data),
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+				break;
+
+			case 'listarDetallesProductosCaja':
+				$idcaja = $_GET['idcaja'];
+				$idcaja_cerrada = $_GET['idcaja_cerrada'];
+
+				$rspta = $cajas->listarDetallesProductosCaja($idcaja, $idcaja_cerrada);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$data[] = array(
+						"0" => ($reg->articulo != "") ? mb_strtoupper($reg->articulo) : mb_strtoupper($reg->servicio),
+						"1" => ($reg->codigo != "") ? $reg->codigo : "N° " . $reg->codigo_servicio,
+						"2" => $reg->cantidad,
+						"3" => $reg->precio_venta,
+						"4" => $reg->descuento,
+						"5" => number_format(($reg->cantidad * $reg->precio_venta) - $reg->descuento, 2),
 					);
 				}
 				$results = array(

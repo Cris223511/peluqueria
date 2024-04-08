@@ -61,7 +61,6 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Monto</th>
                       <th style="white-space: nowrap;">Agregado por</th>
                       <th>Cargo</th>
-                      <th style="white-space: nowrap;">Fecha inicio</th>
                       <th style="white-space: nowrap;">Fecha cierre</th>
                       <th>Estado</th>
                     </thead>
@@ -74,7 +73,6 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Monto</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
-                      <th>Fecha inicio</th>
                       <th>Fecha cierre</th>
                       <th>Estado</th>
                     </tfoot>
@@ -86,6 +84,48 @@ if (!isset($_SESSION["cajas"])) {
         </div>
       </section>
     </div>
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 75%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">DETALLES DE PRODUCTOS DE CIERRE DE CAJA: <span id="fecha_hora_caja"></span></h4>
+            </div>
+          </div>
+          <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding: 0 !important; height: max-content;">
+            <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
+              <table id="tbldetalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                <thead>
+                  <th>PRODUCTO / SERVICIO</th>
+                  <th>CÓDIGO</th>
+                  <th>CANTIDAD</th>
+                  <th style="white-space: nowrap;">P. UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th style="white-space: nowrap;">P. TOTAL</th>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <th>PRODUCTO / SERVICIO</th>
+                  <th>CÓDIGO</th>
+                  <th>CANTIDAD</th>
+                  <th>P. UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th>P. TOTAL</th>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-warning" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Regresar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 1 -->
   <?php
   } else {
     require 'noacceso.php';

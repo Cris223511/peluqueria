@@ -38,6 +38,36 @@
     </script>
 
     <script>
+      function formatHora(hora) {
+        let partes = hora.split(':');
+        let h = parseInt(partes[0], 10);
+        let m = parseInt(partes[1], 10);
+        let s = parseInt(partes[2], 10);
+
+        let ampm = h >= 12 ? 'p.m.' : 'a.m.';
+        h = h % 12 || 12;
+        h = h < 10 ? '0' + h : h;
+        m = m < 10 ? '0' + m : m;
+
+        return h + ':' + m + ' ' + ampm;
+      }
+
+      function formatFecha(fecha) {
+        const meses = [
+          "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio",
+          "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"
+        ];
+
+        let partes = fecha.split('-');
+        let dia = partes[0];
+        let mes = meses[parseInt(partes[1]) - 1];
+        let anio = partes[2];
+
+        return dia + " de " + mes + " del " + anio;
+      }
+    </script>
+
+    <script>
       function capitalizarPalabras(palabra) {
         return palabra.charAt(0).toUpperCase() + palabra.slice(1);
       }
@@ -317,7 +347,15 @@
     </script>
 
     <?php
-    if ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
+    if ($_SESSION["cargo"] == "cajero") {
+      echo '<script>
+              $(document).ajaxSuccess(function(event, xhr, settings) {
+                if (!$("#lCierres").hasClass("active")) {
+                  $(".dt-buttons").hide();
+                }
+              });
+            </script>';
+    } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
       echo '<script>
               $(document).ajaxSuccess(function(event, xhr, settings) {
                 $(".dt-buttons").hide();
@@ -339,6 +377,11 @@
         if (modal.hasClass('bootbox') && modal.hasClass('bootbox-confirm')) {
           modal.find('.modal-footer .btn-default').text('Cancelar');
           modal.find('.modal-footer .btn-primary').text('Aceptar');
+        }
+
+        const okButton = modal.find('.modal-footer button[data-bb-handler="ok"]');
+        if (okButton.length) {
+          okButton.text('Aceptar').removeClass('btn-default').addClass('btn-bcp');
         }
       });
     </script>

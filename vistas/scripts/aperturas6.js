@@ -60,7 +60,7 @@ function validarCaja() {
 	$.post("../ajax/cajas.php?op=validarCaja", function (e) {
 		console.log(e);
 		if (e == "true" || e == true) {
-			bootbox.alert("Usted ya tiene una caja registrada en su local actual. <strong>Nota:</strong> Solo puede agregar cuando su local no tenga una caja registrada.");
+			bootbox.alert("Usted ya tiene una caja registrada en su local actual. <br><br> <strong>Nota:</strong> Solo puede agregar cuando su local no tenga una caja registrada.");
 		} else {
 			mostrarform(true);
 		}
@@ -190,6 +190,33 @@ function mostrar(idcaja) {
 			$("#desbloquearMonto").removeAttr("onclick");
 		}
 	})
+}
+
+function modalDetalles(idcaja) {
+	$.post("../ajax/cajas.php?op=mostrar", { idcaja: idcaja }, function (data, status) {
+		console.log(data);
+		data = JSON.parse(data);
+		console.log(data);
+
+		Object.keys(data).forEach(function (key) {
+			data[key] = data[key].toUpperCase();
+		});
+
+		$("#local_caja").text(data.local);
+		$("#usuario_caja").text(data.nombre);
+
+		let fechaHora = data.fecha.split(" ");
+		let fecha = fechaHora[0];
+		let hora = fechaHora[1];
+
+		$("#fecha_caja").text(formatFecha(fecha));
+		$("#hora_caja").text(formatHora(hora));
+
+		$("#monto_caja").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#descripcion_caja").text(data.descripcion);
+
+		$("#myModal").modal("show");
+	});
 }
 
 function verificarMonto(contador) {

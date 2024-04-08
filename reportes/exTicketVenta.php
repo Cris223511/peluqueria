@@ -55,7 +55,7 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-$y += 48;
+$y += 52;
 
 # Encabezado y datos del ticket #
 $pdf->encabezado2(
@@ -317,9 +317,9 @@ $lineVuelto = array(
 );
 
 $pdf->SetFont('hypermarket', '', 7);
-$sizeIGV = $pdf->addLine($y, $lineVuelto);
+$sizeVuelto = $pdf->addLine($y, $lineVuelto);
 
-$y += $sizeIGV + 2;
+$y += $sizeVuelto + 2;
 
 # TOTAL #
 $lineTotal = array(
@@ -366,10 +366,9 @@ $level = 'H';
 $filePath = './ticket/temp/qrcode.png';
 
 QRcode::png($codeText, $filePath, $level, $size ?? 0);
-$pdf->Image($filePath, 19, null, 30);
+$pdf->Image($filePath, 20, null, 30);
 
 unlink($filePath);
-
 
 # Créditos #
 $pdf->creditos(

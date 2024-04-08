@@ -10,8 +10,8 @@ class Caja
 	public function agregar($idusuario, $idlocal, $titulo, $monto, $descripcion)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO cajas (idusuario, idlocal, titulo, monto, contador, descripcion, fecha_hora, fecha_cierre, estado, vendido, eliminado)
-            VALUES ('$idusuario','$idlocal','$titulo', '$monto', '3', '$descripcion', SYSDATE(), '0000-00-00 00:00:00', 'aperturado','0','0')";
+		$sql = "INSERT INTO cajas (idcaja_cerrada, idusuario, idlocal, titulo, monto, contador, descripcion, fecha_hora, fecha_cierre, estado, vendido, eliminado)
+            VALUES ('0','$idusuario','$idlocal','$titulo', '$monto', '3', '$descripcion', SYSDATE(), '0000-00-00 00:00:00', 'aperturado','0','0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -26,6 +26,7 @@ class Caja
 
 		if ($fila = mysqli_fetch_assoc($resultado)) {
 			// Almacena los datos de la fila en variables
+			$idcaja_cerrada = $fila['idcaja'];
 			$idusuario = $fila['idusuario'];
 			$idlocal = $fila['idlocal'];
 			$titulo = $fila['titulo'];
@@ -34,8 +35,8 @@ class Caja
 			$fecha = $fila['fecha_hora'];
 
 			// Inserta los datos en la nueva tabla
-			$sql3 = "INSERT INTO cajas_cerradas (idusuario, idlocal, titulo, monto, contador, descripcion, fecha_hora, fecha_cierre, estado, vendido, eliminado)
-						   VALUES ('$idusuario', '$idlocal', '$titulo', '$monto', '3', '$descripcion', '$fecha', SYSDATE(), 'cerrado', '0', '0')";
+			$sql3 = "INSERT INTO cajas_cerradas (idcaja_cerrada, idusuario, idlocal, titulo, monto, contador, descripcion, fecha_hora, fecha_cierre, estado, vendido, eliminado)
+						   VALUES ('$idcaja_cerrada', '$idusuario', '$idlocal', '$titulo', '$monto', '3', '$descripcion', '$fecha', SYSDATE(), 'cerrado', '0', '0')";
 			return ejecutarConsulta($sql3);
 		}
 	}
@@ -102,92 +103,113 @@ class Caja
 
 	public function eliminarCajaCerrada($idcaja)
 	{
-		$sql = "UPDATE cajas_cerradas SET eliminado = '1' WHERE idcaja='$idcaja'";
+		$sql = "DELETE FROM cajas_cerradas WHERE idcaja = '$idcaja'";
 		return ejecutarConsulta($sql);
 	}
 
 	public function mostrar($idcaja)
 	{
-		$sql = "SELECT * FROM cajas WHERE idcaja='$idcaja'";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE idcaja='$idcaja'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	public function listar()
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorParametro($param)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioParametro($idlocalSession, $param)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' AND c.idlocal = '$idlocalSession' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' AND c.idlocal = '$idlocalSession' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerrados()
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradosPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradas()
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradasPorParametro($param)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradasPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradasPorUsuarioParametro($idlocalSession, $param)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' AND c.idlocal = '$idlocalSession' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND $param AND c.eliminado = '0' AND c.idlocal = '$idlocalSession' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradasCerrados()
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarCerradasCerradosPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT c.idcaja, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
+		$sql = "SELECT c.idcaja, c.idcaja_cerrada, u.idusuario, u.nombre as nombre, u.cargo as cargo, c.titulo, l.titulo as local, l.local_ruc as local_ruc,  c.monto, c.descripcion, DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, DATE_FORMAT(c.fecha_cierre, '%d-%m-%Y %H:%i:%s') as fecha_cierre, c.vendido, c.estado FROM cajas_cerradas c LEFT JOIN usuario u ON c.idusuario = u.idusuario LEFT JOIN locales l ON c.idlocal=l.idlocal WHERE c.idlocal = '$idlocalSession' AND c.eliminado = '0' AND c.estado = 'cerrado' ORDER BY c.idcaja DESC";
 		return ejecutarConsulta($sql);
 	}
-
 
 	public function listarActivos()
 	{
 		$sql = "SELECT idcaja, titulo FROM cajas WHERE estado='aperturado' AND eliminado = '0' ORDER BY idcaja DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarDetallesProductosCaja($idcaja, $idcaja_cerrada)
+	{
+		$sql = "SELECT
+				  a.nombre AS articulo,
+				  s.titulo AS servicio,
+				  a.codigo AS codigo,
+				  s.codigo AS codigo_servicio,
+				  dv.cantidad AS cantidad,
+				  dv.precio_venta AS precio_venta,
+				  dv.descuento AS descuento
+				FROM detalle_venta dv
+				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
+				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
+				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
+				WHERE cc.idcaja = '$idcaja' 
+				AND cc.idcaja_cerrada = '$idcaja_cerrada'
+				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				ORDER BY dv.iddetalle_venta ASC";
+
 		return ejecutarConsulta($sql);
 	}
 }

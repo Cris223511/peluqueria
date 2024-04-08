@@ -999,22 +999,22 @@ class FPDF
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("Estado: $estado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, 8, 20, 20, $ext_logo);
+		$this->Image('../files/logo_reportes/' . $logo, 25, 12, 20, 20, $ext_logo);
 
 		# TIPO DE COMPROBANTE #
-		$this->SetY($y + 28);
+		$this->SetY($y + 32);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$tipo_comprobante"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
-		$this->SetY($y + 34);
+		$this->SetY($y + 38);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# RUC #
-		$this->SetY($y + 38);
+		$this->SetY($y + 42);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
@@ -1114,8 +1114,8 @@ class FPDF
 	function creditos($y, $adresse)
 	{
 		$this->Ln(1);
-		$this->SetX(1.5);
-		$this->SetFont('hypermarket', '', 7);
+		$this->SetX(4.5);
+		$this->SetFont('hypermarket', '', 7.5);
 		$this->MultiCell(0, 3.3, mb_convert_encoding(mb_strtoupper($adresse), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 	}
 
@@ -1200,6 +1200,86 @@ class FPDF
 			$nb_lines += $res;
 		}
 		return $nb_lines;
+	}
+
+	/*******************************************************************************
+	 *                      Ticket Apertura / Cierre Design                        *
+	 *******************************************************************************/
+
+	function cuerpoCaja($y, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $descripcion)
+	{
+		# LOGO #
+		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
+
+		# TIPO DE COMPROBANTE #
+		$this->SetY($y += 23.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("APERTURA DE CAJA"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# LOCAL #
+		$this->SetY($y += 6);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# RUC #
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# SEPARADOR #
+		$this->Ln(4);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1.5);
+
+		$partes = explode(" ", $fecha_hora);
+
+		$fecha = $partes[0];
+		$hora = $partes[1];
+
+		# FECHA #
+		$this->SetX(1.5);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("FECHA: $fecha          HORA: $hora", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# USUARIO #
+		$this->SetX(1.5);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("EMPLEADO: $usuario", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# CAJA #
+		$this->SetX(1.5);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("CAJA: $caja", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# MONTO #
+		$this->SetX(1.5);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("MONTO: $monto", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# DESCRIPCIÓN #
+		$this->Ln(2.5);
+		$this->SetX(1.5);
+		$this->SetFont('hypermarket', '', 7.5);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding("COMENTARIO: $descripcion", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# SEPARADOR #
+		$this->Ln(4);
+		$this->SetX(1.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1.5);
+
+		return $y;
 	}
 
 	/*******************************************************************************

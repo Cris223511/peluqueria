@@ -112,7 +112,7 @@ function limpiar() {
 }
 
 function limpiarTodo() {
-	bootbox.confirm("¿Estás seguro de eliminar la venta?", function (result) {
+	bootbox.confirm("¿Estás seguro de limpiar los datos de la venta?, perderá todos los datos registrados.", function (result) {
 		if (result) {
 			limpiar();
 		}
@@ -1499,6 +1499,81 @@ function limpiarModalPrecuentaFinal() {
 }
 
 // FUNCIONES Y BOTONES DE LAS VENTAS
+
+function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
+	$.post("../ajax/venta.php?op=listarDetallesProductoVenta", { idventa: idventa }, function (data, status) {
+		console.log(data);
+		data = JSON.parse(data);
+		console.log(data);
+
+		// Actualizar datos del cliente
+		let nombreCompleto = cliente;
+
+		if (cliente_tipo_documento && cliente_num_documento) {
+			nombreCompleto += ' - ' + cliente_tipo_documento + ': ' + cliente_num_documento;
+		}
+
+		$('#nombre_cliente').text(nombreCompleto);
+		$('#direccion_cliente').text((cliente_direccion != "") ? cliente_direccion : "Sin registrar");
+		$('#nota_de_venta').text(num_comprobante);
+
+		// Actualizar detalles de la tabla productos
+		let tbody = $('#detallesProductosFinal tbody');
+		tbody.empty();
+
+		let subtotal = 0;
+
+		data.articulos.forEach(item => {
+			let descripcion = item.articulo ? item.articulo : item.servicio;
+			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
+
+			let row = `
+                <tr>
+                    <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_venta) - item.descuento).toFixed(2)}</td>
+                </tr>`;
+
+			tbody.append(row);
+
+			// Calcular subtotal
+			subtotal += item.cantidad * item.precio_venta;
+		});
+
+		let igv = subtotal * (impuesto);
+
+		$('#subtotal_detalle').text(subtotal.toFixed(2));
+		$('#igv_detalle').text(igv.toFixed(2));
+		$('#total_detalle').text(total_venta);
+
+		// Actualizar detalles de la tabla pagos
+		let tbodyPagos = $('#detallesPagosFinal tbody');
+		tbodyPagos.empty();
+
+		let subtotalPagos = 0;
+
+		data.pagos.forEach(item => {
+			let row = `
+                <tr>
+                    <td width: 80%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(item.metodo_pago)}</td>
+                    <td width: 20%; min-width: 40px; white-space: nowrap;">${item.monto}</td>
+                </tr>`;
+
+			tbodyPagos.append(row);
+
+			// Calcular subtotalPagos
+			subtotalPagos += parseFloat(item.monto);
+		});
+
+		$('#subtotal_pagos').text(subtotalPagos.toFixed(2));
+		$('#vueltos_pagos').text(vuelto);
+		$('#total_pagos').text(total_venta);
+
+		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
+	});
+}
 
 function modalImpresion(idventa, num_comprobante) {
 	$("#num_comprobante_final2").text(num_comprobante);

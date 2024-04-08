@@ -137,7 +137,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
-							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
 									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
@@ -289,6 +289,30 @@ if (!isset($_SESSION["nombre"])) {
 
 				echo json_encode($data);
 				break;
+
+			case 'listarDetallesProductoVenta':
+				$rspta1 = $venta->listarDetallesProductoVenta($idventa);
+				$rspta2 = $venta->listarDetallesMetodosPagoVenta($idventa);
+
+				$articulos = array();
+				$pagos = array();
+
+				while ($row = mysqli_fetch_assoc($rspta1)) {
+					$articulos[] = $row;
+				}
+
+				while ($row = mysqli_fetch_assoc($rspta2)) {
+					$pagos[] = $row;
+				}
+
+				$data = array(
+					"articulos" => $articulos,
+					"pagos" => $pagos
+				);
+
+				echo json_encode($data);
+				break;
+
 
 			case 'listarMetodosDePago':
 				$rspta = $venta->listarMetodosDePago();
