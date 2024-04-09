@@ -65,7 +65,7 @@ class Venta
 			$precioVentaItem = $precio_venta[$i];
 			$descuentoItem = $descuento[$i];
 
-			$sql_detalle = "INSERT INTO detalle_venta(idventa,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,fecha_hora) VALUES ('$idventanew','$idcaja','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem',SYSDATE())";
+			$sql_detalle = "INSERT INTO detalle_venta(idventa,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idventanew','$idcaja','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$impuesto','$descuentoItem',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 

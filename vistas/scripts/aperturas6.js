@@ -328,9 +328,9 @@ function buscar() {
 			],
 			'ajax':
 			{
-				url: '../ajax/cajas.php?op=listar2',
-				data: { param1: param1, param2: param2, param3: param3 },
+				url: '../ajax/cajas.php?op=listar',
 				type: 'get',
+				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: 'json',
 				error: function (e) {
 					console.log(e.responseText);

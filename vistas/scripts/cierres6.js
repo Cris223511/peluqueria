@@ -47,6 +47,13 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
+				{
+					extend: 'colvis',
+					text: 'VER / OCULTAR',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					}
+				}
 			],
 			'ajax':
 			{
@@ -132,12 +139,19 @@ function buscar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
+				{
+					extend: 'colvis',
+					text: 'VER / OCULTAR',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
+					}
+				}
 			],
 			'ajax':
 			{
 				url: '../ajax/cajas.php?op=listar2',
-				data: { param1: param1, param2: param2, param3: param3 },
 				type: 'get',
+				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: 'json',
 				error: function (e) {
 					console.log(e.responseText);
@@ -174,6 +188,7 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 			'aProcessing': true,
 			'aServerSide': true,
 			dom: '<Bl<f>rtip>',
+			// APLICAR EN TODOS LOS SISTEMAS.
 			buttons: [
 				{
 					extend: 'copyHtml5',
@@ -222,6 +237,13 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 						var randomNum = Math.floor(Math.random() * 100000000);
 						config.filename = 'cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'colvis',
+					text: 'VER / OCULTAR',
+					exportOptions: {
+						columns: [0, 1, 2, 3, 4, 5]
 					}
 				}
 			],

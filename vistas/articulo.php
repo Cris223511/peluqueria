@@ -234,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Peso:</label>
-                        <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Ingrese el peso.">
+                        <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el peso.">
                       </div>
                     </div>
                     <!-- end form detalles -->

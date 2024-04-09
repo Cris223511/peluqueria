@@ -1203,10 +1203,10 @@ class FPDF
 	}
 
 	/*******************************************************************************
-	 *                      Ticket Apertura / Cierre Design                        *
+	 *                      Ticket Apertura / Retiro Design                        *
 	 *******************************************************************************/
 
-	function cuerpoCaja($y, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $descripcion)
+	function cuerpoCaja($y, $titulo, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $descripcion)
 	{
 		# LOGO #
 		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
@@ -1215,7 +1215,7 @@ class FPDF
 		$this->SetY($y += 23.5);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("APERTURA DE CAJA"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$titulo"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
 		$this->SetY($y += 6);

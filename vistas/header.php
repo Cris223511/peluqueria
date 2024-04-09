@@ -316,6 +316,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lAperturas"><a href="aperturas.php"><i class="fa fa-circle-o"></i> Aperturas</a></li>
                 <li id="lCierres"><a href="cierres.php"><i class="fa fa-circle-o"></i> Cierres</a></li>
+                <li id="lRetiros"><a href="retiros.php"><i class="fa fa-circle-o"></i> Retiros</a></li>
               </ul>
             </li>';
           }

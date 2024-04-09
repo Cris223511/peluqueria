@@ -16,16 +16,12 @@ if (!isset($_SESSION["cajas"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Aperturas de caja
-                  <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { 
-                  ?>
-                  <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
-                    <i class="fa fa-plus-circle"></i> Crear nueva caja
+                <h1 class="box-title">Retiros
+                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
+                    <i class="fa fa-plus-circle"></i> Agregar retiro
                   </button>
-                  <?php // } 
-                  ?>
                   <?php if ($_SESSION["cargo"] == "superadmin") { ?>
-                    <a href="../reportes/rptcajas.php" target="_blank">
+                    <a href="../reportes/rptretiros.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
                       </button>
@@ -45,7 +41,7 @@ if (!isset($_SESSION["cajas"])) {
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
                     <label>Buscar por local:</label>
-                    <select id="idlocal2" name="idlocal2" class="form-control selectpicker" data-live-search="true" data-size="5">
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" data-size="5">
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>
@@ -64,12 +60,11 @@ if (!isset($_SESSION["cajas"])) {
                     <thead>
                       <th>Opciones</th>
                       <th>Caja</th>
-                      <th>Ubicación del local</th>
-                      <th>Monto</th>
+                      <th style="white-space: nowrap;">Ubicación del local</th>
+                      <th style="white-space: nowrap;">Monto retirado</th>
                       <th style="white-space: nowrap;">Agregado por</th>
                       <th>Cargo</th>
                       <th style="white-space: nowrap;">Fecha y hora</th>
-                      <th>Estado</th>
                     </thead>
                     <tbody>
                     </tbody>
@@ -77,46 +72,35 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Opciones</th>
                       <th>Caja</th>
                       <th>Ubicación del local</th>
-                      <th>Monto</th>
+                      <th>Monto retirado</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Fecha y hora</th>
-                      <th>Estado</th>
                     </tfoot>
                   </table>
                 </div>
               </div>
               <div class="panel-body" style="height: max-content;" id="formularioregistros">
                 <form name="formulario" id="formulario" method="POST">
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                    <label>Empleado(*):</label>
-                    <select name="idusuario" id="idusuario" class="form-control" required>
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                    <label>Local(*):</label>
-                    <select name="idlocal" id="idlocal" class="form-control" required>
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                  <div class="form-group col-lg-6 col-md-6 col-sm-">
                     <label>Caja(*):</label>
-                    <input type="hidden" name="idcaja" id="idcaja">
-                    <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese el nombre de la caja." autocomplete="off" required>
+                    <select id="idcaja" name="idcaja" class="form-control selectpicker" onchange="changeCaja();" data-live-search="true" data-size="5" required>
+                      <option value="">- Seleccione -</option>
+                    </select>
                   </div>
-                  <div class="form-group col-lg-6 col-md-6 col-sm-12">
-                    <label>Monto(*):</label>
-                    <div style="display: flex;">
-                      <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
-                      <a id="desbloquearMonto" class="btn btn-bcp" style="display: flex; align-items: center;"><i class="fa fa-lock"></i></a>
-                    </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <label>Monto de caja(*):</label>
+                    <input type="number" class="form-control" id="monto_caja" step="any" placeholder="Monto total de la caja." disabled>
                   </div>
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <label>Monto a retirar(*):</label>
+                    <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto a retirar de la caja." required>
+                  </div>
+                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Comentario:</label>
                     <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" rows="4" placeholder="Ingrese un comentario."></textarea>
                   </div>
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12">
+                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                     <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                   </div>
@@ -135,7 +119,7 @@ if (!isset($_SESSION["cajas"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">APERTURA DE CAJA</h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">RETIRO DE DINERO</h4>
             </div>
           </div>
           <div class="panel-body">
@@ -143,27 +127,27 @@ if (!isset($_SESSION["cajas"])) {
               <div style="display: flex; gap: 5px; flex-direction: column;">
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">ALMACÉN / TIENDA:</div>
-                  <div class="nowrap-cell" id="local_caja"></div>
+                  <div class="nowrap-cell" id="local_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">EMPLEADO:</div>
-                  <div class="nowrap-cell" id="usuario_caja"></div>
+                  <div class="nowrap-cell" id="usuario_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">FECHA DE CREACIÓN:</div>
-                  <div class="nowrap-cell" id="fecha_caja"></div>
+                  <div class="nowrap-cell" id="fecha_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">HORA:</div>
-                  <div class="nowrap-cell" id="hora_caja"></div>
+                  <div class="nowrap-cell" id="hora_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO:</div>
-                  <div class="nowrap-cell" id="monto_caja"></div>
+                  <div class="nowrap-cell" id="monto_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">COMENTARIO:</div>
-                  <div style="min-width: 300px;" id="descripcion_caja"></div>
+                  <div style="min-width: 300px;" id="descripcion_retiro"></div>
                 </div>
               </div>
             </div>
@@ -182,7 +166,7 @@ if (!isset($_SESSION["cajas"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/aperturas6.js"></script>
+  <script type="text/javascript" src="scripts/retiros.js"></script>
 <?php
 }
 ob_end_flush();

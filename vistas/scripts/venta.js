@@ -121,11 +121,13 @@ function limpiarTodo() {
 
 function validarCaja() {
 	$.post("../ajax/venta.php?op=validarCaja", function (e) {
-		// console.log(e);
+		console.log(e);
 		const obj = JSON.parse(e);
 		console.log(obj);
 
-		if (obj.estado != "aperturado") {
+		if (e == "null") {
+			bootbox.alert("Usted debe registrar una caja para realizar la venta.");
+		} else if (obj.estado != "aperturado") {
 			bootbox.alert("Usted necesita aperturar su caja para realizar la venta.");
 		} else {
 			mostrarform(true);
@@ -144,13 +146,13 @@ function listarDatos() {
 		const obj = JSON.parse(data);
 		console.log(obj);
 
-		let articulo = obj.articulo;
-		let servicio = obj.servicio;
-		let metodo_pago = obj.metodo_pago;
-		let clientes = obj.clientes;
-		let categoria = obj.categoria;
-		let personales = obj.personales;
-		let locales = obj.locales;
+		let articulo = obj.articulo || [];
+		let servicio = obj.servicio || [];
+		let metodo_pago = obj.metodo_pago || [];
+		let clientes = obj.clientes || [];
+		let categoria = obj.categoria || [];
+		let personales = obj.personales || [];
+		let locales = obj.locales || [];
 
 		$("#productos").empty();
 		$("#categoria").empty();
@@ -196,8 +198,9 @@ function listarArticulosPorCategoria(idcategoria) {
 
 function listarArticulos(articulos, servicios) {
 	let productosContainer = $("#productos");
+	console.log(articulos.length);
 
-	if (articulos != "") {
+	if (servicios.length > 0) {
 		articulos.forEach((articulo) => {
 			var stockHtml = (articulo.stock > 0 && articulo.stock < articulo.stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' + articulo.stock + '</span>' : ((articulo.stock != '0') ? '<span style="color: #00a65a; font-weight: bold">' + articulo.stock + '</span>' : '<span style="color: red; font-weight: bold">' + articulo.stock + '</span>');
 			var labelHtml = (articulo.stock > 0 && articulo.stock < articulo.stock_minimo) ? '<span class="label bg-orange" style="width: min-content;">agotandose</span>' : ((articulo.stock != '0') ? '<span class="label bg-green" style="width: min-content;">Disponible</span>' : '<span class="label bg-red" style="width: min-content;">agotado</span>');
@@ -225,22 +228,22 @@ function listarArticulos(articulos, servicios) {
 
 		servicios.forEach((servicio) => {
 			let html = `
-				<div class="draggable" style="padding: 10px; width: 180px;">
-					<div class="caja-productos">
-						<a href="../files/articulos/${servicio.imagen}" class="galleria-lightbox">
-							<img src="../files/articulos/${servicio.imagen}" class="img-fluid">
-						</a>
-						<h1>${servicio.nombre}</h1>
-						<h4>${servicio.marca}</h4>
-						<div class="subcaja-gris">
-							<span><strong>ㅤ</strong></span>
-							<span class="label bg-green" style="width: min-content;">Disponible</span>
-							<span><strong>S/ ${servicio.precio_venta}</strong></span>
+					<div class="draggable" style="padding: 10px; width: 180px;">
+						<div class="caja-productos">
+							<a href="../files/articulos/${servicio.imagen}" class="galleria-lightbox">
+								<img src="../files/articulos/${servicio.imagen}" class="img-fluid">
+							</a>
+							<h1>${servicio.nombre}</h1>
+							<h4>${servicio.marca}</h4>
+							<div class="subcaja-gris">
+								<span><strong>ㅤ</strong></span>
+								<span class="label bg-green" style="width: min-content;">Disponible</span>
+								<span><strong>S/ ${servicio.precio_venta}</strong></span>
+							</div>
+							<a style="width: 100%;" onclick="verificarEmpleado('servicio','${servicio.id}','${servicio.nombre}','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 						</div>
-						<a style="width: 100%;" onclick="verificarEmpleado('servicio','${servicio.id}','${servicio.nombre}','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
-				</div>
-			`;
+				`;
 
 			productosContainer.append(html);
 		});
@@ -251,7 +254,7 @@ function listarArticulos(articulos, servicios) {
 		let html = `
 				<div class="draggable" style="padding: 10px; width: 100%;">
 					<div class="caja-productos-vacia">
-						<h4>No se encontraron productos.</h4>
+						<h4>No se encontraron productos y servicios.</h4>
 					</div>
 				</div>
 			`;

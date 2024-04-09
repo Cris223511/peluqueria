@@ -14,8 +14,8 @@ $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"]
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
 $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
-require('../modelos/Cajas.php');
-$venta = new Caja();
+require('../modelos/Retiros.php');
+$venta = new Retiro();
 
 $rspta = $venta->mostrar($_GET["id"]);
 
@@ -35,14 +35,14 @@ $size = 0; // inicialización de variable de tamaño.
 # Encabezado y datos del ticket #
 $y = $pdf->cuerpoCaja(
     $y,
-    "APERTURA DE CAJA",
+    "RETIRO DE DINERO",
     $logo,
     $ext_logo,
     $reg->fecha ?? '',
     $reg->local ?? '',
     $reg->local_ruc ?? '',
     $reg->nombre ?? '',
-    $reg->titulo ?? '',
+    $reg->caja ?? '',
     $reg->monto ?? '',
     $reg->descripcion ?? '',
 );

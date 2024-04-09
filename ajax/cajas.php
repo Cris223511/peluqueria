@@ -19,6 +19,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idlocalSession = $_SESSION["idlocal"];
+		$idusuarioSession = $_SESSION["idusuario"];
 		$cargo = $_SESSION["cargo"];
 
 		$idusuario = isset($_POST["idusuario"]) ? limpiarCadena($_POST["idusuario"]) : "";
@@ -62,7 +63,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'cerrar':
-				$rspta = $cajas->agregarCajaCerrada($idcaja);
+				$rspta = $cajas->agregarCajaCerrada($idcaja, $idusuarioSession);
 				echo $rspta ? "Caja cerrada" : "La caja no se pudo cerrar";
 				break;
 
@@ -245,16 +246,63 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				$firstIteration = true;
+				$totalSubtotal = 0;
+				$totalIGV = 0;
+
 				while ($reg = $rspta->fetch_object()) {
+					$subtotal = ($reg->cantidad * $reg->precio_venta) - $reg->descuento;
+
+					$igv = 0;
+					if ($reg->impuesto == 0.18) {
+						$igv = $subtotal * 0.18;
+						$totalIGV += $igv;
+					}
+
+					$total = $subtotal + $igv;
+
 					$data[] = array(
 						"0" => ($reg->articulo != "") ? mb_strtoupper($reg->articulo) : mb_strtoupper($reg->servicio),
 						"1" => ($reg->codigo != "") ? $reg->codigo : "N° " . $reg->codigo_servicio,
 						"2" => $reg->cantidad,
 						"3" => $reg->precio_venta,
 						"4" => $reg->descuento,
-						"5" => number_format(($reg->cantidad * $reg->precio_venta) - $reg->descuento, 2),
+						"5" => number_format($subtotal, 2),
+					);
+
+					$totalSubtotal += $subtotal;
+					$firstIteration = false;
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "<strong>SUBTOTAL</strong>",
+						"5" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "<strong>IGV</strong>",
+						"5" => '<strong>' . number_format($totalIGV, 2) . '</strong>',
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "<strong>TOTAL</strong>",
+						"5" => '<strong>' . number_format($totalSubtotal + $totalIGV, 2) . '</strong>',
 					);
 				}
+
 				$results = array(
 					"sEcho" => 1,
 					"iTotalRecords" => count($data),
@@ -265,18 +313,18 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
-				// case 'selectCajas':
-				// 	if ($cargo == "superadmin") {
-				// 		$rspta = $cajas->listar();
-				// 	} else {
-				// 		$rspta = $cajas->listarPorUsuario($idusuario);
-				// 	}
+			case 'selectCajas':
+				if ($cargo == "superadmin") {
+					$rspta = $cajas->listar();
+				} else {
+					$rspta = $cajas->listarPorUsuario($idlocalSession);
+				}
 
-				// 	echo '<option value="">- Seleccione -</option>';
-				// 	while ($reg = $rspta->fetch_object()) {
-				// 		echo '<option value="' . $reg->idcaja . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
-				// 	}
-				// 	break;
+				echo '<option value="">- Seleccione -</option>';
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->idcaja . '" data-idlocal="' . $reg->idlocal . '" data-monto="' . $reg->monto . '"> ' . $reg->titulo . ' - ' . $reg->local . '</option>';
+				}
+				break;
 		}
 	} else {
 		require 'noacceso.php';

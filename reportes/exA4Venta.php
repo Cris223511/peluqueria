@@ -321,7 +321,7 @@ while ($reg3 = $rspta3->fetch_object()) {
   if ($esUltimoBucle && $hizoSaltoLinea) {
     $y += ($size + 1) ?? 0;
   } else if ($esUltimoBucle) {
-    $y += ($size + 2.5) ?? 0;
+    $y += ($size + 1) ?? 0;
   } else {
     $y += ($size + 3) ?? 0;
   }
@@ -332,7 +332,7 @@ while ($reg3 = $rspta3->fetch_object()) {
 # Tabla para los totales de los métodos de pago (SUBTOTAL, VUELTO y TOTAL) #
 
 # SUBTOTAL #
-$y += $size - 5 ?? 0;
+$y += $size - 2 ?? 0;
 $pdf->Line(105.5, $y - 3, 197, $y - 3);
 
 $lineSubtotal = array(
