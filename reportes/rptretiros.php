@@ -20,7 +20,7 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
-    $pdf->Cell(100, 6, 'LISTA DE CAJAS', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'LISTA DE RETIROS', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);
@@ -30,23 +30,23 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->Cell(40, 6, utf8_decode('Fecha y hora'), 1, 0, 'C', 1);
 
     $pdf->Ln(10);
-    require_once "../modelos/Cajas.php";
-    $cajas = new Caja();
+    require_once "../modelos/Retiros.php";
+    $retiros = new Retiro();
 
     $idusuario = $_SESSION["idusuario"];
     $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin") {
-      $rspta = $cajas->listar();
+      $rspta = $retiros->listar();
     } else {
-      $rspta = $cajas->listarPorUsuario($idlocal_session);
+      $rspta = $retiros->listarPorUsuario($idlocal_session);
     }
 
     $pdf->SetWidths(array(40, 110, 40));
 
     while ($reg = $rspta->fetch_object()) {
-      $titulo = $reg->titulo;
+      $titulo = $reg->caja;
       $descripcion = $reg->descripcion;
       $fecha = $reg->fecha;
 

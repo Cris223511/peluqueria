@@ -7,8 +7,6 @@ class Retiro
 	{
 	}
 
-	// al intentar agregar, validar que el monto a retirar sea menor al monto de la caja.
-	// al agregar retiro, el monto de la caja resta.
 	public function agregar($idusuario, $idcaja, $idlocal, $descripcion, $monto)
 	{
 		date_default_timezone_set("America/Lima");
