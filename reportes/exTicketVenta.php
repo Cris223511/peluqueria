@@ -364,7 +364,7 @@ $codeText = $redirectUrl;
 
 $size = 12;
 $level = 'H';
-$filePath = './ticket/temp/qrcode.png';
+$filePath = './ticket/img_qr/qrcode.png';
 
 QRcode::png($codeText, $filePath, $level, $size ?? 0);
 $pdf->Image($filePath, 20, null, 30);
@@ -382,12 +382,6 @@ $pdf->creditos(
 );
 
 # Nombre del archivo PDF #
-ob_clean();
-try {
-    header('Content-Type: application/pdf');
-    $pdf->Output("I", "ticket_venta_" . mt_rand(10000000, 99999999) . ".pdf", true);
-} catch (Exception $e) {
-    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
-}
+$pdf->Output("I", "ticket_venta_" . mt_rand(10000000, 99999999) . ".pdf", true);
 
 ob_end_flush();
