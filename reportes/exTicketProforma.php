@@ -364,7 +364,7 @@ $codeText = $redirectUrl;
 
 $size = 12;
 $level = 'H';
-$filePath = './ticket/img_qr/qrcode.png';
+$filePath = './ticket/qrcode.png';
 
 QRcode::png($codeText, $filePath, $level, $size ?? 0);
 $pdf->Image($filePath, 20, null, 30);
