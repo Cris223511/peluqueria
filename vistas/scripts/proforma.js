@@ -20,13 +20,13 @@ function init() {
 	$("#formulario7").on("submit", function (e) { guardaryeditar7(e); });
 
 	$('#mVentas').addClass("treeview active");
-	$('#lVentas').addClass("active");
+	$('#lProformas').addClass("active");
 
 	$('[data-toggle="popover"]').popover();
 }
 
 function actualizarCorrelativo() {
-	$.post("../ajax/venta.php?op=getLastNumComprobante", function (e) {
+	$.post("../ajax/proforma.php?op=getLastNumComprobante", function (e) {
 		console.log(e);
 		lastNumComp = generarSiguienteCorrelativo(e);
 		$("#num_comprobante_final1").text(lastNumComp);
@@ -120,7 +120,7 @@ function limpiarTodo() {
 }
 
 function validarCaja() {
-	$.post("../ajax/venta.php?op=validarCaja", function (e) {
+	$.post("../ajax/proforma.php?op=validarCaja", function (e) {
 		console.log(e);
 		const obj = JSON.parse(e);
 		console.log(obj);
@@ -142,7 +142,7 @@ function validarCaja() {
 }
 
 function listarDatos() {
-	$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+	$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
 		const obj = JSON.parse(data);
 		console.log(obj);
 
@@ -175,7 +175,7 @@ function listarDatos() {
 }
 
 function listarTodosLosArticulos() {
-	$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+	$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
 		const obj = JSON.parse(data);
 
 		let articulo = obj.articulo;
@@ -187,7 +187,7 @@ function listarTodosLosArticulos() {
 }
 
 function listarArticulosPorCategoria(idcategoria) {
-	$.post("../ajax/venta.php?op=listarArticulosPorCategoria", { idcategoria: idcategoria }, function (data) {
+	$.post("../ajax/proforma.php?op=listarArticulosPorCategoria", { idcategoria: idcategoria }, function (data) {
 		const articulos = JSON.parse(data).articulo || [];
 		console.log(articulos);
 
@@ -674,7 +674,7 @@ function cambiarEstado(id, nombre) {
 }
 
 function listarMetodosDePago() {
-	$.post("../ajax/venta.php?op=listarMetodosDePago", function (data) {
+	$.post("../ajax/proforma.php?op=listarMetodosDePago", function (data) {
 		console.log(data);
 		const obj = JSON.parse(data);
 		console.log(obj);
@@ -726,7 +726,7 @@ function guardaryeditar2(e) {
 // CLIENTES NUEVOS (POR SUNAT)
 
 function listarClientes() {
-	$.post("../ajax/venta.php?op=listarClientes", function (data) {
+	$.post("../ajax/proforma.php?op=listarClientes", function (data) {
 		console.log(data);
 		const obj = JSON.parse(data);
 		console.log(obj);
@@ -807,7 +807,7 @@ function buscarSunat(e) {
 	$("#btnSunat").prop("disabled", true);
 
 	$.ajax({
-		url: "../ajax/venta.php?op=consultaSunat",
+		url: "../ajax/proforma.php?op=consultaSunat",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -1319,7 +1319,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/venta.php?op=listar',
+				url: '../ajax/proforma.php?op=listar',
 				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, estado: estado },
 				type: "get",
 				dataType: "json",
@@ -1372,7 +1372,7 @@ function buscar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/venta.php?op=listar',
+				url: '../ajax/proforma.php?op=listar',
 				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, estado: estado },
 				type: "get",
 				dataType: "json",
@@ -1407,7 +1407,7 @@ function guardaryeditar(e) {
 	formData.append('idcaja', idCajaFinal);
 
 	$.ajax({
-		url: "../ajax/venta.php?op=guardaryeditar",
+		url: "../ajax/proforma.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -1449,18 +1449,18 @@ function guardaryeditar(e) {
 	});
 }
 
-function modalPrecuentaFinal(idventa) {
+function modalPrecuentaFinal(idproforma) {
 	$('#myModal8').modal('show');
 	limpiarModalPrecuentaFinal();
 
-	var nombresBotones = ['LISTADO DE PRECUENTAS', 'NUEVA PRECUENTA', 'REPORTE DE PRECUENTAS', 'GENERAR TICKET', 'GENERAR PDF-A4'];
+	var nombresBotones = ['LISTADO DE COTIZACIONES', 'NUEVA COTIZACIÓN', 'REPORTE DE COTIZACIONES', 'GENERAR TICKET', 'GENERAR PDF-A4'];
 
 	nombresBotones.forEach(function (texto, index) {
-		$("button:contains('" + texto + "')").attr("onclick", "opcionesPrecuentaFinal(" + (index + 1) + ", " + idventa + ");");
+		$("button:contains('" + texto + "')").attr("onclick", "opcionesPrecuentaFinal(" + (index + 1) + ", " + idproforma + ");");
 	});
 }
 
-function opcionesPrecuentaFinal(correlativo, idventa) {
+function opcionesPrecuentaFinal(correlativo, idproforma) {
 	switch (correlativo) {
 		case 1:
 			$("#myModal8").modal('hide');
@@ -1473,19 +1473,19 @@ function opcionesPrecuentaFinal(correlativo, idventa) {
 			window.location.href = "../reporteVentas.php";
 			break;
 		case 4:
-			window.open("../reportes/exTicketVenta.php?id=" + idventa, '_blank');
+			window.open("../reportes/exTicketProforma.php?id=" + idproforma, '_blank');
 			break;
 		case 5:
-			window.open("../reportes/exA4Venta.php?id=" + idventa, '_blank');
+			window.open("../reportes/exA4Proforma.php?id=" + idproforma, '_blank');
 			break;
 		default:
 	}
 	console.log("correlativo =) =>", correlativo);
-	console.log("idventa =) =>", idventa);
+	console.log("idproforma =) =>", idproforma);
 }
 
 function limpiarModalPrecuentaFinal() {
-	var nombresBotones = ['LISTADO DE PRECUENTAS', 'NUEVA PRECUENTA', 'REPORTE DE PRECUENTAS', 'GENERAR TICKET', 'GENERAR PDF-A4'];
+	var nombresBotones = ['LISTADO DE COTIZACIONES', 'NUEVA COTIZACIÓN', 'REPORTE DE COTIZACIONES', 'GENERAR TICKET', 'GENERAR PDF-A4'];
 
 	nombresBotones.forEach(function (texto) {
 		$("button:contains('" + texto + "')").removeAttr("onclick");
@@ -1494,8 +1494,8 @@ function limpiarModalPrecuentaFinal() {
 
 // FUNCIONES Y BOTONES DE LAS VENTAS
 
-function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
-	$.post("../ajax/venta.php?op=listarDetallesProductoVenta", { idventa: idventa }, function (data, status) {
+function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
+	$.post("../ajax/proforma.php?op=listarDetallesProductoVenta", { idproforma: idproforma }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
 		console.log(data);
@@ -1569,7 +1569,7 @@ function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_
 	});
 }
 
-function modalImpresion(idventa, num_comprobante) {
+function modalImpresion(idproforma, num_comprobante) {
 	$("#num_comprobante_final2").text(num_comprobante);
 
 	limpiarModalImpresion();
@@ -1578,7 +1578,7 @@ function modalImpresion(idventa, num_comprobante) {
 
 	nombresBotones.forEach(function (texto, index) {
 		var ruta = (index === 0) ? "exTicketVenta" : "exA4Venta";
-		$("a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idventa);
+		$("a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idproforma);
 	});
 }
 
@@ -1592,7 +1592,7 @@ function limpiarModalImpresion() {
 	});
 }
 
-function modalEstadoVenta(idventa, num_comprobante) {
+function modalEstadoVenta(idproforma, num_comprobante) {
 	limpiarModalEstadoVenta();
 
 	$("#num_comprobante_final3").text(num_comprobante);
@@ -1600,7 +1600,7 @@ function modalEstadoVenta(idventa, num_comprobante) {
 	var nombresBotones = ['INICIADO', 'ENTREGADO', 'POR ENTREGAR', 'EN TRANSCURSO', 'FINALIZADO', 'ANULADO'];
 
 	nombresBotones.forEach(function (texto) {
-		$("button:contains('" + texto + "')").attr("onclick", "cambiarEstadoVenta('" + texto + "', " + idventa + ");");
+		$("button:contains('" + texto + "')").attr("onclick", "cambiarEstadoVenta('" + texto + "', " + idproforma + ");");
 	});
 }
 
@@ -1614,12 +1614,12 @@ function limpiarModalEstadoVenta() {
 	});
 }
 
-function cambiarEstadoVenta(estado, idventa) {
+function cambiarEstadoVenta(estado, idproforma) {
 	const mensajeAdicional = (estado === "FINALIZADO" || estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo." : "";
 
 	bootbox.confirm("¿Estás seguro de cambiar el estado de la venta a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
 		if (result) {
-			$.post("../ajax/venta.php?op=cambiarEstado", { idventa: idventa, estado: capitalizarPrimeraLetra(estado) }, function (e) {
+			$.post("../ajax/proforma.php?op=cambiarEstado", { idproforma: idproforma, estado: capitalizarPrimeraLetra(estado) }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 				$('#myModal11').modal('hide');
@@ -1629,10 +1629,10 @@ function cambiarEstadoVenta(estado, idventa) {
 	})
 }
 
-function anular(idventa) {
+function anular(idproforma) {
 	bootbox.confirm("¿Está seguro de anular la venta? recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo.", function (result) {
 		if (result) {
-			$.post("../ajax/venta.php?op=anular", { idventa: idventa }, function (e) {
+			$.post("../ajax/proforma.php?op=anular", { idproforma: idproforma }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 			});
@@ -1640,13 +1640,13 @@ function anular(idventa) {
 	})
 }
 
-function eliminar(idventa) {
+function eliminar(idproforma) {
 	bootbox.confirm("¿Estás seguro de eliminar la venta?", function (result) {
 		if (result) {
-			$.post("../ajax/venta.php?op=eliminar", { idventa: idventa }, function (e) {
+			$.post("../ajax/proforma.php?op=eliminar", { idproforma: idproforma }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
-				$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+				$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
 					const obj = JSON.parse(data);
 
 					let articulo = obj.articulo;

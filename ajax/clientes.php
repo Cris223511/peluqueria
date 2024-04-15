@@ -126,7 +126,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"6" => $telefono,
 						"7" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"8" => ucwords($reg->nombre),
+						"8" => ucwords($reg->usuario),
 						"9" => ucwords($cargo_detalle),
 						"10" => $reg->fecha,
 						"11" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :

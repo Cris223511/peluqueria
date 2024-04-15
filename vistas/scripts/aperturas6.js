@@ -69,6 +69,7 @@ function validarCaja() {
 
 function mostrarform(flag) {
 	limpiar();
+	$("#idlocal").prop("disabled", false);
 	if (flag) {
 		$(".listadoregistros").hide();
 		$("#formularioregistros").show();
@@ -169,6 +170,8 @@ function mostrar(idcaja) {
 		$("#desbloquearMonto").show();
 		$("#monto").removeAttr("name");
 
+		$("#idlocal").prop("disabled", true);
+
 		console.log(data);
 
 		contador = data.contador;
@@ -213,7 +216,7 @@ function modalDetalles(idcaja) {
 		$("#hora_caja").text(formatHora(hora));
 
 		$("#monto_caja").text("S/. " + parseFloat(data.monto).toFixed(2));
-		$("#descripcion_caja").text(data.descripcion);
+		$("#descripcion_caja").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
 
 		$("#myModal").modal("show");
 	});

@@ -2,7 +2,7 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-class Venta
+class Proforma
 {
 	//Implementamos nuestro constructor
 	public function __construct()
@@ -43,12 +43,12 @@ class Venta
 			return $mensajeError;
 		}
 
-		// Si no hay errores, continuamos con el registro de la venta
-		$sql = "INSERT INTO venta (idusuario,idlocal,idcliente,idcaja,tipo_comprobante,num_comprobante,fecha_hora,impuesto,total_venta,vuelto,comentario_interno,comentario_externo,estado,eliminado)
+		// Si no hay errores, continuamos con el registro de la proforma
+		$sql = "INSERT INTO proforma (idusuario,idlocal,idcliente,idcaja,tipo_comprobante,num_comprobante,fecha_hora,impuesto,total_venta,vuelto,comentario_interno,comentario_externo,estado,eliminado)
 		VALUES ('$idusuario','$idlocal','$idcliente','$idcaja','$tipo_comprobante','$num_comprobante',SYSDATE(),'$impuesto','$total_venta','$vuelto','$comentario_interno','$comentario_externo','Finalizado','0')";
 		//return ejecutarConsulta($sql);
 
-		$idventanew = ejecutarConsulta_retornarID($sql);
+		$idproformanew = ejecutarConsulta_retornarID($sql);
 		$items = array_merge($idarticulo, $idservicio);
 
 		$sw = true;
@@ -65,7 +65,7 @@ class Venta
 			$precioVentaItem = $precio_venta[$i];
 			$descuentoItem = $descuento[$i];
 
-			$sql_detalle = "INSERT INTO detalle_venta(idventa,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idventanew','$idcaja','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
+			$sql_detalle = "INSERT INTO detalle_proforma(idproforma,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idproformanew','$idcaja','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
@@ -81,16 +81,16 @@ class Venta
 		$num_elementos = 0;
 
 		while ($num_elementos < count($metodo_pago)) {
-			$sql_detalle = "INSERT INTO detalle_venta_pagos(idventa,idmetodopago,monto) VALUES ('$idventanew','$metodo_pago[$num_elementos]','$monto[$num_elementos]')";
+			$sql_detalle = "INSERT INTO detalle_proforma_pagos(idproforma,idmetodopago,monto) VALUES ('$idproformanew','$metodo_pago[$num_elementos]','$monto[$num_elementos]')";
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
 			$num_elementos = $num_elementos + 1;
 		}
 
-		$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '$total_venta' WHERE idcaja = '$idcaja'";
-		ejecutarConsulta($sql_actualizar_monto);
+		// $sql_actualizar_monto = "UPDATE cajas SET monto = monto + '$total_venta' WHERE idcaja = '$idcaja'";
+		// ejecutarConsulta($sql_actualizar_monto);
 
-		return [$sw, $idventanew];
+		return [$sw, $idproformanew];
 	}
 
 	public function validarStock($idarticulo, $cantidad)
@@ -131,7 +131,7 @@ class Venta
 
 	public function verificarNumeroExiste($num_comprobante, $idlocal)
 	{
-		$sql = "SELECT * FROM venta WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal'";
+		$sql = "SELECT * FROM proforma WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El número ya existe en la tabla
@@ -147,72 +147,72 @@ class Venta
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	//Implementamos un método para cambiar el estado de la venta
-	public function cambiarEstado($idventa, $estado)
+	//Implementamos un método para cambiar el estado de la proforma
+	public function cambiarEstado($idproforma, $estado)
 	{
-		$sql = "UPDATE venta SET estado='$estado' WHERE idventa='$idventa'";
+		$sql = "UPDATE proforma SET estado='$estado' WHERE idproforma='$idproforma'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para anular la venta
-	public function anular($idventa)
+	//Implementamos un método para anular la proforma
+	public function anular($idproforma)
 	{
-		$sql = "UPDATE venta SET estado='Anulado' WHERE idventa='$idventa'";
+		$sql = "UPDATE proforma SET estado='Anulado' WHERE idproforma='$idproforma'";
 		return ejecutarConsulta($sql);
 	}
 
-	//Implementamos un método para eliminar la venta
-	public function eliminar($idventa)
+	//Implementamos un método para eliminar la proforma
+	public function eliminar($idproforma)
 	{
-		$sql = "UPDATE venta SET eliminado = '1' WHERE idventa='$idventa'";
+		$sql = "UPDATE proforma SET eliminado = '1' WHERE idproforma='$idproforma'";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listar()
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarEstado($estado)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorFecha($fecha_inicio, $fecha_fin)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioEstado($idlocalSession, $estado)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado)
 	{
-		$sql = "SELECT v.idventa,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM venta v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idventa DESC";
+		$sql = "SELECT v.idproforma,DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,v.idcliente,p.nombre AS cliente,p.tipo_documento AS cliente_tipo_documento,p.num_documento AS cliente_num_documento,p.direccion AS cliente_direccion,v.idcaja, ca.titulo AS caja,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,v.tipo_comprobante,v.num_comprobante,v.total_venta,v.vuelto,v.comentario_interno,v.comentario_externo,v.impuesto,v.estado FROM proforma v LEFT JOIN clientes p ON v.idcliente=p.idcliente LEFT JOIN cajas ca ON v.idcaja=ca.idcaja LEFT JOIN locales al ON v.idlocal = al.idlocal LEFT JOIN usuario u ON v.idusuario=u.idusuario WHERE v.idlocal = '$idlocalSession' AND DATE(v.fecha_hora) >= '$fecha_inicio' AND DATE(v.fecha_hora) <= '$fecha_fin' AND v.estado = '$estado' AND v.eliminado = '0' ORDER by v.idproforma DESC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -284,16 +284,16 @@ class Venta
 
 	public function getLastNumComprobante($idlocal)
 	{
-		$sql = "SELECT num_comprobante as last_num_comprobante FROM venta WHERE idlocal = '$idlocal' ORDER BY idventa DESC LIMIT 1";
+		$sql = "SELECT num_comprobante as last_num_comprobante FROM proforma WHERE idlocal = '$idlocal' ORDER BY idproforma DESC LIMIT 1";
 		return ejecutarConsulta($sql);
 	}
 
 	// MOSTRAR LOS DATOS POR VENTA
 
-	public function listarDetallesVenta($idventa)
+	public function listarDetallesVenta($idproforma)
 	{
 		$sql = "SELECT
-				  v.idventa,
+				  v.idproforma,
 				  v.idusuario,
 				  v.idlocal,
 				  v.idcliente,
@@ -320,20 +320,20 @@ class Venta
 				  v.comentario_interno,
 				  v.comentario_externo,
 				  v.estado
-				FROM venta v
+				FROM proforma v
 				LEFT JOIN usuario u ON v.idusuario = u.idusuario
 				LEFT JOIN locales l ON v.idlocal = l.idlocal
 				LEFT JOIN clientes c ON v.idcliente = c.idcliente
 				LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
-				WHERE v.idventa = '$idventa'";
+				WHERE v.idproforma = '$idproforma'";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarDetallesProductoVenta($idventa)
+	public function listarDetallesProductoVenta($idproforma)
 	{
 		$sql = "SELECT
-				  dv.idventa,
+				  dv.idproforma,
 				  dv.idarticulo,
 				  dv.idservicio,
 				  a.nombre AS articulo,
@@ -343,24 +343,24 @@ class Venta
 				  dv.cantidad,
 				  dv.precio_venta,
 				  dv.descuento
-				FROM detalle_venta dv
+				FROM detalle_proforma dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
 				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
-				WHERE dv.idventa='$idventa'";
+				WHERE dv.idproforma='$idproforma'";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarDetallesMetodosPagoVenta($idventa)
+	public function listarDetallesMetodosPagoVenta($idproforma)
 	{
 		$sql = "SELECT
-				  dvp.idventa,
+				  dvp.idproforma,
 				  dvp.idmetodopago,
 				  m.titulo AS metodo_pago,
 				  dvp.monto
-				FROM detalle_venta_pagos dvp
+				FROM detalle_proforma_pagos dvp
 				LEFT JOIN metodo_pago m ON dvp.idmetodopago = m.idmetodopago
-				WHERE dvp.idventa='$idventa'";
+				WHERE dvp.idproforma='$idproforma'";
 
 		return ejecutarConsulta($sql);
 	}

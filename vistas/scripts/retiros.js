@@ -252,7 +252,7 @@ function modalDetalles(idretiro) {
 		$("#hora_retiro").text(formatHora(hora));
 
 		$("#monto_retiro").text("S/. " + parseFloat(data.monto).toFixed(2));
-		$("#descripcion_retiro").text(data.descripcion);
+		$("#descripcion_retiro").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
 
 		$("#myModal").modal("show");
 	});

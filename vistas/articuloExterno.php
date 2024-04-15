@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html");
 } else {
   require 'header.php';
-  if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
+  if ($_SESSION['almacen'] == 1) {
 ?>
     <style>
       @media (max-width: 991px) {
@@ -60,19 +60,19 @@ if (!isset($_SESSION["nombre"])) {
                 </h1>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Buscar por marca:</label>
                     <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Buscar por categoría:</label>
                     <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Buscar por estado:</label>
                     <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                       <option value="">- Seleccione -</option>
@@ -81,7 +81,7 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="3">Agotado</option>
                     </select>
                   </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">
+                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label id="labelCustom">ㅤ</label>
                     <div style="display: flex; gap: 10px;">
                       <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
@@ -234,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Peso:</label>
-                        <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="1" placeholder="Ingrese el peso.">
+                        <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el peso.">
                       </div>
                     </div>
                     <!-- end form detalles -->
@@ -252,6 +252,48 @@ if (!isset($_SESSION["nombre"])) {
         </div>
       </section>
     </div>
+
+    <!-- Form categoría -->
+    <form name="formularioCategoria" id="formularioCategoria" method="POST" style="display: none;">
+      <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <label>Nombre(*):</label>
+        <input type="hidden" name="idcategoria" id="idcategoria2">
+        <input type="text" class="form-control" name="titulo" id="titulo2" maxlength="50" placeholder="Nombre" required>
+      </div>
+      <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+        <label>Descripción:</label>
+        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="256" placeholder="Descripción">
+      </div>
+    </form>
+    <!-- Fin form categoría -->
+
+    <!-- Form marcas -->
+    <form name="formularioMarcas" id="formularioMarcas" method="POST" style="display: none;">
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Marca(*):</label>
+        <input type="hidden" name="idmarca" id="idmarca3">
+        <input type="text" class="form-control" name="titulo" id="titulo3" maxlength="50" placeholder="Nombre de la marca" required>
+      </div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Descripción:</label>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+      </div>
+    </form>
+    <!-- Fin form marcas -->
+
+    <!-- Form medidas -->
+    <form name="formularioMedidas" id="formularioMedidas" method="POST" style="display: none;">
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Medida(*):</label>
+        <input type="hidden" name="idmedida" id="idmedida4">
+        <input type="text" class="form-control" name="titulo" id="titulo4" maxlength="50" placeholder="Nombre de la medida" required>
+      </div>
+      <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <label>Descripción:</label>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+      </div>
+    </form>
+    <!-- Fin form medidas -->
   <?php
   } else {
     require 'noacceso.php';

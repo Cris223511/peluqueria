@@ -299,7 +299,7 @@ $local_login = $_SESSION['local'];
               </a>
               <ul class="treeview-menu">
                 <li id="lVentas"><a href="venta.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
-                <li id="lProformas"><a href="#"><i class="fa fa-circle-o"></i> Proformas</a></li>
+                <li id="lProformas"><a href="proforma.php"><i class="fa fa-circle-o"></i> Proformas</a></li>
               </ul>
             </li>';
           }

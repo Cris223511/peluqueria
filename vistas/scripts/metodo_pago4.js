@@ -30,6 +30,7 @@ function mostrarform(flag) {
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
+		$("#imagen").attr("required", true);
 	}
 	else {
 		$("#listadoregistros").show();
@@ -115,6 +116,8 @@ function mostrar(idmetodopago) {
 		mostrarform(true);
 
 		console.log(data);
+
+		$("#imagen").removeAttr("required");
 
 		$("#titulo").val(data.titulo);
 		$("#descripcion").val(data.descripcion);

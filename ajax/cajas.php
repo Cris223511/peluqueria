@@ -87,6 +87,24 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($rspta);
 				break;
 
+			case 'prueba':
+				$idcaja = $_POST['idcaja'];
+				$idcaja_cerrada = $_POST['idcaja_cerrada'];
+				$rspta = $cajas->listarDetallesVentasCajaCerrada($idcaja, $idcaja_cerrada);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$rowData = array();
+					foreach ($reg as $key => $value) {
+						$rowData[$key] = $value;
+					}
+					$data[] = $rowData;
+				}
+
+				echo json_encode(["data" => $data]);
+				break;
+
 			case 'listar':
 				$param1 = $_GET["param1"]; // valor fecha inicio
 				$param2 = $_GET["param2"]; // valor fecha fin
@@ -216,8 +234,9 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
-							('<a target="_blank" href="../reportes/exTicketCierre.php?id=' . $reg->idcaja . '"> <button class="btn btn-success" style="margin-right: 3px; color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
+							('<a target="_blank" href="../reportes/exTicketCierre.php?idcaja=' . $reg->idcaja . '&idcaja_cerrada=' . $reg->idcaja_cerrada . '"><button class="btn btn-success" style="margin-right: 3px; color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\')"><i class="fa fa-bars"></i></button>') .
+							// ('<button class="btn btn-info" style="margin-left: 3px; height: 35px;" onclick="prueba(' . $reg->idcaja . ',\'' . $reg->idcaja_cerrada . '\')"><i class="fa fa-info-circle"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,
@@ -242,7 +261,7 @@ if (!isset($_SESSION["nombre"])) {
 				$idcaja = $_GET['idcaja'];
 				$idcaja_cerrada = $_GET['idcaja_cerrada'];
 
-				$rspta = $cajas->listarDetallesProductosCaja($idcaja, $idcaja_cerrada);
+				$rspta = $cajas->listarDetallesProductosCajaCerrada($idcaja, $idcaja_cerrada);
 
 				$data = array();
 

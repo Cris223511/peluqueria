@@ -90,6 +90,15 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
+				{
+					if ($cargo == "superadmin" || $cargo == "admin") {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -111,7 +120,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							(($param != 1) ? '<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>' : '') .
+							(($param != 1) ? mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') : '') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
 							(($param != 1) ? '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>' : '') .
 							'</div>',

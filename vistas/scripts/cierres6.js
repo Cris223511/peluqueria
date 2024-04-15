@@ -277,6 +277,13 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 		}).DataTable();
 }
 
+function prueba(idcaja, idcaja_cerrada) {
+	$.post("../ajax/cajas.php?op=prueba", { idcaja: idcaja, idcaja_cerrada: idcaja_cerrada }, function (e) {
+		// console.log(e);
+		console.log(JSON.parse(e));
+	});
+}
+
 function eliminar(idcaja) {
 	bootbox.confirm("¿Estás seguro de eliminar la caja?", function (result) {
 		if (result) {

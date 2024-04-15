@@ -58,6 +58,12 @@ $pdf->creditos(
 );
 
 # Nombre del archivo PDF #
-$pdf->Output("I", "ticket_apertura_" . mt_rand(10000000, 99999999) . ".pdf", true);
+ob_clean();
+try {
+    header('Content-Type: application/pdf');
+    $pdf->Output("I", "ticket_apertura_" . mt_rand(10000000, 99999999) . ".pdf", true);
+} catch (Exception $e) {
+    echo 'Excepción capturada: ',  $e->getMessage(), "\n";
+}
 
 ob_end_flush();

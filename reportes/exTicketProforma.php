@@ -14,16 +14,16 @@ $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"]
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
 $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
-require('../modelos/Venta.php');
-$venta = new Venta();
+require('../modelos/Proforma.php');
+$proforma = new Proforma();
 
-$rspta1 = $venta->listarDetallesVenta($_GET["id"]);
-$rspta2 = $venta->listarDetallesProductoVenta($_GET["id"]);
-$rspta3 = $venta->listarDetallesMetodosPagoVenta($_GET["id"]);
+$rspta1 = $proforma->listarDetallesVenta($_GET["id"]);
+$rspta2 = $proforma->listarDetallesProductoVenta($_GET["id"]);
+$rspta3 = $proforma->listarDetallesMetodosPagoVenta($_GET["id"]);
 
 $reg1 = $rspta1->fetch_object();
 
-require('./ticket/code128.php');
+require('ticket/code128.php');
 
 # Modificando el ancho y alto del ticket #
 $pdf = new PDF_Code128('P', 'mm', array(70, 300));
@@ -385,7 +385,7 @@ $pdf->creditos(
 ob_clean();
 try {
     header('Content-Type: application/pdf');
-    $pdf->Output("I", "ticket_venta_" . mt_rand(10000000, 99999999) . ".pdf", true);
+    $pdf->Output("I", "ticket_proforma_" . mt_rand(10000000, 99999999) . ".pdf", true);
 } catch (Exception $e) {
     echo 'Excepción capturada: ',  $e->getMessage(), "\n";
 }
