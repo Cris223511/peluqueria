@@ -260,7 +260,7 @@ if (!isset($_SESSION["nombre"])) {
         flex-direction: column;
         text-align: center;
         gap: 5px;
-        padding: 10px 120px;
+        padding: 10px 80px;
       }
 
       .pagos h1 {
@@ -296,6 +296,8 @@ if (!isset($_SESSION["nombre"])) {
       .color {
         filter: grayscale(0%);
         transition: filter 0.3s ease;
+        border: 2px #f2d150 solid;
+        border-radius: 5px;
       }
 
       @media (max-width: 1200px) {
@@ -493,7 +495,7 @@ if (!isset($_SESSION["nombre"])) {
                         </tbody>
                       </table>
                     </div>
-                    <div class="col-lg-12 col-md-12 col-sm-12 pagos" style="background-color: #1e272c; height: 100%; max-height: max-content;">
+                    <div class="col-lg-12 col-md-12 col-sm-12 pagos" style="background-color: #1e272c; height: 100%; max-height: max-content; min-height: 248px;">
                       <h1>TIPOS DE PAGO</h1>
                       <div id="pagos" class="caja-pagos">
                       </div>

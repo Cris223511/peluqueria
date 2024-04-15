@@ -121,6 +121,9 @@ class Usuario
 			$num_elementos = $num_elementos + 1;
 		}
 
+		$sql2 = "UPDATE locales SET idusuario='$idusuario' WHERE idlocal='$idlocal'";
+		ejecutarConsulta($sql2);
+
 		return $sw;
 	}
 
