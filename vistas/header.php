@@ -351,6 +351,38 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['reportes'] == 1) {
+            echo '<li id="mReportes" class="treeview">
+              <a href="#">
+                <i class="fa fa-bar-chart"></i>
+                <span>Reportes generales</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+              <li id="lReporteVenta"><a href="reporteVenta.php"><i class="fa fa-circle-o"></i> Reporte de ventas</a></li>
+              <li id="lReporteCotizacion"><a href="reporteProforma.php"><i class="fa fa-circle-o"></i> Reporte de cotizaciones</a></li>
+              <!-- <li id="lReporteCompra"><a href="#"><i class="fa fa-circle-o"></i> Reporte de compras</a></li> -->
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['reportesP'] == 1) {
+            echo '<li id="mReportesP" class="treeview">
+              <a href="#">
+                <i class="fa fa-area-chart"></i>
+                <span>Reportes de productos</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+              <li id="lReporteProductos"><a href="#"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['acceso'] == 1) {
             echo '<li id="mAcceso" class="treeview">
               <a href="#">

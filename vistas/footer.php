@@ -38,6 +38,25 @@
     </script>
 
     <script>
+      function setTitleFromBoxTitle(titleElement) {
+        const additionalText = " | Peluquería S.A.C.";
+        const title = $(titleElement).contents().filter(function() {
+          return this.nodeType === 3;
+        }).text().trim();
+
+        const capitalizedTitle = title.replace(/\b\w/g, function(letter) {
+          return letter.toUpperCase();
+        });
+
+        const fullTitle = capitalizedTitle + additionalText;
+
+        document.title = fullTitle;
+      }
+
+      setTitleFromBoxTitle('.box-title');
+    </script>
+
+    <script>
       function formatHora(hora) {
         let partes = hora.split(':');
         let h = parseInt(partes[0], 10);

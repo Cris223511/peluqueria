@@ -17,7 +17,7 @@ class Servicio
 
 	public function verficarCodigoExiste($codigo)
 	{
-		$sql = "SELECT * FROM servicios WHERE codigo = '$codigo'";
+		$sql = "SELECT * FROM servicios WHERE codigo = '$codigo' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El codigo ya existe en la tabla

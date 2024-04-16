@@ -66,13 +66,7 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				{
-					extend: 'colvis',
-					text: 'VER / OCULTAR',
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5]
-					}
-				}
+				'pdfHtml5',
 			],
 			'ajax':
 			{
@@ -158,13 +152,7 @@ function buscar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				{
-					extend: 'colvis',
-					text: 'VER / OCULTAR',
-					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5]
-					}
-				}
+				'pdfHtml5',
 			],
 			'ajax':
 			{

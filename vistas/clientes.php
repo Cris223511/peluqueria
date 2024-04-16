@@ -84,10 +84,6 @@ if (!isset($_SESSION["nombre"])) {
                     <label>RUC local(*):</label>
                     <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                   </div>
-                  <div class="form-group col-lg-12 col-md-12">
-                    <label>Descripción:</label>
-                    <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del cliente." autocomplete="off">
-                  </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Dirección:</label>
                     <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="40">

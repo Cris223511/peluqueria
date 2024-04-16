@@ -1205,38 +1205,38 @@ class FPDF
 
 	function encabezadoCierre($y, $logo, $ext_logo, $fecha_hora, $fecha_cierre, $titulo, $local, $local_ruc, $anulados, $emitidos, $validos)
 	{
-		# FECHA Y HORA REGISTRO #
-		$this->SetXY(1.5, $y);
-		$this->SetFont('hypermarket', '', 9);
-		$this->SetTextColor(0, 0, 0);
-		$this->Cell(0, 5, mb_convert_encoding("$fecha_hora", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
-
-		# FECHA Y HORA CIERRE #
-		$this->SetXY(1.5, $y + 4.5);
-		$this->SetFont('hypermarket', '', 9);
-		$this->SetTextColor(0, 0, 0);
-		$this->Cell(0, 5, mb_convert_encoding("$fecha_cierre", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
-
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, 13, 20, 20, $ext_logo);
+		$this->Image('../files/logo_reportes/' . $logo, 25, 3, 20, 20, $ext_logo);
 
 		# TÍTULO #
-		$this->SetY($y + 33);
+		$this->SetY($y + 23);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$titulo"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
-		$this->SetY($y + 39);
+		$this->SetY($y + 29);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# RUC #
-		$this->SetY($y + 43);
+		$this->SetY($y + 33);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# FECHA Y HORA REGISTRO #
+		$this->SetY($y + 39);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("$fecha_hora", 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# FECHA Y HORA CIERRE #
+		$this->SetY($y + 43.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding("$fecha_cierre", 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# TICKETS EMITIDOS #
 		$this->SetY($y + 49);

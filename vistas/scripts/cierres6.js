@@ -44,14 +44,60 @@ function listar() {
 			'aServerSide': true,
 			dom: '<Bl<f>rtip>',
 			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
+				{
+					extend: 'copyHtml5',
+					text: 'Copiar',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					}
+				},
+				{
+					extend: 'excelHtml5',
+					text: 'Excel',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'csvHtml5',
+					text: 'CSV',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'pdfHtml5',
+					text: 'PDF',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
+					}
+				},
 				{
 					extend: 'colvis',
 					text: 'VER / OCULTAR',
 					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5]
+						columns: [1, 2, 3, 4, 5, 6, 7]
 					}
 				}
 			],
@@ -136,14 +182,60 @@ function buscar() {
 			'aServerSide': true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
 			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
+				{
+					extend: 'copyHtml5',
+					text: 'Copiar',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					}
+				},
+				{
+					extend: 'excelHtml5',
+					text: 'Excel',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'csvHtml5',
+					text: 'CSV',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
+					}
+				},
+				{
+					extend: 'pdfHtml5',
+					text: 'PDF',
+					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					filename: 'cierre_caja',
+					exportOptions: {
+						columns: [1, 2, 3, 4, 5, 6, 7]
+					},
+					action: function (e, dt, button, config) {
+						var randomNum = Math.floor(Math.random() * 100000000);
+						config.filename = 'cierre_caja_' + randomNum;
+						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
+					}
+				},
 				{
 					extend: 'colvis',
 					text: 'VER / OCULTAR',
 					exportOptions: {
-						columns: [0, 1, 2, 3, 4, 5]
+						columns: [1, 2, 3, 4, 5, 6, 7]
 					}
 				}
 			],
@@ -188,7 +280,6 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 			'aProcessing': true,
 			'aServerSide': true,
 			dom: '<Bl<f>rtip>',
-			// APLICAR EN TODOS LOS SISTEMAS.
 			buttons: [
 				{
 					extend: 'copyHtml5',
@@ -201,13 +292,13 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 					extend: 'excelHtml5',
 					text: 'Excel',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
-					filename: 'cierre_caja',
+					filename: 'productos_cierre_caja',
 					exportOptions: {
 						columns: [0, 1, 2, 3, 4, 5]
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
-						config.filename = 'cierre_caja_' + randomNum;
+						config.filename = 'productos_cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.excelHtml5.action.call(this, e, dt, button, config);
 					}
 				},
@@ -215,13 +306,13 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 					extend: 'csvHtml5',
 					text: 'CSV',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
-					filename: 'cierre_caja',
+					filename: 'productos_cierre_caja',
 					exportOptions: {
 						columns: [0, 1, 2, 3, 4, 5]
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
-						config.filename = 'cierre_caja_' + randomNum;
+						config.filename = 'productos_cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.csvHtml5.action.call(this, e, dt, button, config);
 					}
 				},
@@ -229,13 +320,13 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 					extend: 'pdfHtml5',
 					text: 'PDF',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
-					filename: 'cierre_caja',
+					filename: 'productos_cierre_caja',
 					exportOptions: {
 						columns: [0, 1, 2, 3, 4, 5]
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
-						config.filename = 'cierre_caja_' + randomNum;
+						config.filename = 'productos_cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
 					}
 				},
@@ -247,7 +338,6 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 					}
 				}
 			],
-
 			'ajax':
 			{
 				url: '../ajax/cajas.php?op=listarDetallesProductosCaja',

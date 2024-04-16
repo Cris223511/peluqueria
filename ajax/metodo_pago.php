@@ -30,12 +30,12 @@ if (!isset($_SESSION["nombre"])) {
 			case 'guardaryeditar':
 				if (!empty($_FILES['imagen']['name'])) {
 					$uploadDirectory = "../files/metodo_pago/";
-				
+
 					$tempFile = $_FILES['imagen']['tmp_name'];
 					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
 					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
 					$targetFile = $uploadDirectory . $newFileName;
-				
+
 					// Verificar si es una imagen y mover el archivo
 					$allowedExtensions = array('jpg', 'jpeg', 'png');
 					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
@@ -152,18 +152,14 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
-				// case 'selectMetodoPago':
-				// 	if ($cargo == "superadmin") {
-				// 		$rspta = $metodo_pago->listar();
-				// 	} else {
-				// 		$rspta = $metodo_pago->listarPorUsuario($idusuario);
-				// 	}
+			case 'selectMetodoPago':
+				$rspta = $metodo_pago->listar();
 
-				// 	echo '<option value="">- Seleccione -</option>';
-				// 	while ($reg = $rspta->fetch_object()) {
-				// 		echo '<option value="' . $reg->idmetodopago . '"> ' . $reg->titulo . ' - ' . $reg->nombre . '</option>';
-				// 	}
-				// 	break;
+				echo '<option value="">- Seleccione -</option>';
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->idmetodopago . '"> ' . $reg->titulo . '</option>';
+				}
+				break;
 		}
 	} else {
 		require 'noacceso.php';
