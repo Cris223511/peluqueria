@@ -332,11 +332,12 @@ switch ($_GET["op"]) {
 			in_array(4, $valores) ? $_SESSION['almacen'] = 1 : $_SESSION['almacen'] = 0;
 			in_array(5, $valores) ? $_SESSION['personas'] = 1 : $_SESSION['personas'] = 0;
 			in_array(6, $valores) ? $_SESSION['ventas'] = 1 : $_SESSION['ventas'] = 0;
-			in_array(7, $valores) ? $_SESSION['cajas'] = 1 : $_SESSION['cajas'] = 0;
-			in_array(8, $valores) ? $_SESSION['pagos'] = 1 : $_SESSION['pagos'] = 0;
-			in_array(9, $valores) ? $_SESSION['servicios'] = 1 : $_SESSION['servicios'] = 0;
-			in_array(10, $valores) ? $_SESSION['reportes'] = 1 : $_SESSION['reportes'] = 0;
-			in_array(11, $valores) ? $_SESSION['reportesP'] = 1 : $_SESSION['reportesP'] = 0;
+			in_array(7, $valores) ? $_SESSION['compras'] = 1 : $_SESSION['compras'] = 0;
+			in_array(8, $valores) ? $_SESSION['cajas'] = 1 : $_SESSION['cajas'] = 0;
+			in_array(9, $valores) ? $_SESSION['pagos'] = 1 : $_SESSION['pagos'] = 0;
+			in_array(10, $valores) ? $_SESSION['servicios'] = 1 : $_SESSION['servicios'] = 0;
+			in_array(11, $valores) ? $_SESSION['reportes'] = 1 : $_SESSION['reportes'] = 0;
+			in_array(12, $valores) ? $_SESSION['reportesP'] = 1 : $_SESSION['reportesP'] = 0;
 		}
 		echo json_encode($fetch);
 		break;

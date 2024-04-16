@@ -123,7 +123,7 @@ while ($reg3) {
         "CANTIDAD" => ($reg3->cantidad ?? 0.00),
         "TOTAL VENTA" => ($reg3->total_venta ?? 0.00),
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
 
     $contador++;
@@ -157,7 +157,7 @@ $lineTotal = array(
     "TOTAL VENTA" => number_format($ventaTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineTotal) ?? 0;
 
 $pdf->addLineFormat($lineTotal);
@@ -222,7 +222,7 @@ while ($reg6) {
         "FECHA Y HORA" => ($reg6->fecha ?? 0.00),
         "MONTO" => ($reg6->monto ?? 0.00),
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
 
     $contador++;
@@ -254,7 +254,7 @@ $lineTotal = array(
     "MONTO" => number_format($montoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineTotal) ?? 0;
 
 $pdf->addLineFormat($lineTotal);
@@ -319,7 +319,7 @@ while ($reg7) {
         "FECHA Y HORA" => ($reg7->fecha ?? 0.00),
         "MONTO" => ($reg7->monto_retiro ?? 0.00),
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
 
     $contador++;
@@ -351,7 +351,7 @@ $lineTotal = array(
     "MONTO" => number_format($montoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineTotal) ?? 0;
 
 $pdf->addLineFormat($lineTotal);
@@ -430,7 +430,7 @@ while ($reg5) {
         "METODO PAGO" => ($reg5->metodo_pago ?? ''),
         "MONTO" => (number_format($reg5->monto, 2) ?? 0.00),
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
 
     $contador++;
@@ -464,7 +464,7 @@ $lineSubtotal = array(
     "MONTO" => number_format($montoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineSubtotal) ?? 0;
 
 $y += $sizeSubtotal + 2;
@@ -475,7 +475,7 @@ $lineVuelto = array(
     "MONTO" => number_format($vueltoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeVuelto = $pdf->addLine($y, $lineVuelto);
 
 $y += $sizeVuelto + 2;
@@ -486,7 +486,7 @@ $lineTotal = array(
     "MONTO" => number_format($montoTotal - $vueltoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeTotal = $pdf->addLine($y, $lineTotal);
 
 $pdf->addLineFormat($lineVuelto);
@@ -569,7 +569,7 @@ while ($reg2) {
         "DSCTO" => number_format($reg2->descuento, 2),
         "SUBTOTAL" => "" . number_format($subtotal, 2) . ""
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y, $line) ?? 0;
 
     $igv = 0;
@@ -611,7 +611,7 @@ $lineSubtotal = array(
     "SUBTOTAL" => number_format($totalSubtotal, 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineSubtotal);
 
 $y += $sizeSubtotal + 2;
@@ -625,7 +625,7 @@ $lineIGV = array(
     "SUBTOTAL" => number_format(($totalIGV), 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeIGV = $pdf->addLine($y, $lineIGV);
 
 $y += $sizeIGV + 2;
@@ -639,7 +639,7 @@ $lineTotal = array(
     "SUBTOTAL" => number_format($totalSubtotal + $totalIGV, 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeTotal = $pdf->addLine($y, $lineTotal);
 
 $pdf->addLineFormat($lineIGV);

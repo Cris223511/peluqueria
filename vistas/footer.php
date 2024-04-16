@@ -1,6 +1,6 @@
     <footer class="main-footer">
       <div class="pull-right hidden-xs">
-        <b>Version</b> 3.0.0
+        <b>Version</b> 4.0.0
       </div>
       <strong>Copyright &copy; 2024 <a href="www.SistemaDePeluqueria.com" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
     </footer>

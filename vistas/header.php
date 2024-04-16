@@ -306,6 +306,22 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['compras'] == 1) {
+            echo '<li id="mCompras" class="treeview">
+              <a href="#">
+                <i class="fa fa-cart-plus"></i>
+                <span>Compras</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li id="lCompras"><a href="compras.php"><i class="fa fa-circle-o"></i> Compras</a></li>
+                <li id="lProveedor"><a href="proveedores.php"><i class="fa fa-circle-o"></i> Proveedores</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['cajas'] == 1) {
             echo '<li id="mCajas" class="treeview">
               <a href="#">
@@ -361,7 +377,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
               <li id="lReporteVenta"><a href="reporteVenta.php"><i class="fa fa-circle-o"></i> Reporte de ventas</a></li>
               <li id="lReporteCotizacion"><a href="reporteProforma.php"><i class="fa fa-circle-o"></i> Reporte de cotizaciones</a></li>
-              <!-- <li id="lReporteCompra"><a href="#"><i class="fa fa-circle-o"></i> Reporte de compras</a></li> -->
+              <li id="lReporteCompra"><a href="#"><i class="fa fa-circle-o"></i> Reporte de compras</a></li>
               </ul>
             </li>';
           }

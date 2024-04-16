@@ -130,7 +130,7 @@ while ($reg2 = $rspta2->fetch_object()) {
         "DSCTO" => number_format($reg2->descuento, 2),
         "SUBTOTAL" => number_format($subtotal, 2)
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y, $line) ?? 0;
 
     $contador++;
@@ -164,7 +164,7 @@ $lineSubtotal = array(
     "SUBTOTAL" => number_format($totalSubtotal, 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineSubtotal);
 
 $y += $sizeSubtotal + 2;
@@ -178,7 +178,7 @@ $lineIGV = array(
     "SUBTOTAL" => number_format((($totalSubtotal) * ($reg1->impuesto ?? 0.00)), 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeIGV = $pdf->addLine($y, $lineIGV);
 
 $y += $sizeIGV + 2;
@@ -192,7 +192,7 @@ $lineTotal = array(
     "SUBTOTAL" => number_format($reg1->total_venta ?? 0.00, 2)
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeTotal = $pdf->addLine($y, $lineTotal);
 
 $pdf->addLineFormat($lineIGV);
@@ -277,7 +277,7 @@ while ($reg3 = $rspta3->fetch_object()) {
         "METODO PAGO" => ($reg3->metodo_pago ?? ''),
         "MONTO" => (number_format($reg3->monto, 2) ?? 0.00),
     );
-    $pdf->SetFont('hypermarket', '', 7);
+    $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
 
     $contador++;
@@ -306,7 +306,7 @@ $lineSubtotal = array(
     "MONTO" => number_format($montoTotal, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeSubtotal = $pdf->addLine($y, $lineSubtotal) ?? 0;
 
 $y += $sizeSubtotal + 2;
@@ -317,7 +317,7 @@ $lineVuelto = array(
     "MONTO" => $reg1->vuelto ?? '0.00',
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeVuelto = $pdf->addLine($y, $lineVuelto);
 
 $y += $sizeVuelto + 2;
@@ -328,7 +328,7 @@ $lineTotal = array(
     "MONTO" => number_format($reg1->total_venta ?? 0.00, 2),
 );
 
-$pdf->SetFont('hypermarket', '', 7);
+$pdf->SetFont('hypermarket', '', 8);
 $sizeTotal = $pdf->addLine($y, $lineTotal);
 
 $pdf->addLineFormat($lineVuelto);
