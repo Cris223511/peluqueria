@@ -14,16 +14,16 @@ $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"]
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
 $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
-require('../modelos/Proforma.php');
-$proforma = new Proforma();
+require('../modelos/Compra.php');
+$compra = new Compra();
 
-$rspta1 = $proforma->listarDetallesVenta($_GET["id"]);
-$rspta2 = $proforma->listarDetallesProductoVenta($_GET["id"]);
-$rspta3 = $proforma->listarDetallesMetodosPagoVenta($_GET["id"]);
+$rspta1 = $compra->listarDetallesCompra($_GET["id"]);
+$rspta2 = $compra->listarDetallesProductoCompra($_GET["id"]);
+$rspta3 = $compra->listarDetallesMetodosPagoCompra($_GET["id"]);
 
 $reg1 = $rspta1->fetch_object();
 
-require('ticket/code128.php');
+require('./ticket/code128.php');
 
 # Modificando el ancho y alto del ticket #
 $pdf = new PDF_Code128('P', 'mm', array(70, 300));
@@ -59,7 +59,7 @@ $y += 52;
 # Encabezado y datos del ticket #
 $pdf->encabezado2(
     $y,
-    "CLIENTE: " . $reg1->cliente ?? '',
+    "PROVEEDOR: " . $reg1->proveedor ?? '',
     ($reg1->telefono  ?? '' != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
     $reg1->tipo_documento ?? '',
     $reg1->num_documento ?? '',
@@ -189,7 +189,7 @@ $lineTotal = array(
     "CANTIDAD" => "",
     "P.U." => "",
     "DSCTO" => "TOTAL",
-    "SUBTOTAL" => number_format($reg1->total_venta ?? 0.00, 2)
+    "SUBTOTAL" => number_format($reg1->total_compra ?? 0.00, 2)
 );
 
 $pdf->SetFont('hypermarket', '', 8);
@@ -212,10 +212,10 @@ $y += 7;
 
 # Cuerpo y datos del ticket #
 $formatterES = new NumberFormatter("es-ES", NumberFormatter::SPELLOUT);
-$total_venta = $reg1->total_venta ?? 0.00;
+$total_compra = $reg1->total_compra ?? 0.00;
 
-$izquierda = floor($total_venta);
-$derecha = round(($total_venta - $izquierda) * 100);
+$izquierda = floor($total_compra);
+$derecha = round(($total_compra - $izquierda) * 100);
 
 $texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
 $textoEnMayusculas = mb_strtoupper($texto, 'UTF-8');
@@ -325,7 +325,7 @@ $y += $sizeVuelto + 2;
 # TOTAL #
 $lineTotal = array(
     "METODO PAGO" => "TOTAL",
-    "MONTO" => number_format($reg1->total_venta ?? 0.00, 2),
+    "MONTO" => number_format($reg1->total_compra ?? 0.00, 2),
 );
 
 $pdf->SetFont('hypermarket', '', 8);
@@ -382,6 +382,6 @@ $pdf->creditos(
 );
 
 # Nombre del archivo PDF #
-$pdf->Output("I", "ticket_proforma_" . mt_rand(10000000, 99999999) . ".pdf", true);
+$pdf->Output("I", "ticket_compra_" . mt_rand(10000000, 99999999) . ".pdf", true);
 
 ob_end_flush();

@@ -139,9 +139,9 @@ while ($reg2 = $rspta2->fetch_object()) {
   $line = array(
     "PRODUCTO" => $textoProducto,
     "CANTIDAD" => "$reg2->cantidad",
-    "P.U." => "$reg2->precio_venta",
-    "DSCTO" => "$reg2->descuento",
-    "SUBTOTAL" => "" . $subtotal . ""
+    "P.U." => number_format($reg2->precio_venta ?? 0.00, 2),
+    "DSCTO" => number_format($reg2->descuento ?? 0.00, 2),
+    "SUBTOTAL" => number_format($subtotal ?? 0.00, 2)
   );
   $pdf->SetFont('Arial', '', 10);
   $size = $pdf->addLine($y, $line) ?? 0;

@@ -735,15 +735,15 @@ class PDF_Invoice extends FPDF
 		$this->MultiCell(130, 4, mb_convert_encoding("$content1", 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
 	}
 
-	function cliente($y, $cliente, $telefono, $tipo_documento, $num_documento, $fecha_hora, $impuesto, $comentario_externo)
+	function proveedor($y, $proveedor, $telefono, $tipo_documento, $num_documento, $fecha_hora, $impuesto, $comentario_externo)
 	{
-		# TITULO CLIENTE #
+		# TITULO PROVEEDOR #
 		$this->SetXY(13.5, $y + 3.5);
 		$this->SetFont('Arial', 'B', 12);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("CLIENTE"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("PROVEEDOR"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
-		# CLIENTE #
+		# PROVEEDOR #
 		$this->SetXY(13.5, $y += 10);
 		$this->SetFont('Arial', 'B', 10);
 		$this->SetTextColor(0, 0, 0);
@@ -752,7 +752,7 @@ class PDF_Invoice extends FPDF
 		$this->SetXY(33, $y);
 		$this->SetFont('Arial', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper($cliente), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper($proveedor), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# TELEFONO #
 		$this->SetXY(13.5, $y += 5);
@@ -772,10 +772,17 @@ class PDF_Invoice extends FPDF
 			$this->SetTextColor(0, 0, 0);
 			$this->MultiCell(0, 5, mb_convert_encoding("$tipo_documento:", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
-			$this->SetXY(33, $y);
-			$this->SetFont('Arial', '', 10);
-			$this->SetTextColor(0, 0, 0);
-			$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper($num_documento), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+			if ($tipo_documento == "CARNET DE EXTRANJERIA") {
+				$this->SetXY(62, $y);
+				$this->SetFont('Arial', '', 10);
+				$this->SetTextColor(0, 0, 0);
+				$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper($num_documento), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+			} else {
+				$this->SetXY(33, $y);
+				$this->SetFont('Arial', '', 10);
+				$this->SetTextColor(0, 0, 0);
+				$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper($num_documento), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+			}
 		} else {
 			$this->SetXY(13.5, $y += 5);
 			$this->SetFont('Arial', '', 10);
@@ -859,7 +866,7 @@ class PDF_Invoice extends FPDF
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(50, 3.5, mb_convert_encoding(mb_strtoupper("Total de unidades: $totalUnidades"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
-		# TOTAL VENTA EN LETRA #
+		# TOTAL COMPRA EN LETRA #
 		$this->SetXY(15, $y += 6);
 		$this->SetFont('Arial', 'B', 9);
 		$this->SetTextColor(0, 0, 0);

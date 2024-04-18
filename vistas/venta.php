@@ -381,12 +381,12 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Buscar por estado:</label>
                     <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                       <option value="">- Seleccione -</option>
-                      <option value="INICIADO">INICIADO</option>
+                      <option value="FINALIZADO">FINALIZADO</option>
                       <option value="ENTREGADO">ENTREGADO</option>
+                      <option value="ANULADO">ANULADO</option>
+                      <option value="INICIADO">INICIADO</option>
                       <option value="POR ENTREGAR">POR ENTREGAR</option>
                       <option value="EN TRANSCURSO">EN TRANSCURSO</option>
-                      <option value="FINALIZADO">FINALIZADO</option>
-                      <option value="ANULADO">ANULADO</option>
                     </select>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">

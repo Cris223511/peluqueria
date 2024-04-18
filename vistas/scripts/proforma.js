@@ -1307,7 +1307,7 @@ function listar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [15, 25, 50, 100],//mostramos el menú de registros a revisar
+			"lengthMenu": [10, 25, 50, 100],//mostramos el menú de registros a revisar
 			"aProcessing": true,//Activamos el procesamiento del datatables
 			"aServerSide": true,//Paginación y filtrado realizados por el servidor
 			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
@@ -1338,7 +1338,7 @@ function listar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 15,//Paginación
+			"iDisplayLength": 10,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
@@ -1361,7 +1361,7 @@ function buscar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [15, 25, 50, 100],
+			"lengthMenu": [10, 25, 50, 100],
 			"aProcessing": true,
 			"aServerSide": true,
 			dom: '<Bl<f>rtip>',
@@ -1392,7 +1392,7 @@ function buscar() {
 				}
 			},
 			"bDestroy": true,
-			"iDisplayLength": 15,
+			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
@@ -1616,7 +1616,7 @@ function limpiarModalEstadoVenta() {
 }
 
 function cambiarEstadoVenta(estado, idproforma) {
-	const mensajeAdicional = (estado === "FINALIZADO" || estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo." : "";
+	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo." : "";
 
 	bootbox.confirm("¿Estás seguro de cambiar el estado de la venta a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
 		if (result) {
@@ -1653,8 +1653,8 @@ function eliminar(idproforma) {
 					let articulo = obj.articulo;
 					let servicio = obj.servicio;
 
-					$("#productos").empty();
 					listarSelectsArticulos(articulo, servicio);
+					listarArticulos(articulo, servicio);
 				});
 			});
 		}

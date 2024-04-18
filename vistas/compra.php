@@ -9,7 +9,7 @@ if (!isset($_SESSION["nombre"])) {
   require '../config/Conexion.php';
   require 'header.php';
 
-  if ($_SESSION['ventas'] == 1) {
+  if ($_SESSION['compras'] == 1) {
 ?>
     <link rel="stylesheet" href="../public/css/jquery.gScrollingCarousel.css">
     <style>
@@ -302,7 +302,7 @@ if (!isset($_SESSION["nombre"])) {
 
       @media (max-width: 1200px) {
         .pagos {
-          padding: 10px 60px;
+          padding: 10px 30px;
         }
       }
 
@@ -328,7 +328,7 @@ if (!isset($_SESSION["nombre"])) {
         padding: 10px;
       }
 
-      .idclienteInput {
+      .idproveedorInput {
         max-width: 400px;
         overflow: auto;
       }
@@ -354,12 +354,12 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box caja">
               <div class="box-header with-border">
-                <h1 class="box-title">Proformas
-                  <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
-                    <i class="fa fa-plus-circle"></i> Nueva proforma
+                <h1 class="box-title">Compras
+                  <button class="btn btn-bcp" id="btnagregar" onclick="agregar();">
+                    <i class="fa fa-plus-circle"></i> Nueva compra
                   </button>
                   <?php if ($_SESSION["cargo"] == "superadmin") { ?>
-                    <a href="../reportes/rptproformas.php" target="_blank">
+                    <a href="../reportes/rptcompras.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
                       </button>
@@ -404,12 +404,11 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="width: 12%;">Opciones</th>
                       <th>PDF</th>
-                      <th>Cliente</th>
+                      <th>Proveedor</th>
                       <th>Ubicación del local</th>
-                      <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma (S/.)</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -419,12 +418,11 @@ if (!isset($_SESSION["nombre"])) {
                     <tfoot>
                       <th>Opciones</th>
                       <th>PDF</th>
-                      <th>Cliente</th>
+                      <th>Proveedor</th>
                       <th>Ubicación del local</th>
-                      <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma (S/.)</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -449,19 +447,20 @@ if (!isset($_SESSION["nombre"])) {
                       </select>
                     </div>
                     <div class="form-group col-lg-2 col-md-4 col-sm-4" style="padding-bottom: 5px !important; padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
-                      <select id="idcliente" name="idcliente" class="form-control selectpicker" data-live-search="true" data-size="5">
-                        <option value="">Buscar cliente.</option>
+                      <select id="idproveedor" name="idproveedor" class="form-control selectpicker" data-live-search="true" data-size="5">
+                        <option value="">Buscar proveedor.</option>
                       </select>
                     </div>
                     <!-- <a data-toggle="modal" href="#"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;"><i class="fa fa-map-o"></i></button></a> -->
-                    <a data-toggle="modal" href="#myModal5"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CLIENTE GENÉRICO</button></a>
+                    <a data-toggle="modal" href="#myModal5"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">PROVEEDOR GENÉRICO</button></a>
                     <a data-toggle="modal" href="#myModal4"><button class="btn btn-primary" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CARNET EXTRANJERÍA</button></a>
                     <div style="padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;" required>
-                        <option value="COTIZACIÓN">COTIZACIÓN</option>
+                        <option value="BOLETA DE COMPRA">BOLETA DE COMPRA</option>
+                        <option value="FACTURA">FACTURA</option>
                       </select>
                     </div>
-                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_venta">s/. 0.00</button>
+                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_compra">s/. 0.00</button>
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
                   </div>
                 </div>
@@ -519,7 +518,7 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="0.00">0.00</option>
                       <option value="0.18">0.18</option>
                     </select>
-                    <input type="hidden" id="total_venta_final" name="total_venta" value="">
+                    <input type="hidden" id="total_compra_final" name="total_compra" value="">
                     <input type="hidden" id="vuelto_final" name="vuelto" value="">
                   </div>
                 </div>
@@ -616,13 +615,13 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">NO SE ENCONTRÓ AL CLIENTE, ¿DESEA AGREGAR UNO NUEVO?:</h4>
+            <h4 class="modal-title infotitulo">NO SE ENCONTRÓ AL PROVEEDOR, ¿DESEA AGREGAR UNO NUEVO?:</h4>
           </div>
           <div class="panel-body">
             <form name="formSunat" id="formSunat" method="POST">
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 20px;">
                 <div style="display: flex;">
-                  <input type="number" class="form-control" name="sunat" id="sunat" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="Buscar cliente por DNI o RUC a la SUNAT." required>
+                  <input type="number" class="form-control" name="sunat" id="sunat" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="Buscar proveedor por DNI o RUC a la SUNAT." required>
                   <button class="btn btn-bcp" type="submit" id="btnSunat">Buscar</button>
                 </div>
               </div>
@@ -643,8 +642,8 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Nombre(*):</label>
-                <input type="hidden" name="idcliente" id="idcliente2">
-                <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" required disabled>
+                <input type="hidden" name="idproveedor" id="idproveedor2">
+                <input type="text" class="form-control" name="nombre" id="nombre" maxlength="40" placeholder="Ingrese el nombre del proveedor." autocomplete="off" required disabled>
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
@@ -658,24 +657,14 @@ if (!isset($_SESSION["nombre"])) {
                 <label>Email:</label>
                 <input type="email" class="form-control" name="email" id="email" maxlength="50" placeholder="Ingrese el correo electrónico." disabled>
               </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Local(*):</label>
-                <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC()" required disabled>
-                  <option value="">- Seleccione -</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>RUC local(*):</label>
-                <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local." disabled>
-              </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="50" placeholder="Ingrese la descripción del cliente." autocomplete="off" disabled>
+                <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="50" placeholder="Ingrese la descripción del proveedor." autocomplete="off" disabled>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalClientes();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-bcp" type="submit" id="btnGuardarCliente" disabled><i class="fa fa-save"></i> Guardar</button>
+                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalProveedor();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                <button class="btn btn-bcp" type="submit" id="btnGuardarProveedor" disabled><i class="fa fa-save"></i> Guardar</button>
               </div>
             </form>
           </div>
@@ -707,8 +696,8 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Nombre(*):</label>
-                <input type="hidden" name="idcliente" id="idcliente3">
-                <input type="text" class="form-control" name="nombre" id="nombre2" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" required>
+                <input type="hidden" name="idproveedor" id="idproveedor3">
+                <input type="text" class="form-control" name="nombre" id="nombre2" maxlength="40" placeholder="Ingrese el nombre del proveedor." autocomplete="off" required>
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
@@ -722,24 +711,14 @@ if (!isset($_SESSION["nombre"])) {
                 <label>Email:</label>
                 <input type="email" class="form-control" name="email" id="email2" maxlength="50" placeholder="Ingrese el correo electrónico.">
               </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Local(*):</label>
-                <select id="idlocal2" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC2()" required>
-                  <option value="">- Seleccione -</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>RUC local(*):</label>
-                <input type="number" class="form-control" id="local_ruc2" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local." disabled>
-              </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="50" placeholder="Ingrese la descripción del cliente." autocomplete="off">
+                <input type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="50" placeholder="Ingrese la descripción del proveedor." autocomplete="off">
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalClientes2();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-bcp" type="submit" id="btnGuardarCliente2"><i class="fa fa-save"></i> Guardar</button>
+                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalProveedor2();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                <button class="btn btn-bcp" type="submit" id="btnGuardarProveedor2"><i class="fa fa-save"></i> Guardar</button>
               </div>
             </form>
           </div>
@@ -754,7 +733,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">CLIENTE GENÉRICO:</h4>
+            <h4 class="modal-title infotitulo">PROVEEDOR GENÉRICO:</h4>
           </div>
           <div class="panel-body">
             <form name="formulario5" id="formulario5" method="POST">
@@ -770,23 +749,13 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Nombre(*):</label>
-                <input type="hidden" name="idcliente" id="idcliente4">
-                <input type="text" class="form-control" name="nombre" id="nombre3" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" value="PÚBLICO GENERAL" required disabled>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Local(*):</label>
-                <select id="idlocal3" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC3()" required>
-                  <option value="">- Seleccione -</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>RUC local(*):</label>
-                <input type="number" class="form-control" id="local_ruc3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local." disabled>
+                <input type="hidden" name="idproveedor" id="idproveedor4">
+                <input type="text" class="form-control" name="nombre" id="nombre3" maxlength="40" placeholder="Ingrese el nombre del proveedor." autocomplete="off" value="PÚBLICO GENERAL" required disabled>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalClientes3();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-bcp" type="submit" id="btnGuardarCliente3"><i class="fa fa-save"></i> Guardar</button>
+                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalProveedor3();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                <button class="btn btn-bcp" type="submit" id="btnGuardarProveedor3"><i class="fa fa-save"></i> Guardar</button>
               </div>
             </form>
           </div>
@@ -801,7 +770,7 @@ if (!isset($_SESSION["nombre"])) {
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">CREAR NUEVO CLIENTE:</h4>
+            <h4 class="modal-title infotitulo">CREAR NUEVO PROVEEDOR:</h4>
           </div>
           <div class="panel-body">
             <form name="formulario6" id="formulario6" method="POST">
@@ -820,8 +789,8 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Nombre(*):</label>
-                <input type="hidden" name="idcliente" id="idcliente4">
-                <input type="text" class="form-control" name="nombre" id="nombre4" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" required>
+                <input type="hidden" name="idproveedor" id="idproveedor4">
+                <input type="text" class="form-control" name="nombre" id="nombre4" maxlength="40" placeholder="Ingrese el nombre del proveedor." autocomplete="off" required>
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
@@ -835,24 +804,14 @@ if (!isset($_SESSION["nombre"])) {
                 <label>Email:</label>
                 <input type="email" class="form-control" name="email" id="email3" maxlength="50" placeholder="Ingrese el correo electrónico.">
               </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Local(*):</label>
-                <select id="idlocal4" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC2()" required>
-                  <option value="">- Seleccione -</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>RUC local(*):</label>
-                <input type="number" class="form-control" id="local_ruc4" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local." disabled>
-              </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="50" placeholder="Ingrese la descripción del cliente." autocomplete="off">
+                <input type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="50" placeholder="Ingrese la descripción del proveedor." autocomplete="off">
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalClientes4();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-bcp" type="submit" id="btnGuardarCliente4"><i class="fa fa-save"></i> Guardar</button>
+                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalProveedor4();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+                <button class="btn btn-bcp" type="submit" id="btnGuardarProveedor4"><i class="fa fa-save"></i> Guardar</button>
               </div>
             </form>
           </div>
@@ -868,8 +827,8 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">COTIZACIÓN</h4>
-              <h4 class="modal-title infotitulo" id="clienteFinal" style="margin: 0; padding: 0;"></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">PRECUENTA</h4>
+              <h4 class="modal-title infotitulo" id="proveedorFinal" style="margin: 0; padding: 0;"></h4>
             </div>
           </div>
           <div class="panel-body">
@@ -954,23 +913,23 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">COTIZACIÓN EXITOSA, TICKET N° <span id="num_comprobante_final1"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">COMPRA EXITOSA, TICKET N° <span id="num_comprobante_final1"></span></h4>
             </div>
           </div>
           <div class="panel-body">
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
               <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">LISTADO DE COTIZACIONES</button>
+                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">LISTADO DE PRECUENTAS</button>
               </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
               <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">NUEVA COTIZACIÓN</button>
+                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">NUEVA PRECUENTA</button>
               </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
               <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">REPORTE DE COTIZACIONES</button>
+                <button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">REPORTE DE PRECUENTAS</button>
               </div>
             </div>
             <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0;">
@@ -1023,9 +982,9 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">COTIZACIÓN: <span id="nota_de_venta" style="font-weight: 600;"></span></h4>
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">CLIENTE: <span id="nombre_cliente" style="font-weight: 600;"></span></h4>
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN CLIENTE: <span id="direccion_cliente" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">BOLETA DE COMPRA: <span id="boleta" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">
@@ -1091,7 +1050,7 @@ if (!isset($_SESSION["nombre"])) {
               </table>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
-              <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta" style="font-weight: 600;"></span></h4>
+              <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>
             </div>
           </div>
         </div>
@@ -1106,7 +1065,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">MODIFICAR ESTADO DE LA COTIZACIÓN N° <span id="num_comprobante_final3"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">MODIFICAR ESTADO DE LA COMPRA N° <span id="num_comprobante_final3"></span></h4>
             </div>
           </div>
           <div class="panel-body">
@@ -1157,7 +1116,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/proforma.js"></script>
+  <script type="text/javascript" src="scripts/compra.js"></script>
   <script src="scripts/jquery.gScrollingCarousel.js"></script>
   <script>
   </script>

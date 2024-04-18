@@ -59,7 +59,7 @@ $y += 52;
 # Encabezado y datos del ticket #
 $pdf->encabezado2(
     $y,
-    $reg1->cliente ?? '',
+    "CLIENTE: " . $reg1->cliente ?? '',
     ($reg1->telefono  ?? '' != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
     $reg1->tipo_documento ?? '',
     $reg1->num_documento ?? '',

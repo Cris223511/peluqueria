@@ -7,24 +7,25 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['ventas'] == 1) {
-		require_once "../modelos/Venta.php";
+	if ($_SESSION['compras'] == 1) {
+		require_once "../modelos/Compra.php";
 
-		$venta = new Venta();
+		$compra = new Compra();
 
 		$idusuario = $_SESSION["idusuario"];
 		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
-		$idventa = isset($_POST["idventa"]) ? limpiarCadena($_POST["idventa"]) : "";
-		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
+		$idcompra = isset($_POST["idcompra"]) ? limpiarCadena($_POST["idcompra"]) : "";
 
-		$idcliente = isset($_POST["idcliente"]) ? limpiarCadena($_POST["idcliente"]) : "";
-		$idcaja = isset($_POST["idcaja"]) ? limpiarCadena($_POST["idcaja"]) : "";
+		$idarticulo = isset($_POST["idarticulo"]) ? $_POST["idarticulo"] : [];
+		$idservicio = isset($_POST["idservicio"]) ? $_POST["idservicio"] : [];
+
+		$idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
 		$tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
 		$num_comprobante = isset($_POST["num_comprobante"]) ? limpiarCadena($_POST["num_comprobante"]) : "";
 		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
-		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
+		$total_compra = isset($_POST["total_compra"]) ? limpiarCadena($_POST["total_compra"]) : "";
 		$vuelto = isset($_POST["vuelto"]) ? limpiarCadena($_POST["vuelto"]) : "";
 		$comentario_interno = isset($_POST["comentario_interno"]) ? limpiarCadena($_POST["comentario_interno"]) : "";
 		$comentario_externo = isset($_POST["comentario_externo"]) ? limpiarCadena($_POST["comentario_externo"]) : "";
@@ -35,12 +36,12 @@ if (!isset($_SESSION["nombre"])) {
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
-				if (empty($idventa)) {
-					$numeroExiste = $venta->verificarNumeroExiste($num_comprobante, $idlocalSession);
+				if (empty($idcompra)) {
+					$numeroExiste = $compra->verificarNumeroExiste($num_comprobante, $idlocalSession);
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $venta->insertar($idusuario, $idlocalSession, $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $compra->insertar($idusuario, $idlocalSession, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $idarticulo, $idservicio, $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -52,23 +53,23 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'anular':
-				$rspta = $venta->anular($idventa);
-				echo $rspta ? "Venta anulada" : "Venta no se puede anular";
+				$rspta = $compra->anular($idcompra);
+				echo $rspta ? "Compra anulada" : "Compra no se puede anular";
 				break;
 
 			case 'cambiarEstado':
-				$rspta = $venta->cambiarEstado($idventa, $estado);
-				echo $rspta ? "Estado de la venta actualizada con éxito." : "El estado de la venta no se puede actualizar.";
+				$rspta = $compra->cambiarEstado($idcompra, $estado);
+				echo $rspta ? "Estado de la compra actualizada con éxito." : "El estado de la compra no se puede actualizar.";
 				break;
 
 			case 'validarCaja':
-				$rspta = $venta->validarCaja($idlocalSession);
+				$rspta = $compra->validarCaja($idlocalSession);
 				echo json_encode($rspta);
 				break;
 
 			case 'eliminar':
-				$rspta = $venta->eliminar($idventa);
-				echo $rspta ? "Venta eliminada" : "Venta no se puede eliminar";
+				$rspta = $compra->eliminar($idcompra);
+				echo $rspta ? "Compra eliminada" : "Compra no se puede eliminar";
 				break;
 
 			case 'listar':
@@ -78,23 +79,23 @@ if (!isset($_SESSION["nombre"])) {
 
 				if ($cargo == "superadmin") {
 					if ($fecha_inicio == "" && $fecha_fin == "" && $estado == "") {
-						$rspta = $venta->listar();
+						$rspta = $compra->listar();
 					} else if ($fecha_inicio == "" && $fecha_fin == ""  && $estado != "") {
-						$rspta = $venta->listarEstado($estado);
+						$rspta = $compra->listarEstado($estado);
 					} else if ($fecha_inicio != "" && $fecha_fin != ""  && $estado == "") {
-						$rspta = $venta->listarPorFecha($fecha_inicio, $fecha_fin);
+						$rspta = $compra->listarPorFecha($fecha_inicio, $fecha_fin);
 					} else {
-						$rspta = $venta->listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado);
+						$rspta = $compra->listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado);
 					}
 				} else {
 					if ($fecha_inicio == "" && $fecha_fin == "" && $estado == "") {
-						$rspta = $venta->listarPorUsuario($idlocalSession);
+						$rspta = $compra->listarPorUsuario($idlocalSession);
 					} else if ($fecha_inicio == "" && $fecha_fin == ""  && $estado != "") {
-						$rspta = $venta->listarPorUsuarioEstado($idlocalSession, $estado);
+						$rspta = $compra->listarPorUsuarioEstado($idlocalSession, $estado);
 					} else if ($fecha_inicio != "" && $fecha_fin != ""  && $estado == "") {
-						$rspta = $venta->listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin);
+						$rspta = $compra->listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin);
 					} else {
-						$rspta = $venta->listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado);
+						$rspta = $compra->listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado);
 					}
 				}
 
@@ -112,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioCompra = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -133,26 +134,25 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
-							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
-									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idventa . ')"><i class="fa fa-trash"></i></button>') .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
+									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idcompra . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idcompra . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
-						"1" => '<a target="_blank" href="../reportes/exA4Venta.php?id=' . $reg->idventa . '"> <button class="btn btn-info" style="color: black !important; margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
-						"2" => $reg->cliente,
+						"1" => '<a target="_blank" href="../reportes/exA4Compra.php?id=' . $reg->idcompra . '"> <button class="btn btn-info" style="color: black !important; margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
+						"2" => $reg->proveedor,
 						"3" => $reg->local,
-						"4" => $reg->caja,
-						"5" => $reg->tipo_comprobante,
-						"6" => 'N° ' . $reg->num_comprobante,
-						"7" => $reg->total_venta,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => $reg->fecha,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"4" => $reg->tipo_comprobante,
+						"5" => 'N° ' . $reg->num_comprobante,
+						"6" => $reg->total_compra,
+						"7" => $reg->usuario . ' - ' . $cargo_detalle,
+						"8" => $reg->fecha,
+						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					$totalPrecioCompra += $reg->total_compra;
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -163,12 +163,11 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => "",
 						"3" => "",
 						"4" => "",
-						"5" => "",
-						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"7" => "",
 						"8" => "",
 						"9" => "",
-						"10" => "",
 					);
 				}
 
@@ -236,7 +235,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'getLastNumComprobante':
-				$row = mysqli_fetch_assoc($venta->getLastNumComprobante($idlocalSession));
+				$row = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocalSession));
 				if ($row != null) {
 					$last_num_comprobante = $row["last_num_comprobante"];
 					echo $last_num_comprobante;
@@ -249,9 +248,9 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarTodosLocalActivosPorUsuario':
 				if ($cargo == "superadmin") {
-					$rspta = $venta->listarTodosLocalActivos();
+					$rspta = $compra->listarTodosLocalActivos();
 				} else {
-					$rspta = $venta->listarTodosLocalActivosPorUsuario($idlocalSession);
+					$rspta = $compra->listarTodosLocalActivosPorUsuario($idlocalSession);
 				}
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
@@ -270,9 +269,9 @@ if (!isset($_SESSION["nombre"])) {
 				$idcategoria = isset($_POST["idcategoria"]) ? limpiarCadena($_POST["idcategoria"]) : "";
 
 				if ($cargo == "superadmin") {
-					$rspta = $venta->listarArticulosPorCategoria($idcategoria);
+					$rspta = $compra->listarArticulosPorCategoria($idcategoria);
 				} else {
-					$rspta = $venta->listarArticulosPorCategoriaLocal($idcategoria, $idlocalSession);
+					$rspta = $compra->listarArticulosPorCategoriaLocal($idcategoria, $idlocalSession);
 				}
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
@@ -287,9 +286,9 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($data);
 				break;
 
-			case 'listarDetallesProductoVenta':
-				$rspta1 = $venta->listarDetallesProductoVenta($idventa);
-				$rspta2 = $venta->listarDetallesMetodosPagoVenta($idventa);
+			case 'listarDetallesProductoCompra':
+				$rspta1 = $compra->listarDetallesProductoCompra($idcompra);
+				$rspta2 = $compra->listarDetallesMetodosPagoCompra($idcompra);
 
 				$articulos = array();
 				$pagos = array();
@@ -312,7 +311,7 @@ if (!isset($_SESSION["nombre"])) {
 
 
 			case 'listarMetodosDePago':
-				$rspta = $venta->listarMetodosDePago();
+				$rspta = $compra->listarMetodosDePago();
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
@@ -326,12 +325,8 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($data);
 				break;
 
-			case 'listarClientes':
-				if ($cargo == "superadmin") {
-					$rspta = $venta->listarClientes();
-				} else {
-					$rspta = $venta->listarClientesLocal($idlocalSession);
-				}
+			case 'listarProveedores':
+				$rspta = $compra->listarProveedores();
 
 				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
 
