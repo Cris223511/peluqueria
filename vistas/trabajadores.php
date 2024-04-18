@@ -32,7 +32,7 @@ if (!isset($_SESSION["nombre"])) {
                   <thead>
                     <th>usuario</th>
                     <th>cargo</th>
-                    <th>nombre</th>
+                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">nombre</th>
                     <th>documento</th>
                     <th>Número Doc.</th>
                     <th>teléfono</th>

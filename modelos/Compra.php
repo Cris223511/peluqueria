@@ -9,30 +9,30 @@ class Compra
 	{
 	}
 
-	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $idarticulo, $idservicio, $idpersonal, $cantidad, $precio_compra, $precio_venta, $descuento, $metodo_pago, $monto)
+	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $idpersonal, $cantidad, $precio_compra, $precio_venta, $descuento, $metodo_pago, $monto)
 	{
-		$idarticulo = isset($idarticulo) && $idarticulo !== NULL ? $idarticulo : [];
-		$idservicio = isset($idservicio) && $idservicio !== NULL ? $idservicio : [];
-
 		// Inicializar variable de mensaje
 		$mensajeError = "";
 
+		// Convertir $detalles a un array si es una cadena JSON
+		$detalles = json_decode($detalles, true);
+
 		// Primero, debemos verificar si hay suficiente stock para cada artículo
-		$error = $this->validarStock($idarticulo, $cantidad);
+		$error = $this->validarStock($detalles, $cantidad);
 		if ($error) {
 			// Si hay un error, no se puede insertar
 			$mensajeError = "Una de las cantidades superan al stock normal del artículo o servicio.";
 		}
 
 		// Luego verificamos si el subtotal es negativo
-		$error = $this->validarSubtotalNegativo($idarticulo, $idservicio, $cantidad, $precio_venta, $descuento);
+		$error = $this->validarSubtotalNegativo($detalles, $cantidad, $precio_venta, $descuento);
 		if ($error) {
 			// Si cumple, o sea si es verdadero, asignamos el mensaje correspondiente
 			$mensajeError = "El subtotal de uno de los artículos o servicios no puede ser menor a 0.";
 		}
 
 		// Luego verificamos si el precio de venta es menor al precio de compra
-		$error = $this->validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta);
+		$error = $this->validarPrecioCompraPrecioVenta($detalles, $precio_compra, $precio_venta);
 		if ($error) {
 			// Si cumple, o sea si es verdadero, no se puede insertar
 			$mensajeError = "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra.";
@@ -49,31 +49,31 @@ class Compra
 		//return ejecutarConsulta($sql);
 
 		$idcompranew = ejecutarConsulta_retornarID($sql);
-		$items = array_merge($idarticulo, $idservicio);
-
 		$sw = true;
 
-		for ($i = 0; $i < count($items); $i++) {
-			$esArticulo = $i < count($idarticulo);
-			$esServicio = $i >= count($idarticulo);
+		foreach ($detalles as $i => $detalle) {
+			$esArticulo = strpos($detalle, '_producto') !== false;
+			$esServicio = strpos($detalle, '_servicio') !== false;
 
-			$id = $esArticulo && isset($idarticulo[$i]) ? $idarticulo[$i] : 0;
-			$idServicio = $esServicio && isset($idservicio[$i - count($idarticulo)]) ? $idservicio[$i - count($idarticulo)] : 0;
+			$id = str_replace(['_producto', '_servicio'], '', $detalle);
 
 			$cantidadItem = $cantidad[$i];
 			$idPersonalItem = $idpersonal[$i];
 			$precioVentaItem = $precio_venta[$i];
 			$descuentoItem = $descuento[$i];
 
-			$sql_detalle = "INSERT INTO detalle_compra(idcompra,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idcompranew','$id','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
+			$idArticulo = $esArticulo ? $id : 0;
+			$idServicio = $esServicio ? $id : 0;
+
+			$sql_detalle = "INSERT INTO detalle_compra(idcompra,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idcompranew','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
 			if ($esArticulo && $id != 0) {
 				$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
 				ejecutarConsulta($actualizar_art) or $sw = false;
-			} elseif ($esServicio && $idServicio != 0) {
-				$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$idServicio'";
+			} elseif ($esServicio && $id != 0) {
+				$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
 				ejecutarConsulta($actualizar_serv) or $sw = false;
 			}
 		}
@@ -90,41 +90,67 @@ class Compra
 		return [$sw, $idcompranew];
 	}
 
-	public function validarStock($idarticulo, $cantidad)
+	public function validarStock($detalles, $cantidad)
 	{
-		for ($i = 0; $i < count($idarticulo); $i++) {
-			$sql = "SELECT stock FROM articulo WHERE idarticulo = '$idarticulo[$i]'";
+		if (!is_array($detalles)) {
+			$detalles = json_decode($detalles, true);
+		}
+
+		$idarticulos = array_filter($detalles, function ($detalle) {
+			return strpos($detalle, '_producto') !== false;
+		});
+
+		foreach ($idarticulos as $indice => $idarticulo) {
+			$id = str_replace('_producto', '', $idarticulo);
+			$sql = "SELECT stock FROM articulo WHERE idarticulo = '$id'";
 			$res = ejecutarConsultaSimpleFila($sql);
 			$stockActual = $res['stock'];
-			if ($cantidad[$i] > $stockActual) {
+			if ($cantidad[$indice] > $stockActual) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public function validarSubtotalNegativo($idarticulo, $idservicio, $cantidad, $precio_venta, $descuento)
+	public function validarSubtotalNegativo($detalles, $cantidad, $precio_venta, $descuento)
 	{
-		$idarticulo_servicio = array_merge($idarticulo, $idservicio);
+		if (!is_array($detalles)) {
+			$detalles = json_decode($detalles, true);
+		}
 
-		for ($i = 0; $i < count($idarticulo_servicio); $i++) {
-			if ((($cantidad[$i] * $precio_venta[$i]) - $descuento[$i]) < 0) {
+		$idarticulos_servicios = array_filter($detalles, function ($detalle) {
+			return strpos($detalle, '_producto') !== false || strpos($detalle, '_servicio') !== false;
+		});
+
+		foreach ($idarticulos_servicios as $indice => $id_detalle) {
+			$tipo = strpos($id_detalle, '_producto') !== false ? '_producto' : '_servicio';
+			$id = str_replace($tipo, '', $id_detalle);
+
+			if ((($cantidad[$indice] * $precio_venta[$indice]) - $descuento[$indice]) < 0) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	public function validarPrecioCompraPrecioVenta($idarticulo, $precio_compra, $precio_venta)
+	public function validarPrecioCompraPrecioVenta($detalles, $precio_compra, $precio_venta)
 	{
-		for ($i = 0; $i < count($idarticulo); $i++) {
-			if ($precio_venta[$i] < $precio_compra[$i]) {
+		if (!is_array($detalles)) {
+			$detalles = json_decode($detalles, true);
+		}
+
+		$idarticulos = array_filter($detalles, function ($detalle) {
+			return strpos($detalle, '_producto') !== false;
+		});
+
+		foreach ($idarticulos as $indice => $idarticulo) {
+			$id = str_replace('_producto', '', $idarticulo);
+			if ($precio_venta[$indice] < $precio_compra[$indice]) {
 				return true;
 			}
 		}
 		return false;
 	}
-
 
 	public function verificarNumeroExiste($num_comprobante, $idlocal)
 	{

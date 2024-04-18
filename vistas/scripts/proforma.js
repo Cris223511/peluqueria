@@ -1246,8 +1246,8 @@ function guardaryeditar7(e) {
 
 	console.log(impuesto);
 
-	$("#comentario_interno_final").text(comentarioInterno);
-	$("#comentario_externo_final").text(comentarioExterno);
+	$("#comentario_interno_final").val(comentarioInterno);
+	$("#comentario_externo_final").val(comentarioExterno);
 	$("#igvFinal").val(impuesto);
 	$("#total_venta_final").val(totalVentaFinal);
 	$("#vuelto_final").val(vueltoFinal);
@@ -1406,6 +1406,18 @@ function guardaryeditar(e) {
 	var formData = new FormData($("#formulario")[0]);
 	formData.append('num_comprobante', lastNumComp);
 	formData.append('idcaja', idCajaFinal);
+
+	var detalles = [];
+
+	$('#detalles .filas').each(function () {
+		var tipo = $(this).find('input[name="idarticulo[]"]').length ? "_producto" : "_servicio";
+		var id = $(this).find('input[name="idarticulo[]"]').val() || $(this).find('input[name="idservicio[]"]').val();
+		detalles.push(id + tipo);
+	});
+
+	console.log(detalles);
+
+	formData.append('detalles', JSON.stringify(detalles));
 
 	$.ajax({
 		url: "../ajax/proforma.php?op=guardaryeditar",
@@ -1574,11 +1586,12 @@ function modalImpresion(idproforma, num_comprobante) {
 	$("#num_comprobante_final2").text(num_comprobante);
 
 	limpiarModalImpresion();
+	limpiarModalPrecuentaFinal();
 
 	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
 
 	nombresBotones.forEach(function (texto, index) {
-		var ruta = (index === 0) ? "exTicketVenta" : "exA4Venta";
+		var ruta = (index === 0) ? "exTicketProforma" : "exA4Proforma";
 		$("a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idproforma);
 	});
 }

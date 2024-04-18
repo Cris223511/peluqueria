@@ -1246,8 +1246,8 @@ function guardaryeditar7(e) {
 
 	console.log(impuesto);
 
-	$("#comentario_interno_final").text(comentarioInterno);
-	$("#comentario_externo_final").text(comentarioExterno);
+	$("#comentario_interno_final").val(comentarioInterno);
+	$("#comentario_externo_final").val(comentarioExterno);
 	$("#igvFinal").val(impuesto);
 	$("#total_venta_final").val(totalVentaFinal);
 	$("#vuelto_final").val(vueltoFinal);
@@ -1588,6 +1588,7 @@ function modalImpresion(idventa, num_comprobante) {
 	$("#num_comprobante_final2").text(num_comprobante);
 
 	limpiarModalImpresion();
+	limpiarModalPrecuentaFinal();
 
 	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
 
