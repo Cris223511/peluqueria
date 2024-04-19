@@ -4,6 +4,73 @@ require "../config/Conexion.php";
 
 class Reporte
 {
+	/* ======================= REPORTE DE COMPRAS ======================= */
+
+	public function listarCompras($condiciones = "")
+	{
+		$sql = "SELECT DISTINCT
+					  c.idcompra,
+					  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					  c.idproveedor,
+					  p.nombre AS proveedor,
+					  p.tipo_documento AS proveedor_tipo_documento,
+					  p.num_documento AS proveedor_num_documento,
+					  p.direccion AS proveedor_direccion,
+					  al.idlocal,
+					  al.titulo AS local,
+					  u.idusuario,
+					  u.nombre AS usuario,
+					  u.cargo AS cargo,
+					  c.tipo_comprobante,
+					  c.num_comprobante,
+					  c.vuelto,
+					  c.impuesto,
+					  c.total_compra,
+					  c.estado
+					FROM compra c
+					LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
+					LEFT JOIN locales al ON c.idlocal = al.idlocal
+					LEFT JOIN usuario u ON c.idusuario = u.idusuario
+					LEFT JOIN detalle_compra_pagos dvp ON c.idcompra = dvp.idcompra
+					WHERE $condiciones
+					ORDER by c.idcompra DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarComprasLocal($idlocal, $condiciones = "")
+	{
+		$sql = "SELECT DISTINCT
+					  c.idcompra,
+					  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					  c.idproveedor,
+					  p.nombre AS proveedor,
+					  p.tipo_documento AS proveedor_tipo_documento,
+					  p.num_documento AS proveedor_num_documento,
+					  p.direccion AS proveedor_direccion,
+					  al.idlocal,
+					  al.titulo AS local,
+					  u.idusuario,
+					  u.nombre AS usuario,
+					  u.cargo AS cargo,
+					  c.tipo_comprobante,
+					  c.num_comprobante,
+					  c.vuelto,
+					  c.impuesto,
+					  c.total_compra,
+					  c.estado
+					FROM compra c
+					LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
+					LEFT JOIN locales al ON c.idlocal = al.idlocal
+					LEFT JOIN usuario u ON c.idusuario = u.idusuario
+					LEFT JOIN detalle_compra_pagos dvp ON c.idcompra = dvp.idcompra
+					WHERE c.idlocal = '$idlocal'
+					AND $condiciones
+					ORDER by c.idcompra DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
 	/* ======================= REPORTE DE VENTAS ======================= */
 
 	public function listarVentas($condiciones = "")
@@ -37,6 +104,7 @@ class Reporte
 				LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
 				WHERE $condiciones
 				ORDER by v.idventa DESC";
+
 		return ejecutarConsulta($sql);
 	}
 
@@ -72,6 +140,7 @@ class Reporte
 				WHERE v.idlocal = '$idlocal'
 				AND $condiciones
 				ORDER by v.idventa DESC";
+
 		return ejecutarConsulta($sql);
 	}
 
@@ -108,6 +177,7 @@ class Reporte
 				LEFT JOIN detalle_proforma_pagos dpp ON p.idproforma = dpp.idproforma
 				WHERE $condiciones
 				ORDER by p.idproforma DESC";
+
 		return ejecutarConsulta($sql);
 	}
 
@@ -143,6 +213,84 @@ class Reporte
 				WHERE p.idlocal = '$idlocal'
 				AND $condiciones
 				ORDER by p.idproforma DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	/* ======================= REPORTE DE ARTICULOS MÁS VENDIDOS ======================= */
+
+	public function listarArticulosMasVendidos($condiciones = "")
+	{
+		$sql = "SELECT
+				  a.idarticulo,
+				  a.idusuario,
+				  a.idmarca,
+				  a.idcategoria,
+				  COUNT(dv.idarticulo) as cantidad,
+				  u.nombre as usuario,
+				  u.cargo as cargo,
+				  u.cargo,
+				  c.titulo as categoria,
+				  al.titulo as local,
+				  m.titulo as marca,
+				  a.codigo,
+				  a.codigo_producto,
+				  a.nombre,
+				  a.stock,
+				  a.stock_minimo,
+				  a.descripcion,
+				  a.imagen,
+				  a.precio_compra,
+				  a.precio_venta,
+				  a.estado
+				FROM detalle_venta dv
+				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
+				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN locales al ON a.idlocal = al.idlocal
+				LEFT JOIN usuario u ON a.idusuario = u.idusuario
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				WHERE $condiciones
+				GROUP BY dv.idarticulo
+				ORDER BY cantidad DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarArticulosMasVendidosLocal($idlocal, $condiciones = "")
+	{
+		$sql = "SELECT
+				  a.idarticulo,
+				  a.idusuario,
+				  a.idmarca,
+				  a.idcategoria,
+				  COUNT(dv.idarticulo) as cantidad,
+				  u.nombre as usuario,
+				  u.cargo as cargo,
+				  u.cargo,
+				  c.titulo as categoria,
+				  al.titulo as local,
+				  m.titulo as marca,
+				  a.codigo,
+				  a.codigo_producto,
+				  a.nombre,
+				  a.stock,
+				  a.stock_minimo,
+				  a.descripcion,
+				  a.imagen,
+				  a.precio_compra,
+				  a.precio_venta,
+				  a.estado
+				FROM detalle_venta dv
+				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
+				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN locales al ON a.idlocal = al.idlocal
+				LEFT JOIN usuario u ON a.idusuario = u.idusuario
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				WHERE a.idlocal = '$idlocal'
+				AND $condiciones
+				GROUP BY dv.idarticulo
+				ORDER BY cantidad DESC";
+
 		return ejecutarConsulta($sql);
 	}
 }

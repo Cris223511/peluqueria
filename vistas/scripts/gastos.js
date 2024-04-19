@@ -18,7 +18,7 @@ function init() {
 	});
 
 	$('#mCajas').addClass('treeview active');
-	$('#lRetiros').addClass('active');
+	$('#lGastos').addClass('active');
 }
 
 function listarSelectCajas() {
@@ -76,7 +76,7 @@ function listar() {
 			],
 			'ajax':
 			{
-				url: '../ajax/retiros.php?op=listar',
+				url: '../ajax/gastos.php?op=listar',
 				type: 'get',
 				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: 'json',
@@ -162,7 +162,7 @@ function buscar() {
 			],
 			'ajax':
 			{
-				url: '../ajax/retiros.php?op=listar',
+				url: '../ajax/gastos.php?op=listar',
 				type: 'get',
 				data: { param1: param1, param2: param2, param3: param3 },
 				dataType: 'json',
@@ -204,14 +204,14 @@ function guardaryeditar(e) {
 	formData.append('idlocal', idlocal);
 
 	$.ajax({
-		url: "../ajax/retiros.php?op=guardaryeditar",
+		url: "../ajax/gastos.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El monto que desea retirar no puede ser mayor al monto total de la caja.") {
+			if (datos == "El monto que desea gastar no puede ser mayor al monto total de la caja.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -225,8 +225,8 @@ function guardaryeditar(e) {
 	});
 }
 
-function modalDetalles(idretiro) {
-	$.post("../ajax/retiros.php?op=mostrar", { idretiro: idretiro }, function (data, status) {
+function modalDetalles(idgasto) {
+	$.post("../ajax/gastos.php?op=mostrar", { idgasto: idgasto }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
 		console.log(data);
@@ -235,27 +235,27 @@ function modalDetalles(idretiro) {
 			data[key] = data[key].toUpperCase();
 		});
 
-		$("#local_retiro").text(data.local);
-		$("#usuario_retiro").text(data.nombre);
+		$("#local_gasto").text(data.local);
+		$("#usuario_gasto").text(data.nombre);
 
 		let fechaHora = data.fecha.split(" ");
 		let fecha = fechaHora[0];
 		let hora = fechaHora[1];
 
-		$("#fecha_retiro").text(formatFecha(fecha));
-		$("#hora_retiro").text(formatHora(hora));
+		$("#fecha_gasto").text(formatFecha(fecha));
+		$("#hora_gasto").text(formatHora(hora));
 
-		$("#monto_retiro").text("S/. " + parseFloat(data.monto).toFixed(2));
-		$("#descripcion_retiro").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
+		$("#monto_gasto").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#descripcion_gasto").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
 
 		$("#myModal").modal("show");
 	});
 }
 
-function eliminar(idretiro, idcaja) {
-	bootbox.confirm("¿Estás seguro de eliminar el retiro?", function (result) {
+function eliminar(idgasto, idcaja) {
+	bootbox.confirm("¿Estás seguro de eliminar el gasto?", function (result) {
 		if (result) {
-			$.post("../ajax/retiros.php?op=eliminar", { idretiro: idretiro, idcaja: idcaja }, function (e) {
+			$.post("../ajax/gastos.php?op=eliminar", { idgasto: idgasto, idcaja: idcaja }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 				listarSelectCajas();

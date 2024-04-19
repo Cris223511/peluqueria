@@ -14,10 +14,10 @@ $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"]
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
 $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
-require('../modelos/Retiros.php');
-$retiro = new Retiro();
+require('../modelos/Gastos.php');
+$gasto = new Gasto();
 
-$rspta = $retiro->mostrar($_GET["id"]);
+$rspta = $gasto->mostrar($_GET["id"]);
 
 $reg = (object) $rspta;
 
@@ -35,7 +35,7 @@ $size = 0; // inicialización de variable de tamaño.
 # Encabezado y datos del ticket #
 $y = $pdf->cuerpoCaja(
     $y,
-    "RETIRO DE DINERO",
+    "GASTOS DE CAJA",
     $logo,
     $ext_logo,
     $reg->fecha ?? '',
@@ -58,6 +58,6 @@ $pdf->creditos(
 );
 
 # Nombre del archivo PDF #
-$pdf->Output("I", "ticket_retiro_" . mt_rand(10000000, 99999999) . ".pdf", true);
+$pdf->Output("I", "ticket_gasto_" . mt_rand(10000000, 99999999) . ".pdf", true);
 
 ob_end_flush();

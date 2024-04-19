@@ -23,7 +23,7 @@ function init() {
 	})
 
 	$('#mReportes').addClass("treeview active");
-	$('#lReporteCotizacion').addClass("active");
+	$('#lReporteCompra').addClass("active");
 }
 
 function listar() {
@@ -52,7 +52,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/reporte.php?op=listarProformas',
+				url: '../ajax/reporte.php?op=listarCompras',
 				type: "get",
 				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
@@ -74,13 +74,13 @@ function listar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
 function resetear() {
-	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "clienteBuscar", "numDocBuscar", "numTicketBuscar"];
+	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "proveedorBuscar", "numDocBuscar", "numTicketBuscar"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");
@@ -110,11 +110,11 @@ function buscar() {
 	const usuarioBuscar = document.getElementById("usuarioBuscar");
 	const estadoBuscar = document.getElementById("estadoBuscar");
 	const metodopagoBuscar = document.getElementById("metodopagoBuscar");
-	const clienteBuscar = document.getElementById("clienteBuscar");
+	const proveedorBuscar = document.getElementById("proveedorBuscar");
 	const numDocBuscar = document.getElementById("numDocBuscar");
 	const numTicketBuscar = document.getElementById("numTicketBuscar");
 
-	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && clienteBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
+	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && proveedorBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
 		return;
 	}
@@ -126,7 +126,7 @@ function buscar() {
 	param5 = usuarioBuscar.value;
 	param6 = estadoBuscar.value;
 	param7 = metodopagoBuscar.value;
-	param8 = clienteBuscar.value;
+	param8 = proveedorBuscar.value;
 	param9 = numDocBuscar.value;
 	param10 = numTicketBuscar.value;
 
@@ -144,7 +144,7 @@ function buscar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/reporte.php?op=listarProformas',
+				url: '../ajax/reporte.php?op=listarCompras',
 				type: "get",
 				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
@@ -166,27 +166,27 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
-function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
-	$.post("../ajax/proforma.php?op=listarDetallesProductoVenta", { idproforma: idproforma }, function (data, status) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto) {
+	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
 		console.log(data);
 
-		// Actualizar datos del cliente
-		let nombreCompleto = cliente;
+		// Actualizar datos del proveedor
+		let nombreCompleto = proveedor;
 
-		if (cliente_tipo_documento && cliente_num_documento) {
-			nombreCompleto += ' - ' + cliente_tipo_documento + ': ' + cliente_num_documento;
+		if (proveedor_tipo_documento && proveedor_num_documento) {
+			nombreCompleto += ' - ' + proveedor_tipo_documento + ': ' + proveedor_num_documento;
 		}
 
-		$('#nombre_cliente').text(nombreCompleto);
-		$('#direccion_cliente').text((cliente_direccion != "") ? cliente_direccion : "Sin registrar");
-		$('#nota_de_venta').text("N° " + num_comprobante);
+		$('#nombre_proveedor').text(nombreCompleto);
+		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "Sin registrar");
+		$('#boleta_de_compra').text("N° " + num_comprobante);
 
 		// Actualizar detalles de la tabla productos
 		let tbody = $('#detallesProductosFinal tbody');
@@ -217,7 +217,7 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 
 		$('#subtotal_detalle').text(subtotal.toFixed(2));
 		$('#igv_detalle').text(igv.toFixed(2));
-		$('#total_detalle').text(total_venta);
+		$('#total_detalle').text(total_compra);
 
 		// Actualizar detalles de la tabla pagos
 		let tbodyPagos = $('#detallesPagosFinal tbody');
@@ -240,9 +240,9 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 
 		$('#subtotal_pagos').text(subtotalPagos.toFixed(2));
 		$('#vueltos_pagos').text(vuelto);
-		$('#total_pagos').text(total_venta);
+		$('#total_pagos').text(total_compra);
 
-		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
+		$('#atendido_compra').text(capitalizarTodasLasPalabras(usuario));
 	});
 }
 

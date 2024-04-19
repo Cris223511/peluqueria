@@ -300,6 +300,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lVentas"><a href="venta.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
                 <li id="lProformas"><a href="proforma.php"><i class="fa fa-circle-o"></i> Proformas</a></li>
+                <li id="lClientes"><a href="clientes.php"><i class="fa fa-circle-o"></i> Clientes</a></li>
               </ul>
             </li>';
           }
@@ -333,6 +334,7 @@ $local_login = $_SESSION['local'];
                 <li id="lAperturas"><a href="aperturas.php"><i class="fa fa-circle-o"></i> Aperturas</a></li>
                 <li id="lCierres"><a href="cierres.php"><i class="fa fa-circle-o"></i> Cierres</a></li>
                 <li id="lRetiros"><a href="retiros.php"><i class="fa fa-circle-o"></i> Retiros</a></li>
+                <li id="lGastos"><a href="gastos.php"><i class="fa fa-circle-o"></i> Gastos</a></li>
               </ul>
             </li>';
           }
@@ -360,7 +362,6 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
               <li id="lTrabajadores"><a href="trabajadores.php"><i class="fa fa-circle-o"></i> Trabajadores</a></li>
               <li id="lPersonales"><a href="personales.php"><i class="fa fa-circle-o"></i> Personales</a></li>
-              <li id="lClientes"><a href="clientes.php"><i class="fa fa-circle-o"></i> Clientes</a></li>
               </ul>
             </li>';
           }
@@ -377,7 +378,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
               <li id="lReporteVenta"><a href="reporteVenta.php"><i class="fa fa-circle-o"></i> Reporte de ventas</a></li>
               <li id="lReporteCotizacion"><a href="reporteProforma.php"><i class="fa fa-circle-o"></i> Reporte de cotizaciones</a></li>
-              <li id="lReporteCompra"><a href="#"><i class="fa fa-circle-o"></i> Reporte de compras</a></li>
+              <li id="lReporteCompra"><a href="reporteCompra.php"><i class="fa fa-circle-o"></i> Reporte de compras</a></li>
               </ul>
             </li>';
           }
@@ -392,7 +393,7 @@ $local_login = $_SESSION['local'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-              <li id="lReporteProductos"><a href="#"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+              <li id="lReporteProductos"><a href="reporteProductoMasVendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
               </ul>
             </li>';
           }

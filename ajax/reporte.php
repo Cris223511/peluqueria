@@ -14,7 +14,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['reportes'] == 1) {
+	if ($_SESSION['reportes'] == 1 || $_SESSION['reportesP'] == 1) {
 		require_once "../modelos/Reporte.php";
 
 		$reporte = new Reporte();
@@ -23,6 +23,103 @@ if (!isset($_SESSION["nombre"])) {
 		$cargo = $_SESSION["cargo"];
 
 		switch ($_GET["op"]) {
+			case 'listarCompras':
+				$parametros = array(
+					"c.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "c.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(c.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "c.tipo_comprobante = '{$_GET["param3"]}'",
+					"param4" => "c.idlocal = '{$_GET["param4"]}'",
+					"param5" => "u.idusuario = '{$_GET["param5"]}'",
+					"param6" => "c.estado = '{$_GET["param6"]}'",
+					"param7" => "dvp.idmetodopago = '{$_GET["param7"]}'",
+					"param8" => "p.nombre LIKE '%{$_GET["param8"]}%'",
+					"param9" => "p.num_documento = '{$_GET["param9"]}'",
+					"param10" => "c.num_comprobante = '{$_GET["param10"]}'"
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarCompras($condiciones) : $reporte->listarComprasLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioCompra = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->proveedor,
+						"3" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
+						"4" => $reg->local,
+						"5" => $reg->tipo_comprobante,
+						"6" => 'N° ' . $reg->num_comprobante,
+						"7" => $reg->total_compra,
+						"8" => $reg->usuario . ' - ' . $cargo_detalle,
+						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					$totalPrecioCompra += $reg->total_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL</strong>",
+						"7" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
 			case 'listarVentas':
 				$parametros = array(
 					"v.eliminado = '0'"
@@ -208,6 +305,85 @@ if (!isset($_SESSION["nombre"])) {
 						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
 						"9" => "",
 						"10" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+			case 'listarArticulosMasVendidos':
+				$parametros = array(
+					"a.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "a.idlocal = '$idlocalSession'";
+				}
+
+				$estadoSeleccionado = isset($_GET["param7"]) ? $_GET["param7"] : '';
+
+				$filtros = array(
+					"param3" => "a.idlocal = '{$_GET["param3"]}'",
+					"param4" => "a.idmarca = '{$_GET["param4"]}'",
+					"param5" => "a.idcategoria = '{$_GET["param5"]}'",
+					"param6" => "a.idusuario = '{$_GET["param6"]}'",
+					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'")
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarArticulosMasVendidos($condiciones) : $reporte->listarArticulosMasVendidosLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
+						"1" => $reg->nombre,
+						"2" => $reg->cantidad,
+						"3" => $reg->categoria,
+						"4" => $reg->local,
+						"5" => $reg->marca,
+						"6" => $reg->codigo_producto,
+						"7" => $reg->codigo,
+						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"9" => $reg->stock_minimo,
+						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
+						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
+						"12" => $reg->usuario,
+						"13" => $cargo_detalle,
+						"14" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 

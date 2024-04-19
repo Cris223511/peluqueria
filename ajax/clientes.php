@@ -12,7 +12,7 @@ if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['personas'] == 1) {
+	if ($_SESSION['ventas'] == 1) {
 		require_once "../modelos/Clientes.php";
 
 		$clientes = new Cliente();

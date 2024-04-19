@@ -367,13 +367,13 @@
 
     <?php
     if ($_SESSION["cargo"] == "cajero") {
-      echo '<script>
-              $(document).ajaxSuccess(function(event, xhr, settings) {
-                if (!$("#lCierres").hasClass("active")) {
-                  $(".dt-buttons").hide();
-                }
-              });
-            </script>';
+      // echo '<script>
+      //         $(document).ajaxSuccess(function(event, xhr, settings) {
+      //           if (!$("#lCierres").hasClass("active")) {
+      //             $(".dt-buttons").hide();
+      //           }
+      //         });
+      //       </script>';
     } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
       echo '<script>
               $(document).ajaxSuccess(function(event, xhr, settings) {

@@ -1269,7 +1269,7 @@ class FPDF
 	}
 
 	/*******************************************************************************
-	 *                      Ticket Apertura / Retiro Design                        *
+	 *                  Ticket Apertura / Retiro / Gasto Design                    *
 	 *******************************************************************************/
 
 	function cuerpoCaja($y, $titulo, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $descripcion)

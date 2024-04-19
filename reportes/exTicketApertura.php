@@ -15,9 +15,9 @@ $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta[
 $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
 require('../modelos/Cajas.php');
-$venta = new Caja();
+$apertura = new Caja();
 
-$rspta = $venta->mostrar($_GET["id"]);
+$rspta = $apertura->mostrar($_GET["id"]);
 
 $reg = (object) $rspta;
 

@@ -18,14 +18,6 @@ function init() {
 		console.log(r);
 		$('#idlocal').html(r);
 		$('#idlocal').selectpicker('refresh');
-
-		// $.post('../ajax/usuario.php?op=getSessionId', function (r) {
-		// 	console.log(r);
-		// 	data = JSON.parse(r);
-		// 	idLocal = data.idlocal;
-		// 	$('#idlocal').val(idLocal);
-		// 	$('#idlocal').selectpicker('refresh');
-		// })
 	});
 
 	$('#mCajas').addClass('treeview active');

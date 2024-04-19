@@ -106,7 +106,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Reporte de ventas generales</h1>
+                <h1 class="box-title">Reporte de compras generales</h1>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
                   <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
@@ -121,7 +121,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Tipo documento:</label>
                     <select id="tipoDocBuscar" name="tipoDocBuscar" class="form-control selectpicker" data-size="5">
                       <option value="">- Seleccione -</option>
-                      <option value="NOTA DE VENTA">NOTA DE VENTA</option>
+                      <option value="BOLETA DE COMPRA">BOLETA DE COMPRA</option>
                       <option value="FACTURA">FACTURA</option>
                     </select>
                   </div>
@@ -153,8 +153,8 @@ if (!isset($_SESSION["nombre"])) {
                     </select>
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Cliente:</label>
-                    <input type="text" class="form-control" name="clienteBuscar" id="clienteBuscar" maxlength="100" placeholder="Ingrese el nombre del cliente." required>
+                    <label>Proveedor:</label>
+                    <input type="text" class="form-control" name="proveedorBuscar" id="proveedorBuscar" maxlength="100" placeholder="Ingrese el nombre del proveedor." required>
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>DNI / RUC:</label>
@@ -179,13 +179,12 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th>Opciones</th>
                       <th>Fecha y hora</th>
-                      <th>Cliente</th>
+                      <th>Proveedor</th>
                       <th>DNI / RUC</th>
                       <th>Ubicación del local</th>
-                      <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Venta (S/.)</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
                     </thead>
@@ -194,13 +193,12 @@ if (!isset($_SESSION["nombre"])) {
                     <tfoot>
                       <th>Opciones</th>
                       <th>Fecha y hora</th>
-                      <th>Cliente</th>
+                      <th>Proveedor</th>
                       <th>DNI / RUC</th>
                       <th>Ubicación del local</th>
-                      <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Venta (S/.)</th>
+                      <th>Total Compra (S/.)</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
                     </tfoot>
@@ -220,9 +218,9 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">NOTA DE VENTA: <span id="nota_de_venta" style="font-weight: 600;"></span></h4>
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">CLIENTE: <span id="nombre_cliente" style="font-weight: 600;"></span></h4>
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN CLIENTE: <span id="direccion_cliente" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">BOLETA DE COMPRA: <span id="boleta_de_compra" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">
@@ -288,7 +286,7 @@ if (!isset($_SESSION["nombre"])) {
               </table>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
-              <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta" style="font-weight: 600;"></span></h4>
+              <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>
             </div>
           </div>
         </div>
@@ -302,7 +300,7 @@ if (!isset($_SESSION["nombre"])) {
   }
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/reporteVenta.js"></script>
+  <script type="text/javascript" src="scripts/reporteCompra.js"></script>
 <?php
 }
 ob_end_flush();
