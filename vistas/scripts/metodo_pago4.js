@@ -55,7 +55,17 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					// 'orientation': 'landscape',
+					'exportOptions': {
+						'columns': [1, 2, 3, 4, 6, 7]
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
+				},
 			],
 			"ajax":
 			{

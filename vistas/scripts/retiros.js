@@ -72,7 +72,16 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
+				},
 			],
 			'ajax':
 			{
@@ -158,7 +167,16 @@ function buscar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
+				},
 			],
 			'ajax':
 			{

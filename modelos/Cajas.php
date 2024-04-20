@@ -17,7 +17,7 @@ class Caja
 
 	public function agregarCajaCerrada($idcaja, $idusuario)
 	{
-		$sql = "UPDATE cajas SET estado='cerrado' WHERE idcaja='$idcaja'";
+		$sql = "UPDATE cajas SET estado='cerrado', vendido='0' WHERE idcaja='$idcaja'";
 		ejecutarConsulta($sql);
 
 		date_default_timezone_set("America/Lima");
@@ -224,6 +224,59 @@ class Caja
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarPrimerayUltimaVentaCajaCerrada($idcaja, $idcaja_cerrada)
+	{
+		$sql = "(SELECT 
+					v.idventa,
+					v.tipo_comprobante,
+					v.num_comprobante,
+					c.nombre AS cliente,
+					c.tipo_documento AS tipo_documento_cliente,
+					c.num_documento AS num_documento_cliente,
+					(
+						SELECT SUM(dv2.cantidad)
+						FROM detalle_venta dv2
+						WHERE dv2.idventa = dv.idventa
+					) AS cantidad,
+					v.total_venta
+				FROM detalle_venta dv
+				LEFT JOIN venta v ON dv.idventa = v.idventa
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
+				WHERE cc.idcaja = '$idcaja'
+				AND cc.idcaja_cerrada = '$idcaja_cerrada'
+				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				ORDER BY v.idventa ASC
+				LIMIT 1)
+					
+				UNION ALL
+				
+				(SELECT 
+					v.idventa,
+					v.tipo_comprobante,
+					v.num_comprobante,
+					c.nombre AS cliente,
+					c.tipo_documento AS tipo_documento_cliente,
+					c.num_documento AS num_documento_cliente,
+					(
+						SELECT SUM(dv2.cantidad)
+						FROM detalle_venta dv2
+						WHERE dv2.idventa = dv.idventa
+					) AS cantidad,
+					v.total_venta
+				FROM detalle_venta dv
+				LEFT JOIN venta v ON dv.idventa = v.idventa
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
+				WHERE cc.idcaja = '$idcaja'
+				AND cc.idcaja_cerrada = '$idcaja_cerrada'
+				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				ORDER BY v.idventa DESC
+				LIMIT 1)";
+
+		return ejecutarConsulta($sql);
+	}
+
 	public function listarDetallesEstadoVentasCajaCerrada($idcaja, $idcaja_cerrada)
 	{
 		$sql = "SELECT 
@@ -236,17 +289,17 @@ class Caja
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
 				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre);";
-	
+
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarDetallesMetodosPagoCajaCerrada($idcaja, $idcaja_cerrada)
 	{
 		$sql = "SELECT
-				  mp.titulo AS metodo_pago,
-				  dvp.monto AS monto,
-				  v.vuelto AS vuelto,
-				  v.idventa
+				mp.titulo AS metodo_pago,
+				SUM(dvp.monto) AS monto_total,
+				v.vuelto AS vuelto,
+				v.idventa
 				FROM detalle_venta_pagos dvp
 				LEFT JOIN metodo_pago mp ON dvp.idmetodopago = mp.idmetodopago
 				LEFT JOIN venta v ON dvp.idventa = v.idventa
@@ -258,6 +311,7 @@ class Caja
 					AND cc.idcaja_cerrada = '$idcaja_cerrada'
 					AND DATE(detalle_venta.fecha_hora) = DATE(cc.fecha_cierre)
 				)
+				GROUP BY mp.titulo, v.vuelto, v.idventa
 				ORDER BY dvp.iddetalle_venta_pago ASC;";
 
 		return ejecutarConsulta($sql);
@@ -272,6 +326,12 @@ class Caja
 	public function listarDetallesRetirosCajaAperurada($idcaja, $idcaja_cerrada)
 	{
 		$sql = "SELECT c.titulo AS caja, r.monto AS monto_retiro, DATE_FORMAT(r.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM retiros r LEFT JOIN cajas c ON r.idcaja = c.idcaja WHERE r.idcaja = '$idcaja_cerrada'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarDetallesGastosCajaAperurada($idcaja, $idcaja_cerrada)
+	{
+		$sql = "SELECT c.titulo AS caja, g.monto AS monto_gasto, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM gastos g LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE g.idcaja = '$idcaja_cerrada'";
 		return ejecutarConsulta($sql);
 	}
 }

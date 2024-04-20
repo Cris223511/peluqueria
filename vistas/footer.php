@@ -44,11 +44,9 @@
           return this.nodeType === 3;
         }).text().trim();
 
-        const capitalizedTitle = title.replace(/\b\w/g, function(letter) {
-          return letter.toUpperCase();
-        });
-
-        const fullTitle = capitalizedTitle + additionalText;
+        const fullTitle = title.replace(/\b([a-zA-ZáéíóúÁÉÍÓÚ]+)/g, function(match) {
+          return match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
+        }) + additionalText;
 
         document.title = fullTitle;
       }

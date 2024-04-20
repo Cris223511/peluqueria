@@ -80,7 +80,7 @@ class Venta
 			$num_elementos = $num_elementos + 1;
 		}
 
-		$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '$total_venta' WHERE idcaja = '$idcaja'";
+		$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '$total_venta', vendido = '1' WHERE idcaja = '$idcaja'";
 		ejecutarConsulta($sql_actualizar_monto);
 
 		return [$sw, $idventanew];

@@ -290,6 +290,22 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['compras'] == 1) {
+            echo '<li id="mCompras" class="treeview">
+              <a href="#">
+                <i class="fa fa-cart-plus"></i>
+                <span>Compras</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                <li id="lCompras"><a href="compra.php"><i class="fa fa-circle-o"></i> Compras</a></li>
+                <li id="lProveedor"><a href="proveedores.php"><i class="fa fa-circle-o"></i> Proveedores</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['ventas'] == 1) {
             echo '<li id="mVentas" class="treeview">
               <a href="#">
@@ -301,22 +317,6 @@ $local_login = $_SESSION['local'];
                 <li id="lVentas"><a href="venta.php"><i class="fa fa-circle-o"></i> Ventas</a></li>
                 <li id="lProformas"><a href="proforma.php"><i class="fa fa-circle-o"></i> Proformas</a></li>
                 <li id="lClientes"><a href="clientes.php"><i class="fa fa-circle-o"></i> Clientes</a></li>
-              </ul>
-            </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['compras'] == 1) {
-            echo '<li id="mCompras" class="treeview">
-              <a href="#">
-                <i class="fa fa-cart-plus"></i>
-                <span>Compras</span>
-                <i class="fa fa-angle-left pull-right"></i>
-              </a>
-              <ul class="treeview-menu">
-                <li id="lCompras"><a href="compra.php"><i class="fa fa-circle-o"></i> Compras</a></li>
-                <li id="lProveedor"><a href="proveedores.php"><i class="fa fa-circle-o"></i> Proveedores</a></li>
               </ul>
             </li>';
           }

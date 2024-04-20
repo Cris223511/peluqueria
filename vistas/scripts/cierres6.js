@@ -39,8 +39,8 @@ function listar() {
 				{
 					extend: 'copyHtml5',
 					text: 'Copiar',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					}
 				},
 				{
@@ -48,8 +48,8 @@ function listar() {
 					text: 'Excel',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
 					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
@@ -62,8 +62,8 @@ function listar() {
 					text: 'CSV',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
 					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
@@ -72,24 +72,28 @@ function listar() {
 					}
 				},
 				{
-					extend: 'pdfHtml5',
-					text: 'PDF',
-					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
-					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'extend': 'pdfHtml5',
+					'text': 'PDF',
+					'title': 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					'filename': 'cierre_caja',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
-					action: function (e, dt, button, config) {
+					'action': function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
 						config.filename = 'cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-					}
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
 				},
 				{
 					extend: 'colvis',
 					text: 'VER / OCULTAR',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					}
 				}
 			],
@@ -177,8 +181,8 @@ function buscar() {
 				{
 					extend: 'copyHtml5',
 					text: 'Copiar',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					}
 				},
 				{
@@ -186,8 +190,8 @@ function buscar() {
 					text: 'Excel',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
 					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
@@ -200,8 +204,8 @@ function buscar() {
 					text: 'CSV',
 					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
 					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
 					action: function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
@@ -210,24 +214,28 @@ function buscar() {
 					}
 				},
 				{
-					extend: 'pdfHtml5',
-					text: 'PDF',
-					title: 'FLUJO DE CAJA (CIERRES DE CAJA)',
-					filename: 'cierre_caja',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'extend': 'pdfHtml5',
+					'text': 'PDF',
+					'title': 'FLUJO DE CAJA (CIERRES DE CAJA)',
+					'filename': 'cierre_caja',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					},
-					action: function (e, dt, button, config) {
+					'action': function (e, dt, button, config) {
 						var randomNum = Math.floor(Math.random() * 100000000);
 						config.filename = 'cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-					}
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
 				},
 				{
 					extend: 'colvis',
 					text: 'VER / OCULTAR',
-					exportOptions: {
-						columns: [1, 2, 3, 4, 5, 6, 7]
+					'exportOptions': {
+						'columns': ':not(:first-child)'
 					}
 				}
 			],
@@ -320,7 +328,11 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 						var randomNum = Math.floor(Math.random() * 100000000);
 						config.filename = 'productos_cierre_caja_' + randomNum;
 						$.fn.dataTable.ext.buttons.pdfHtml5.action.call(this, e, dt, button, config);
-					}
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
 				},
 				{
 					extend: 'colvis',
@@ -361,7 +373,7 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 
 function prueba(idcaja, idcaja_cerrada) {
 	$.post("../ajax/cajas.php?op=prueba", { idcaja: idcaja, idcaja_cerrada: idcaja_cerrada }, function (e) {
-		// console.log(e);
+		console.log(e);
 		console.log(JSON.parse(e));
 	});
 }

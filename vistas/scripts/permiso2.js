@@ -36,7 +36,21 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					// 'orientation': 'landscape',
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+						doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+
+						doc.content[1].table.body.forEach(function (row) {
+							row.forEach(function (cell, i) {
+								cell.alignment = 'center';
+							});
+						});
+					},
+				},
 			],
 			"ajax":
 			{

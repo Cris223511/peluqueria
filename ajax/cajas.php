@@ -90,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'prueba':
 				$idcaja = $_POST['idcaja'];
 				$idcaja_cerrada = $_POST['idcaja_cerrada'];
-				$rspta = $cajas->listarDetallesVentasCajaCerrada($idcaja, $idcaja_cerrada);
+				$rspta = $cajas->listarDetallesMetodosPagoCajaCerrada($idcaja, $idcaja_cerrada);
 
 				$data = array();
 
@@ -155,7 +155,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
-							(($reg->vendido == '0') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') : ('')) .
+							('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcaja . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado != 'aperturado') ?
 								('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="aperturar(' . $reg->idcaja . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : ('<button class="btn btn-danger" style="margin-right: 3px; width: 35px; height: 35px;" onclick="cerrar(' . $reg->idcaja . ')"><i class="fa fa-close"></i></button>')) .
 							((($cargo == "superadmin" || $cargo == "admin")) ?
@@ -236,7 +236,7 @@ if (!isset($_SESSION["nombre"])) {
 							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							('<a target="_blank" href="../reportes/exTicketCierre.php?idcaja=' . $reg->idcaja . '&idcaja_cerrada=' . $reg->idcaja_cerrada . '"><button class="btn btn-success" style="margin-right: 3px; color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\')"><i class="fa fa-bars"></i></button>') .
-							// ('<button class="btn btn-info" style="margin-left: 3px; height: 35px;" onclick="prueba(' . $reg->idcaja . ',\'' . $reg->idcaja_cerrada . '\')"><i class="fa fa-info-circle"></i></button>') .
+							('<button class="btn btn-info" style="margin-left: 3px; height: 35px;" onclick="prueba(' . $reg->idcaja . ',\'' . $reg->idcaja_cerrada . '\')"><i class="fa fa-info-circle"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => $reg->local,

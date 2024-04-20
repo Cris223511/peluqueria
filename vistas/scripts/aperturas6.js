@@ -2,6 +2,7 @@ var tabla;
 var idSession;
 var idLocal;
 var contador;
+var vendido;
 
 function init() {
 	mostrarform(false);
@@ -107,7 +108,16 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
+				},
 			],
 			'ajax':
 			{
@@ -141,7 +151,9 @@ function listar() {
 function guardaryeditar(e) {
 	e.preventDefault();
 	$("#btnGuardar").prop("disabled", true);
+	$("#idlocal").prop("disabled", false);
 	var formData = new FormData($("#formulario")[0]);
+	$("#idlocal").prop("disabled", true);
 
 	$.ajax({
 		url: "../ajax/cajas.php?op=guardaryeditar",
@@ -176,6 +188,7 @@ function mostrar(idcaja) {
 		console.log(data);
 
 		contador = data.contador;
+		vendido = data.vendido;
 
 		$("#titulo").val(data.titulo);
 		$("#idlocal").val(data.idlocal);
@@ -188,11 +201,7 @@ function mostrar(idcaja) {
 
 		$("#monto").prop("disabled", true);
 
-		if (data.contador != 0) {
-			$("#desbloquearMonto").attr("onclick", "verificarMonto(" + contador + ")");
-		} else {
-			$("#desbloquearMonto").removeAttr("onclick");
-		}
+		$("#desbloquearMonto").attr("onclick", "verificarMonto('" + data.estado + "', " + contador + ", " + vendido + ")");
 	})
 }
 
@@ -223,22 +232,30 @@ function modalDetalles(idcaja) {
 	});
 }
 
-function verificarMonto(contador) {
-	bootbox.confirm("¿Está seguro de modificar el monto? Le queda <strong>" + contador + "</strong> intento(s).", function (result) {
-		if (result) {
-			$("#monto").prop("disabled", false);
-			$("#monto").attr("name", "monto");
-			$("#desbloquearMonto i").removeClass("fa-lock").addClass("fa-unlock-alt");
-			$("#desbloquearMonto").attr("onclick", "bloquearMonto(" + contador + ")");
-		}
-	});
+function verificarMonto(estado, contador, vendido) {
+	if (vendido == 1) {
+		bootbox.alert("La caja ya ha sido utilizada para hacer las ventas, por la cual no puede volver a modificar el monto.");
+	} else if (estado == "cerrado") {
+		bootbox.alert("Necesita volver a abrir la caja para modificar el monto.");
+	} else if (contador != 0) {
+		bootbox.confirm("¿Está seguro de modificar el monto? Le queda <strong>" + contador + "</strong> intento(s).", function (result) {
+			if (result) {
+				$("#monto").prop("disabled", false);
+				$("#monto").attr("name", "monto");
+				$("#desbloquearMonto i").removeClass("fa-lock").addClass("fa-unlock-alt");
+				$("#desbloquearMonto").attr("onclick", "bloquearMonto('" + estado + "', " + contador + ", " + vendido + ")");
+			}
+		});
+	} else {
+		bootbox.alert("Usted superó el límite de intentos, por la cual no puede volver a editar el monto.");
+	}
 }
 
-function bloquearMonto(contador) {
+function bloquearMonto(estado, contador, vendido) {
 	$("#monto").prop("disabled", true);
 	$("#monto").removeAttr("name");
 	$("#desbloquearMonto i").removeClass("fa-unlock-alt").addClass("fa-lock");
-	$("#desbloquearMonto").attr("onclick", "verificarMonto(" + contador + ")");
+	$("#desbloquearMonto").attr("onclick", "verificarMonto('" + estado + "', " + contador + ", " + vendido + ")");
 }
 
 function cerrar(idcaja) {
@@ -329,7 +346,16 @@ function buscar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 9;
+						doc.styles.tableHeader.fontSize = 9;
+					},
+				},
 			],
 			'ajax':
 			{

@@ -305,7 +305,19 @@ function listar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'orientation': 'landscape',
+					'exportOptions': {
+						'columns': function (idx, data, node) {
+							return idx > 1 ? true : false;
+						}
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 7;
+						doc.styles.tableHeader.fontSize = 7;
+					},
+				},
 			],
 			"ajax":
 			{
@@ -514,7 +526,19 @@ function buscar() {
 				'copyHtml5',
 				'excelHtml5',
 				'csvHtml5',
-				'pdfHtml5',
+				{
+					'extend': 'pdfHtml5',
+					'orientation': 'landscape',
+					'exportOptions': {
+						'columns': function (idx, data, node) {
+							return idx > 1 ? true : false;
+						}
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 7;
+						doc.styles.tableHeader.fontSize = 7;
+					},
+				},
 			],
 			"ajax":
 			{
