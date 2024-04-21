@@ -38,15 +38,18 @@
     </script>
 
     <script>
+      $('[data-toggle="popover"]').popover();
+    </script>
+
+    <script>
       function setTitleFromBoxTitle(titleElement) {
-        const additionalText = " | Peluquería S.A.C.";
         const title = $(titleElement).contents().filter(function() {
           return this.nodeType === 3;
         }).text().trim();
 
         const fullTitle = title.replace(/\b([a-zA-ZáéíóúÁÉÍÓÚ]+)/g, function(match) {
           return match.charAt(0).toUpperCase() + match.slice(1).toLowerCase();
-        }) + additionalText;
+        });
 
         document.title = fullTitle;
       }

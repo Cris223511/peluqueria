@@ -26,6 +26,7 @@ if (!isset($_SESSION["nombre"])) {
                         <i class="fa fa-clipboard"></i> Reporte
                       </button>
                     </a>
+                    <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Locales externos</strong>" data-html="true" data-content="Módulo para editar, ver los detalles y trabajadores de los locales externos de tu local, es decir, de los demás locales excepto el local donde te encuentras trabajando.<br><strong>Nota:</strong> Si quieres eliminar un local externo, primero tienes que cambiar de local a los trabajadores del local que quieres eliminar (desde el módulo <strong>usuarios</strong>)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                   <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">
@@ -34,7 +35,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
-                    <th>Opciones</th>
+                    <th style="width: 1%;">Opciones</th>
                     <th style="white-space: nowrap;">Ubicación del local</th>
                     <th style="white-space: nowrap;">N° RUC</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del local</th>

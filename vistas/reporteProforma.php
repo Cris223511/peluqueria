@@ -107,6 +107,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Reporte de cotizaciones generales</h1>
+                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Reporte de cotizaciones generales</strong>" data-html="true" data-content="Módulo para ver todas las cotizaciones (proformas) realizadas en tu local y los detalles de los productos." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
                   <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
@@ -176,7 +177,7 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                     <thead>
-                      <th>Opciones</th>
+                      <th style="width: 1%;">Opciones</th>
                       <th>Fecha y hora</th>
                       <th>Cliente</th>
                       <th>DNI / RUC</th>

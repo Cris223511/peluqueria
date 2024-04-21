@@ -23,6 +23,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Configuración de perfil del <?php echo $_SESSION["cargo_detalle"] ?></h1>
+                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Configuración de perfil</strong>" data-html="true" data-content="Módulo para configurar los datos de tu perfil." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right">
                 </div>
               </div>
@@ -61,7 +62,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Local principal(*):</label>
-                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" data-size="5"onchange="actualizarRUC()" required>
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
                     </select>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">

@@ -161,6 +161,10 @@ $local_login = $_SESSION['local'];
       display: none;
     }
   }
+
+  .popover {
+    z-index: 99999 !important;
+  }
 </style>
 
 <!DOCTYPE html>
@@ -368,6 +372,31 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['perfilu'] == 1) {
+            echo '
+          <li id="mPerfilUsuario" class="treeview">
+            <a href="#">
+              <i class="fa fa-user"></i> <span>Perfil de usuario</span>
+              <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+              <li id="lConfUsuario"><a href="confUsuario.php"><i class="fa fa-circle-o"></i> Configuración de perfil</a></li>
+              ';
+            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
+              echo '
+                <li id="lConfPortada"><a href="confPortada.php"><i class="fa fa-circle-o"></i> Configuración de portada</a></li>
+                <li id="lConfBoleta"><a href="confBoleta.php"><i class="fa fa-circle-o"></i> Configuración de boletas</a></li>
+                <li id="lLocalesExternos"><a href="localesExternos.php"><i class="fa fa-circle-o"></i> Locales externos</a></li>
+                <li id="lLocalesDisponibles"><a href="localesDisponibles.php"><i class="fa fa-circle-o"></i> Locales disponibles</a></li>
+              ';
+            }
+            echo '
+            </ul>
+          </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['reportes'] == 1) {
             echo '<li id="mReportes" class="treeview">
               <a href="#">
@@ -411,31 +440,6 @@ $local_login = $_SESSION['local'];
                 <li id="lPermisos"><a href="permiso.php"><i class="fa fa-circle-o"></i> Permisos</a></li>
               </ul>
             </li>';
-          }
-          ?>
-
-          <?php
-          if ($_SESSION['perfilu'] == 1) {
-            echo '
-          <li id="mPerfilUsuario" class="treeview">
-            <a href="#">
-              <i class="fa fa-user"></i> <span>Perfil de usuario</span>
-              <i class="fa fa-angle-left pull-right"></i>
-            </a>
-            <ul class="treeview-menu">
-              <li id="lConfUsuario"><a href="confUsuario.php"><i class="fa fa-circle-o"></i> Configuración de perfil</a></li>
-              ';
-            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
-              echo '
-                <li id="lConfPortada"><a href="confPortada.php"><i class="fa fa-circle-o"></i> Configuración de portada</a></li>
-                <li id="lConfBoleta"><a href="confBoleta.php"><i class="fa fa-circle-o"></i> Configuración de boletas</a></li>
-                <li id="lLocalesExternos"><a href="localesExternos.php"><i class="fa fa-circle-o"></i> Locales externos</a></li>
-                <li id="lLocalesDisponibles"><a href="localesDisponibles.php"><i class="fa fa-circle-o"></i> Locales disponibles</a></li>
-              ';
-            }
-            echo '
-            </ul>
-          </li>';
           }
           ?>
           <li>

@@ -24,6 +24,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Cierre de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas que ha sido cerradas desde el módulo de aperturas, en donde se podrá visualizar las ventas, montos, retiros y detalles de los productos que se vendieron en la caja <strong>de su local</strong> durante todo el día antes de haber sido cerrada." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -55,7 +56,7 @@ if (!isset($_SESSION["cajas"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                     <thead>
-                      <th>Opciones</th>
+                      <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
                       <th>Ubicación del local</th>
                       <th>Monto</th>

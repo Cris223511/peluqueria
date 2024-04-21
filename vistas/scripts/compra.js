@@ -20,8 +20,6 @@ function init() {
 
 	$('#mCompras').addClass("treeview active");
 	$('#lCompras').addClass("active");
-
-	$('[data-toggle="popover"]').popover();
 }
 
 function actualizarCorrelativo() {
@@ -411,10 +409,10 @@ let tipoProductoFinal = "";
 function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compra, precio_venta, codigo) {
 	var existeProducto = validarTablaProductos(tipoarticulo, idarticulo);
 
-	if (stock == 0) {
-		bootbox.alert("El producto seleccionado se encuentra sin stock.");
-		return;
-	}
+	// if (stock == 0) {
+	// 	bootbox.alert("El producto seleccionado se encuentra sin stock.");
+	// 	return;
+	// }
 
 	if (!existeProducto) {
 		$('#myModal1').modal('show');

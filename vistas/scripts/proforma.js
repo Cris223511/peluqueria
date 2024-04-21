@@ -21,8 +21,6 @@ function init() {
 
 	$('#mVentas').addClass("treeview active");
 	$('#lProformas').addClass("active");
-
-	$('[data-toggle="popover"]').popover();
 }
 
 function actualizarCorrelativo() {
@@ -112,7 +110,7 @@ function limpiar() {
 }
 
 function limpiarTodo() {
-	bootbox.confirm("¿Estás seguro de limpiar los datos de la venta?, perderá todos los datos registrados.", function (result) {
+	bootbox.confirm("¿Estás seguro de limpiar los datos de la proforma?, perderá todos los datos registrados.", function (result) {
 		if (result) {
 			limpiar();
 		}
@@ -126,9 +124,9 @@ function validarCaja() {
 		console.log(obj);
 
 		if (e == "null") {
-			bootbox.alert("Usted debe registrar una caja para realizar la venta.");
+			bootbox.alert("Usted debe registrar una caja para realizar la proforma.");
 		} else if (obj.estado != "aperturado") {
-			bootbox.alert("Usted necesita aperturar su caja para realizar la venta.");
+			bootbox.alert("Usted necesita aperturar su caja para realizar la proforma.");
 		} else {
 			mostrarform(true);
 			actualizarCorrelativo();
@@ -1225,7 +1223,7 @@ function guardaryeditar7(e) {
 		return;
 	}
 
-	// ACTUALIZAR CAMPOS DE LA VENTA
+	// ACTUALIZAR CAMPOS DE LA PROFORMA
 
 	// actualizo los inputs de los montos de los métodos de pago
 	$("#montoMetodoPago div").each(function () {
@@ -1234,10 +1232,10 @@ function guardaryeditar7(e) {
 		$("#inputsMontoMetodoPago input[data-id='" + dataId + "']").val(monto);
 	});
 
-	// actualizo los campos de los productos de la venta por lo de la precuenta (si son modificados desde la precuenta)
+	// actualizo los campos de los productos de la proforma por lo de la precuenta (si son modificados desde la precuenta)
 	actualizarTablaDetallesProductosVenta();
 
-	// actualizo el total final de la venta, comentarios e impuesto
+	// actualizo el total final de la proforma, comentarios e impuesto
 	let comentarioInterno = $("#comentario_interno").val();
 	let comentarioExterno = $("#comentario_externo").val();
 	let impuesto = $("#igv").val();
@@ -1653,9 +1651,9 @@ function limpiarModalEstadoVenta() {
 }
 
 function cambiarEstadoVenta(estado, idproforma) {
-	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo." : "";
+	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la proforma no se pueda modificar de nuevo." : "";
 
-	bootbox.confirm("¿Estás seguro de cambiar el estado de la venta a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
+	bootbox.confirm("¿Estás seguro de cambiar el estado de la proforma a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
 		if (result) {
 			$.post("../ajax/proforma.php?op=cambiarEstado", { idproforma: idproforma, estado: capitalizarPrimeraLetra(estado) }, function (e) {
 				bootbox.alert(e);
@@ -1668,7 +1666,7 @@ function cambiarEstadoVenta(estado, idproforma) {
 }
 
 function anular(idproforma) {
-	bootbox.confirm("¿Está seguro de anular la venta? recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo.", function (result) {
+	bootbox.confirm("¿Está seguro de anular la proforma? recuerde que esta opción hará que el estado de la proforma no se pueda modificar de nuevo.", function (result) {
 		if (result) {
 			$.post("../ajax/proforma.php?op=anular", { idproforma: idproforma }, function (e) {
 				bootbox.alert(e);
@@ -1679,7 +1677,7 @@ function anular(idproforma) {
 }
 
 function eliminar(idproforma) {
-	bootbox.confirm("¿Estás seguro de eliminar la venta?", function (result) {
+	bootbox.confirm("¿Estás seguro de eliminar la proforma?", function (result) {
 		if (result) {
 			$.post("../ajax/proforma.php?op=eliminar", { idproforma: idproforma }, function (e) {
 				bootbox.alert(e);

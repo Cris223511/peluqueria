@@ -365,6 +365,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Compras</strong>" data-html="true" data-content="Módulo para registrar las compras de los productos, no es necesario que su caja esté abierta para que pueda comprar.<br><strong>Nota:</strong> Al hacer la compra, el monto total de la compra no aumentará a su caja. También, el stock del producto comprado se aumenta al almacén (no importa si el stock del artículo esté en 0)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -402,7 +403,7 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                     <thead>
-                      <th style="width: 12%;">Opciones</th>
+                      <th style="width: 1%;">Opciones</th>
                       <th>PDF</th>
                       <th>Proveedor</th>
                       <th>Ubicación del local</th>
@@ -866,7 +867,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
                 <div style="margin-bottom: 10px; display: flex; justify-content: start; flex-wrap: wrap; align-items: center; gap: 5px;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; margin-top: 10px; padding: 0; font-weight: bold;">VUELTOS</h4>
-                  <a href="#" data-toggle="popover" data-placement="right" title="Vuelto" data-html="true" data-content="Asegúrese que el vuelto sea <strong>mayor igual</strong> a 0." style="color: #418bb7; font-size: 16px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="right" title="Vuelto" data-html="true" data-content="Asegúrese que el vuelto sea <strong>mayor igual</strong> a 0." style="color: #002a8e; font-size: 16px;"><i class="fa fa-question-circle"></i></a>
                 </div>
                 <div style="padding: 10px; border-top: 1px solid #d2d6de; display: flex; justify-content: space-between; align-items: center;">
                   <h5 class="infotitulo" style="margin: 0; padding: 0;">VUELTO</h5>

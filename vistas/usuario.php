@@ -32,6 +32,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Usuarios</strong>" data-html="true" data-content="Módulo para registrar los usuarios quienes tendrán acceso al sistema. Los usuarios pueden tener los roles de <strong>cajero y administrador</strong>." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -39,16 +40,16 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
-                    <th>Opciones</th>
+                    <th style="width: 1%;">Opciones</th>
                     <th>Usuario</th>
                     <th>Cargo</th>
+                    <th>Ubicación del local</th>
+                    <th>RUC del local</th>
                     <th>Nombre</th>
                     <th>Documento</th>
                     <th>Número Doc.</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Ubicación del local</th>
-                    <th>RUC del local</th>
                     <th>Foto</th>
                     <th>Estado</th>
                   </thead>
@@ -58,13 +59,13 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Usuario</th>
                     <th>Cargo</th>
+                    <th>Ubicación del local</th>
+                    <th>RUC del local</th>
                     <th>Nombre</th>
                     <th>Documento</th>
                     <th>Número Doc.</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th>Ubicación del local</th>
-                    <th>RUC del local</th>
                     <th>Foto</th>
                     <th>Estado</th>
                   </tfoot>
@@ -92,7 +93,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label id="locales">Local principal(*):</label>
-                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" data-size="5"onchange="actualizarRUC()" required>
+                    <select id="idlocal" name="idlocal" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>

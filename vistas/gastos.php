@@ -27,6 +27,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Gastos</strong>" data-html="true" data-content="Módulo para registrar los gastos de la caja. <br><strong>Nota:</strong> al registrar el gasto, el monto a gastar reducirá al monto total de la caja." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -58,7 +59,7 @@ if (!isset($_SESSION["cajas"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                     <thead>
-                      <th>Opciones</th>
+                      <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
                       <th style="white-space: nowrap;">Ubicación del local</th>
                       <th style="white-space: nowrap;">Monto gastado</th>

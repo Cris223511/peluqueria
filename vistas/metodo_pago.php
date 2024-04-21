@@ -27,6 +27,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Métodos de pago</strong>" data-html="true" data-content="Módulo para registrar los métodos de pago y sean utilizados en las ventas, proformas y compras.<br><strong>Nota:</strong> Los métodos de pago que usted registre serán visible y utilizados por todos (solo puede editar, anular y eliminar los métodos de pago que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -34,7 +35,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
-                    <th>Opciones</th>
+                    <th style="width: 1%;">Opciones</th>
                     <th>Nombre</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del método de pago</th>
                     <th style="white-space: nowrap;">Agregado por</th>

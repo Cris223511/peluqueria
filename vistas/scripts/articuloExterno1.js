@@ -11,7 +11,7 @@ function init() {
 
 	$("#imagenmuestra").hide();
 	$('#mAlmacen').addClass("treeview active");
-	$('#lArticulos').addClass("active");
+	$('#lArticulosExternos').addClass("active");
 
 	$.post("../ajax/articuloExterno.php?op=listarTodosActivos", function (data) {
 		// console.log(data)

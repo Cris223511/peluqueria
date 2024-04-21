@@ -21,8 +21,6 @@ function init() {
 
 	$('#mVentas').addClass("treeview active");
 	$('#lVentas').addClass("active");
-
-	$('[data-toggle="popover"]').popover();
 }
 
 function actualizarCorrelativo() {

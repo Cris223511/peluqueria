@@ -31,6 +31,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Aperturas de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas para que sean utilizadas en las ventas, proformas y compras.<br><strong>Nota:</strong> Sólo puede agregar 1 caja por local. También, todos los trabajadores de su local puede editar y cerrar la caja de su local.<br><strong>Consideraciones:</strong> Se recomienda cerrar la caja al finalizar el día y una vez por día, y una vez cerrada, abrir la caja el día siguiente.<br><strong>Restricciones:</strong> El monto de la caja puede ser editado sólo 3 veces y mientras tanto no se haya realizado una venta con la caja. También no puede editar el monto si la caja está cerrada, de la cuál tendría que abrirlo de nuevo." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -62,11 +63,11 @@ if (!isset($_SESSION["cajas"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                     <thead>
-                      <th>Opciones</th>
+                      <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
                       <th>Ubicación del local</th>
                       <th>Monto</th>
-                      <th style="white-space: nowrap;">Agregado por</th>
+                      <th style="white-space: nowrap;">Empleado</th>
                       <th>Cargo</th>
                       <th style="white-space: nowrap;">Fecha y hora</th>
                       <th>Estado</th>
@@ -78,7 +79,7 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Caja</th>
                       <th>Ubicación del local</th>
                       <th>Monto</th>
-                      <th>Agregado por</th>
+                      <th>Empleado</th>
                       <th>Cargo</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>

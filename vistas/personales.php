@@ -27,6 +27,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Personales del salón</strong>" data-html="true" data-content="Módulo para registrar los personales que se comicionan por la venta o compra de cada producto en el módulo venta, proforma y compra.<br><strong>Nota:</strong> Solo visualizará los personales de su local, de la cual, los personales que registre serán visibles y utilizados por los trabajadores <strong>de su local</strong> (solo puede editar, anular y eliminar los personales que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -34,7 +35,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
-                    <th>Opciones</th>
+                    <th style="width: 1%;">Opciones</th>
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Nombres</th>
                     <th>Cargo</th>
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Ubicación del local</th>
