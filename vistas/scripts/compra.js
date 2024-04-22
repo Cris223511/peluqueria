@@ -30,6 +30,14 @@ function actualizarCorrelativo() {
 	});
 }
 
+function actualizarCorrelativoLocal(idlocal) {
+	$.post("../ajax/compra.php?op=getLastNumComprobanteLocal", { idlocal: idlocal }, function (e) {
+		console.log(e);
+		lastNumComp = generarSiguienteCorrelativo(e);
+		$("#num_comprobante_final1").text(lastNumComp);
+	});
+}
+
 function limpiar() {
 	limpiarModalEmpleados();
 	limpiarModalMetodoPago();
@@ -51,6 +59,7 @@ function limpiar() {
 
 	$("#comentario_interno_final").val("");
 	$("#comentario_externo_final").val("");
+	$("#idlocal_session_final").val("");
 	$("#igvFinal").val("0.00");
 	$("#total_compra_final").val("");
 	$("#vuelto_final").val("");
@@ -80,6 +89,7 @@ function listarDatos() {
 		let proveedores = obj.proveedores || [];
 		let categoria = obj.categoria || [];
 		let personales = obj.personales || [];
+		let locales = obj.locales || [];
 
 		$("#productos").empty();
 		$("#categoria").empty();
@@ -93,7 +103,7 @@ function listarDatos() {
 		listarArticulos(articulo, servicio);
 		listarCategoria(categoria);
 		listarMetodoPago(metodo_pago);
-		listarSelects(articulo, servicio, proveedores, personales);
+		listarSelects(articulo, servicio, proveedores, personales, locales);
 	});
 }
 
@@ -239,7 +249,7 @@ function listarMetodoPago(metodosPago) {
 	pagosContainer.append(htmlFinal);
 }
 
-function listarSelects(articulos, servicios, proveedores, personales) {
+function listarSelects(articulos, servicios, proveedores, personales, locales) {
 	let selectProductos1 = $("#productos1");
 	selectProductos1.empty();
 	selectProductos1.append('<option value="">Lectora de códigos.</option>');
@@ -293,6 +303,28 @@ function listarSelects(articulos, servicios, proveedores, personales) {
 	personales.forEach((personal) => {
 		let optionHtml = `<option value="${personal.id}">${capitalizarTodasLasPalabras(personal.nombre)} - ${capitalizarTodasLasPalabras(personal.local)}</option>`;
 		selectEmpleados.append(optionHtml);
+	});
+
+	if ($("#idlocal_session").length) {
+		let selectLocales = $("#idlocal_session");
+		selectLocales.empty();
+		selectLocales.append('<option value="">- Seleccione -</option>');
+
+		locales.forEach((local) => {
+			let optionHtml = `<option value="${local.id}">${local.nombre} - ${local.local_ruc}</option>`;
+			selectLocales.append(optionHtml);
+		});
+
+		selectLocales.selectpicker('refresh');
+	}
+
+	let selectLocales6 = $("#idlocal_session_final");
+	selectLocales6.empty();
+	selectLocales6.append('<option value="">- Seleccione -</option>');
+
+	locales.forEach((local) => {
+		let optionHtml = `<option value="${local.id}">${local.nombre} - ${local.local_ruc}</option>`;
+		selectLocales6.append(optionHtml);
 	});
 
 	// Después de agregar todas las opciones, actualizamos el plugin selectpicker
@@ -1085,6 +1117,7 @@ function guardaryeditar7(e) {
 	actualizarTablaDetallesProductosCompra();
 
 	// actualizo el total final de la compra, comentarios e impuesto
+	let idlocalSession = $("#idlocal_session").length ? $("#idlocal_session").val() : '';
 	let comentarioInterno = $("#comentario_interno").val();
 	let comentarioExterno = $("#comentario_externo").val();
 	let impuesto = $("#igv").val();
@@ -1093,6 +1126,7 @@ function guardaryeditar7(e) {
 
 	console.log(impuesto);
 
+	$("#idlocal_session_final").val(idlocalSession);
 	$("#comentario_interno_final").val(comentarioInterno);
 	$("#comentario_externo_final").val(comentarioExterno);
 	$("#igvFinal").val(impuesto);
@@ -1117,6 +1151,8 @@ function limpiarModalPrecuenta() {
 
 	$("#igv").val("0.00");
 	$("#vuelto").val("0.00");
+	$("#idlocal_session").val("");
+	$("#idlocal_session").selectpicker('refresh');
 	$("#comentario_interno").val("");
 	$("#comentario_externo").val("");
 }

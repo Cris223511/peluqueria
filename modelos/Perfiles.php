@@ -55,6 +55,28 @@ class Perfiles
 		return ejecutarConsulta($sql);
 	}
 
+	public function proformasultimos_10dias()
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
+				FROM proforma 
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function proformasultimos_10diasUsuario($idlocal)
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
+				FROM proforma 
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
 	public function totalVentas()
 	{
 		$sql = "SELECT SUM(total_venta) AS total 

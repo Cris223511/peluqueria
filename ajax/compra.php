@@ -17,6 +17,7 @@ if (!isset($_SESSION["nombre"])) {
 		$cargo = $_SESSION["cargo"];
 
 		$idcompra = isset($_POST["idcompra"]) ? limpiarCadena($_POST["idcompra"]) : "";
+		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 
 		$idproveedor = isset($_POST["idproveedor"]) ? limpiarCadena($_POST["idproveedor"]) : "";
 		$tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
@@ -34,11 +35,11 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idcompra)) {
-					$numeroExiste = $compra->verificarNumeroExiste($num_comprobante, $idlocalSession);
+					$numeroExiste = $compra->verificarNumeroExiste($num_comprobante, (($idlocal != "") ? $idlocal : $idlocalSession));
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $compra->insertar($idusuario, $idlocalSession, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $compra->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -233,6 +234,16 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'getLastNumComprobante':
 				$row = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocalSession));
+				if ($row != null) {
+					$last_num_comprobante = $row["last_num_comprobante"];
+					echo $last_num_comprobante;
+				} else {
+					echo $row;
+				}
+				break;
+
+			case 'getLastNumComprobanteLocal':
+				$row = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocal));
 				if ($row != null) {
 					$last_num_comprobante = $row["last_num_comprobante"];
 					echo $last_num_comprobante;

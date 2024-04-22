@@ -515,6 +515,9 @@ if (!isset($_SESSION["nombre"])) {
                       <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="120" rows="4" autocomplete="off"></textarea>
                       <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="120" rows="4" autocomplete="off"></textarea>
                     </div>
+                    <select style="display: none;" id="idlocal_session_final" name="idlocal" class="form-control">
+                      <option value="">- Seleccione -</option>
+                    </select>
                     <select style="display: none;" id="igvFinal" name="impuesto" class="form-control" data-size="2">
                       <option value="0.00">0.00</option>
                       <option value="0.18">0.18</option>
@@ -852,6 +855,14 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6">
+                <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
+                    <label>Local (*):</label>
+                    <select id="idlocal_session" class="form-control selectpicker" data-live-search="true" data-size="5" required onchange="actualizarCorrelativoLocal(this.value)">
+                      <option value="">- Seleccione -</option>
+                    </select>
+                  </div>
+                <?php } ?>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO INTERNO (*):</h4>
                   <textarea type="text" class="form-control" id="comentario_interno" maxlength="120" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off" required></textarea>

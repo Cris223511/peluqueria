@@ -381,6 +381,12 @@ function guardaryeditar(e) {
 	$("#btnGuardar").prop("disabled", true);
 	var formData = new FormData($("#formulario")[0]);
 
+	let detalles = frmDetallesVisible() ? obtenerDetalles() : { talla: '', color: '', idmedida: '0', peso: '0.00' };
+
+	for (let key in detalles) {
+		formData.append(key, detalles[key]);
+	}
+
 	$.ajax({
 		url: "../ajax/articuloExterno.php?op=guardaryeditar",
 		type: "POST",
@@ -400,6 +406,26 @@ function guardaryeditar(e) {
 			tabla.ajax.reload();
 		}
 	});
+}
+
+function obtenerDetalles() {
+	let detalles = {
+		talla: $("#talla").val(),
+		color: $("#color").val(),
+		idmedida: $("#idmedida").val(),
+		peso: $("#peso").val()
+	};
+
+	if (!detalles.talla) detalles.talla = '';
+	if (!detalles.color) detalles.color = '';
+	if (!detalles.idmedida) detalles.idmedida = '0';
+	if (!detalles.peso) detalles.peso = '0.00';
+
+	return detalles;
+}
+
+function frmDetallesVisible() {
+	return $("#frmDetalles").is(":visible");
 }
 
 function mostrar(idarticulo) {

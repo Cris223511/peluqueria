@@ -18,10 +18,12 @@ if (!isset($_SESSION["nombre"])) {
 
     if ($cargo == "superadmin") {
       $compras10 = $consulta->comprasultimos_10dias();
-      $ventas12 = $consulta->ventasultimos_10dias();
+      $ventas10 = $consulta->ventasultimos_10dias();
+      $proformas10 = $consulta->proformasultimos_10dias();
     } else {
       $compras10 = $consulta->comprasultimos_10diasUsuario($idlocal);
-      $ventas12 = $consulta->ventasultimos_10diasUsuario($idlocal);
+      $ventas10 = $consulta->ventasultimos_10diasUsuario($idlocal);
+      $proformas10 = $consulta->proformasultimos_10diasUsuario($idlocal);
     }
 
     if ($cargo == "superadmin") {
@@ -33,7 +35,6 @@ if (!isset($_SESSION["nombre"])) {
       $totalVentas = $consulta->totalVentasUsuario($idlocal)["total"];
       $totalVentasProforma = $consulta->totalVentasProformaUsuario($idlocal)["total"];
     }
-
 
     //Datos para mostrar el gráfico de barras de las compras
     $fechasc = '';
@@ -50,7 +51,7 @@ if (!isset($_SESSION["nombre"])) {
     //Datos para mostrar el gráfico de barras de las ventas
     $fechasv = '';
     $totalesv = '';
-    while ($regfechav = $ventas12->fetch_object()) {
+    while ($regfechav = $ventas10->fetch_object()) {
       $fechasv = $fechasv . '"' . $regfechav->fecha . '",';
       $totalesv = $totalesv . $regfechav->total . ',';
     }
@@ -58,6 +59,18 @@ if (!isset($_SESSION["nombre"])) {
     //Quitamos la última coma
     $fechasv = substr($fechasv, 0, -1);
     $totalesv = substr($totalesv, 0, -1);
+
+    //Datos para mostrar el gráfico de barras de las ventas
+    $fechasp = '';
+    $totalesp = '';
+    while ($regfechap = $proformas10->fetch_object()) {
+      $fechasp = $fechasp . '"' . $regfechap->fecha . '",';
+      $totalesp = $totalesp . $regfechap->total . ',';
+    }
+
+    //Quitamos la última coma
+    $fechasp = substr($fechasp, 0, -1);
+    $totalesp = substr($totalesp, 0, -1);
 ?>
     <style>
       .tarjeta1 {
@@ -184,17 +197,24 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <div class="panel-body formularioregistros" style="background-color: white !important; padding-left: 0 !important; padding-right: 0 !important; height: max-content;">
               <div class="panel-body">
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                   <div class="box box-primary">
                     <div class="box-body">
-                      <canvas id="compras" width="400" height="250"></canvas>
+                      <canvas id="ventas" width="300" height="280"></canvas>
                     </div>
                   </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
                   <div class="box box-primary">
                     <div class="box-body">
-                      <canvas id="ventas" width="400" height="250"></canvas>
+                      <canvas id="proformas" width="300" height="280"></canvas>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-6 col-sm-12 col-xs-12">
+                  <div class="box box-primary">
+                    <div class="box-body">
+                      <canvas id="compras" width="300" height="280"></canvas>
                     </div>
                   </div>
                 </div>
@@ -273,6 +293,60 @@ if (!isset($_SESSION["nombre"])) {
             barPercentage: 0.3,
             label: 'Ventas en S/ de los últimos 10 días',
             data: [<?php echo $totalesv; ?>],
+            backgroundColor: [
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+            ],
+            borderColor: [
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+              'rgba(0,166,149,255)',
+            ],
+            borderWidth: 1,
+            borderRadius: {
+              topLeft: 10,
+              topRight: 10
+            }
+          }]
+        },
+        options: {
+          plugins: {
+            datalabels: { //esta es la configuración de pluggin datalabels
+              anchor: 'end',
+              align: 'top',
+              formatter: Math.round,
+              font: {
+                weight: 'bold'
+              }
+            }
+          }
+        }
+      });
+
+      var ctx = document.getElementById("proformas").getContext('2d');
+      var proformas = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [<?php echo $fechasp; ?>],
+          datasets: [{
+            barPercentage: 0.3,
+            label: 'Proformas en S/ de los últimos 10 días',
+            data: [<?php echo $totalesp; ?>],
             backgroundColor: [
               'rgba(0,166,149,255)',
               'rgba(0,166,149,255)',

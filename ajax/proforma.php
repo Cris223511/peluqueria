@@ -36,11 +36,11 @@ if (!isset($_SESSION["nombre"])) {
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idproforma)) {
-					$numeroExiste = $proforma->verificarNumeroExiste($num_comprobante, $idlocalSession);
+					$numeroExiste = $proforma->verificarNumeroExiste($num_comprobante, (($idlocal != "") ? $idlocal : $idlocalSession));
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $proforma->insertar($idusuario, $idlocalSession, $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -237,6 +237,16 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'getLastNumComprobante':
 				$row = mysqli_fetch_assoc($proforma->getLastNumComprobante($idlocalSession));
+				if ($row != null) {
+					$last_num_comprobante = $row["last_num_comprobante"];
+					echo $last_num_comprobante;
+				} else {
+					echo $row;
+				}
+				break;
+
+			case 'getLastNumComprobanteLocal':
+				$row = mysqli_fetch_assoc($proforma->getLastNumComprobante($idlocal));
 				if ($row != null) {
 					$last_num_comprobante = $row["last_num_comprobante"];
 					echo $last_num_comprobante;
