@@ -165,6 +165,13 @@ $local_login = $_SESSION['local'];
   .popover {
     z-index: 99999 !important;
   }
+
+  .box-title2 {
+    display: inline-block;
+    font-size: 18px;
+    margin: 0;
+    line-height: 1;
+  }
 </style>
 
 <!DOCTYPE html>

@@ -9,6 +9,104 @@ class Perfiles
 	{
 	}
 
+	/* ===================  ESCRITORIO ====================== */
+
+	public function comprasultimos_10dias()
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
+				FROM compra 
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function comprasultimos_10diasUsuario($idlocal)
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
+				FROM compra 
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function ventasultimos_10dias()
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
+				FROM venta 
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function ventasultimos_10diasUsuario($idlocal)
+	{
+		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
+				FROM venta 
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+				ORDER BY fecha_hora ASC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function totalVentas()
+	{
+		$sql = "SELECT SUM(total_venta) AS total 
+            	FROM venta";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function totalVentasUsuario($idlocal)
+	{
+		$sql = "SELECT SUM(total_venta) AS total 
+				FROM venta 
+				WHERE idlocal = '$idlocal'";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function totalVentasProforma()
+	{
+		$sql = "SELECT SUM(total_venta) AS total 
+            FROM proforma";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function totalVentasProformaUsuario($idlocal)
+	{
+		$sql = "SELECT SUM(total_venta) AS total 
+            FROM proforma 
+            WHERE idlocal = '$idlocal'";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function totalCompras()
+	{
+		$sql = "SELECT SUM(total_compra) AS total 
+            	FROM compra";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+	public function totalComprasUsuario($idlocal)
+	{
+		$sql = "SELECT SUM(total_compra) AS total 
+            FROM compra 
+            	WHERE idlocal = '$idlocal'";
+
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
+
 	/* ===================  PERFILES DE USUARIO ====================== */
 	public function mostrarUsuario($idusuario)
 	{
