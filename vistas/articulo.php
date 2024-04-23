@@ -223,7 +223,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Talla:</label>
-                        <input type="text" class="form-control" name="talla" id="talla" maxlength="5" placeholder="Ingrese la talla del producto." autocomplete="off">
+                        <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Color:</label>

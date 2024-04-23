@@ -33,7 +33,11 @@ if (!isset($_SESSION["nombre"])) {
 			case 'guardaryeditar':
 				if (empty($idproveedor)) {
 					$rspta = $proveedores->agregar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
-					echo $rspta ? "Proveedor registrado" : "El proveedor no se pudo registrar";
+					if (is_numeric($rspta)) {
+						echo $rspta;
+					} else {
+						echo "El proveedor no se pudo registrar";
+					}
 				} else {
 					$rspta = $proveedores->editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
 					echo $rspta ? "Proveedor actualizado" : "El proveedor no se pudo actualizar";

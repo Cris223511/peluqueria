@@ -9,6 +9,7 @@ $rspta = $perfil->mostrarReporte();
 $logo = $rspta["imagen"];
 $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
+$auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
 $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
@@ -351,6 +352,7 @@ $y = $pdf->pie(
     $y,
     $reg1->usuario ?? '',
     $reg1->comentario_externo ?? '',
+    $auspiciado,
 );
 
 $y += 4;

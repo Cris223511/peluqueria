@@ -1079,7 +1079,7 @@ class FPDF
 		return $y;
 	}
 
-	function pie($y, $usuario, $comentario)
+	function pie($y, $usuario, $comentario, $auspiciado)
 	{
 		# ATENDIDO POR #
 		$this->SetY($y);
@@ -1103,7 +1103,7 @@ class FPDF
 		$this->Ln(3);
 		$this->SetFont('hypermarket', '', 9);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(63, 5, "Powered by Estetica", 0, 'R', false);
+		$this->MultiCell(63, 5, "Powered by $auspiciado", 0, 'R', false);
 
 		return $y;
 	}

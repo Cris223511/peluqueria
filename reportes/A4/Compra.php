@@ -875,7 +875,7 @@ class PDF_Invoice extends FPDF
 		return $y;
 	}
 
-	function creditosReporte($y, $tipo_comprobante)
+	function creditosReporte($y, $tipo_comprobante, $auspiciado)
 	{
 		# TÍTULO REPRESENTACIÓN #
 		$this->SetXY(20, $y += 3);
@@ -890,6 +890,6 @@ class PDF_Invoice extends FPDF
 		# POWERED BY #
 		$this->SetXY(13.5, $y += 34);
 		$this->SetFont('Arial', 'I', 8);
-		$this->MultiCell(0, 3, mb_convert_encoding(("Powered by Estetica"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 3, mb_convert_encoding(("Powered by $auspiciado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 	}
 }

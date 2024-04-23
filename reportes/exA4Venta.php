@@ -9,6 +9,7 @@ $rspta = $perfil->mostrarReporte();
 $logo = $rspta["imagen"];
 $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
+$auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
 $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
@@ -272,7 +273,7 @@ $pdf->Image($filePath, 11.5, $y, 42);
 unlink($filePath);
 
 # Créditos #
-$pdf->creditosReporte($y, $reg1->tipo_comprobante ?? '');
+$pdf->creditosReporte($y, $reg1->tipo_comprobante ?? '', $auspiciado);
 
 # Tabla para los métodos de pago #
 $cols = array(

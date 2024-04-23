@@ -15,7 +15,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
 				FROM compra 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -26,7 +26,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
 				FROM compra 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -37,7 +37,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
 				FROM venta 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -48,7 +48,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
 				FROM venta 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -59,7 +59,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
 				FROM proforma 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -70,7 +70,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
 				FROM proforma 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY)
+				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
 				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
 				ORDER BY fecha_hora ASC";
 
@@ -80,7 +80,8 @@ class Perfiles
 	public function totalVentas()
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-            	FROM venta";
+            	FROM venta
+				WHERE eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -89,7 +90,7 @@ class Perfiles
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
 				FROM venta 
-				WHERE idlocal = '$idlocal'";
+				WHERE idlocal = '$idlocal' AND eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -97,7 +98,8 @@ class Perfiles
 	public function totalVentasProforma()
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-            FROM proforma";
+				FROM proforma
+				WHERE eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -105,8 +107,8 @@ class Perfiles
 	public function totalVentasProformaUsuario($idlocal)
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-            FROM proforma 
-            WHERE idlocal = '$idlocal'";
+				FROM proforma 
+				WHERE idlocal = '$idlocal' AND eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -114,7 +116,8 @@ class Perfiles
 	public function totalCompras()
 	{
 		$sql = "SELECT SUM(total_compra) AS total 
-            	FROM compra";
+            	FROM compra
+				WHERE eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -122,8 +125,8 @@ class Perfiles
 	public function totalComprasUsuario($idlocal)
 	{
 		$sql = "SELECT SUM(total_compra) AS total 
-            FROM compra 
-            	WHERE idlocal = '$idlocal'";
+            	FROM compra 
+            	WHERE idlocal = '$idlocal' AND eliminado = '0'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
@@ -162,9 +165,9 @@ class Perfiles
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $imagen)
+	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $imagen)
 	{
-		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',imagen='$imagen' WHERE idreporte='$idreporte'";
+		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',imagen='$imagen' WHERE idreporte='$idreporte'";
 		return ejecutarConsulta($sql);
 	}
 }

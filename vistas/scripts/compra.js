@@ -634,7 +634,7 @@ function guardaryeditar2(e) {
 
 // PROVEEDORES NUEVOS (POR SUNAT)
 
-function listarProveedores() {
+function listarProveedores(idproveedor) {
 	$.post("../ajax/compra.php?op=listarProveedores", function (data) {
 		console.log(data);
 		const obj = JSON.parse(data);
@@ -651,6 +651,7 @@ function listarProveedores() {
 			selectProveedores.append(optionHtml);
 		});
 
+		selectProveedores.val(idproveedor);
 		selectProveedores.selectpicker('refresh');
 
 		$('#idproveedor').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
@@ -690,14 +691,15 @@ function guardaryeditar3(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			console.log(datos);
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarProveedor").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Proveedor registrado correctamente.");
 			$('#myModal3').modal('hide');
-			listarProveedores();
+			listarProveedores(datos);
 			limpiarModalProveedor();
 			$("#sunat").val("");
 		}
@@ -813,14 +815,15 @@ function guardaryeditar4(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			console.log(datos);
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarProveedor2").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Proveedor registrado correctamente.");
 			$('#myModal4').modal('hide');
-			listarProveedores();
+			listarProveedores(datos);
 			limpiarModalProveedor2();
 		}
 	});
@@ -853,14 +856,15 @@ function guardaryeditar5(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			console.log(datos);
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarProveedor3").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Proveedor registrado correctamente.");
 			$('#myModal5').modal('hide');
-			listarProveedores();
+			listarProveedores(datos);
 			limpiarModalProveedor3();
 		}
 	});
@@ -905,15 +909,16 @@ function guardaryeditar6(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			console.log(datos);
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarProveedor4").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Proveedor registrado correctamente.");
 			$('#myModal6').modal('hide');
-			listarProveedores();
-			limpiarModalProveedor3();
+			listarProveedores(datos);
+			limpiarModalProveedor4();
 		}
 	});
 }

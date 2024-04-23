@@ -92,27 +92,32 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-body table-responsive">
             <table id="tbltrabajadores" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
               <thead>
-                <th>Nombre</th>
-                <th style="white-space: nowrap;">Tipo Doc.</th>
-                <th style="white-space: nowrap;">Número Doc.</th>
-                <th style="width: 30%; min-width: 200px; white-space: nowrap;">Local</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th style="white-space: nowrap;">Fecha Nac.</th>
-                <th>Estado</th>
-              </thead>
-              <tbody>
-
-              </tbody>
-              <tfoot>
-                <th>Nombre</th>
-                <th>Tipo Doc.</th>
+                <TH>USUARIO</TH>
+                <TH>CARGO</TH>
+                <TH>NOMBRE</TH>
+                <TH>DOCUMENTO</TH>
                 <th>Número Doc.</th>
+                <TH>TELÉFONO</TH>
+                <TH>EMAIL</TH>
                 <th>Ubicación del local</th>
-                <th>Teléfono</th>
-                <th>Email</th>
-                <th>Fecha Nac.</th>
-                <th>Estado</th>
+                <th>RUC del local</th>
+                <TH>FOTO</TH>
+                <TH>ESTADO</TH>
+              </THEAD>
+              <TBODY>
+              </TBODY>
+              <TFOOT>
+                <TH>USUARIO</TH>
+                <TH>CARGO</TH>
+                <TH>NOMBRE</TH>
+                <TH>DOCUMENTO</TH>
+                <th>Número Doc.</th>
+                <TH>TELÉFONO</TH>
+                <TH>EMAIL</TH>
+                <th>Ubicación del local</th>
+                <th>RUC del local</th>
+                <TH>FOTO</TH>
+                <TH>ESTADO</TH>
               </tfoot>
             </table>
           </div>

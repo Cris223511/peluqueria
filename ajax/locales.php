@@ -122,7 +122,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
 							(($param != 1) ? mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') : '') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
-							(($param != 1) ? '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>' : '') .
+							('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->local_ruc,
@@ -144,7 +144,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarTrabajadores':
 
-				$rspta = $locales->listarUsuariosPorLocal($idlocal_session);
+				$idlocal = $_GET["idlocal"];
+				$rspta = $locales->listarUsuariosPorLocal($idlocal);
 
 				$data = array();
 
@@ -176,7 +177,9 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => $reg->email,
 						"7" => $reg->local,
 						"8" => "N° " . $reg->local_ruc,
-						"9" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+						"9" => '<a href="../files/usuarios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/usuarios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"10" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);

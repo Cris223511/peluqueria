@@ -753,7 +753,7 @@ function guardaryeditar2(e) {
 
 // CLIENTES NUEVOS (POR SUNAT)
 
-function listarClientes() {
+function listarClientes(idcliente) {
 	$.post("../ajax/proforma.php?op=listarClientes", function (data) {
 		console.log(data);
 		const obj = JSON.parse(data);
@@ -770,6 +770,7 @@ function listarClientes() {
 			selectClientes.append(optionHtml);
 		});
 
+		selectClientes.val(idcliente);
 		selectClientes.selectpicker('refresh');
 
 		$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
@@ -814,14 +815,14 @@ function guardaryeditar3(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarCliente").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Cliente registrado correctamente.");
 			$('#myModal3').modal('hide');
-			listarClientes();
+			listarClientes(datos);
 			limpiarModalClientes();
 			$("#sunat").val("");
 		}
@@ -950,14 +951,14 @@ function guardaryeditar4(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarCliente2").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Cliente registrado correctamente.");
 			$('#myModal4').modal('hide');
-			listarClientes();
+			listarClientes(datos);
 			limpiarModalClientes2();
 		}
 	});
@@ -995,14 +996,14 @@ function guardaryeditar5(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarCliente3").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Cliente registrado correctamente.");
 			$('#myModal5').modal('hide');
-			listarClientes();
+			listarClientes(datos);
 			limpiarModalClientes3();
 		}
 	});
@@ -1055,15 +1056,15 @@ function guardaryeditar6(e) {
 		processData: false,
 
 		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe.") {
+			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardarCliente4").prop("disabled", false);
 				return;
 			}
-			bootbox.alert(datos);
+			bootbox.alert("Cliente registrado correctamente.");
 			$('#myModal6').modal('hide');
-			listarClientes();
-			limpiarModalClientes3();
+			listarClientes(datos);
+			limpiarModalClientes4();
 		}
 	});
 }

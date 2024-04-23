@@ -12,7 +12,7 @@ class Proveedor
 		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO proveedores (idusuario, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
             VALUES ('$idusuario','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
-		return ejecutarConsulta($sql);
+		return ejecutarConsulta_retornarID($sql);
 	}
 
 	public function editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)

@@ -236,7 +236,7 @@ if (!isset($_SESSION["nombre"])) {
         data: {
           labels: [<?php echo $fechasc; ?>],
           datasets: [{
-            barPercentage: 0.2,
+            barPercentage: 0.3,
             label: 'Compras en S/ de los últimos 10 días',
             data: [<?php echo $totalesc; ?>],
             backgroundColor: [
@@ -275,7 +275,12 @@ if (!isset($_SESSION["nombre"])) {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',
               align: 'top',
-              formatter: Math.round,
+              formatter: function(value, context) {
+                return value.toLocaleString('es-PE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }).replace(',', '.');
+              },
               font: {
                 weight: 'bold'
               }
@@ -329,7 +334,12 @@ if (!isset($_SESSION["nombre"])) {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',
               align: 'top',
-              formatter: Math.round,
+              formatter: function(value, context) {
+                return value.toLocaleString('es-PE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }).replace(',', '.');
+              },
               font: {
                 weight: 'bold'
               }
@@ -383,7 +393,12 @@ if (!isset($_SESSION["nombre"])) {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',
               align: 'top',
-              formatter: Math.round,
+              formatter: function(value, context) {
+                return value.toLocaleString('es-PE', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2
+                }).replace(',', '.');
+              },
               font: {
                 weight: 'bold'
               }

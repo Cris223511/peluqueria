@@ -842,7 +842,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Local(*):</label>
-                <select id="idlocal4" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC2()" required>
+                <select id="idlocal4" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC4()" required>
                   <option value="">- Seleccione -</option>
                 </select>
               </div>

@@ -224,6 +224,34 @@ class Caja
 		return ejecutarConsulta($sql);
 	}
 
+	public function listarDetallesVentasAnuladasCajaCerrada($idcaja, $idcaja_cerrada)
+	{
+		$sql = "SELECT 
+				  v.idventa,
+				  v.tipo_comprobante,
+				  v.num_comprobante,
+				  c.nombre AS cliente,
+				  c.tipo_documento AS tipo_documento_cliente,
+				  c.num_documento AS num_documento_cliente,
+				  (
+				  SELECT SUM(dv2.cantidad)
+				  FROM detalle_venta dv2
+				  WHERE dv2.idventa = dv.idventa
+				  ) AS cantidad,
+				  v.total_venta
+				FROM detalle_venta dv
+				LEFT JOIN venta v ON dv.idventa = v.idventa
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
+				WHERE cc.idcaja = '$idcaja'
+				AND cc.idcaja_cerrada = '$idcaja_cerrada'
+				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND v.estado = 'Anulado'  -- Agregando el filtro por estado anulado
+				GROUP BY v.idventa, v.tipo_comprobante, v.num_comprobante, c.nombre, c.tipo_documento, c.num_documento, v.total_venta;";
+
+		return ejecutarConsulta($sql);
+	}
+
 	public function listarPrimerayUltimaVentaCajaCerrada($idcaja, $idcaja_cerrada)
 	{
 		$sql = "(SELECT 

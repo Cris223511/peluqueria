@@ -11,8 +11,8 @@ class Cliente
 	{
 		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO clientes (idusuario, idlocal, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
-		return ejecutarConsulta($sql);
+				VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
+		return ejecutarConsulta_retornarID($sql);
 	}
 
 	public function verificarDniExiste($num_documento)

@@ -9,6 +9,7 @@ $rspta = $perfil->mostrarReporte();
 $logo = $rspta["imagen"];
 $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
+$auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
 $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
 $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
@@ -21,6 +22,7 @@ $rspta1 = $cajas->mostrarCerradas($_GET["idcaja"]);
 $rspta2 = $cajas->listarDetallesProductosCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 $rspta3 = $cajas->listarDetallesVentasCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 $rspta3_1 = $cajas->listarPrimerayUltimaVentaCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
+$rspta3_2 = $cajas->listarDetallesVentasAnuladasCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 $rspta4 = $cajas->listarDetallesEstadoVentasCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 $rspta5 = $cajas->listarDetallesMetodosPagoCajaCerrada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 $rspta6 = $cajas->listarDetallesCajaAperturada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
@@ -31,6 +33,7 @@ $reg1 = (object) $rspta1;
 $reg2 = $rspta2->fetch_object();
 $reg3 = $rspta3->fetch_object();
 $reg3_1 = $rspta3_1->fetch_object();
+$reg3_2 = $rspta3_2->fetch_object();
 $reg4 = $rspta4->fetch_object();
 $reg5 = $rspta5->fetch_object();
 $reg6 = $rspta6->fetch_object();
@@ -40,7 +43,7 @@ $reg8 = $rspta8->fetch_object();
 require('ticket/code128.php');
 
 # Modificando el ancho y alto del ticket #
-$pdf = new PDF_Code128('P', 'mm', array(70, 420));
+$pdf = new PDF_Code128('P', 'mm', array(70, 440));
 $pdf->SetAutoPageBreak(false);
 $pdf->SetMargins(4, 10, 4);
 $pdf->AddPage();
@@ -285,6 +288,116 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
+# TÍTULO #
+$pdf->SetY($y + 5.5);
+$pdf->SetFont('hypermarket', '', 10);
+$pdf->SetTextColor(0, 0, 0);
+$pdf->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("DOCUMENTOS ANULADOS"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+$pdf->Ln(3);
+
+$y += 18;
+
+# Tabla para los detalles de la venta #
+$cols = array(
+    "DOCUMENTO" => 17,
+    mb_convert_encoding(mb_strtoupper("N° DOCUMENTO"), 'ISO-8859-1', 'UTF-8') => 17,
+    "CANTIDAD" => 15,
+    "TOTAL VENTA" => 15,
+);
+
+$aligns = array(
+    "DOCUMENTO" => "L",
+    mb_convert_encoding(mb_strtoupper("N° DOCUMENTO"), 'ISO-8859-1', 'UTF-8') => "L",
+    "CANTIDAD" => "C",
+    "TOTAL VENTA" => "R",
+);
+
+$pdf->SetFont('hypermarket', '', 8.5);
+$pdf->addCols($cols, $aligns, $y);
+$cols = array(
+    "DOCUMENTO" => "L",
+    mb_convert_encoding(mb_strtoupper("N° DOCUMENTO"), 'ISO-8859-1', 'UTF-8') => "L",
+    "CANTIDAD" => "C",
+    "TOTAL VENTA" => "R",
+);
+
+$pdf->addLineFormat($cols);
+$pdf->addLineFormat($cols);
+
+$y += 4;
+
+$cantidadTotal = 0;
+$ventaTotal = 0;
+
+$esUltimoBucle = false;
+$hizoSaltoLinea = false;
+$contador = 0;
+
+$totalRegistros = $rspta3->num_rows;
+$anchoColumna = 17;
+
+$ultimoNumComprobante = null; // Variable para almacenar el último num_comprobante impreso
+
+while ($reg3_2) {
+    $anchoTexto = $pdf->GetStringWidth($reg3_2->tipo_comprobante ?? '');
+
+    // Verificamos si el num_comprobante actual es igual al último num_comprobante impreso
+    if ($reg3_2->num_comprobante != $ultimoNumComprobante) {
+        $line = array(
+            "DOCUMENTO" => ($reg3_2->tipo_comprobante ?? ''),
+            mb_convert_encoding(mb_strtoupper("N° DOCUMENTO"), 'ISO-8859-1', 'UTF-8') => ($reg3_2->num_comprobante ?? ''),
+            "CANTIDAD" => ($reg3_2->cantidad ?? 0.00),
+            "TOTAL VENTA" => (number_format($reg3_2->total_venta, 2) ?? 0.00),
+        );
+        $pdf->SetFont('hypermarket', '', 8);
+        $size = $pdf->addLine($y - 4, $line) ?? 0;
+
+        $ultimoNumComprobante = $reg3_2->num_comprobante; // Actualizamos el último num_comprobante impreso
+
+        $contador++;
+        $esUltimoBucle = ($contador === $totalRegistros);
+        $hizoSaltoLinea = ($anchoTexto > $anchoColumna);
+
+        if ($esUltimoBucle && $hizoSaltoLinea) {
+            $y += ($size - 1) ?? 0;
+        } else if ($esUltimoBucle) {
+            $y += ($size + 1.5) ?? 0;
+        } else {
+            $y += ($size + 2) ?? 0;
+        }
+
+        $cantidadTotal += ($reg3_2->cantidad ?? 0.00);
+        $ventaTotal += ($reg3_2->total_venta ?? 0.00);
+    }
+
+    $reg3_2 = $rspta3_2->fetch_object();
+}
+
+# Tabla para los totales de las ventas (TOTALES) #
+
+# TOTAL #
+$y += ($size - 4) ?? 0;
+$pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+
+$lineTotal = array(
+    "DOCUMENTO" => "",
+    mb_convert_encoding(mb_strtoupper("N° DOCUMENTO"), 'ISO-8859-1', 'UTF-8') => "TOTAL",
+    "CANTIDAD" => $cantidadTotal,
+    "TOTAL VENTA" => number_format($ventaTotal, 2),
+);
+
+$pdf->SetFont('hypermarket', '', 8);
+$sizeSubtotal = $pdf->addLine($y, $lineTotal) ?? 0;
+
+$pdf->addLineFormat($lineTotal);
+
+$pdf->SetFont('hypermarket', '', 10);
+$pdf->Ln(3);
+$pdf->SetX(1.5);
+$pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
+$pdf->Ln(1);
+$pdf->SetX(1.5);
+$pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
 # TÍTULO #
 $pdf->SetY($y + 5.5);
@@ -642,7 +755,7 @@ while ($reg5) {
 
     $line = array(
         "METODO PAGO" => ($reg5->metodo_pago ?? ''),
-        "MONTO" => (number_format($reg5->monto, 2) ?? 0.00),
+        "MONTO" => (number_format($reg5->monto_total, 2) ?? 0.00),
     );
     $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
@@ -659,7 +772,7 @@ while ($reg5) {
         $y += ($size + 2) ?? 0;
     }
 
-    $montoTotal += ($reg5->monto ?? 0.00);
+    $montoTotal += ($reg5->monto_total ?? 0.00);
 
     $reg5 = $rspta5->fetch_object();
 }

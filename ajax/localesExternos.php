@@ -168,7 +168,9 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->num_documento,
 						"5" => $telefono,
 						"6" => $reg->email,
-						"7" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
+						"7" => '<a href="../files/usuarios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/usuarios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
 						"8" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);

@@ -42,6 +42,7 @@ function mostrar() {
 		console.log(data);
 		$("#idreporte").val(data.idreporte);
 		$("#titulo").val(data.titulo);
+		$("#auspiciado").val(data.auspiciado);
 		$("#ruc").val(data.ruc);
 		$("#direccion").val(data.direccion);
 		$("#telefono").val(data.telefono);
