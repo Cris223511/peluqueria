@@ -122,7 +122,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
 							(($param != 1) ? mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') : '') .
 							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
-							('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
+							('<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\');"><i class="fa fa-user"></i></button></a>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->local_ruc,
