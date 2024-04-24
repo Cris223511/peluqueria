@@ -51,7 +51,7 @@ class Proveedor
 				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
 				FROM proveedores p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario
-				WHERE p.eliminado = '0' ORDER BY p.idproveedor DESC";
+				WHERE p.eliminado = '0' AND p.idproveedor <> '0' ORDER BY p.idproveedor DESC";
 		return ejecutarConsulta($sql);
 	}
 }

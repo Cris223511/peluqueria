@@ -455,7 +455,7 @@ if (!isset($_SESSION["nombre"])) {
                       </select>
                     </div>
                     <!-- <a data-toggle="modal" href="#"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;"><i class="fa fa-map-o"></i></button></a> -->
-                    <a data-toggle="modal" href="#myModal5"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CLIENTE GENÉRICO</button></a>
+                    <a onclick="seleccionarPublicoGeneral()"><button class="btn btn-warning" type="button" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CLIENTE GENÉRICO</button></a>
                     <a data-toggle="modal" href="#myModal4"><button class="btn btn-primary" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CARNET EXTRANJERÍA</button></a>
                     <div style="padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;" required>
@@ -752,53 +752,6 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </div>
     <!-- Fin modal 4 -->
-
-    <!-- Modal 5 -->
-    <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">CLIENTE GENÉRICO:</h4>
-          </div>
-          <div class="panel-body">
-            <form name="formulario5" id="formulario5" method="POST">
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Tipo Documento(*):</label>
-                <select class="form-control select-picker" name="tipo_documento" id="tipo_documento3" required disabled>
-                  <option value="DNI">DNI</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Número(*):</label>
-                <input type="number" class="form-control" name="num_documento" id="num_documento3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" placeholder="Ingrese el N° de documento." required>
-              </div>
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <label>Nombre(*):</label>
-                <input type="hidden" name="idcliente" id="idcliente4">
-                <input type="text" class="form-control" name="nombre" id="nombre3" maxlength="40" placeholder="Ingrese el nombre del cliente." autocomplete="off" value="PÚBLICO GENERAL" required disabled>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>Local(*):</label>
-                <select id="idlocal3" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC3()" required>
-                  <option value="">- Seleccione -</option>
-                </select>
-              </div>
-              <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <label>RUC local(*):</label>
-                <input type="number" class="form-control" id="local_ruc3" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local." disabled>
-              </div>
-
-              <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-                <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalClientes3();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-                <button class="btn btn-bcp" type="submit" id="btnGuardarCliente3"><i class="fa fa-save"></i> Guardar</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Fin modal 5 -->
 
     <!-- Modal 6 -->
     <div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -76,7 +76,7 @@ class Cliente
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				LEFT JOIN locales l ON c.idlocal = l.idlocal
-				WHERE c.eliminado = '0' ORDER BY c.idcliente DESC";
+				WHERE c.eliminado = '0' AND c.idcliente <> '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
 
@@ -87,7 +87,7 @@ class Cliente
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario
 				LEFT JOIN locales l ON c.idlocal = l.idlocal
-				WHERE c.idlocal = '$idlocal_session' AND c.eliminado = '0' ORDER BY c.idcliente DESC";
+				WHERE c.idlocal = '$idlocal_session' AND c.eliminado = '0' AND c.idcliente <> '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
 }

@@ -65,19 +65,6 @@ function actualizarRUC2() {
 	}
 }
 
-function actualizarRUC3() {
-	const selectLocal = document.getElementById("idlocal3");
-	const localRUCInput = document.getElementById("local_ruc3");
-	const selectedOption = selectLocal.options[selectLocal.selectedIndex];
-
-	if (selectedOption.value !== "") {
-		const localRUC = selectedOption.getAttribute('data-local-ruc');
-		localRUCInput.value = localRUC;
-	} else {
-		localRUCInput.value = "";
-	}
-}
-
 function actualizarRUC4() {
 	const selectLocal = document.getElementById("idlocal4");
 	const localRUCInput = document.getElementById("local_ruc4");
@@ -96,7 +83,6 @@ function limpiar() {
 	limpiarModalMetodoPago();
 	limpiarModalClientes();
 	limpiarModalClientes2();
-	limpiarModalClientes3();
 	limpiarModalClientes4();
 	limpiarModalPrecuenta();
 
@@ -260,7 +246,7 @@ function listarArticulos(articulos, servicios) {
 		let html = `
 				<div class="draggable" style="padding: 10px; width: 100%;">
 					<div class="caja-productos-vacia">
-						<h4>No se encontraron productos y servicios.</h4>
+						<h4>no se encontraron productos y/o servicios.</h4>
 					</div>
 				</div>
 			`;
@@ -366,7 +352,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectClientes.append('<option value="">Buscar cliente.</option>');
 
 	clientes.forEach((cliente) => {
-		let optionHtml = `<option value="${cliente.id}">${cliente.nombre} - ${cliente.tipo_documento}: ${cliente.num_documento} - ${cliente.local}</option>`;
+		let optionHtml = `<option value="${cliente.id}">${cliente.nombre} - ${cliente.tipo_documento}: ${cliente.num_documento} ${((cliente.local != null) ? " - " + cliente.local : "")}</option>`;
 		selectClientes.append(optionHtml);
 	});
 
@@ -449,7 +435,6 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 
 	actualizarRUC();
 	actualizarRUC2();
-	actualizarRUC3();
 	actualizarRUC4();
 
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
@@ -766,7 +751,7 @@ function listarClientes(idcliente) {
 		selectClientes.append('<option value="">Buscar cliente.</option>');
 
 		clientes.forEach((cliente) => {
-			let optionHtml = `<option value="${cliente.id}">${cliente.nombre} - ${cliente.tipo_documento}: ${cliente.num_documento} - ${cliente.local}</option>`;
+			let optionHtml = `<option value="${cliente.id}">${cliente.nombre} - ${cliente.tipo_documento}: ${cliente.num_documento} ${((cliente.local != null) ? " - " + cliente.local : "")}</option>`;
 			selectClientes.append(optionHtml);
 		});
 
@@ -966,61 +951,9 @@ function guardaryeditar4(e) {
 
 // CLIENTES NUEVOS (CLIENTE GENÉRICO)
 
-function limpiarModalClientes3() {
-	$("#idcliente4").val("");
-	$("#nombre3").val("PÚBLICO GENERAL");
-	$("#tipo_documento3").val("DNI");
-	$("#num_documento3").val("");
-
-	$("#idlocal3").val($("#idlocal3 option:first").val());
-	$("#idlocal3").selectpicker('refresh');
-
-	$("#btnGuardarCliente3").prop("disabled", false);
-
-	actualizarRUC3();
-}
-
-function guardaryeditar5(e) {
-	e.preventDefault();
-	$("#btnGuardarCliente3").prop("disabled", true);
-
-	deshabilitarTodoModalCliente2();
-	var formData = new FormData($("#formulario5")[0]);
-	habilitarTodoModalCliente2();
-
-	$.ajax({
-		url: "../ajax/clientes.php?op=guardaryeditar",
-		type: "POST",
-		data: formData,
-		contentType: false,
-		processData: false,
-
-		success: function (datos) {
-			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
-				bootbox.alert(datos);
-				$("#btnGuardarCliente3").prop("disabled", false);
-				return;
-			}
-			bootbox.alert("Cliente registrado correctamente.");
-			$('#myModal5').modal('hide');
-			listarClientes(datos);
-			limpiarModalClientes3();
-		}
-	});
-}
-
-function habilitarTodoModalCliente2() {
-	$("#tipo_documento3").prop("disabled", true);
-	$("#nombre3").prop("disabled", true);
-	$("#local_ruc3").prop("disabled", true);
-}
-
-function deshabilitarTodoModalCliente2() {
-	$("#tipo_documento3").prop("disabled", false);
-	$("#num_documento3").prop("disabled", false);
-	$("#nombre3").prop("disabled", false);
-	$("#idlocal3").prop("disabled", false);
-	$("#local_ruc3").prop("disabled", false);
+function seleccionarPublicoGeneral() {
+	$("#idcliente").val(0);
+	$("#idcliente").selectpicker("refresh");
 }
 
 // CLIENTES NUEVOS (POR SI NO ENCUENTRA LA SUNAT)

@@ -43,7 +43,6 @@ function limpiar() {
 	limpiarModalMetodoPago();
 	limpiarModalProveedor();
 	limpiarModalProveedor2();
-	limpiarModalProveedor3();
 	limpiarModalProveedor4();
 	limpiarModalPrecuenta();
 
@@ -186,7 +185,7 @@ function listarArticulos(articulos, servicios) {
 		let html = `
 				<div class="draggable" style="padding: 10px; width: 100%;">
 					<div class="caja-productos-vacia">
-						<h4>No se encontraron productos y servicios.</h4>
+						<h4>no se encontraron productos y/o servicios.</h4>
 					</div>
 				</div>
 			`;
@@ -829,56 +828,11 @@ function guardaryeditar4(e) {
 	});
 }
 
-// PROVEEDORES NUEVOS (PROVEEDOR GENÉRICO)
+// PROOVEDORES NUEVOS (CLIENTE GENÉRICO)
 
-function limpiarModalProveedor3() {
-	$("#idproveedor4").val("");
-	$("#nombre3").val("PÚBLICO GENERAL");
-	$("#tipo_documento3").val("DNI");
-	$("#num_documento3").val("");
-
-	$("#btnGuardarProveedor3").prop("disabled", false);
-}
-
-function guardaryeditar5(e) {
-	e.preventDefault();
-	$("#btnGuardarProveedor3").prop("disabled", true);
-
-	deshabilitarTodoModalProveedor2();
-	var formData = new FormData($("#formulario5")[0]);
-	habilitarTodoModalProveedor2();
-
-	$.ajax({
-		url: "../ajax/proveedores.php?op=guardaryeditar",
-		type: "POST",
-		data: formData,
-		contentType: false,
-		processData: false,
-
-		success: function (datos) {
-			console.log(datos);
-			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
-				bootbox.alert(datos);
-				$("#btnGuardarProveedor3").prop("disabled", false);
-				return;
-			}
-			bootbox.alert("Proveedor registrado correctamente.");
-			$('#myModal5').modal('hide');
-			listarProveedores(datos);
-			limpiarModalProveedor3();
-		}
-	});
-}
-
-function habilitarTodoModalProveedor2() {
-	$("#tipo_documento3").prop("disabled", true);
-	$("#nombre3").prop("disabled", true);
-}
-
-function deshabilitarTodoModalProveedor2() {
-	$("#tipo_documento3").prop("disabled", false);
-	$("#num_documento3").prop("disabled", false);
-	$("#nombre3").prop("disabled", false);
+function seleccionarPublicoGeneral() {
+	$("#idproveedor").val(0);
+	$("#idproveedor").selectpicker("refresh");
 }
 
 // PROVEEDORES NUEVOS (POR SI NO ENCUENTRA LA SUNAT)

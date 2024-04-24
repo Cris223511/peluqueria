@@ -455,7 +455,7 @@ if (!isset($_SESSION["nombre"])) {
                       </select>
                     </div>
                     <!-- <a data-toggle="modal" href="#"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;"><i class="fa fa-map-o"></i></button></a> -->
-                    <a data-toggle="modal" href="#myModal5"><button class="btn btn-warning" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CLIENTE GENÉRICO</button></a>
+                    <a onclick="seleccionarPublicoGeneral()"><button class="btn btn-warning" type="button" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CLIENTE GENÉRICO</button></a>
                     <a data-toggle="modal" href="#myModal4"><button class="btn btn-primary" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CARNET EXTRANJERÍA</button></a>
                     <div style="padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;" required>
