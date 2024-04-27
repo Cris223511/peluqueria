@@ -1494,9 +1494,9 @@ function limpiarModalEstadoVenta() {
 }
 
 function cambiarEstadoVenta(estado, idcompra) {
-	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo." : "";
+	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la compra no se pueda modificar de nuevo." : "";
 
-	bootbox.confirm("¿Estás seguro de cambiar el estado de la venta a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
+	bootbox.confirm("¿Estás seguro de cambiar el estado de la compra a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
 		if (result) {
 			$.post("../ajax/compra.php?op=cambiarEstado", { idcompra: idcompra, estado: capitalizarPrimeraLetra(estado) }, function (e) {
 				bootbox.alert(e);
@@ -1509,7 +1509,7 @@ function cambiarEstadoVenta(estado, idcompra) {
 }
 
 function anular(idcompra) {
-	bootbox.confirm("¿Está seguro de anular la venta? recuerde que esta opción hará que el estado de la venta no se pueda modificar de nuevo.", function (result) {
+	bootbox.confirm("¿Está seguro de anular la compra? recuerde que esta opción hará que el estado de la compra no se pueda modificar de nuevo.", function (result) {
 		if (result) {
 			$.post("../ajax/compra.php?op=anular", { idcompra: idcompra }, function (e) {
 				bootbox.alert(e);
@@ -1520,7 +1520,7 @@ function anular(idcompra) {
 }
 
 function eliminar(idcompra) {
-	bootbox.confirm("¿Estás seguro de eliminar la venta?", function (result) {
+	bootbox.confirm("¿Estás seguro de eliminar la compra?", function (result) {
 		if (result) {
 			$.post("../ajax/compra.php?op=eliminar", { idcompra: idcompra }, function (e) {
 				bootbox.alert(e);

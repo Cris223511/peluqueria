@@ -501,7 +501,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div id="inputsMetodoPago"></div>
                       <div id="inputsMontoMetodoPago"></div>
-                      <h1>OPCIONES DE VENTA</h1>
+                      <h1>OPCIONES DE COMPRA</h1>
                       <div class="caja-ventas">
                         <!-- <a href="#"><button type="button" class="btn btn-default" style="padding-top: 4px;"><strong>%</strong></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-money"></i></button></a> -->
