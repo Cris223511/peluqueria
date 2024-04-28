@@ -32,6 +32,10 @@ function actualizarCorrelativo() {
 }
 
 function actualizarCorrelativoLocal(idlocal) {
+	if (idlocal === "") {
+		return;
+	}
+	
 	$.post("../ajax/proforma.php?op=getLastNumComprobanteLocal", { idlocal: idlocal }, function (e) {
 		console.log(e);
 		const obj = JSON.parse(e);
@@ -41,11 +45,9 @@ function actualizarCorrelativoLocal(idlocal) {
 			$("#idlocal_session").val("");
 			$("#idlocal_session").selectpicker('refresh');
 			$("#num_comprobante_final1").text(lastNumComp);
-		} else if (obj !== null) {
+		} else {
 			lastNumComp = generarSiguienteCorrelativo(obj.last_num_comprobante);
 			idCajaFinal = obj.idcaja;
-		} else {
-			bootbox.alert("Ocurrió un error al traer los datos.");
 		}
 	});
 }
