@@ -56,6 +56,11 @@ if (!isset($_SESSION["nombre"])) {
 				echo $rspta ? "Proforma anulada" : "Proforma no se puede anular";
 				break;
 
+			case 'enviar':
+				$rspta = $proforma->enviar($idproforma, $idlocal);
+				echo $rspta ? "Proforma convertida en venta con éxito." : "Proforma no se pudo enviar";
+				break;
+
 			case 'cambiarEstado':
 				$rspta = $proforma->cambiarEstado($idproforma, $estado);
 				echo $rspta ? "Estado de la proforma actualizada con éxito." : "El estado de la proforma no se puede actualizar.";
@@ -137,7 +142,8 @@ if (!isset($_SESSION["nombre"])) {
 							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idproforma . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
-									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idproforma . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
+									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idproforma . ')"><i class="fa fa-close"></i></button>')) .
+									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="enviar(' . $reg->idproforma . ', ' . $reg->idlocal . ')"><i class="fa fa-sign-in"></i></button>'))) : ('')) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => '<a target="_blank" href="../reportes/exA4Proforma.php?id=' . $reg->idproforma . '"> <button class="btn btn-info" style="color: black !important; margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
@@ -246,14 +252,19 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'getLastNumComprobanteLocal':
-				$row = mysqli_fetch_assoc($proforma->getLastNumComprobante($idlocal));
-				if ($row != null) {
-					$last_num_comprobante = $row["last_num_comprobante"];
-					echo $last_num_comprobante;
-				} else {
-					echo $row;
-				}
+				$row1 = mysqli_fetch_assoc($proforma->getLastNumComprobante($idlocal));
+				$row2 = mysqli_fetch_assoc($proforma->getCajaLocal($idlocal));
+
+				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
+				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";
+
+				$response = array(
+					"last_num_comprobante" => $lastNumComp,
+					"idcaja" => $idcajaLocal
+				);
+				echo json_encode($response);
 				break;
+
 
 				/* ======================= SELECTS ======================= */
 

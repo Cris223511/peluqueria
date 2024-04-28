@@ -301,7 +301,13 @@ class Compra
 
 	public function getLastNumComprobante($idlocal)
 	{
-		$sql = "SELECT num_comprobante as last_num_comprobante FROM compra WHERE idlocal = '$idlocal' ORDER BY idcompra DESC LIMIT 1";
+		$sql = "SELECT num_comprobante as last_num_comprobante FROM compra WHERE idlocal = '$idlocal' AND eliminado = '0' ORDER BY idcompra DESC LIMIT 1";
+		return ejecutarConsulta($sql);
+	}
+
+	public function getCajaLocal($idlocal)
+	{
+		$sql = "SELECT idcaja FROM cajas WHERE idlocal = '$idlocal' AND eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -34,8 +34,19 @@ function actualizarCorrelativo() {
 function actualizarCorrelativoLocal(idlocal) {
 	$.post("../ajax/proforma.php?op=getLastNumComprobanteLocal", { idlocal: idlocal }, function (e) {
 		console.log(e);
-		lastNumComp = generarSiguienteCorrelativo(e);
-		$("#num_comprobante_final1").text(lastNumComp);
+		const obj = JSON.parse(e);
+		console.log(obj);
+		if (obj.idcaja == 0) {
+			bootbox.alert("El local seleccionado no tiene una caja disponible.");
+			$("#idlocal_session").val("");
+			$("#idlocal_session").selectpicker('refresh');
+			$("#num_comprobante_final1").text(lastNumComp);
+		} else if (obj !== null) {
+			lastNumComp = generarSiguienteCorrelativo(obj.last_num_comprobante);
+			idCajaFinal = obj.idcaja;
+		} else {
+			bootbox.alert("Ocurrió un error al traer los datos.");
+		}
 	});
 }
 
@@ -1451,6 +1462,19 @@ function guardaryeditar(e) {
 			}
 		},
 	});
+}
+
+let lastNumCompVenta = 0;
+
+function enviar(idproforma, idlocal) {
+	bootbox.confirm("¿Está seguro de convertir la proforma en una venta?", function (result) {
+		if (result) {
+			$.post("../ajax/proforma.php?op=enviar", { idproforma: idproforma, idlocal: idlocal }, function (e) {
+				bootbox.alert(e);
+				tabla.ajax.reload();
+			});
+		}
+	})
 }
 
 function modalPrecuentaFinal(idproforma) {

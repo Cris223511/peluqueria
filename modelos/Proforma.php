@@ -187,6 +187,69 @@ class Proforma
 		return ejecutarConsulta($sql);
 	}
 
+	public function enviar($idproforma, $idlocal)
+	{
+		// Consultar los datos de la proforma
+		$sql_proforma = "SELECT * FROM proforma WHERE idproforma = '$idproforma'";
+		$resultado_proforma = ejecutarConsulta($sql_proforma);
+
+		if ($resultado_proforma->num_rows > 0) {
+			// Obtener los datos de la proforma como un array asociativo
+			$datos_proforma = $resultado_proforma->fetch_assoc();
+
+			// Obtener el último número de comprobante de la tabla venta
+			$sql_last_num_comprobante = "SELECT num_comprobante as last_num_comprobante FROM venta WHERE idlocal = '$idlocal' AND eliminado = '0' ORDER BY idventa DESC LIMIT 1";
+			$resultado_num_comprobante = ejecutarConsulta($sql_last_num_comprobante);
+
+			if ($resultado_num_comprobante->num_rows > 0) {
+				$ultimo_num_comprobante = $resultado_num_comprobante->fetch_assoc()['last_num_comprobante'];
+			} else {
+				$ultimo_num_comprobante = "00000";
+			}
+
+			// Incrementar el número de comprobante y formatearlo
+			$nuevo_num_comprobante = str_pad(intval($ultimo_num_comprobante) + 1, 5, "0", STR_PAD_LEFT);
+
+			// Obtener la fecha y hora actual
+			$fecha_hora = date('Y-m-d H:i:s');
+
+			// Insertar los datos en la tabla venta
+			$sql_insert_venta = "INSERT INTO venta (idusuario, idlocal, idcliente, idcaja, tipo_comprobante, num_comprobante, fecha_hora, impuesto, total_venta, vuelto, comentario_interno, comentario_externo, estado, eliminado)
+            VALUES ('{$datos_proforma['idusuario']}', '{$datos_proforma['idlocal']}', '{$datos_proforma['idcliente']}', '{$datos_proforma['idcaja']}', 'NOTA DE VENTA', '$nuevo_num_comprobante', '$fecha_hora', '{$datos_proforma['impuesto']}', '{$datos_proforma['total_venta']}', '{$datos_proforma['vuelto']}', '{$datos_proforma['comentario_interno']}', '{$datos_proforma['comentario_externo']}', '{$datos_proforma['estado']}', '{$datos_proforma['eliminado']}')";
+
+			// Ejecutar la consulta de inserción
+			$idventa = ejecutarConsulta_retornarID($sql_insert_venta);
+
+			// Actualizar el monto en la caja correspondiente
+			$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '{$datos_proforma['total_venta']}', vendido = '1' WHERE idcaja = '{$datos_proforma['idcaja']}'";
+			ejecutarConsulta($sql_actualizar_monto);
+
+			// Insertar los detalles de la proforma en detalle_venta
+			$sql_detalle_proforma = "SELECT * FROM detalle_proforma WHERE idproforma = '$idproforma'";
+			$resultado_detalle_proforma = ejecutarConsulta($sql_detalle_proforma);
+
+			while ($detalle_proforma = $resultado_detalle_proforma->fetch_assoc()) {
+				$sql_insert_detalle_venta = "INSERT INTO detalle_venta (idventa, idcaja, idarticulo, idservicio, idpersonal, cantidad, precio_venta, descuento, impuesto, fecha_hora)
+                VALUES ('$idventa', '{$detalle_proforma['idcaja']}', '{$detalle_proforma['idarticulo']}', '{$detalle_proforma['idservicio']}', '{$detalle_proforma['idpersonal']}', '{$detalle_proforma['cantidad']}', '{$detalle_proforma['precio_venta']}', '{$detalle_proforma['descuento']}', '{$detalle_proforma['impuesto']}', '{$detalle_proforma['fecha_hora']}')";
+				ejecutarConsulta($sql_insert_detalle_venta);
+			}
+
+			// Insertar los detalles de los pagos en detalle_venta_pagos
+			$sql_detalle_pagos = "SELECT * FROM detalle_proforma_pagos WHERE idproforma = '$idproforma'";
+			$resultado_detalle_pagos = ejecutarConsulta($sql_detalle_pagos);
+
+			while ($detalle_pago = $resultado_detalle_pagos->fetch_assoc()) {
+				$sql_insert_detalle_pago = "INSERT INTO detalle_venta_pagos (idventa, idmetodopago, monto)
+                VALUES ('$idventa', '{$detalle_pago['idmetodopago']}', '{$detalle_pago['monto']}')";
+				ejecutarConsulta($sql_insert_detalle_pago);
+			}
+
+			return true; // Éxito al enviar los detalles a las tablas detalle_venta y detalle_venta_pagos
+		} else {
+			return false; // Error al consultar los detalles de la proforma
+		}
+	}
+
 	//Implementamos un método para eliminar la proforma
 	public function eliminar($idproforma)
 	{
@@ -310,7 +373,13 @@ class Proforma
 
 	public function getLastNumComprobante($idlocal)
 	{
-		$sql = "SELECT num_comprobante as last_num_comprobante FROM proforma WHERE idlocal = '$idlocal' ORDER BY idproforma DESC LIMIT 1";
+		$sql = "SELECT num_comprobante as last_num_comprobante FROM proforma WHERE idlocal = '$idlocal' AND eliminado = '0' ORDER BY idproforma DESC LIMIT 1";
+		return ejecutarConsulta($sql);
+	}
+
+	public function getCajaLocal($idlocal)
+	{
+		$sql = "SELECT idcaja FROM cajas WHERE idlocal = '$idlocal' AND eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 
