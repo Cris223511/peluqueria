@@ -9,7 +9,7 @@ class Compra
 	{
 	}
 
-	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $idpersonal, $cantidad, $precio_compra, $precio_venta, $descuento, $metodo_pago, $monto)
+	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $cantidad, $precio_compra, $precio_venta, $descuento, $metodo_pago, $monto)
 	{
 		// Inicializar variable de mensaje
 		$mensajeError = "";
@@ -58,14 +58,13 @@ class Compra
 			$id = str_replace(['_producto', '_servicio'], '', $detalle);
 
 			$cantidadItem = $cantidad[$i];
-			$idPersonalItem = $idpersonal[$i];
 			$precioVentaItem = $precio_venta[$i];
 			$descuentoItem = $descuento[$i];
 
 			$idArticulo = $esArticulo ? $id : 0;
 			$idServicio = $esServicio ? $id : 0;
 
-			$sql_detalle = "INSERT INTO detalle_compra(idcompra,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idcompranew','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
+			$sql_detalle = "INSERT INTO detalle_compra(idcompra,idarticulo,idservicio,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idcompranew','$idArticulo','$idServicio','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
@@ -154,7 +153,7 @@ class Compra
 
 	public function verificarNumeroExiste($num_comprobante, $idlocal)
 	{
-		$sql = "SELECT * FROM compra WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal'";
+		$sql = "SELECT * FROM compra WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El número ya existe en la tabla
@@ -247,8 +246,6 @@ class Compra
 				UNION
 				SELECT 'locales' AS tabla, l.idlocal AS id, l.titulo AS nombre, l.local_ruc AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM locales l WHERE l.idlocal='$idlocal' AND l.idusuario <> 0 AND l.estado='activado' AND l.eliminado = '0'
 				UNION
-				SELECT 'personales' AS tabla, p.idpersonal AS id, p.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, l.titulo AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM personales p LEFT JOIN locales l ON p.idlocal = l.idlocal WHERE p.idlocal='$idlocal' AND p.eliminado='0' AND p.estado='activado'
-				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.idlocal = '$idlocal' AND a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION
 				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.precio_compra AS precio_compra, a.precio_venta AS precio_venta, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.eliminado = '0'
@@ -264,8 +261,6 @@ class Compra
 				SELECT 'proveedores' AS tabla, p.idproveedor AS id, p.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, p.tipo_documento AS tipo_documento, p.num_documento AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM proveedores p WHERE p.eliminado='0' AND p.estado='activado'
 				UNION
 				SELECT 'locales' AS tabla, l.idlocal AS id, l.titulo AS nombre, l.local_ruc AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM locales l WHERE l.idusuario <> 0 AND l.estado='activado' AND l.eliminado = '0'
-				UNION
-				SELECT 'personales' AS tabla, p.idpersonal AS id, p.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, l.titulo AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM personales p LEFT JOIN locales l ON p.idlocal = l.idlocal WHERE p.eliminado='0' AND p.estado='activado'
 				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS precio_compra, NULL AS precio_venta, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION

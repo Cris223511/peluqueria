@@ -52,7 +52,6 @@ function actualizarCorrelativoLocal(idlocal) {
 }
 
 function limpiar() {
-	limpiarModalEmpleados();
 	limpiarModalMetodoPago();
 	limpiarModalProveedor();
 	limpiarModalProveedor2();
@@ -100,7 +99,6 @@ function listarDatos() {
 		let metodo_pago = obj.metodo_pago || [];
 		let proveedores = obj.proveedores || [];
 		let categoria = obj.categoria || [];
-		let personales = obj.personales || [];
 		let locales = obj.locales || [];
 
 		$("#productos").empty();
@@ -110,12 +108,11 @@ function listarDatos() {
 		$("#productos1").empty();
 		$("#productos2").empty();
 		$("#idproveedor").empty();
-		$("#idpersonal").empty();
 
 		listarArticulos(articulo, servicio);
 		listarCategoria(categoria);
 		listarMetodoPago(metodo_pago);
-		listarSelects(articulo, servicio, proveedores, personales, locales);
+		listarSelects(articulo, servicio, proveedores, locales);
 	});
 }
 
@@ -162,7 +159,7 @@ function listarArticulos(articulos, servicios) {
 							${labelHtml}
 							<span><strong>S/ ${articulo.precio_venta}</strong></span>
 						</div>
-						<a style="width: 100%;" onclick="verificarEmpleado('producto','${articulo.id}','${articulo.nombre}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
+						<a style="width: 100%;" onclick="verificarProducto('producto','${articulo.id}','${articulo.nombre}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
 				</div>
 			`;
@@ -184,7 +181,7 @@ function listarArticulos(articulos, servicios) {
 								<span class="label bg-green" style="width: min-content;">Disponible</span>
 								<span><strong>S/ ${servicio.precio_venta}</strong></span>
 							</div>
-							<a style="width: 100%;" onclick="verificarEmpleado('servicio','${servicio.id}','${servicio.nombre}','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
+							<a style="width: 100%;" onclick="verificarProducto('servicio','${servicio.id}','${servicio.nombre}','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 						</div>
 					</div>
 				`;
@@ -261,7 +258,7 @@ function listarMetodoPago(metodosPago) {
 	pagosContainer.append(htmlFinal);
 }
 
-function listarSelects(articulos, servicios, proveedores, personales, locales) {
+function listarSelects(articulos, servicios, proveedores, locales) {
 	let selectProductos1 = $("#productos1");
 	selectProductos1.empty();
 	selectProductos1.append('<option value="">Lectora de códigos.</option>');
@@ -308,15 +305,6 @@ function listarSelects(articulos, servicios, proveedores, personales, locales) {
 		selectProveedores.append(optionHtml);
 	});
 
-	let selectEmpleados = $("#idpersonal");
-	selectEmpleados.empty();
-	selectEmpleados.append('<option value="">SIN EMPLEADOS A COMISIONAR.</option>');
-
-	personales.forEach((personal) => {
-		let optionHtml = `<option value="${personal.id}">${capitalizarTodasLasPalabras(personal.nombre)} - ${capitalizarTodasLasPalabras(personal.local)}</option>`;
-		selectEmpleados.append(optionHtml);
-	});
-
 	if ($("#idlocal_session").length) {
 		let selectLocales = $("#idlocal_session");
 		selectLocales.empty();
@@ -343,7 +331,6 @@ function listarSelects(articulos, servicios, proveedores, personales, locales) {
 	selectProductos1.selectpicker('refresh');
 	selectProductos2.selectpicker('refresh');
 	selectProveedores.selectpicker('refresh');
-	selectEmpleados.selectpicker('refresh');
 
 	$('#idproveedor').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	$('#idproveedor').closest('.form-group').find('input[type="text"]').attr('oninput', 'checkDNI(this)');
@@ -435,13 +422,11 @@ function checkDNI(value) {
 
 function seleccionarProducto(selectElement) {
 	var selectedOption = selectElement.options[selectElement.selectedIndex];
-	verificarEmpleado(selectedOption.getAttribute('data-tipo-producto'), selectedOption.value, selectedOption.getAttribute('data-nombre'), selectedOption.getAttribute('data-stock'), selectedOption.getAttribute('data-precio-compra'), selectedOption.getAttribute('data-precio-venta'), selectedOption.getAttribute('data-codigo'))
+	verificarProducto(selectedOption.getAttribute('data-tipo-producto'), selectedOption.value, selectedOption.getAttribute('data-nombre'), selectedOption.getAttribute('data-stock'), selectedOption.getAttribute('data-precio-compra'), selectedOption.getAttribute('data-precio-venta'), selectedOption.getAttribute('data-codigo'))
 	selectElement.value = "";
 	$(selectElement).selectpicker('refresh');
 	colocarNegritaStocksSelects();
 }
-
-// MODAL EMPLEADOS
 
 let idarticuloGlobal = "";
 let nombreGlobal = "";
@@ -450,7 +435,7 @@ let precioVentaGlobal = "";
 let codigoGlobal = "";
 let tipoProductoFinal = "";
 
-function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compra, precio_venta, codigo) {
+function verificarProducto(tipoarticulo, idarticulo, nombre, stock, precio_compra, precio_venta, codigo) {
 	var existeProducto = validarTablaProductos(tipoarticulo, idarticulo);
 
 	// if (stock == 0) {
@@ -459,9 +444,6 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compr
 	// }
 
 	if (!existeProducto) {
-		$('#myModal1').modal('show');
-		limpiarModalEmpleados();
-
 		console.log("esto traigo =) =>", tipoarticulo, idarticulo, nombre, precio_compra, precio_venta, codigo);
 
 		idarticuloGlobal = idarticulo;
@@ -471,10 +453,7 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compr
 		codigoGlobal = codigo;
 		tipoProductoFinal = tipoarticulo;
 
-		$("#ProductoSeleccionado").html(capitalizarTodasLasPalabras(nombre));
-		$("#PrecioSeleccionado").html(`S/. ${precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta}`);
-
-		evaluarBotonEmpleado();
+		agregarDetalle(tipoProductoFinal, idarticuloGlobal, nombreGlobal, precioCompraGlobal, precioVentaGlobal, codigoGlobal);
 	} else {
 		bootbox.alert("No puedes agregar el mismo artículo o servicio dos veces.");
 	}
@@ -495,40 +474,6 @@ function validarTablaProductos(tipoarticulo, idarticulo) {
 	}
 
 	return existeProducto;
-}
-
-function evaluarBotonEmpleado() {
-	let valorEmpleado = $("#idpersonal").val();
-	console.log(valorEmpleado);
-
-	if (valorEmpleado == "") {
-		$("#btnGuardarArticulo").hide();
-		$("#empleadoSeleccionado").html("SIN SELECCIONAR");
-	} else {
-		$("#btnGuardarArticulo").show();
-		let textoSeleccionado = $("#idpersonal option:selected").text();
-		$("#empleadoSeleccionado").html(capitalizarTodasLasPalabras(textoSeleccionado));
-		$("#btnGuardarArticulo").attr("onclick", `agregarDetalle('${tipoProductoFinal}','${idarticuloGlobal}', '${valorEmpleado}', '${nombreGlobal}', '${precioCompraGlobal}', '${precioVentaGlobal}', '${codigoGlobal}'); limpiarModalEmpleados();`);
-	}
-}
-
-function limpiarModalEmpleados() {
-	$("#idpersonal").val("");
-	$("#idpersonal").selectpicker('refresh');
-
-	$("#empleadoSeleccionado").html("SIN SELECCIONAR");
-	$("#ProductoSeleccionado").html("");
-	$("#PrecioSeleccionado").html("");
-
-	$("#btnGuardarArticulo").removeAttr("onclick");
-	$("#btnGuardarArticulo").hide();
-
-	idarticuloGlobal = "";
-	nombreGlobal = "";
-	precioCompraGlobal = "";
-	precioVentaGlobal = "";
-	codigoGlobal = "";
-	tipoProductoFinal = "";
 }
 
 // METODO DE PAGO
@@ -1557,13 +1502,13 @@ var detalles = 0;
 
 // $("#btnGuardar").hide();
 
-function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, precio_compra, precio_venta, codigo) {
+function agregarDetalle(tipoproducto, idarticulo, nombre, precio_compra, precio_venta, codigo) {
 	var cantidad = 1;
 	var descuento = '0.00';
 
 	if (idarticulo != "") {
 		var fila = '<tr class="filas fila' + cont + ' principal">' +
-			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '"><input type="hidden" name="idpersonal[]" value="' + idpersonal + '">' + codigo + '</td>' +
+			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '">' + codigo + '</td>' +
 			'<td>' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td><input type="number" step="any" name="precio_venta[]" oninput="modificarSubototales();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td><input type="number" step="any" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
@@ -1572,7 +1517,7 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, precio_com
 			'</tr>';
 
 		var fila2 = '<tr class="filas fila' + cont + ' principal2">' +
-			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '"><input type="hidden" name="idpersonal[]" value="' + idpersonal + '">' + codigo + '</td>' +
+			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '">' + codigo + '</td>' +
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></div></td>' +

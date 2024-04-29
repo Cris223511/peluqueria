@@ -170,18 +170,6 @@ if (!isset($_SESSION["nombre"])) {
         user-select: none;
       }
 
-      #detallesEmpleados thead,
-      #detallesEmpleados thead tr,
-      #detallesEmpleados thead th,
-      #detallesEmpleados tbody,
-      #detallesEmpleados tbody tr,
-      #detallesEmpleados tbody th {
-        border: none;
-        background-color: white;
-        font-size: 14px;
-        text-align: center;
-      }
-
       #detallesProductosFinal thead,
       #detallesProductosFinal thead tr,
       #detallesProductosFinal thead th,
@@ -536,47 +524,6 @@ if (!isset($_SESSION["nombre"])) {
         </div>
       </section>
     </div>
-
-    <!-- Modal 1 -->
-    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title infotitulo">EMPLEADOS A COMISIONAR:</h4>
-          </div>
-          <div class="panel-body">
-            <div class="form-group col-lg-12 col-md-12 col-sm-12">
-              <select id="idpersonal" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="evaluarBotonEmpleado();">
-                <option value="">SIN EMPLEADOS A COMISIONAR.</option>
-              </select>
-            </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
-              <table id="detallesEmpleados" class="table w-100" style="width: 100% !important;">
-                <thead>
-                  <th>EMPLEADO</th>
-                  <th>PRODUCTO</th>
-                  <th>PRECIO</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="width: 30%; min-width: 130px; white-space: nowrap;" id="empleadoSeleccionado">SIN SELECCIONAR</td>
-                    <td style="width: 40%; min-width: 130px; white-space: nowrap;" id="ProductoSeleccionado"></td>
-                    <td style="width: 30%; min-width: 130px; white-space: nowrap;" id="PrecioSeleccionado"></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
-              <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalEmpleados();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-              <button class="btn btn-bcp" type="button" data-dismiss="modal" id="btnGuardarArticulo"><i class="fa fa-save"></i> Guardar</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Fin modal 1 -->
 
     <!-- Modal 2 -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

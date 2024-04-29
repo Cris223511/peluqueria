@@ -10,8 +10,8 @@ class Personal
 	public function agregar($idusuario, $idlocal, $nombre, $cargo, $tipo_documento, $num_documento, $direccion, $telefono, $email)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO personales (idusuario, idlocal, nombre, cargo, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$idlocal','$nombre','$cargo','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(), 'activado','0')";
+		$sql = "INSERT INTO personales (idusuario, idlocal, nombre, cargo, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, comisionado, eliminado)
+            VALUES ('$idusuario','$idlocal','$nombre','$cargo','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(), 'activado','0','0')";
 		return ejecutarConsulta($sql);
 	}
 

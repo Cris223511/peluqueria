@@ -246,8 +246,8 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'getLastNumComprobanteLocal':
-				$row1 = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocal));
-				$row2 = mysqli_fetch_assoc($compra->getCajaLocal($idlocal));
+				$row1 = mysqli_fetch_assoc($venta->getLastNumComprobante($idlocal));
+				$row2 = mysqli_fetch_assoc($venta->getCajaLocal($idlocal));
 
 				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
 				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";

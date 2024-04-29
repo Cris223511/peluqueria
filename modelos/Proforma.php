@@ -157,7 +157,7 @@ class Proforma
 
 	public function verificarNumeroExiste($num_comprobante, $idlocal)
 	{
-		$sql = "SELECT * FROM proforma WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal'";
+		$sql = "SELECT * FROM proforma WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El número ya existe en la tabla
@@ -243,6 +243,10 @@ class Proforma
                 VALUES ('$idventa', '{$detalle_pago['idmetodopago']}', '{$detalle_pago['monto']}')";
 				ejecutarConsulta($sql_insert_detalle_pago);
 			}
+
+			// Actualizar el estado de eliminado de la proforma a 1
+			$sql_actualizar_eliminado = "UPDATE proforma SET eliminado = '1' WHERE idproforma = '$idproforma'";
+			ejecutarConsulta($sql_actualizar_eliminado);
 
 			return true; // Éxito al enviar los detalles a las tablas detalle_venta y detalle_venta_pagos
 		} else {

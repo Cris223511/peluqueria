@@ -372,7 +372,8 @@ $local_login = $_SESSION['local'];
               </a>
               <ul class="treeview-menu">
               <li id="lTrabajadores"><a href="trabajadores.php"><i class="fa fa-circle-o"></i> Trabajadores</a></li>
-              <li id="lPersonales"><a href="personales.php"><i class="fa fa-circle-o"></i> Personales</a></li>
+              <li id="lPersonales"><a href="personales.php"><i class="fa fa-circle-o"></i> Empleados</a></li>
+              <li id="lComisiones"><a href="comisiones.php"><i class="fa fa-circle-o"></i> Comisiones</a></li>
               </ul>
             </li>';
           }

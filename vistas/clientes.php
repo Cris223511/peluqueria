@@ -36,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Nombres</th>
+                    <th style="width: 30%; min-width: 150px; white-space: nowrap;">Nombres</th>
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Ubicación del local</th>
                     <th style="white-space: nowrap;">Tipo Doc.</th>
                     <th style="white-space: nowrap;">Número Doc.</th>

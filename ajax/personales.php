@@ -40,7 +40,7 @@ if (!isset($_SESSION["nombre"])) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
 						$rspta = $personales->agregar($idusuario, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email);
-						echo $rspta ? "Personal registrado" : "El personal no se pudo registrar";
+						echo $rspta ? "Empleado registrado" : "El empleado no se pudo registrar";
 					}
 				} else {
 					$nombreExiste = $personales->verificarDniEditarExiste($nombre, $idpersonal);
@@ -48,24 +48,24 @@ if (!isset($_SESSION["nombre"])) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
 						$rspta = $personales->editar($idpersonal, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email);
-						echo $rspta ? "Personal actualizado" : "El personal no se pudo actualizar";
+						echo $rspta ? "Empleado actualizado" : "El empleado no se pudo actualizar";
 					}
 				}
 				break;
 
 			case 'desactivar':
 				$rspta = $personales->desactivar($idpersonal);
-				echo $rspta ? "Personal desactivado" : "El personal no se pudo desactivar";
+				echo $rspta ? "Empleado desactivado" : "El empleado no se pudo desactivar";
 				break;
 
 			case 'activar':
 				$rspta = $personales->activar($idpersonal);
-				echo $rspta ? "Personal activado" : "El personal no se pudo activar";
+				echo $rspta ? "Empleado activado" : "El empleado no se pudo activar";
 				break;
 
 			case 'eliminar':
 				$rspta = $personales->eliminar($idpersonal);
-				echo $rspta ? "Personal eliminado" : "El personal no se pudo eliminar";
+				echo $rspta ? "Empleado eliminado" : "El empleado no se pudo eliminar";
 				break;
 
 			case 'mostrar':

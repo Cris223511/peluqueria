@@ -168,7 +168,7 @@ function mostrar(idpersonal) {
 }
 
 function desactivar(idpersonal) {
-	bootbox.confirm("¿Está seguro de desactivar al personal?", function (result) {
+	bootbox.confirm("¿Está seguro de desactivar al empleado?", function (result) {
 		if (result) {
 			$.post("../ajax/personales.php?op=desactivar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);
@@ -179,7 +179,7 @@ function desactivar(idpersonal) {
 }
 
 function activar(idpersonal) {
-	bootbox.confirm("¿Está seguro de activar al personal?", function (result) {
+	bootbox.confirm("¿Está seguro de activar al empleado?", function (result) {
 		if (result) {
 			$.post("../ajax/personales.php?op=activar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);
@@ -190,7 +190,7 @@ function activar(idpersonal) {
 }
 
 function eliminar(idpersonal) {
-	bootbox.confirm("¿Estás seguro de eliminar al personal?", function (result) {
+	bootbox.confirm("¿Estás seguro de eliminar al empleado?", function (result) {
 		if (result) {
 			$.post("../ajax/personales.php?op=eliminar", { idpersonal: idpersonal }, function (e) {
 				bootbox.alert(e);

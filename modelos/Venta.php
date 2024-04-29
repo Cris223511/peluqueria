@@ -150,7 +150,7 @@ class Venta
 
 	public function verificarNumeroExiste($num_comprobante, $idlocal)
 	{
-		$sql = "SELECT * FROM venta WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal'";
+		$sql = "SELECT * FROM venta WHERE num_comprobante = '$num_comprobante' AND idlocal = '$idlocal' AND eliminado = '0'";
 		$resultado = ejecutarConsulta($sql);
 		if (mysqli_num_rows($resultado) > 0) {
 			// El número ya existe en la tabla
@@ -176,15 +176,35 @@ class Venta
 	//Implementamos un método para anular la venta
 	public function anular($idventa)
 	{
-		$sql = "UPDATE venta SET estado='Anulado' WHERE idventa='$idventa'";
-		return ejecutarConsulta($sql);
+		$sql_anular_venta = "UPDATE venta SET estado='Anulado' WHERE idventa='$idventa'";
+		ejecutarConsulta($sql_anular_venta);
+
+		$sql_verificar_eliminada = "SELECT eliminado FROM venta WHERE idventa='$idventa' AND eliminado = '0'";
+		$resultado_verificar_eliminada = ejecutarConsulta($sql_verificar_eliminada);
+
+		if ($resultado_verificar_eliminada->num_rows > 0) {
+			$sql_actualizar_monto = "UPDATE cajas SET monto = GREATEST(0, monto - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
+			ejecutarConsulta($sql_actualizar_monto);
+		}
+
+		return true;
 	}
 
 	//Implementamos un método para eliminar la venta
 	public function eliminar($idventa)
 	{
-		$sql = "UPDATE venta SET eliminado = '1' WHERE idventa='$idventa'";
-		return ejecutarConsulta($sql);
+		$sql_eliminar_venta = "UPDATE venta SET eliminado = '1' WHERE idventa='$idventa'";
+		ejecutarConsulta($sql_eliminar_venta);
+
+		$sql_verificar_anulada = "SELECT estado FROM venta WHERE idventa='$idventa' AND estado <> 'Anulado'";
+		$resultado_verificar_anulada = ejecutarConsulta($sql_verificar_anulada);
+
+		if ($resultado_verificar_anulada->num_rows > 0) {
+			$sql_actualizar_monto = "UPDATE cajas SET monto = GREATEST(0, monto - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
+			ejecutarConsulta($sql_actualizar_monto);
+		}
+
+		return true;
 	}
 
 	public function listar()

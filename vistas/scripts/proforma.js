@@ -35,7 +35,7 @@ function actualizarCorrelativoLocal(idlocal) {
 	if (idlocal === "") {
 		return;
 	}
-	
+
 	$.post("../ajax/proforma.php?op=getLastNumComprobanteLocal", { idlocal: idlocal }, function (e) {
 		console.log(e);
 		const obj = JSON.parse(e);
@@ -1474,6 +1474,15 @@ function enviar(idproforma, idlocal) {
 			$.post("../ajax/proforma.php?op=enviar", { idproforma: idproforma, idlocal: idlocal }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
+				$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+					const obj = JSON.parse(data);
+
+					let articulo = obj.articulo;
+					let servicio = obj.servicio;
+
+					listarSelectsArticulos(articulo, servicio);
+					listarArticulos(articulo, servicio);
+				});
 			});
 		}
 	})

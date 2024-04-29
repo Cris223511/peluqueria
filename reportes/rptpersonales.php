@@ -21,7 +21,7 @@ if (!isset($_SESSION["nombre"])) {
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
 
-    $pdf->Cell(190, 6, 'LISTA DE PERSONALES', 1, 0, 'C');
+    $pdf->Cell(190, 6, 'LISTA DE EMPLEADOS', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);

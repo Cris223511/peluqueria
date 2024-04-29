@@ -557,7 +557,7 @@ if (!isset($_SESSION["nombre"])) {
               <table id="detallesEmpleados" class="table w-100" style="width: 100% !important;">
                 <thead>
                   <th>EMPLEADO</th>
-                  <th>PRODUCTO</th>
+                  <th>PRODUCTO / SERVICIO</th>
                   <th>PRECIO</th>
                 </thead>
                 <tbody>
