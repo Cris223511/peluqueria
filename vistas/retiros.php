@@ -27,7 +27,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Retiros</strong>" data-html="true" data-content="Módulo para registrar los retiros de la caja. <br><strong>Nota:</strong> al registrar el retiro, el monto a retirar reducirá al monto total de la caja." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Retiros</strong>" data-html="true" data-content="Módulo para registrar los retiros de la caja. <br><br><strong>Nota:</strong> al registrar el retiro, el monto a retirar reducirá al monto total de la caja." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

@@ -23,7 +23,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Configuración de perfil del <?php echo $_SESSION["cargo_detalle"] ?></h1>
-                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Configuración de perfil</strong>" data-html="true" data-content="Módulo para configurar los datos de tu perfil." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Configuración de perfil</strong>" data-html="true" data-content="Módulo para configurar los datos de tu perfil." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right">
                 </div>
               </div>

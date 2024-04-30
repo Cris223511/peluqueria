@@ -27,7 +27,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Empleados del salón</strong>" data-html="true" data-content="Módulo para registrar los empleados que se comicionan por la venta o compra de cada producto en el módulo venta, proforma y compra.<br><strong>Nota:</strong> Solo visualizará los empleados de su local, de la cual, los empleados que registre serán visibles y utilizados por los trabajadores <strong>de su local</strong> (solo puede editar, anular y eliminar los empleados que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Empleados del salón</strong>" data-html="true" data-content="Módulo para registrar los empleados que se comicionan por la venta o compra de cada producto en el módulo venta, proforma y compra.<br><br><strong>Nota:</strong> Solo visualizará los empleados de su local, de la cual, los empleados que registre serán visibles y utilizados por los trabajadores <strong>de su local</strong> (solo puede editar, anular y eliminar los empleados que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

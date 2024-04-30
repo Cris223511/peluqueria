@@ -22,10 +22,15 @@ if (!isset($_SESSION["nombre"])) {
 		$idlocal_session = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
-		$idpersonal = isset($_POST["idpersonal"]) ? limpiarCadena($_POST["idpersonal"]) : "";
+		$idpersonalUniq = isset($_POST["idpersonalUniq"]) ? limpiarCadena($_POST["idpersonalUniq"]) : "";
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 
 		switch ($_GET["op"]) {
+			case 'guardaryeditar':
+				$rspta = $comisiones->insertar($idpersonalUniq, $_POST["detalles"], $_POST["idpersonal"], $_POST["comision"], $_POST["tipo"]);
+				echo $rspta ? "Comisión realizada al empleado correctamente." : "La comición no se pudo realizar.";
+				break;
+
 			case 'listar':
 				if ($cargo == "superadmin") {
 					$rspta = $comisiones->listarPersonales();
@@ -66,10 +71,10 @@ if (!isset($_SESSION["nombre"])) {
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
 
 					$data[] = array(
-						"0" => '<div style="display: flex; justify-content: center; flex-wrap: nowrap; gap: 3px">' .
-							('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
-							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ')"><i class="fa fa-eye"></i></button>') : ('')) .
-							(($reg->comisionado == "1") ? ('<button class="btn btn-success" style="color: black !important; margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="imprimirComision(' . $reg->idpersonal . ')"><i class="fa fa-print"></i></button>') : ('')) .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+							('<button class="btn btn-warning" style="margin-right: 3px; width: 38px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', ' . $reg->idlocal . ', \'' . $reg->nombre . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
+							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') : ('')) .
+							(($reg->comisionado == "1") ? ('<a target="_blank" href="../reportes/exTicketComision.php?id=' . $reg->idpersonal . '"> <button class="btn btn-success" style="margin-right: 3px; width: 38px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') : ('')) .
 							'</div>',
 						"1" => ucwords($reg->nombre),
 						"2" => $reg->cargo_personal,
@@ -94,9 +99,58 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
+			case 'verComision':
+				$idpersonal = $_GET['idpersonal'];
+
+				$rspta = $comisiones->verComisionesEmpleado($idpersonal);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalComision = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$data[] = array(
+						"0" => ($reg->idarticulo != "0") ? $reg->nombre_articulo : $reg->nombre_servicio,
+						"1" => $reg->comision,
+						"2" => ($reg->tipo == "1") ? 'S/.' : '%',
+						"3" => $reg->fecha,
+					);
+
+					$totalComision += $reg->comision;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "<div style='text-align: end; margin-right: 20px;'><strong>TOTAL</strong></div>",
+						"1" => '<strong>' . number_format($totalComision, 2) . '</strong>',
+						"2" => "",
+						"3" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1,
+					"iTotalRecords" => count($data),
+					"iTotalDisplayRecords" => count($data),
+					"aaData" => $data
+				);
+
+				echo json_encode($results);
+				break;
+
 			case 'mostrarComisionesPersonal':
+				$idpersonal = isset($_POST["idpersonal"]) ? limpiarCadena($_POST["idpersonal"]) : "";
+
 				$rspta = $comisiones->mostrarComisionesPersonal($idpersonal, $idlocal);
-				echo json_encode($rspta);
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$data[] = $reg;
+				}
+
+				echo json_encode($data);
 				break;
 		}
 	} else {

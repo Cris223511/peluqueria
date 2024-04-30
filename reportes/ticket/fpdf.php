@@ -1349,6 +1349,69 @@ class FPDF
 	}
 
 	/*******************************************************************************
+	 *                          Ticket Comisiones Design                           *
+	 *******************************************************************************/
+
+	function cuerpoComisiones($y, $titulo, $logo, $ext_logo, $local, $local_ruc, $nombre, $tipo_documento, $num_documento, $cargo)
+	{
+		# LOGO #
+		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
+
+		# TÍTULO #
+		$this->SetY($y += 23.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$titulo"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# LOCAL #
+		$this->SetY($y += 6);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# RUC #
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# SEPARADOR #
+		$this->Ln(4);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1.5);
+
+		# EMPLEADO #
+		$this->SetX(3);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 4, mb_convert_encoding("EMPLEADO: $nombre", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# CARGO #
+		$this->SetX(3);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 4, mb_convert_encoding("CARGO: $cargo", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# TIPO Y NÚMERO DE DOCUMENTO #
+		$this->SetX(3);
+		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 4, ($tipo_documento != "") ? mb_convert_encoding(mb_strtoupper("$tipo_documento: $num_documento"), 'ISO-8859-1', 'UTF-8') : mb_convert_encoding("TIPO Y N° DOC. SIN REGISTRAR", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# SEPARADOR #
+		$this->Ln(4);
+		$this->SetX(1.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1);
+		$this->SetX(1.5);
+		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');
+		$this->Ln(1.5);
+
+		return $y;
+	}
+
+	/*******************************************************************************
 	 *                              Protected methods                               *
 	 *******************************************************************************/
 

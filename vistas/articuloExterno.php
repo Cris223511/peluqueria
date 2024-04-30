@@ -57,7 +57,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos externos</strong>" data-html="true" data-content="Módulo en donde se registran los productos para que sean utilizados en las ventas, proformas y compras.<br><strong>Nota:</strong> Solo visualizará los productos de los locales externos y no del local actual, es decir, solo lista los productos de los demás locales, a excepción del local en el que se encuentra trabajando." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos externos</strong>" data-html="true" data-content="Módulo en donde se registran los productos para que sean utilizados en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Solo visualizará los productos de los locales externos y no del local actual, es decir, solo lista los productos de los demás locales, a excepción del local en el que se encuentra trabajando." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">

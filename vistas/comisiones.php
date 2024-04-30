@@ -26,6 +26,11 @@ if (!isset($_SESSION["nombre"])) {
       #detallesProductosComisiones input,
       #detallesProductosComisiones select {
         height: 30px !important;
+        text-align: center;
+      }
+
+      #detallesProductosComisiones select option {
+        text-align: left !important;
       }
 
       @media (max-width: 991.50px) {
@@ -41,12 +46,12 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Comisiones de empleados
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Comisiones de empleados</strong>" data-html="true" data-content="Módulo para registrar las comisiones de los empleados del local.<br><strong>Nota:</strong> Puedes comisionar al empleado las veces que desee, también puede modificar y eliminar las comisiones de los empleados." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Comisiones de empleados</strong>" data-html="true" data-content="Módulo para registrar las comisiones de los empleados del local.<br><br><strong>Nota 1:</strong> Puedes comisionar al empleado las veces que desee, también puede modificar y eliminar las comisiones de los empleados.<br><br><strong>Nota 2:</strong> Solo se listarán los productos que se comisionaron a los empleados desde las ventas y del local del empleado (por ejemplo, si el empleado es de <strong>los Olivos</strong>, se listará los productos que se comisionaron en las ventas desde <strong>los Olivos</strong>, ya que las ventas son por locales)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
               </div>
-              <div class="panel-body table-responsive" id="listadoregistros">
+              <div class="panel-body table-responsive">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
@@ -87,55 +92,77 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 1 -->
     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog smallModal" style="width: 65%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow: auto;">
+      <div class="modal-dialog smallModal" style="width: 65%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">CREAR COMISIÓN</h4>
-              <h4 class="modal-title infotitulo" id="trabajador_comisionar" style="margin: 0; padding: 0;"></h4>
+              <h4 class="modal-title infotitulo trabajador_comisionar" style="margin: 0; padding: 0;"></h4>
             </div>
           </div>
-          <div class="panel-body">
-            <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px 0x; background-color: white; overflow: auto;">
-              <table id="detallesProductosComisiones" class="table w-100" style="width: 100% !important;">
-                <thead>
-                  <th>PRODUCTOS / SERVICIOS</th>
-                  <th>COMISIONES</th>
-                  <th>OPCIONES</th>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="width: 60%; min-width: 130px; white-space: nowrap;">
-                      <input type="text" class="form-control" disabled>
-                    </td>
-                    <td style="width: 100%; gap: 5px; min-width: 130px; white-space: nowrap; display: flex; justify-content: start">
-                      <input type="hidden" class="form-control" name="idpersonal[]" id="idpersonal[]">
-                      <input type="hidden" class="form-control" name="idarticulo[]" id="idarticulo[]">
-                      <input type="number" class="form-control" name="comision[]" id="comision[]" lang="en-US" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required>
-                      <select id="tipo[]" name="tipo[]" class="form-control" required>
-                        <option value="1">S/.</option>
-                        <option value="2">%</option>
-                      </select>
-                    </td>
-                    <td style="width: 10%; min-width: 130px; white-space: nowrap;">
-                      <div style="display: flex; justify-content: center;">
-                        <button class="btn btn-danger" style="height: 35px;" onclick="eliminar()"><i class="fa fa-trash"></i></button>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+          <form name="formulario" id="formulario" method="POST">
+            <div class="panel-body">
+              <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px 0x; background-color: white; overflow: auto;">
+                <table id="detallesProductosComisiones" class="table w-100" style="width: 100% !important;">
+                  <thead>
+                    <th>PRODUCTOS / SERVICIOS</th>
+                    <th>COMISIONES</th>
+                    <th>OPCIONES</th>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
+            <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important; text-align: left !important;">
               <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalComision();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-              <button class="btn btn-bcp" type="button" data-dismiss="modal" id="btnGuardarComision"><i class="fa fa-save"></i> Guardar</button>
+              <button class="btn btn-bcp" type="submit" id="btnGuardarComision"><i class="fa fa-save"></i> Guardar</button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </div>
     <!-- Fin modal 1 -->
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 65%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">DETALLES DE COMISIÓN</h4>
+              <h4 class="modal-title infotitulo trabajador_comisionar" style="margin: 0; padding: 0;"></h4>
+            </div>
+          </div>
+          <div class="panel-body" style="background-color: #ecf0f5 !important; padding: 0 !important; height: max-content;">
+            <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
+              <table id="tbldetalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                <thead>
+                  <th>PRODUCTO / SERVICIO</th>
+                  <th>MONTO</th>
+                  <th>TIPO</th>
+                  <th>FECHA Y HORA</th>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <th>PRODUCTO / SERVICIO</th>
+                  <th>MONTO</th>
+                  <th>TIPO</th>
+                  <th>FECHA Y HORA</th>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-warning" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Regresar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 2 -->
   <?php
   } else {
     require 'noacceso.php';

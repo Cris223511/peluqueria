@@ -272,7 +272,6 @@ init();
 
 function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 	$("#fecha_hora_caja").text(fecha);
-	$("#myModal").modal("show");
 
 	tabla2 = $('#tbldetalles').dataTable(
 		{
@@ -367,6 +366,9 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
 				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+			},
+			"initComplete": function (settings, json) {
+				$("#myModal").modal("show");
 			}
 		}).DataTable();
 }

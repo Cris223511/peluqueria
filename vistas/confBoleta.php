@@ -24,7 +24,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Configuración de boletas</h1>
-                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Configuración de boletas</strong>" data-html="true" data-content="Módulo para configurar los datos de la empresa que aparecerán en los tickets y reportes A4 (ventas, proformas, compras y los flujos de cajas)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Configuración de boletas</strong>" data-html="true" data-content="Módulo para configurar los datos de la empresa que aparecerán en los tickets y reportes A4 (ventas, proformas, compras y los flujos de cajas)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right">
                 </div>
               </div>

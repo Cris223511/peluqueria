@@ -27,7 +27,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Marcas</strong>" data-html="true" data-content="Módulo para registrar las marcas de los productos.<br><strong>Nota:</strong> Las marcas no están divididos por local, de la cual, las marcas que registre serán visibles y utilizados por los trabajadores <strong>de todos los locales</strong> (solo puede editar, anular y eliminar las marcas que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Marcas</strong>" data-html="true" data-content="Módulo para registrar las marcas de los productos.<br><br><strong>Nota:</strong> Las marcas no están divididos por local, de la cual, las marcas que registre serán visibles y utilizados por los trabajadores <strong>de todos los locales</strong> (solo puede editar, anular y eliminar las marcas que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

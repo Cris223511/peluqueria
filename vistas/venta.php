@@ -365,7 +365,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Ventas</strong>" data-html="true" data-content="Módulo para registrar las ventas de los productos, solo puede vender si la caja <strong>de su local</strong> está abierta.<br><strong>Nota:</strong> Al hacer la venta, el monto total de la venta aumentará a su caja. También, el stock del producto vendido se reduce (no puede vender productos con stock de 0)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Ventas</strong>" data-html="true" data-content="Módulo para registrar las ventas de los productos, solo puede vender si la caja <strong>de su local</strong> está abierta.<br><br><strong>Nota:</strong> Al hacer la venta, el monto total de la venta aumentará a su caja. También, el stock del producto vendido se reduce (no puede vender productos con stock de 0)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

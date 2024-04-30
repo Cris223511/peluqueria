@@ -113,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idretiro . ', ' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							('<button class="btn btn-info" style="margin-right: 3px; height: 35px;" onclick="modalDetalles(' . $reg->idretiro . ')"><i class="fa fa-info-circle"></i></button>') .
-							('<a target="_blank" href="../reportes/exTicketRetiro.php?id=' . $reg->idretiro . '"> <button class="btn btn-success" style="color: black !important; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
+							('<a target="_blank" href="../reportes/exTicketRetiro.php?id=' . $reg->idretiro . '"> <button class="btn btn-success" style="height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							'</div>',
 						"1" => $reg->caja,
 						"2" => $reg->local,

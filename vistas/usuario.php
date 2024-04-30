@@ -32,7 +32,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Usuarios</strong>" data-html="true" data-content="Módulo para registrar los usuarios quienes tendrán acceso al sistema. Los usuarios pueden tener los roles de <strong>cajero y administrador</strong>." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Usuarios</strong>" data-html="true" data-content="Módulo para registrar los usuarios quienes tendrán acceso al sistema. Los usuarios pueden tener los roles de <strong>cajero y administrador</strong>." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>

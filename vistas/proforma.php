@@ -365,7 +365,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Proformas</strong>" data-html="true" data-content="Módulo para registrar las proformas de los productos, solo puede generar la proforma si la caja <strong>de su local</strong> está abierta.<br><strong>Nota:</strong> Es similar al módulo ventas, pero solo hace ventas fictícias, es decir, el monto de la proforma no aumenta a la caja, y tampoco reduce el stock de producto (no puede generar la proforma de productos con stock de 0)." style="color: #002a8e; font-size: 18px;"><i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Proformas</strong>" data-html="true" data-content="Módulo para registrar las proformas de los productos, solo puede generar la proforma si la caja <strong>de su local</strong> está abierta.<br><br><strong>Nota:</strong> Es similar al módulo ventas, pero solo hace ventas fictícias, es decir, el monto de la proforma no aumenta a la caja, y tampoco reduce el stock de producto (no puede generar la proforma de productos con stock de 0)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
