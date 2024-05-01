@@ -63,8 +63,8 @@ function listar() {
 		}).DataTable();
 }
 
-function generarComision(idpersonal, idlocal, nombre, tipo_documento, num_documento, local) {
-	$(".trabajador_comisionar").text(capitalizarTodasLasPalabras(`${nombre} - ${tipo_documento}: ${num_documento} - ${local}`));
+function generarComision(idpersonal, idlocal, nombre, cargo, tipo_documento, num_documento, local) {
+	$(".trabajador_comisionar").text(capitalizarTodasLasPalabras(`${nombre} (${cargo}) - ${tipo_documento}: ${num_documento} - ${local}`));
 
 	$.post("../ajax/comisiones.php?op=mostrarComisionesPersonal", { idpersonal: idpersonal, idlocal: idlocal }, function (data, status) {
 		data = JSON.parse(data);
@@ -172,8 +172,8 @@ function guardaryeditar(e) {
 	});
 }
 
-function verComision(idpersonal, nombre, tipo_documento, num_documento, local) {
-	$(".trabajador_comisionar").text(capitalizarTodasLasPalabras(`${nombre} - ${tipo_documento}: ${num_documento} - ${local}`));
+function verComision(idpersonal, nombre, cargo, tipo_documento, num_documento, local) {
+	$(".trabajador_comisionar").text(capitalizarTodasLasPalabras(`${nombre} (${cargo}) - ${tipo_documento}: ${num_documento} - ${local}`));
 
 	tabla2 = $('#tbldetalles').dataTable(
 		{
