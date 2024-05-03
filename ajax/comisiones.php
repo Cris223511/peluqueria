@@ -72,8 +72,8 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							('<button class="btn btn-warning" style="margin-right: 3px; width: 38px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', ' . $reg->idlocal . ', \'' . $reg->nombre . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
-							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') : ('')) .
+							('<button class="btn btn-warning" style="margin-right: 3px; width: 38px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', ' . $reg->idlocal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
+							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') : ('')) .
 							(($reg->comisionado == "1") ? ('<a target="_blank" href="../reportes/exTicketComision.php?id=' . $reg->idpersonal . '"> <button class="btn btn-success" style="margin-right: 3px; width: 38px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') : ('')) .
 							'</div>',
 						"1" => ucwords($reg->nombre),
