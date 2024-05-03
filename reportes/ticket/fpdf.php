@@ -1399,7 +1399,7 @@ class FPDF
 		$this->MultiCell(0, 4, ($tipo_documento != "") ? mb_convert_encoding(mb_strtoupper("$tipo_documento: $num_documento"), 'ISO-8859-1', 'UTF-8') : mb_convert_encoding("TIPO Y N° DOC. SIN REGISTRAR", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# SEPARADOR #
-		$this->Ln(4);
+		$this->Ln(3.5);
 		$this->SetX(1.5);
 		$this->SetFont('hypermarket', '', 10);
 		$this->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');

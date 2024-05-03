@@ -119,7 +119,7 @@ function eliminarFila(btn) {
 	if ($('#detallesProductosComisiones tbody tr').length > 1) {
 		$(btn).closest("tr").remove();
 	} else {
-		bootbox.alert("Debe haber al menos una comisión en la tabla.");
+		bootbox.alert("Debe haber por lo menos una comisión en la tabla.");
 	}
 }
 
