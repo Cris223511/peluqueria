@@ -84,8 +84,8 @@ if (!isset($_SESSION["nombre"])) {
 							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
-						"2" => $reg->proveedor,
-						"3" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
+						"2" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
+						"3" => $reg->proveedor,
 						"4" => $reg->local,
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
@@ -183,8 +183,8 @@ if (!isset($_SESSION["nombre"])) {
 							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
-						"2" => $reg->cliente,
-						"3" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"3" => $reg->cliente,
 						"4" => $reg->local,
 						"5" => $reg->caja,
 						"6" => $reg->tipo_comprobante,
@@ -284,8 +284,8 @@ if (!isset($_SESSION["nombre"])) {
 							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
-						"2" => $reg->cliente,
-						"3" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"3" => $reg->cliente,
 						"4" => $reg->local,
 						"5" => $reg->caja,
 						"6" => $reg->tipo_comprobante,

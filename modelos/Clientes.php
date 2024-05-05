@@ -90,4 +90,75 @@ class Cliente
 				WHERE c.idlocal = '$idlocal_session' AND c.eliminado = '0' AND c.idcliente <> '0' ORDER BY c.idcliente DESC";
 		return ejecutarConsulta($sql);
 	}
+
+	/* ======================= REPORTE DE VENTAS POR CLIENTE ======================= */
+
+	public function listarVentasCliente($idcliente)
+	{
+		$sql = "SELECT
+				  v.idventa,
+				  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  v.idcliente,
+				  c.nombre AS cliente,
+				  c.tipo_documento AS cliente_tipo_documento,
+				  c.num_documento AS cliente_num_documento,
+				  c.direccion AS cliente_direccion,
+				  v.idcaja,
+				  ca.titulo AS caja,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  v.tipo_comprobante,
+				  v.num_comprobante,
+				  v.vuelto,
+				  v.impuesto,
+				  v.total_venta,
+				  v.estado
+				FROM venta v
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+				LEFT JOIN locales al ON v.idlocal = al.idlocal
+				LEFT JOIN usuario u ON v.idusuario = u.idusuario
+				WHERE v.idcliente = '$idcliente'
+				ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarVentasClientehaLocal($idcliente, $idlocal)
+	{
+		$sql = "SELECT
+				  v.idventa,
+				  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  v.idcliente,
+				  c.nombre AS cliente,
+				  c.tipo_documento AS cliente_tipo_documento,
+				  c.num_documento AS cliente_num_documento,
+				  c.direccion AS cliente_direccion,
+				  v.idcaja,
+				  ca.titulo AS caja,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  v.tipo_comprobante,
+				  v.num_comprobante,
+				  v.vuelto,
+				  v.impuesto,
+				  v.total_venta,
+				  v.estado
+				FROM venta v
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+				LEFT JOIN locales al ON v.idlocal = al.idlocal
+				LEFT JOIN usuario u ON v.idusuario = u.idusuario
+				WHERE v.idcliente = '$idcliente'
+				AND v.idlocal = '$idlocal'
+				ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
 }

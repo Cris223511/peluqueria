@@ -200,4 +200,133 @@ function eliminar(idcliente) {
 	})
 }
 
+function modalVentasCliente(idcliente, nombre, tipo_documento, num_documento, local) {
+	$(".cliente_detalles").text(capitalizarTodasLasPalabras(`${nombre} - ${tipo_documento}: ${num_documento} - ${local}`));
+
+	tabla2 = $('#tbldetalles').dataTable(
+		{
+			"lengthMenu": [5, 10, 25, 75, 100],
+			"aProcessing": true,
+			"aServerSide": true,
+			dom: '<Bl<f>rtip>',
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+				{
+					'extend': 'pdfHtml5',
+					// 'orientation': 'landscape',
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 10;
+						doc.styles.tableHeader.fontSize = 10;
+					},
+				},
+			],
+			"ajax":
+			{
+				url: '../ajax/clientes.php?op=listarVentasCliente',
+				data: { idcliente: idcliente },
+				type: "get",
+				dataType: "json",
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			"language": {
+				"lengthMenu": "Mostrar : _MENU_ registros",
+				"buttons": {
+					"copyTitle": "Tabla Copiada",
+					"copySuccess": {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			"bDestroy": true,
+			"iDisplayLength": 5,
+			"order": [],
+			"createdRow": function (row, data, dataIndex) {
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
+			},
+			"initComplete": function (settings, json) {
+				$('#myModal1').modal('show');
+			}
+		}).DataTable();
+}
+
+function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
+	$.post("../ajax/venta.php?op=listarDetallesProductoVenta", { idventa: idventa }, function (data, status) {
+		console.log(data);
+		data = JSON.parse(data);
+		console.log(data);
+
+		// Actualizar datos del cliente
+		let nombreCompleto = cliente;
+
+		if (cliente_tipo_documento && cliente_num_documento) {
+			nombreCompleto += ' - ' + cliente_tipo_documento + ': ' + cliente_num_documento;
+		}
+
+		$('#nombre_cliente').text(nombreCompleto);
+		$('#direccion_cliente').text((cliente_direccion != "") ? cliente_direccion : "Sin registrar");
+		$('#nota_de_venta').text("N° " + num_comprobante);
+
+		// Actualizar detalles de la tabla productos
+		let tbody = $('#detallesProductosFinal tbody');
+		tbody.empty();
+
+		let subtotal = 0;
+
+		data.articulos.forEach(item => {
+			let descripcion = item.articulo ? item.articulo : item.servicio;
+			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
+
+			let row = `
+                <tr>
+                    <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_venta) - item.descuento).toFixed(2)}</td>
+                </tr>`;
+
+			tbody.append(row);
+
+			// Calcular subtotal
+			subtotal += item.cantidad * item.precio_venta;
+		});
+
+		let igv = subtotal * (impuesto);
+
+		$('#subtotal_detalle').text(subtotal.toFixed(2));
+		$('#igv_detalle').text(igv.toFixed(2));
+		$('#total_detalle').text(total_venta);
+
+		// Actualizar detalles de la tabla pagos
+		let tbodyPagos = $('#detallesPagosFinal tbody');
+		tbodyPagos.empty();
+
+		let subtotalPagos = 0;
+
+		data.pagos.forEach(item => {
+			let row = `
+                <tr>
+                    <td width: 80%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(item.metodo_pago)}</td>
+                    <td width: 20%; min-width: 40px; white-space: nowrap;">${item.monto}</td>
+                </tr>`;
+
+			tbodyPagos.append(row);
+
+			// Calcular subtotalPagos
+			subtotalPagos += parseFloat(item.monto);
+		});
+
+		$('#subtotal_pagos').text(subtotalPagos.toFixed(2));
+		$('#vueltos_pagos').text(vuelto);
+		$('#total_pagos').text(total_venta);
+
+		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
+	});
+}
+
 init();
