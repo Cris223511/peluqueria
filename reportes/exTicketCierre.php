@@ -662,7 +662,7 @@ while ($reg8) {
 
     $montoTotal += ($reg8->monto_gasto ?? 0.00);
 
-    $reg8 = $rspta7->fetch_object();
+    $reg8 = $rspta8->fetch_object();
 }
 
 # Tabla para los totales de la caja aperturada (MONTOS) #

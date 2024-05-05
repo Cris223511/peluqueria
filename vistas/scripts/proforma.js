@@ -45,6 +45,11 @@ function actualizarCorrelativoLocal(idlocal) {
 			$("#idlocal_session").val("");
 			$("#idlocal_session").selectpicker('refresh');
 			$("#num_comprobante_final1").text(lastNumComp);
+		} else if (obj.estado != "aperturado") {
+			bootbox.alert("La caja del local seleccionado no se encuentra aperturada.");
+			$("#idlocal_session").val("");
+			$("#idlocal_session").selectpicker('refresh');
+			$("#num_comprobante_final1").text(lastNumComp);
 		} else {
 			lastNumComp = generarSiguienteCorrelativo(obj.last_num_comprobante);
 			idCajaFinal = obj.idcaja;

@@ -1026,7 +1026,7 @@ class FPDF
 		$this->SetXY(3, $y);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->Cell(0, 5, mb_convert_encoding(mb_strtoupper("CLIENTE: $cliente"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->Cell(0, 5, mb_convert_encoding(mb_strtoupper("$cliente"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# TELEFONO #
 		$this->SetXY(3, $y + 4);
@@ -1087,11 +1087,13 @@ class FPDF
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("Atendido por: $usuario"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
-		# COMENTARIO #
-		$this->Ln(3);
-		$this->SetFont('hypermarket', '', 10);
-		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$comentario"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+		if ($comentario != "") {
+			# COMENTARIO #
+			$this->Ln(3);
+			$this->SetFont('hypermarket', '', 10);
+			$this->SetTextColor(0, 0, 0);
+			$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$comentario"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+		}
 
 		# GRACIAS #
 		$this->Ln(3);

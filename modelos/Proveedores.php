@@ -7,17 +7,17 @@ class Proveedor
 	{
 	}
 
-	public function agregar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function agregar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO proveedores (idusuario, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
-            VALUES ('$idusuario','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
+		$sql = "INSERT INTO proveedores (idusuario, nombre, tipo_documento, num_documento, direccion, descripcion, telefono, email, fecha_hora, estado, eliminado)
+            VALUES ('$idusuario','$nombre','$tipo_documento','$num_documento','$direccion','$descripcion','$telefono', '$email', SYSDATE(),'activado','0')";
 		return ejecutarConsulta_retornarID($sql);
 	}
 
-	public function editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
-		$sql = "UPDATE proveedores SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email' WHERE idproveedor='$idproveedor'";
+		$sql = "UPDATE proveedores SET nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',descripcion='$descripcion',telefono='$telefono',email='$email' WHERE idproveedor='$idproveedor'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -47,7 +47,7 @@ class Proveedor
 
 	public function listarProveedores()
 	{
-		$sql = "SELECT p.idproveedor, p.nombre, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT p.idproveedor, p.nombre, p.tipo_documento, p.num_documento, p.direccion, p.descripcion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
 				FROM proveedores p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario

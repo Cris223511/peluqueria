@@ -23,6 +23,9 @@ if (!isset($_SESSION["nombre"])) {
 		$cargo = $_SESSION["cargo"];
 
 		switch ($_GET["op"]) {
+
+				/* ======================= REPORTE DE COMPRAS ======================= */
+
 			case 'listarCompras':
 				$parametros = array(
 					"c.eliminado = '0'"
@@ -119,6 +122,8 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 
 				break;
+
+				/* ======================= REPORTE DE VENTAS ======================= */
 
 			case 'listarVentas':
 				$parametros = array(
@@ -219,6 +224,8 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
+				/* ======================= REPORTE DE PROFORMAS ======================= */
+
 			case 'listarProformas':
 				$parametros = array(
 					"p.eliminado = '0'"
@@ -317,6 +324,282 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 
 				break;
+
+				/* ======================= MÉTODOS DE PAGO POR COMPRAS ======================= */
+
+			case 'listarComprasMetodosPago':
+				$parametros = array(
+					"co.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "co.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(co.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "dcp.idmetodopago = '{$_GET["param3"]}'",
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarComprasMetodosPago($condiciones) : $reporte->listarComprasMetodosPagoLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalMonto = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
+						"2" => $reg->proveedor,
+						"3" => $reg->metodo_pago_titulo,
+						"4" => $reg->metodo_pago_monto,
+						"5" => 'N° ' . $reg->num_comprobante,
+						"6" => $reg->tipo_comprobante,
+						"7" => $reg->local,
+						"8" => $reg->usuario . ' - ' . $cargo_detalle,
+						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					$totalMonto += $reg->metodo_pago_monto;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL</strong>",
+						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+				/* ======================= MÉTODOS DE PAGO POR VENTAS ======================= */
+
+			case 'listarVentasMetodosPago':
+				$parametros = array(
+					"v.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "v.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(v.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "dvp.idmetodopago = '{$_GET["param3"]}'",
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarVentasMetodosPago($condiciones) : $reporte->listarVentasMetodosPagoLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalMonto = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago_titulo,
+						"4" => $reg->metodo_pago_monto,
+						"5" => 'N° ' . $reg->num_comprobante,
+						"6" => $reg->tipo_comprobante,
+						"7" => $reg->caja,
+						"8" => $reg->local,
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					$totalMonto += $reg->metodo_pago_monto;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL</strong>",
+						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+				/* ======================= MÉTODOS DE PAGO POR PROFORMA ======================= */
+
+			case 'listarProformasMetodosPago':
+				$parametros = array(
+					"p.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "p.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(p.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "dpp.idmetodopago = '{$_GET["param3"]}'",
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarProformasMetodosPago($condiciones) : $reporte->listarProformasMetodosPagoLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalMonto = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"2" => $reg->cliente,
+						"3" => $reg->metodo_pago_titulo,
+						"4" => $reg->metodo_pago_monto,
+						"5" => 'N° ' . $reg->num_comprobante,
+						"6" => $reg->tipo_comprobante,
+						"7" => $reg->caja,
+						"8" => $reg->local,
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					$totalMonto += $reg->metodo_pago_monto;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL</strong>",
+						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+				/* ======================= REPORTE DE ARTICULOS MÁS VENDIDOS ======================= */
 
 			case 'listarArticulosMasVendidos':
 				$parametros = array(

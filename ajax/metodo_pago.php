@@ -137,7 +137,9 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
 						"3" => ucwords($reg->nombre),
 						"4" => ucwords($cargo_detalle),
-						"5" => "<img src='../files/metodo_pago/" . $reg->imagen . "' height='50px' width='50px' >",
+						"5" => '<a href="../files/metodo_pago/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/metodo_pago/' . $reg->imagen . '" width="50px" style="max-height: 50px" class="img-fluid">
+								</a>',
 						"6" => $reg->fecha,
 						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' : '<span class="label bg-red">Desactivado</span>'
 					);

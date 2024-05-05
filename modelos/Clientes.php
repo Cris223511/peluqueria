@@ -7,11 +7,11 @@ class Cliente
 	{
 	}
 
-	public function agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO clientes (idusuario, idlocal, nombre, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, eliminado)
-				VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(),'activado','0')";
+		$sql = "INSERT INTO clientes (idusuario, idlocal, nombre, tipo_documento, num_documento, direccion, descripcion, telefono, email, fecha_hora, estado, eliminado)
+				VALUES ('$idusuario','$idlocal','$nombre','$tipo_documento','$num_documento','$direccion','$descripcion','$telefono', '$email', SYSDATE(),'activado','0')";
 		return ejecutarConsulta_retornarID($sql);
 	}
 
@@ -39,9 +39,9 @@ class Cliente
 		return false;
 	}
 
-	public function editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
-		$sql = "UPDATE clientes SET idlocal='$idlocal',nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email' WHERE idcliente='$idcliente'";
+		$sql = "UPDATE clientes SET idlocal='$idlocal',nombre='$nombre',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',descripcion='$descripcion',telefono='$telefono',email='$email' WHERE idcliente='$idcliente'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -71,7 +71,7 @@ class Cliente
 
 	public function listarClientes()
 	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.descripcion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario
@@ -82,7 +82,7 @@ class Cliente
 
 	public function listarClientesPorUsuario($idlocal_session)
 	{
-		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.descripcion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
 				FROM clientes c
 				LEFT JOIN usuario u ON c.idusuario = u.idusuario

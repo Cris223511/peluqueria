@@ -18,6 +18,7 @@ function limpiar() {
 	$("#tipo_documento").val("");
 	$("#num_documento").val("");
 	$("#direccion").val("");
+	$("#descripcion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
 }
@@ -88,7 +89,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(3), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -130,6 +131,7 @@ function mostrar(idproveedor) {
 		$("#tipo_documento").val(data.tipo_documento);
 		$("#num_documento").val(data.num_documento);
 		$("#direccion").val(data.direccion);
+		$("#descripcion").val(data.descripcion);
 		$("#telefono").val(data.telefono);
 		$("#email").val(data.email);
 		$("#idproveedor").val(data.idproveedor);

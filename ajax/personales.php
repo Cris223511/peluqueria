@@ -29,6 +29,7 @@ if (!isset($_SESSION["nombre"])) {
 		$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 		$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
 		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
 
@@ -39,7 +40,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $personales->agregar($idusuario, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+						$rspta = $personales->agregar($idusuario, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 						echo $rspta ? "Empleado registrado" : "El empleado no se pudo registrar";
 					}
 				} else {
@@ -47,7 +48,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $personales->editar($idpersonal, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+						$rspta = $personales->editar($idpersonal, $idlocal, $nombre, $cargo_personal, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 						echo $rspta ? "Empleado actualizado" : "El empleado no se pudo actualizar";
 					}
 				}
@@ -111,6 +112,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -128,10 +130,11 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"7" => $telefono,
 						"8" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"9" => ucwords($reg->nombre),
-						"10" => ucwords($cargo_detalle),
-						"11" => $reg->fecha,
-						"12" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"9" => ($reg->descripcion == "") ? "Sin registrar" : $reg->descripcion,
+						"10" => ucwords($reg->nombre),
+						"11" => ucwords($cargo_detalle),
+						"12" => $reg->fecha,
+						"13" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

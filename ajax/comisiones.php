@@ -84,7 +84,7 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => $reg->num_documento,
 						"7" => ucwords($reg->nombre),
 						"8" => ucwords($cargo_detalle),
-						"9" => $reg->fecha,
+						"9" => ($reg->fecha != "00-00-0000 00:00:00") ? $reg->fecha : "Sin registrar.",
 						"10" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
@@ -111,7 +111,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				while ($reg = $rspta->fetch_object()) {
 					$data[] = array(
-						"0" => ($reg->idarticulo != "0") ? $reg->nombre_articulo : $reg->nombre_servicio,
+						"0" => ($reg->idarticulo != "0") ? strtoupper($reg->nombre_articulo) : strtoupper($reg->nombre_servicio),
 						"1" => $reg->comision,
 						"2" => ($reg->tipo == "1") ? 'S/.' : '%',
 						"3" => $reg->fecha,

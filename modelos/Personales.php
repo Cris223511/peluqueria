@@ -7,11 +7,11 @@ class Personal
 	{
 	}
 
-	public function agregar($idusuario, $idlocal, $nombre, $cargo, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function agregar($idusuario, $idlocal, $nombre, $cargo, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO personales (idusuario, idlocal, nombre, cargo, tipo_documento, num_documento, direccion, telefono, email, fecha_hora, estado, comisionado, eliminado)
-            VALUES ('$idusuario','$idlocal','$nombre','$cargo','$tipo_documento','$num_documento','$direccion','$telefono', '$email', SYSDATE(), 'activado','0','0')";
+		$sql = "INSERT INTO personales (idusuario, idlocal, nombre, cargo, tipo_documento, num_documento, direccion, descripcion, telefono, email, fecha_hora, fecha_hora_comision, estado, comisionado, eliminado)
+            VALUES ('$idusuario','$idlocal','$nombre','$cargo','$tipo_documento','$num_documento','$direccion','$descripcion','$telefono', '$email', SYSDATE(), '0000-00-00 00:00:00', 'activado','0','0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -39,9 +39,9 @@ class Personal
 		return false;
 	}
 
-	public function editar($idpersonal, $idlocal, $nombre, $cargo, $tipo_documento, $num_documento, $direccion, $telefono, $email)
+	public function editar($idpersonal, $idlocal, $nombre, $cargo, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email)
 	{
-		$sql = "UPDATE personales SET idlocal='$idlocal',nombre='$nombre',cargo='$cargo',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',telefono='$telefono',email='$email' WHERE idpersonal='$idpersonal'";
+		$sql = "UPDATE personales SET idlocal='$idlocal',nombre='$nombre',cargo='$cargo',tipo_documento='$tipo_documento',num_documento='$num_documento',direccion='$direccion',descripcion='$descripcion',telefono='$telefono',email='$email' WHERE idpersonal='$idpersonal'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -71,7 +71,7 @@ class Personal
 
 	public function listarPersonales()
 	{
-		$sql = "SELECT p.idpersonal, p.nombre, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT p.idpersonal, p.nombre, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.descripcion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario
@@ -82,7 +82,7 @@ class Personal
 
 	public function listarPersonalesPorUsuario($idlocal_session)
 	{
-		$sql = "SELECT p.idpersonal, p.nombre, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT p.idpersonal, p.nombre, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.descripcion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario

@@ -353,13 +353,21 @@ class Caja
 
 	public function listarDetallesRetirosCajaAperurada($idcaja, $idcaja_cerrada)
 	{
-		$sql = "SELECT c.titulo AS caja, r.monto AS monto_retiro, DATE_FORMAT(r.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM retiros r LEFT JOIN cajas c ON r.idcaja = c.idcaja WHERE r.idcaja = '$idcaja_cerrada'";
+		$sql = "SELECT c.titulo AS caja, r.monto AS monto_retiro, DATE_FORMAT(r.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha 
+				FROM retiros r 
+				LEFT JOIN cajas c ON r.idcaja = c.idcaja 
+				WHERE r.idcaja = '$idcaja_cerrada'
+				AND DATE(r.fecha_hora) = (SELECT DATE(fecha_cierre) FROM cajas_cerradas WHERE idcaja_cerrada = '$idcaja_cerrada')";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarDetallesGastosCajaAperurada($idcaja, $idcaja_cerrada)
 	{
-		$sql = "SELECT c.titulo AS caja, g.monto AS monto_gasto, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM gastos g LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE g.idcaja = '$idcaja_cerrada'";
+		$sql = "SELECT c.titulo AS caja, g.monto AS monto_gasto, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha 
+				FROM gastos g 
+				LEFT JOIN cajas c ON g.idcaja = c.idcaja 
+				WHERE g.idcaja = '$idcaja_cerrada'
+				AND DATE(g.fecha_hora) = (SELECT DATE(fecha_cierre) FROM cajas_cerradas WHERE idcaja_cerrada = '$idcaja_cerrada')";
 		return ejecutarConsulta($sql);
 	}
 }

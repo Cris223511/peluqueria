@@ -8,6 +8,10 @@ $local_login = $_SESSION['local'];
 ?>
 
 <style>
+  .content-wrapper {
+    min-height: 919px !important;
+  }
+
   .skin-blue-light .main-header .navbar .sidebar-toggle {
     transition: .3s ease all;
   }
@@ -431,6 +435,23 @@ $local_login = $_SESSION['local'];
               </a>
               <ul class="treeview-menu">
               <li id="lReporteProductos"><a href="reporteProductoMasVendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['reportesM'] == 1) {
+            echo '<li id="mReportesM" class="treeview">
+              <a href="#">
+                <i class="fa fa-line-chart"></i>
+                <span>Reportes de pagos</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+              <li id="lReporteVentaMetodoPago"><a href="reporteVentaMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (ventas)</a></li>
+              <li id="lReporteProformaMetodoPago"><a href="reporteProformaMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (cotizaciones)</a></li>
+              <li id="lReporteCompraMetodoPago"><a href="reporteCompraMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (compras)</a></li>
               </ul>
             </li>';
           }

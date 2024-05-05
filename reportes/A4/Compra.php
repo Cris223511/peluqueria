@@ -719,7 +719,7 @@ class PDF_Invoice extends FPDF
 
 		# ESTADO #
 		$this->SetXY(66, $y + 32);
-		$this->SetFont('Arial', '', 9);
+		$this->SetFont('Arial', 'B', 9);
 		$this->MultiCell(130, 4, mb_convert_encoding(mb_strtoupper("Estado: $estado"), 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
 
 		# USUARIO #
@@ -830,22 +830,26 @@ class PDF_Invoice extends FPDF
 		$anchoAcumulado = 0;
 		$lineas = 1; // Inicializamos en 1 ya que siempre tendremos al menos una línea
 
-		foreach ($palabras as $palabra) {
-			$anchoPalabra = $this->GetStringWidth($palabra . ' ');
+		if ($comentario_externo != "") {
+			foreach ($palabras as $palabra) {
+				$anchoPalabra = $this->GetStringWidth($palabra . ' ');
 
-			if ($anchoAcumulado + $anchoPalabra > $anchoCaja) {
-				$lineas++; // Incrementamos el contador de líneas
-				$anchoAcumulado = $anchoPalabra; // Reiniciamos el ancho acumulado con la nueva palabra
-			} else {
-				$anchoAcumulado += $anchoPalabra; // Añadimos el ancho de la palabra al acumulado
+				if ($anchoAcumulado + $anchoPalabra > $anchoCaja) {
+					$lineas++; // Incrementamos el contador de líneas
+					$anchoAcumulado = $anchoPalabra; // Reiniciamos el ancho acumulado con la nueva palabra
+				} else {
+					$anchoAcumulado += $anchoPalabra; // Añadimos el ancho de la palabra al acumulado
+				}
 			}
+
+			$this->SetXY(13.5, $y + 7);
+			$this->SetFont('Arial', '', 10);
+			$this->MultiCell(100, 5, mb_convert_encoding($comentario_externo, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+			$y += ($lineas * 5) + 10;
+		} else {
+			$y += $lineas + 8;
 		}
-
-		$this->SetXY(13.5, $y + 7);
-		$this->SetFont('Arial', '', 10);
-		$this->MultiCell(100, 5, mb_convert_encoding($comentario_externo, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
-
-		$y += ($lineas * 5) + 10;
 
 		return $y;
 	}

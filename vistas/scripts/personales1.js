@@ -39,6 +39,7 @@ function limpiar() {
 	$("#tipo_documento").val("");
 	$("#num_documento").val("");
 	$("#direccion").val("");
+	$("#descripcion").val("");
 	$("#telefono").val("");
 	$("#email").val("");
 
@@ -159,6 +160,7 @@ function mostrar(idpersonal) {
 		$("#tipo_documento").val(data.tipo_documento);
 		$("#num_documento").val(data.num_documento);
 		$("#direccion").val(data.direccion);
+		$("#descripcion").val(data.descripcion);
 		$("#telefono").val(data.telefono);
 		$("#email").val(data.email);
 		$("#idpersonal").val(data.idpersonal);

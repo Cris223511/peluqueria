@@ -2,7 +2,7 @@
       <div class="pull-right hidden-xs">
         <b>Version</b> 4.0.0
       </div>
-      <strong>Copyright &copy; 2024 <a href="www.SistemaDePeluqueria.com" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
+      <strong>Copyright &copy; 2024 <a href="escritorio.php" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
     </footer>
     <!-- jQuery -->
     <script src="../public/js/jquery-3.1.1.min.js"></script>
@@ -402,6 +402,14 @@
         const okButton = modal.find('.modal-footer button[data-bb-handler="ok"]');
         if (okButton.length) {
           okButton.text('Aceptar').removeClass('btn-default').addClass('btn-bcp');
+
+          // Agregar controlador de eventos para la tecla Enter
+          $(document).on('keypress', function(e) {
+            if (e.which === 13 && modal.hasClass('in')) {
+              // Verificar si el modal está abierto y la tecla presionada es Enter
+              okButton.click(); // Hacer clic en el botón Aceptar
+            }
+          });
         }
       });
     </script>

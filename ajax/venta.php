@@ -248,13 +248,15 @@ if (!isset($_SESSION["nombre"])) {
 			case 'getLastNumComprobanteLocal':
 				$row1 = mysqli_fetch_assoc($venta->getLastNumComprobante($idlocal));
 				$row2 = mysqli_fetch_assoc($venta->getCajaLocal($idlocal));
+				$row3 = mysqli_fetch_assoc($venta->verificarCajaLocal($idlocal));
 
 				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
 				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";
 
 				$response = array(
 					"last_num_comprobante" => $lastNumComp,
-					"idcaja" => $idcajaLocal
+					"idcaja" => $idcajaLocal,
+					"estado" => $row3["estado"],
 				);
 				echo json_encode($response);
 				break;

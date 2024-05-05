@@ -63,7 +63,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="white-space: nowrap;">Número Doc.</th>
                     <th style="white-space: nowrap;">Agregado por</th>
                     <th>Cargo</th>
-                    <th style="white-space: nowrap;">Fecha y hora</th>
+                    <th style="white-space: nowrap;">Fecha y hora comisión</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -79,7 +79,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Número Doc.</th>
                     <th>Agregado por</th>
                     <th>Cargo</th>
-                    <th>Fecha y hora</th>
+                    <th>Fecha y hora comisión</th>
                     <th>Estado</th>
                   </tfoot>
                 </table>

@@ -333,6 +333,12 @@ class Venta
 		return ejecutarConsulta($sql);
 	}
 
+	public function verificarCajaLocal($idlocal)
+	{
+		$sql = "SELECT estado FROM cajas WHERE idlocal = '$idlocal' AND eliminado = '0'";
+		return ejecutarConsulta($sql);
+	}
+
 	// MOSTRAR LOS DATOS POR VENTA
 
 	public function listarDetallesVenta($idventa)

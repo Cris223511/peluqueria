@@ -39,15 +39,15 @@ function actualizarCorrelativoLocal(idlocal) {
 		console.log(e);
 		const obj = JSON.parse(e);
 		console.log(obj);
-		if (obj.idcaja == 0) {
-			bootbox.alert("El local seleccionado no tiene una caja disponible.");
-			$("#idlocal_session").val("");
-			$("#idlocal_session").selectpicker('refresh');
-			$("#num_comprobante_final1").text(lastNumComp);
-		} else {
-			lastNumComp = generarSiguienteCorrelativo(obj.last_num_comprobante);
-			idCajaFinal = obj.idcaja;
-		}
+		// if (obj.idcaja == 0) {
+		// 	bootbox.alert("El local seleccionado no tiene una caja disponible.");
+		// 	$("#idlocal_session").val("");
+		// 	$("#idlocal_session").selectpicker('refresh');
+		// 	$("#num_comprobante_final1").text(lastNumComp);
+		// } else {
+		lastNumComp = generarSiguienteCorrelativo(obj.last_num_comprobante);
+		// idCajaFinal = obj.idcaja;
+		// }
 	});
 }
 

@@ -68,12 +68,7 @@ function generarComision(idpersonal, idlocal, nombre, cargo, tipo_documento, num
 
 	$.post("../ajax/comisiones.php?op=mostrarComisionesPersonal", { idpersonal: idpersonal, idlocal: idlocal }, function (data, status) {
 		data = JSON.parse(data);
-
-		if (data.length === 0) {
-			bootbox.alert("El empleado no tiene productos comisionados.");
-			return;
-		}
-
+		console.log(data)
 		$("#detallesProductosComisiones tbody").empty();
 
 		data.forEach(function (detalle) {
@@ -84,13 +79,13 @@ function generarComision(idpersonal, idlocal, nombre, cargo, tipo_documento, num
                 <tr>
                     <td style="width: 60%; min-width: 300px; white-space: nowrap;">
 						<div style="display: flex; width: 100%; justify-content: center; align-items: center; height: 34px;">
-                        	<input type="text" class="form-control" value="${productoTitulo}" disabled>
+                        	<input type="text" class="form-control" value="${capitalizarTodasLasPalabras(productoTitulo)}" disabled>
 						</div>
 					</td>
                     <td style="width: 40%; min-width: 130px; white-space: nowrap;">
 						<div style="display: flex; width: 100%; flex-direction: row; justify-content: center; align-items: center; height: 34px; gap: 5px;">
 							<input type="hidden" name="idpersonal[]" value="${detalle.idpersonal}">
-							<input type="hidden" name="${inputId}" value="${detalle.idarticulo || detalle.idservicio}">
+							<input type="hidden" name="${inputId}" value="${detalle.idarticulo !== "0" ? detalle.idarticulo : detalle.idservicio}">
 							<input style="width: 30%; min-width: 90px;" type="number" class="form-control" name="comision[]" lang="en-US" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required>
 							<select style="width: 30%; min-width: 90px;" name="tipo[]" class="form-control" required>
 								<option value="1">S/.</option>
@@ -123,12 +118,11 @@ function eliminarFila(btn) {
 	}
 }
 
-
 function limpiarModalComision() {
 	setTimeout(() => {
 		$(".trabajador_comisionar").text("");
 		$("#detallesProductosComisiones tbody").empty();
-	}, 1000);
+	}, 800);
 }
 
 function guardaryeditar(e) {
@@ -140,9 +134,11 @@ function guardaryeditar(e) {
 
 	$('#detallesProductosComisiones tbody tr').each(function () {
 		var tipo = $(this).find('input[name="idarticulo[]"]').length ? "_producto" : "_servicio";
+		var id = $(this).find('input[name="idarticulo[]"]').val() || $(this).find('input[name="idservicio[]"]').val();
+
 		var idPersonal = $(this).find('input[name="idpersonal[]"]').val();
 		idpersonalUniqSet.add(idPersonal);
-		var id = $(this).find('input[name="idarticulo[]"]').val() || $(this).find('input[name="idservicio[]"]').val();
+
 		detalles.push(id + tipo);
 	});
 

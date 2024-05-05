@@ -16,6 +16,9 @@ class Comision
 		$sql_eliminar = "DELETE FROM comisiones WHERE idpersonal = '$idpersonalUniq'";
 		ejecutarConsulta($sql_eliminar);
 
+		$sql_actualizar = "UPDATE personales SET fecha_hora_comision = SYSDATE() WHERE idpersonal = '$idpersonalUniq'";
+		ejecutarConsulta($sql_actualizar);
+
 		// Convertir $detalles de JSON a array
 		$detalles = json_decode($detalles, true);
 
@@ -50,24 +53,42 @@ class Comision
 	public function listarPersonales()
 	{
 		$sql = "SELECT p.idpersonal, p.nombre, l.idlocal, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
-				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
+				DATE_FORMAT(p.fecha_hora_comision, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario
 				LEFT JOIN locales l ON p.idlocal = l.idlocal
-				WHERE p.eliminado = '0' ORDER BY p.idpersonal DESC";
+				WHERE p.eliminado = '0' AND EXISTS (
+					SELECT 1
+					FROM detalle_venta dv
+					LEFT JOIN venta v ON dv.idventa = v.idventa
+					WHERE dv.idpersonal = p.idpersonal
+					AND v.idlocal = p.idlocal
+					AND v.estado <> 'Anulado'
+				)
+				ORDER BY p.idpersonal DESC";
 		return ejecutarConsulta($sql);
 	}
+
 
 	public function listarPersonalesPorUsuario($idlocal_session)
 	{
 		$sql = "SELECT p.idpersonal, p.nombre, l.idlocal, l.titulo AS local, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
-				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
+				DATE_FORMAT(p.fecha_hora_comision, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario
 				LEFT JOIN locales l ON p.idlocal = l.idlocal
-				WHERE p.idlocal = '$idlocal_session' AND p.eliminado = '0' ORDER BY p.idpersonal DESC";
+				WHERE p.idlocal = '$idlocal_session' AND p.eliminado = '0' AND EXISTS (
+					SELECT 1
+					FROM detalle_venta dv
+					LEFT JOIN venta v ON dv.idventa = v.idventa
+					WHERE dv.idpersonal = p.idpersonal
+					AND v.idlocal = p.idlocal
+					AND v.estado <> 'Anulado'
+				)
+				ORDER BY p.idpersonal DESC";
 		return ejecutarConsulta($sql);
 	}
+
 
 	public function mostrarComisionesPersonal($idpersonal, $idlocal)
 	{
@@ -116,7 +137,7 @@ class Comision
 	public function verDatosEmpleado($idpersonal)
 	{
 		$sql = "SELECT p.idpersonal, p.nombre, l.idlocal, l.titulo AS local, l.local_ruc AS local_ruc, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
-				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
+				DATE_FORMAT(p.fecha_hora_comision, '%d-%m-%Y %H:%i:%s') as fecha, p.estado, p.total_comision, p.comisionado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario
 				LEFT JOIN locales l ON p.idlocal = l.idlocal

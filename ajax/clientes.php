@@ -28,6 +28,7 @@ if (!isset($_SESSION["nombre"])) {
 		$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 		$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
 		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
 
@@ -38,7 +39,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste && $num_documento != '') {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+						$rspta = $clientes->agregar($idusuario, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 						if (is_numeric($rspta)) {
 							echo $rspta;
 						} else {
@@ -50,7 +51,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste && $num_documento != '') {
 						echo "El número de documento que ha ingresado ya existe.";
 					} else {
-						$rspta = $clientes->editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+						$rspta = $clientes->editar($idcliente, $idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 						echo $rspta ? "Cliente actualizado" : "El cliente no se pudo actualizar";
 					}
 				}
@@ -114,7 +115,8 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
-
+					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
+					
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idcliente . ')"><i class="fa fa-pencil"></i></button>') .
@@ -129,10 +131,11 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"6" => $telefono,
 						"7" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"8" => ucwords($reg->usuario),
-						"9" => ucwords($cargo_detalle),
-						"10" => $reg->fecha,
-						"11" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"8" => ($reg->descripcion == "") ? "Sin registrar" : $reg->descripcion,
+						"9" => ucwords($reg->usuario),
+						"10" => ucwords($cargo_detalle),
+						"11" => $reg->fecha,
+						"12" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

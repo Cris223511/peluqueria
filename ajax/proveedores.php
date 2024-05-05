@@ -26,20 +26,21 @@ if (!isset($_SESSION["nombre"])) {
 		$tipo_documento = isset($_POST["tipo_documento"]) ? limpiarCadena($_POST["tipo_documento"]) : "";
 		$num_documento = isset($_POST["num_documento"]) ? limpiarCadena($_POST["num_documento"]) : "";
 		$direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
+		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
 		$email = isset($_POST["email"]) ? limpiarCadena($_POST["email"]) : "";
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
 				if (empty($idproveedor)) {
-					$rspta = $proveedores->agregar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+					$rspta = $proveedores->agregar($idusuario, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 					if (is_numeric($rspta)) {
 						echo $rspta;
 					} else {
 						echo "El proveedor no se pudo registrar";
 					}
 				} else {
-					$rspta = $proveedores->editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email);
+					$rspta = $proveedores->editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
 					echo $rspta ? "Proveedor actualizado" : "El proveedor no se pudo actualizar";
 				}
 				break;
@@ -98,6 +99,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -112,10 +114,11 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"5" => $telefono,
 						"6" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"7" => ucwords($reg->usuario),
-						"8" => ucwords($cargo_detalle),
-						"9" => $reg->fecha,
-						"10" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"7" => ($reg->descripcion == "") ? "Sin registrar" : $reg->descripcion,
+						"8" => ucwords($reg->usuario),
+						"9" => ucwords($cargo_detalle),
+						"10" => $reg->fecha,
+						"11" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
