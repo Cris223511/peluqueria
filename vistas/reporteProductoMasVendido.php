@@ -109,7 +109,7 @@ if (!isset($_SESSION["nombre"])) {
                 <h1 class="box-title">Reporte de productos más vendidos</h1>
                 <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos más vendidos</strong>" data-html="true" data-content="Módulo para ver los productos que más se vendieron." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right"></div>
-                <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
+                <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
                   <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Local:</label>
                     <select id="localBuscar" name="localBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">

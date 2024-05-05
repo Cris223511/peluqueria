@@ -14,6 +14,39 @@ function init() {
 	$('#lReporteProformaMetodoPago').addClass("active");
 }
 
+var valoresMetodoPago = [];
+
+function agregarPago() {
+	var valorSeleccionado = $('#metodopagoBuscar').val();
+	var textoSeleccionado = $('#metodopagoBuscar option:selected').text().trim();
+
+	if (valorSeleccionado && !$('#contenedorPagos input[type="hidden"][value="' + valorSeleccionado + '"]').length) {
+		var nuevoPago =
+			'<input type="hidden" value="' + valorSeleccionado + '">' +
+			'<span class="item_pago">' + textoSeleccionado +
+			'<a href="#" class="borrar_pago" onclick="borrarPago(this); return false;"></a>' +
+			'</span>';
+
+		$('#contenedorPagos').append(nuevoPago);
+
+		// Agregar el valor al array
+		valoresMetodoPago.push(valorSeleccionado);
+	} else {
+		bootbox.alert("No puede agregar el método de pago dos veces.");
+	}
+
+	$("#metodopagoBuscar").val("");
+	$("#metodopagoBuscar").selectpicker('refresh');
+}
+
+function borrarPago(e) {
+	var $itemPago = $(e).closest('.item_pago');
+	var valorBorrado = $itemPago.prev('input[type="hidden"]').val();
+	valoresMetodoPago = valoresMetodoPago.filter(function (valor) { return valor !== valorBorrado; });
+	$itemPago.prev('input[type="hidden"]').remove();
+	$itemPago.remove();
+}
+
 function listar() {
 	let param1 = "";
 	let param2 = "";
@@ -75,6 +108,9 @@ function resetear() {
 		$("#" + selectId).selectpicker('refresh');
 	}
 
+	$('#contenedorPagos').empty();
+	valoresMetodoPago = [];
+
 	listar();
 }
 
@@ -86,16 +122,10 @@ function buscar() {
 	// Obtener los selectores
 	const fecha_inicio = document.getElementById("fecha_inicio");
 	const fecha_fin = document.getElementById("fecha_fin");
-	const metodopagoBuscar = document.getElementById("metodopagoBuscar");
-
-	if (fecha_inicio.value == "" && fecha_fin.value == "" && metodopagoBuscar.value == "") {
-		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
-		return;
-	}
 
 	param1 = fecha_inicio.value;
 	param2 = fecha_fin.value;
-	param3 = metodopagoBuscar.value;
+	param3 = valoresMetodoPago.join(',');
 
 	tabla = $('#tbllistado').dataTable(
 		{

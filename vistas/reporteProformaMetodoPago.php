@@ -41,6 +41,54 @@ if (!isset($_SESSION["nombre"])) {
       tbody td:nth-child(12) {
         white-space: nowrap !important;
       }
+
+      #contenedorPagos {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .item_pago {
+        border: 1px solid #d2d6de;
+        padding: 5px 40px 5px 15px;
+        display: inline-block;
+        border-radius: 5px;
+        position: relative;
+      }
+
+      .item_pago .borrar_pago {
+        margin-left: 10px;
+        font-size: 12px;
+        border-radius: 5px;
+        height: 24px;
+        width: 24px;
+        color: #002a8e;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        position: absolute;
+        font-weight: bold;
+        font-size: 18px;
+        top: 3px;
+        right: 5px;
+        transition: .3s ease all;
+      }
+
+      .item_pago .borrar_pago:hover {
+        background-color: #e1f1ff;
+        transition: .3s ease all;
+      }
+
+      .borrar_pago:before {
+        content: "𝗑";
+      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -51,7 +99,7 @@ if (!isset($_SESSION["nombre"])) {
                 <h1 class="box-title">Reporte de métodos de pago de cotizaciones</h1>
                 <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Reporte de métodos de pago</strong>" data-html="true" data-content="Módulo para ver el monto de los métodos de pago de las cotizaciones que se hicieron en tu local." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right"></div>
-                <div class="panel-body table-responsive listadoregistros" style="overflow-x: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
+                <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Inicial:</label>
                     <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
@@ -62,7 +110,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Método de pago:</label>
-                    <select id="metodopagoBuscar" name="metodopagoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                    <select id="metodopagoBuscar" name="metodopagoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5" onchange="agregarPago()">
                     </select>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0px;">
@@ -71,6 +119,8 @@ if (!isset($_SESSION["nombre"])) {
                       <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
                       <button style="height: 32px;" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
                     </div>
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="contenedorPagos" style="padding: 5px; margin: 0px;">
                   </div>
                 </div>
               </div>

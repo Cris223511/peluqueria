@@ -338,8 +338,18 @@ if (!isset($_SESSION["nombre"])) {
 
 				$filtros = array(
 					"param1" => "DATE(co.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
-					"param3" => "dcp.idmetodopago = '{$_GET["param3"]}'",
 				);
+
+				if (!empty($_GET['param3'])) {
+					$param3_array = explode(',', $_GET['param3']);
+					$param3_condition = [];
+
+					foreach ($param3_array as $metodo_pago_id) {
+						$param3_condition[] = "dcp.idmetodopago = '$metodo_pago_id'";
+					}
+
+					$filtros["param3"] = "(" . implode(' OR ', $param3_condition) . ")";
+				}
 
 				foreach ($filtros as $param => $condicion) {
 					if (!empty($_GET[$param])) {
@@ -428,8 +438,18 @@ if (!isset($_SESSION["nombre"])) {
 
 				$filtros = array(
 					"param1" => "DATE(v.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
-					"param3" => "dvp.idmetodopago = '{$_GET["param3"]}'",
 				);
+
+				if (!empty($_GET['param3'])) {
+					$param3_array = explode(',', $_GET['param3']);
+					$param3_condition = [];
+
+					foreach ($param3_array as $metodo_pago_id) {
+						$param3_condition[] = "dvp.idmetodopago = '$metodo_pago_id'";
+					}
+
+					$filtros["param3"] = "(" . implode(' OR ', $param3_condition) . ")";
+				}
 
 				foreach ($filtros as $param => $condicion) {
 					if (!empty($_GET[$param])) {
@@ -520,8 +540,18 @@ if (!isset($_SESSION["nombre"])) {
 
 				$filtros = array(
 					"param1" => "DATE(p.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
-					"param3" => "dpp.idmetodopago = '{$_GET["param3"]}'",
 				);
+
+				if (!empty($_GET['param3'])) {
+					$param3_array = explode(',', $_GET['param3']);
+					$param3_condition = [];
+
+					foreach ($param3_array as $metodo_pago_id) {
+						$param3_condition[] = "dpp.idmetodopago = '$metodo_pago_id'";
+					}
+
+					$filtros["param3"] = "(" . implode(' OR ', $param3_condition) . ")";
+				}
 
 				foreach ($filtros as $param => $condicion) {
 					if (!empty($_GET[$param])) {
