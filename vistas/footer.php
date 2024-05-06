@@ -100,7 +100,7 @@
         return palabra.toLowerCase();
       }
 
-      const thElements = document.querySelectorAll("#tblarticulos th, #tbldetalles th, #tbllistado th, #tbltrabajadores th");
+      const thElements = document.querySelectorAll("#tblarticulos th, #tbldetalles th, #tbldetalles2 th, #tbllistado th, #tbltrabajadores th");
 
       thElements.forEach((e) => {
         e.textContent = e.textContent.toUpperCase();

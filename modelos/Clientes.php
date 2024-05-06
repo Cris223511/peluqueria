@@ -127,7 +127,7 @@ class Cliente
 		return ejecutarConsulta($sql);
 	}
 
-	public function listarVentasClientehaLocal($idcliente, $idlocal)
+	public function listarVentasClienteLocal($idcliente, $idlocal)
 	{
 		$sql = "SELECT
 				  v.idventa,
@@ -158,6 +158,78 @@ class Cliente
 				WHERE v.idcliente = '$idcliente'
 				AND v.idlocal = '$idlocal'
 				ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+
+	/* ======================= REPORTE DE VENTAS POR CLIENTE ======================= */
+
+	public function listarProformasCliente($idcliente)
+	{
+		$sql = "SELECT
+				  p.idproforma,
+				  DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  p.idcliente,
+				  c.nombre AS cliente,
+				  c.tipo_documento AS cliente_tipo_documento,
+				  c.num_documento AS cliente_num_documento,
+				  c.direccion AS cliente_direccion,
+				  p.idcaja,
+				  ca.titulo AS caja,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  p.tipo_comprobante,
+				  p.num_comprobante,
+				  p.vuelto,
+				  p.impuesto,
+				  p.total_venta,
+				  p.estado
+				FROM proforma p
+				LEFT JOIN clientes c ON p.idcliente = c.idcliente
+				LEFT JOIN cajas ca ON p.idcaja = ca.idcaja
+				LEFT JOIN locales al ON p.idlocal = al.idlocal
+				LEFT JOIN usuario u ON p.idusuario = u.idusuario
+				WHERE p.idcliente = '$idcliente'
+				ORDER by p.idproforma DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarProformasClienteLocal($idcliente, $idlocal)
+	{
+		$sql = "SELECT
+				  p.idproforma,
+				  DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  p.idcliente,
+				  c.nombre AS cliente,
+				  c.tipo_documento AS cliente_tipo_documento,
+				  c.num_documento AS cliente_num_documento,
+				  c.direccion AS cliente_direccion,
+				  p.idcaja,
+				  ca.titulo AS caja,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  p.tipo_comprobante,
+				  p.num_comprobante,
+				  p.vuelto,
+				  p.impuesto,
+				  p.total_venta,
+				  p.estado
+				FROM proforma p
+				LEFT JOIN clientes c ON p.idcliente = c.idcliente
+				LEFT JOIN cajas ca ON p.idcaja = ca.idcaja
+				LEFT JOIN locales al ON p.idlocal = al.idlocal
+				LEFT JOIN usuario u ON p.idusuario = u.idusuario
+				WHERE p.idcliente = '$idcliente'
+				AND p.idlocal = '$idlocal'
+				ORDER by p.idproforma DESC";
 
 		return ejecutarConsulta($sql);
 	}

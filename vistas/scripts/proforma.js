@@ -106,6 +106,9 @@ function limpiar() {
 
 	listarDatos();
 
+	$("#comisionar").val(1);
+	$("#comisionar").selectpicker("refresh");
+
 	$("#detalles tbody").empty();
 	$("#inputsMontoMetodoPago").empty();
 	$("#inputsMetodoPago").empty();
@@ -569,22 +572,26 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compr
 	}
 
 	if (!existeProducto) {
-		$('#myModal1').modal('show');
-		limpiarModalEmpleados();
+		if ($("#comisionar").val() == 1) {
+			$('#myModal1').modal('show');
+			limpiarModalEmpleados();
 
-		console.log("esto traigo =) =>", tipoarticulo, idarticulo, nombre, precio_compra, precio_venta, codigo);
+			console.log("esto traigo =) =>", tipoarticulo, idarticulo, nombre, precio_compra, precio_venta, codigo);
 
-		idarticuloGlobal = idarticulo;
-		nombreGlobal = nombre;
-		precioCompraGlobal = precio_compra;
-		precioVentaGlobal = precio_venta;
-		codigoGlobal = codigo;
-		tipoProductoFinal = tipoarticulo;
+			idarticuloGlobal = idarticulo;
+			nombreGlobal = nombre;
+			precioCompraGlobal = precio_compra;
+			precioVentaGlobal = precio_venta;
+			codigoGlobal = codigo;
+			tipoProductoFinal = tipoarticulo;
 
-		$("#ProductoSeleccionado").html(capitalizarTodasLasPalabras(nombre));
-		$("#PrecioSeleccionado").html(`S/. ${precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta}`);
+			$("#ProductoSeleccionado").html(capitalizarTodasLasPalabras(nombre));
+			$("#PrecioSeleccionado").html(`S/. ${precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta}`);
 
-		evaluarBotonEmpleado();
+			evaluarBotonEmpleado();
+		} else {
+			agregarDetalle(tipoarticulo, idarticulo, '0', nombre, precio_compra, precio_venta, codigo);
+		}
 	} else {
 		bootbox.alert("No puedes agregar el mismo artículo o servicio dos veces.");
 	}

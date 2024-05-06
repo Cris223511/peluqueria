@@ -464,6 +464,12 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_venta">s/. 0.00</button>
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
+                    <div style="padding-left: 5px !important; padding-right: 0 !important; margin: 0 !important;">
+                      <select id="comisionar" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;">
+                        <option value="1">COMISIONAR</option>
+                        <option value="2">NO COMISIONAR</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 contenedor" style="display: flex; padding: 0;">

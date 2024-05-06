@@ -10,6 +10,65 @@ if (!isset($_SESSION["nombre"])) {
 
   if ($_SESSION['compras'] == 1) {
 ?>
+    <style>
+      #detallesProductosFinal thead,
+      #detallesProductosFinal thead tr,
+      #detallesProductosFinal thead th,
+      #detallesProductosFinal tbody,
+      #detallesProductosFinal tbody tr,
+      #detallesProductosFinal tbody th {
+        border: none !important;
+        background-color: white;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #detallesProductosFinal thead {
+        border-bottom: 1.5px black solid !important;
+      }
+
+      #detallesProductosFinal tbody,
+      #detallesProductosFinal tfoot {
+        border-top: 1.5px black solid !important;
+      }
+
+      #detallesProductosFinal tbody tr td,
+      #detallesProductosFinal tfoot tr td {
+        border: none !important;
+      }
+
+      #detallesPagosFinal thead,
+      #detallesPagosFinal thead tr,
+      #detallesPagosFinal thead th,
+      #detallesPagosFinal tbody,
+      #detallesPagosFinal tbody tr,
+      #detallesPagosFinal tbody th {
+        border: none !important;
+        background-color: white;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #detallesPagosFinal thead {
+        border-bottom: 1.5px black solid !important;
+      }
+
+      #detallesPagosFinal tbody,
+      #detallesPagosFinal tfoot {
+        border-top: 1.5px black solid !important;
+      }
+
+      #detallesPagosFinal tbody tr td,
+      #detallesPagosFinal tfoot tr td {
+        border: none !important;
+      }
+
+      @media (max-width: 991.50px) {
+        .smallModal {
+          width: 90% !important;
+        }
+      }
+    </style>
     <div class="content-wrapper">
       <section class="content">
         <div class="row">
@@ -116,6 +175,136 @@ if (!isset($_SESSION["nombre"])) {
         </div>
       </section>
     </div>
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 65%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">HISTORIAL DE COMPRAS DEL PROVEEDOR</h4>
+              <h4 class="modal-title infotitulo proveedor_detalles" style="margin: 0; padding: 0;"></h4>
+            </div>
+          </div>
+          <div class="panel-body" style="background-color: #ecf0f5 !important; padding: 0 !important; height: max-content;">
+            <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
+              <table id="tbldetalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
+                <thead>
+                  <th style="width: 1%;">Opciones</th>
+                  <th>Fecha y hora</th>
+                  <th>Ubicación del local</th>
+                  <th>Documento</th>
+                  <th>Número Ticket</th>
+                  <th>Total Compra (S/.)</th>
+                  <th>Agregado por</th>
+                  <th>Estado</th>
+                </thead>
+                <tbody>
+                </tbody>
+                <tfoot>
+                  <th>Opciones</th>
+                  <th>Fecha y hora</th>
+                  <th>Ubicación del local</th>
+                  <th>Documento</th>
+                  <th>Número Ticket</th>
+                  <th>Total Compra (S/.)</th>
+                  <th>Agregado por</th>
+                  <th>Estado</th>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-warning" type="button" data-dismiss="modal"><i class="fa fa-arrow-circle-left"></i> Regresar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 1 -->
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 75%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">BOLETA DE COMPRA: <span id="boleta_de_compra" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
+              <table id="detallesProductosFinal" class="table w-100" style="width: 100% !important; margin-bottom: 0px;">
+                <thead style="border-bottom: 1.5px solid black !important;">
+                  <th style="white-space: nowrap;">DESCRIPCIÓN DEL PRODUCTO</th>
+                  <th style="white-space: nowrap;">CANTIDAD</th>
+                  <th style="white-space: nowrap;">PRECIO UNITARIO</th>
+                  <th style="white-space: nowrap;">DESCUENTO</th>
+                  <th style="white-space: nowrap;">SUBTOTAL</th>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">SUBTOTAL</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_detalle"></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">IGV</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="igv_detalle"></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="total_detalle"></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
+              <table id="detallesPagosFinal" class="table w-100" style="width: 100% !important; margin-bottom: 0px;">
+                <thead style="border-bottom: 1.5px solid black !important;">
+                  <th>DESCRIPCIÓN DE PAGOS</th>
+                  <th>MONTO</th>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td style="width: 80%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">SUBTOTAL</td>
+                    <td style="width: 20%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_pagos"></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 80%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">VUELTO</td>
+                    <td style="width: 20%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="vueltos_pagos"></td>
+                  </tr>
+                  <tr>
+                    <td style="width: 80%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL</td>
+                    <td style="width: 20%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="total_pagos"></td>
+                  </tr>
+                </tfoot>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
+              <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin modal 2 -->
   <?php
   } else {
     require 'noacceso.php';

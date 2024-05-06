@@ -32,7 +32,7 @@ function agregarPago() {
 		// Agregar el valor al array
 		valoresMetodoPago.push(valorSeleccionado);
 	} else {
-		bootbox.alert("No puede agregar el método de pago dos veces.");
+		bootbox.alert("No puede agregar el mismo método de pago dos veces.");
 	}
 
 	$("#metodopagoBuscar").val("");

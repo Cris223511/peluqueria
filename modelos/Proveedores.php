@@ -54,4 +54,70 @@ class Proveedor
 				WHERE p.eliminado = '0' AND p.idproveedor <> '0' ORDER BY p.idproveedor DESC";
 		return ejecutarConsulta($sql);
 	}
+
+	/* ======================= REPORTE DE COMPRAS POR PROVEEDOR ======================= */
+
+	public function listarComprasProveedor($idproveedor)
+	{
+		$sql = "SELECT
+				  c.idcompra,
+				  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  c.idproveedor,
+				  p.nombre AS proveedor,
+				  p.tipo_documento AS proveedor_tipo_documento,
+				  p.num_documento AS proveedor_num_documento,
+				  p.direccion AS proveedor_direccion,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  c.tipo_comprobante,
+				  c.num_comprobante,
+				  c.vuelto,
+				  c.impuesto,
+				  c.total_compra,
+				  c.estado
+				FROM compra c
+				LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
+				LEFT JOIN locales al ON c.idlocal = al.idlocal
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
+				WHERE c.idproveedor = '$idproveedor'
+				ORDER by c.idcompra DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarComprasProveedorhaLocal($idproveedor, $idlocal)
+	{
+		$sql = "SELECT
+				  c.idcompra,
+				  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+				  c.idproveedor,
+				  p.nombre AS proveedor,
+				  p.tipo_documento AS proveedor_tipo_documento,
+				  p.num_documento AS proveedor_num_documento,
+				  p.direccion AS proveedor_direccion,
+				  c.idcaja,
+				  al.idlocal,
+				  al.titulo AS local,
+				  u.idusuario,
+				  u.nombre AS usuario,
+				  u.cargo AS cargo,
+				  c.tipo_comprobante,
+				  c.num_comprobante,
+				  c.vuelto,
+				  c.impuesto,
+				  c.total_compra,
+				  c.estado
+				FROM compra c
+				LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
+				LEFT JOIN locales al ON c.idlocal = al.idlocal
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
+				WHERE c.idproveedor = '$idproveedor'
+				AND c.idlocal = '$idlocal'
+				ORDER by c.idcompra DESC";
+
+		return ejecutarConsulta($sql);
+	}
 }

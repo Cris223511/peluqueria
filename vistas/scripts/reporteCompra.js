@@ -90,7 +90,7 @@ function listar() {
 }
 
 function resetear() {
-	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "proveedorBuscar", "numDocBuscar", "numTicketBuscar"];
+	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "proveedorBuscar", "numDocBuscar", "numTicketBuscar", "usuarioBuscar", "metodopagoBuscar"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");
