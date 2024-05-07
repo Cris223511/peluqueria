@@ -1071,7 +1071,8 @@ class FPDF
 		}
 		if ($anchoTotalTexto > $anchoMaximo) {
 			$lineas = ceil($anchoTotalTexto / $anchoMaximo);
-			$y += ($lineas) * 4 - 13;
+			$y += ($lineas) * 4 - 5;
+			// $y += ($lineas) * 4 - 13;
 		}
 
 		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper($textoOriginal), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
