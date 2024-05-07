@@ -184,14 +184,16 @@ class Caja
 				  dv.cantidad AS cantidad,
 				  dv.precio_venta AS precio_venta,
 				  dv.descuento AS descuento,
-				  dv.impuesto AS impuesto
+				  dv.impuesto AS impuesto,
+				  DATE_FORMAT(dv.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
 				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja' 
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre
 				ORDER BY dv.iddetalle_venta ASC";
 
 		return ejecutarConsulta($sql);
@@ -218,7 +220,8 @@ class Caja
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre
 				GROUP BY v.idventa, v.tipo_comprobante, v.num_comprobante, c.nombre, c.tipo_documento, c.num_documento, v.total_venta;";
 
 		return ejecutarConsulta($sql);
@@ -245,7 +248,8 @@ class Caja
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre
 				AND v.estado = 'Anulado'  -- Agregando el filtro por estado anulado
 				GROUP BY v.idventa, v.tipo_comprobante, v.num_comprobante, c.nombre, c.tipo_documento, c.num_documento, v.total_venta;";
 
@@ -273,7 +277,8 @@ class Caja
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre
 				ORDER BY v.idventa ASC
 				LIMIT 1)
 					
@@ -298,7 +303,8 @@ class Caja
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre)
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre
 				ORDER BY v.idventa DESC
 				LIMIT 1)";
 
@@ -316,7 +322,8 @@ class Caja
 				LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 				WHERE cc.idcaja = '$idcaja'
 				AND cc.idcaja_cerrada = '$idcaja_cerrada'
-				AND DATE(dv.fecha_hora) = DATE(cc.fecha_cierre);";
+				AND dv.fecha_hora >= cc.fecha_hora
+				AND dv.fecha_hora <= cc.fecha_cierre;";
 
 		return ejecutarConsulta($sql);
 	}
@@ -324,20 +331,20 @@ class Caja
 	public function listarDetallesMetodosPagoCajaCerrada($idcaja, $idcaja_cerrada)
 	{
 		$sql = "SELECT
-				mp.titulo AS metodo_pago,
-				SUM(dvp.monto) AS monto_total,
-				v.vuelto AS vuelto,
-				v.idventa
+					mp.titulo AS metodo_pago,
+					SUM(dvp.monto) AS monto_total,
+					v.vuelto AS vuelto,
+					v.idventa
 				FROM detalle_venta_pagos dvp
 				LEFT JOIN metodo_pago mp ON dvp.idmetodopago = mp.idmetodopago
 				LEFT JOIN venta v ON dvp.idventa = v.idventa
 				WHERE dvp.idventa IN (
-					SELECT DISTINCT idventa
-					FROM detalle_venta
-					LEFT JOIN cajas_cerradas cc ON detalle_venta.idcaja = cc.idcaja_cerrada
+					SELECT DISTINCT dv.idventa
+					FROM detalle_venta dv
+					LEFT JOIN cajas_cerradas cc ON dv.idcaja = cc.idcaja_cerrada
 					WHERE cc.idcaja = '$idcaja'
 					AND cc.idcaja_cerrada = '$idcaja_cerrada'
-					AND DATE(detalle_venta.fecha_hora) = DATE(cc.fecha_cierre)
+					AND dv.fecha_hora BETWEEN cc.fecha_hora AND cc.fecha_cierre
 				)
 				GROUP BY mp.titulo, v.vuelto, v.idventa
 				ORDER BY dvp.iddetalle_venta_pago ASC;";
@@ -356,8 +363,11 @@ class Caja
 		$sql = "SELECT c.titulo AS caja, r.monto AS monto_retiro, DATE_FORMAT(r.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha 
 				FROM retiros r 
 				LEFT JOIN cajas c ON r.idcaja = c.idcaja 
+				LEFT JOIN cajas_cerradas cc ON c.idcaja = cc.idcaja_cerrada
 				WHERE r.idcaja = '$idcaja_cerrada'
-				AND DATE(r.fecha_hora) = (SELECT DATE(fecha_cierre) FROM cajas_cerradas WHERE idcaja_cerrada = '$idcaja_cerrada')";
+				AND cc.idcaja = '$idcaja'
+				AND r.fecha_hora >= cc.fecha_hora
+				AND r.fecha_hora <= cc.fecha_cierre";
 		return ejecutarConsulta($sql);
 	}
 
@@ -366,8 +376,11 @@ class Caja
 		$sql = "SELECT c.titulo AS caja, g.monto AS monto_gasto, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha 
 				FROM gastos g 
 				LEFT JOIN cajas c ON g.idcaja = c.idcaja 
+				LEFT JOIN cajas_cerradas cc ON c.idcaja = cc.idcaja_cerrada
 				WHERE g.idcaja = '$idcaja_cerrada'
-				AND DATE(g.fecha_hora) = (SELECT DATE(fecha_cierre) FROM cajas_cerradas WHERE idcaja_cerrada = '$idcaja_cerrada')";
+				AND cc.idcaja = '$idcaja'
+				AND g.fecha_hora >= cc.fecha_hora
+				AND g.fecha_hora <= cc.fecha_cierre";
 		return ejecutarConsulta($sql);
 	}
 }

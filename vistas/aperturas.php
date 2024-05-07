@@ -31,7 +31,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Aperturas de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas para que sean utilizadas en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Sólo puede agregar 1 caja por local. También, todos los trabajadores de su local puede editar y cerrar la caja de su local.<br><br><strong>Consideraciones:</strong> Se recomienda cerrar la caja al finalizar el día y una vez por día, y una vez cerrada, abrir la caja el día siguiente.<br><br><strong>Restricciones:</strong> El monto de la caja puede ser editado sólo 3 veces y mientras tanto no se haya realizado una venta con la caja. También no puede editar el monto si la caja está cerrada, de la cuál tendría que abrirlo de nuevo." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Aperturas de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas para que sean utilizadas en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Sólo puede agregar 1 caja por local. También, todos los trabajadores de su local puede editar y cerrar la caja de su local.<br><br><strong>Restricciones:</strong> El monto de la caja puede ser editado sólo 3 veces y mientras tanto no se haya realizado una venta con la caja. También no puede editar el monto si la caja está cerrada, de la cuál tendría que abrirlo de nuevo." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -69,7 +69,7 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Monto</th>
                       <th style="white-space: nowrap;">Empleado</th>
                       <th>Cargo</th>
-                      <th style="white-space: nowrap;">Fecha y hora</th>
+                      <th style="white-space: nowrap;">Fecha apertura</th>
                       <th>Estado</th>
                     </thead>
                     <tbody>
@@ -81,7 +81,7 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Monto</th>
                       <th>Empleado</th>
                       <th>Cargo</th>
-                      <th>Fecha y hora</th>
+                      <th>Fecha apertura</th>
                       <th>Estado</th>
                     </tfoot>
                   </table>

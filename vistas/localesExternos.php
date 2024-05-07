@@ -26,7 +26,7 @@ if (!isset($_SESSION["nombre"])) {
                         <i class="fa fa-clipboard"></i> Reporte
                       </button>
                     </a>
-                    <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Locales externos</strong>" data-html="true" data-content="Módulo para editar, ver los detalles y trabajadores de los locales externos de tu local, es decir, de los demás locales excepto el local donde te encuentras trabajando.<br><br><strong>Nota:</strong> Si quieres eliminar un local externo, primero tienes que cambiar de local a los trabajadores del local que quieres eliminar (desde el módulo <strong>usuarios</strong>)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                    <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Locales externos</strong>" data-html="true" data-content="Módulo para editar, ver los detalles y trabajadores de los locales externos de <strong>su local</strong>, es decir, de los demás locales excepto el local donde te encuentras trabajando.<br><br><strong>Nota:</strong> Si quieres eliminar un local externo, primero tienes que cambiar de local a los trabajadores del local que quieres eliminar (desde el módulo <strong>usuarios</strong>)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                   <?php } ?>
                 </h1>
                 <div class="box-tools pull-right">

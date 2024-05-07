@@ -37,8 +37,16 @@ $reg3_2 = $rspta3_2->fetch_object();
 $reg4 = $rspta4->fetch_object();
 $reg5 = $rspta5->fetch_object();
 $reg6 = $rspta6->fetch_object();
-$reg7 = $rspta7->fetch_object();
-$reg8 = $rspta8->fetch_object();
+
+$reg7 = '';
+if ($rspta7 !== false) {
+    $reg7 = $rspta7->fetch_object();
+}
+
+$reg8 = '';
+if ($rspta8 !== false) {
+    $reg8 = $rspta8->fetch_object();
+}
 
 require('ticket/code128.php');
 
@@ -537,7 +545,7 @@ $esUltimoBucle = false;
 $hizoSaltoLinea = false;
 $contador = 0;
 
-$totalRegistros = $rspta7->num_rows;
+$totalRegistros = ($rspta7 !== false) ? $rspta7->num_rows : 0;
 $anchoColumna = 24;
 
 while ($reg7) {
@@ -634,7 +642,7 @@ $esUltimoBucle = false;
 $hizoSaltoLinea = false;
 $contador = 0;
 
-$totalRegistros = $rspta7->num_rows;
+$totalRegistros = ($rspta8 !== false) ? $rspta8->num_rows : 0;
 $anchoColumna = 24;
 
 while ($reg8) {

@@ -235,7 +235,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							('<a target="_blank" href="../reportes/exTicketCierre.php?idcaja=' . $reg->idcaja . '&idcaja_cerrada=' . $reg->idcaja_cerrada . '"><button class="btn btn-success" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
-							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\')"><i class="fa fa-bars"></i></button>') .
+							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\', \'' . $reg->fecha_cierre . '\')"><i class="fa fa-bars"></i></button>') .
 							// ('<button class="btn btn-info" style="margin-left: 3px; height: 35px;" onclick="prueba(' . $reg->idcaja . ',\'' . $reg->idcaja_cerrada . '\')"><i class="fa fa-info-circle"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
@@ -287,6 +287,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => $reg->precio_venta,
 						"4" => $reg->descuento,
 						"5" => number_format($subtotal, 2),
+						"6" => $reg->fecha,
 					);
 
 					$totalSubtotal += $subtotal;
@@ -301,6 +302,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "<strong>SUBTOTAL</strong>",
 						"5" => '<strong>' . number_format($totalSubtotal, 2) . '</strong>',
+						"6" => "",
 					);
 
 					$data[] = array(
@@ -310,6 +312,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "<strong>IGV</strong>",
 						"5" => '<strong>' . number_format($totalIGV, 2) . '</strong>',
+						"6" => "",
 					);
 
 					$data[] = array(
@@ -319,6 +322,7 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "<strong>TOTAL</strong>",
 						"5" => '<strong>' . number_format($totalSubtotal + $totalIGV, 2) . '</strong>',
+						"6" => "",
 					);
 				}
 

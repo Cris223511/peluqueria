@@ -270,8 +270,9 @@ function buscar() {
 
 init();
 
-function modalDetalles(idcaja, idcaja_cerrada, fecha) {
+function modalDetalles(idcaja, idcaja_cerrada, fecha, fecha_cierre) {
 	$("#fecha_hora_caja").text(fecha);
+	$("#fecha_hora_cierre_caja").text(fecha_cierre);
 
 	tabla2 = $('#tbldetalles').dataTable(
 		{
@@ -365,7 +366,7 @@ function modalDetalles(idcaja, idcaja_cerrada, fecha) {
 			'iDisplayLength': 5,
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
 			},
 			"initComplete": function (settings, json) {
 				$("#myModal").modal("show");

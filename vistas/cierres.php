@@ -24,7 +24,7 @@ if (!isset($_SESSION["cajas"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Cierre de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas que ha sido cerradas desde el módulo de aperturas, en donde se podrá visualizar las ventas, montos, retiros y detalles de los productos que se vendieron en la caja <strong>de su local</strong> durante todo el día antes de haber sido cerrada." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Cierre de caja</strong>" data-html="true" data-content="Módulo en donde se registran las cajas que ha sido cerradas desde el módulo de aperturas, en donde se podrá visualizar las ventas, montos, retiros y detalles de los productos que se vendieron en la caja <strong>de su local</strong> durante el rango de fecha en el que se aperturó y se cerró la caja." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
@@ -93,7 +93,10 @@ if (!isset($_SESSION["cajas"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">DETALLES DE PRODUCTOS DE CIERRE DE CAJA: <span id="fecha_hora_caja"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">
+                DETALLES DE PRODUCTOS DE CIERRE DE CAJA<br>
+                <span style="font-weight: 500 !important;">DEL</span> <span id="fecha_hora_caja"></span> <span style="font-weight: 500 !important;">HASTA EL</span> <span id="fecha_hora_cierre_caja"></span>
+              </h4>
             </div>
           </div>
           <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding: 0 !important; height: max-content;">
@@ -106,6 +109,7 @@ if (!isset($_SESSION["cajas"])) {
                   <th style="white-space: nowrap;">P. UNITARIO</th>
                   <th>DESCUENTO</th>
                   <th style="white-space: nowrap;">P. TOTAL</th>
+                  <th>FECHA REGISTRO</th>
                 </thead>
                 <tbody>
                 </tbody>
@@ -116,6 +120,7 @@ if (!isset($_SESSION["cajas"])) {
                   <th>P. UNITARIO</th>
                   <th>DESCUENTO</th>
                   <th>P. TOTAL</th>
+                  <th>FECHA REGISTRO</th>
                 </tfoot>
               </table>
             </div>

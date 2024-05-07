@@ -27,7 +27,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Mi local</strong>" data-html="true" data-content="Módulo para editar, ver los detalles y los trabajadores de tu local." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Mi local</strong>" data-html="true" data-content="Módulo para editar, ver los detalles y los trabajadores de <strong>su local</strong>." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
                 </div>
