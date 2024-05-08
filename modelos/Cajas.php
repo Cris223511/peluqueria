@@ -354,7 +354,7 @@ class Caja
 
 	public function listarDetallesCajaAperturada($idcaja, $idcaja_cerrada)
 	{
-		$sql = "SELECT titulo AS caja, monto AS monto, DATE_FORMAT(fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM cajas WHERE idcaja = '$idcaja_cerrada'";
+		$sql = "SELECT titulo AS caja, monto AS monto, DATE_FORMAT(fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha FROM cajas_cerradas WHERE idcaja_cerrada = '$idcaja_cerrada' AND idcaja = '$idcaja'";
 		return ejecutarConsulta($sql);
 	}
 

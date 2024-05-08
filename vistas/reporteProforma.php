@@ -181,7 +181,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Fecha y hora</th>
                       <th>DNI / RUC</th>
                       <th>Cliente</th>
-                      <th>Ubicación del local</th>
+                      <th>Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
@@ -196,7 +196,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Fecha y hora</th>
                       <th>DNI / RUC</th>
                       <th>Cliente</th>
-                      <th>Ubicación del local</th>
+                      <th>Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>

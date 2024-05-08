@@ -306,6 +306,8 @@ function listarCategoria(categorias) {
 			let dragDistance = Math.sqrt(Math.pow(endClickX - startClickX, 2) + Math.pow(endClickY - startClickY, 2));
 
 			if (dragDistance < 5) {
+				$(".caja-categoria").removeClass("categoriaSelected");
+				$(this).find(".caja-categoria").addClass("categoriaSelected");
 				listarArticulosPorCategoria(categoria.id);
 			}
 		});

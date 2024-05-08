@@ -37,6 +37,12 @@ if (!isset($_SESSION["nombre"])) {
         justify-content: center;
       }
 
+      .categoriaSelected {
+        transition: 0.2s ease all;
+        border: 2px #ffa617 solid;
+        border-radius: 5px;
+      }
+
       .caja-categoria h1 {
         font-size: 14px;
         margin: 0;
@@ -406,7 +412,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 1%;">Opciones</th>
                       <th style="width: 1%;">PDF</th>
                       <th>Cliente</th>
-                      <th>Ubicación del local</th>
+                      <th>Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
@@ -421,7 +427,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Opciones</th>
                       <th>PDF</th>
                       <th>Cliente</th>
-                      <th>Ubicación del local</th>
+                      <th>Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>

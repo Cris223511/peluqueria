@@ -39,7 +39,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
-                    <th>Ubicación del local</th>
+                    <th>Almacén</th>
                     <th style="white-space: nowrap;">N° RUC</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del local</th>
                     <th style="white-space: nowrap;">Fecha y hora</th>
@@ -49,7 +49,7 @@ if (!isset($_SESSION["nombre"])) {
                   </tbody>
                   <tfoot>
                     <th>Opciones</th>
-                    <th>Ubicación del local</th>
+                    <th>Almacén</th>
                     <th>N° RUC</th>
                     <th>Descripción del local</th>
                     <th>Fecha y hora</th>
@@ -62,7 +62,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Local(*):</label>
                     <input type="hidden" name="idlocal" id="idlocal">
-                    <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese la ubicación del local." autocomplete="off" required>
+                    <input type="text" class="form-control" name="titulo" id="titulo" maxlength="40" placeholder="Ingrese la Almacén." autocomplete="off" required>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>RUC(*):</label>

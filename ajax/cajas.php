@@ -210,6 +210,17 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
+				{
+					if ($reg != "superadmin" && $cargo == "admin") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin") {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				$data = array();
 
 				while ($reg = $rspta->fetch_object()) {
@@ -233,7 +244,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
-							('<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
+							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px; margin-right: 3px;" onclick="eliminar(' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .
 							('<a target="_blank" href="../reportes/exTicketCierre.php?idcaja=' . $reg->idcaja . '&idcaja_cerrada=' . $reg->idcaja_cerrada . '"><button class="btn btn-success" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							('<button class="btn btn-warning" style="height: 35px;" onclick="modalDetalles(\'' . $reg->idcaja . '\',\'' . $reg->idcaja_cerrada . '\', \'' . $reg->fecha . '\', \'' . $reg->fecha_cierre . '\')"><i class="fa fa-bars"></i></button>') .
 							// ('<button class="btn btn-info" style="margin-left: 3px; height: 35px;" onclick="prueba(' . $reg->idcaja . ',\'' . $reg->idcaja_cerrada . '\')"><i class="fa fa-info-circle"></i></button>') .
@@ -243,8 +254,9 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
 						"4" => ucwords($reg->nombre),
 						"5" => ucwords($cargo_detalle),
-						"6" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
-						"7" => '<span class="label bg-red">Cerrado</span>'
+						"6" => ($reg->fecha == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha,
+						"7" => ($reg->fecha_cierre == '00-00-0000 00:00:00') ? 'Sin registrar.' : $reg->fecha_cierre,
+						"8" => '<span class="label bg-red">Cerrado</span>'
 					);
 				}
 				$results = array(

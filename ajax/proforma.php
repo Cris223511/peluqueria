@@ -116,6 +116,17 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				function mostrarBoton2($reg, $cargo, $idusuario, $buttonType)
+				{
+					if ($reg != "superadmin" && $cargo == "admin") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin") {
+						return $buttonType;
+					} else {
+						return '';
+					}
+				}
+
 				$firstIteration = true;
 				$totalPrecioVenta = 0;
 
@@ -144,7 +155,7 @@ if (!isset($_SESSION["nombre"])) {
 								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idproforma . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
 									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="enviar(' . $reg->idproforma . ', ' . $reg->idlocal . ')"><i class="fa fa-sign-in"></i></button>') .
 										(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idproforma . ')"><i class="fa fa-close"></i></button>')))) : ('')) .
-							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>') .
+							mostrarBoton2($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idproforma . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => '<a target="_blank" href="../reportes/exA4Proforma.php?id=' . $reg->idproforma . '"> <button class="btn btn-info" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
 						"2" => $reg->cliente,

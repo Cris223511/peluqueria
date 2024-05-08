@@ -306,13 +306,8 @@ function listarCategoria(categorias) {
 			let dragDistance = Math.sqrt(Math.pow(endClickX - startClickX, 2) + Math.pow(endClickY - startClickY, 2));
 
 			if (dragDistance < 5) {
-				// Remover la clase de todas las categorías
 				$(".caja-categoria").removeClass("categoriaSelected");
-
-				// Agregar la clase a la categoría clicada
 				$(this).find(".caja-categoria").addClass("categoriaSelected");
-
-				// Llamar a la función para listar artículos por categoría
 				listarArticulosPorCategoria(categoria.id);
 			}
 		});
