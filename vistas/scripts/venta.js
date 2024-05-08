@@ -285,7 +285,7 @@ function listarCategoria(categorias) {
 
 		let html = `
             <div class="draggable" style="padding: 5px">
-                <div class="caja-categoria">
+                <div class="caja-categoria" data-id="${categoria.id}">
                     <h1>${capitalizarPrimeraLetra(categoria.nombre)}</h1>
                     <h4><strong>Productos: ${categoria.cantidad}</strong></h4>
                 </div>
@@ -306,6 +306,13 @@ function listarCategoria(categorias) {
 			let dragDistance = Math.sqrt(Math.pow(endClickX - startClickX, 2) + Math.pow(endClickY - startClickY, 2));
 
 			if (dragDistance < 5) {
+				// Remover la clase de todas las categorías
+				$(".caja-categoria").removeClass("categoriaSelected");
+
+				// Agregar la clase a la categoría clicada
+				$(this).find(".caja-categoria").addClass("categoriaSelected");
+
+				// Llamar a la función para listar artículos por categoría
 				listarArticulosPorCategoria(categoria.id);
 			}
 		});
@@ -316,7 +323,6 @@ function listarCategoria(categorias) {
 	inicializeGLightbox();
 	inicializegScrollingCarousel();
 }
-
 
 function listarMetodoPago(metodosPago) {
 	let pagosContainer = $("#pagos");

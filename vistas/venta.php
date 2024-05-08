@@ -30,11 +30,18 @@ if (!isset($_SESSION["nombre"])) {
         padding: 10px;
         text-align: center;
         border-radius: 5px;
-        border: 1px solid black;
+        border: 2px solid #5e5e5e;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        transition: 0.2s ease all;
+      }
+
+      .categoriaSelected {
+        transition: 0.2s ease all;
+        border: 2px #ffa617 solid;
+        border-radius: 5px;
       }
 
       .caja-categoria h1 {
