@@ -42,7 +42,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $clientes->listarClientes();
     } else {
       $rspta = $clientes->listarClientesPorUsuario($idlocal_session);

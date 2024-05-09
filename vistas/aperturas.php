@@ -24,7 +24,7 @@ if (!isset($_SESSION["cajas"])) {
                   </button>
                   <?php // } 
                   ?>
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptcajas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

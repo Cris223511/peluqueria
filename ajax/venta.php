@@ -76,7 +76,7 @@ if (!isset($_SESSION["nombre"])) {
 				$fecha_fin = $_GET["fecha_fin"];
 				$estado = $_GET["estado"];
 
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					if ($fecha_inicio == "" && $fecha_fin == "" && $estado == "") {
 						$rspta = $venta->listar();
 					} else if ($fecha_inicio == "" && $fecha_fin == ""  && $estado != "") {
@@ -102,7 +102,9 @@ if (!isset($_SESSION["nombre"])) {
 
 				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
 				{
-					if ($reg != "superadmin" && $cargo == "admin") {
+					if (($reg != "superadmin" && $reg != "admin_total") && $cargo == "admin") {
+						return $buttonType;
+					} elseif ($reg != "superadmin" && $cargo == "admin_total") {
 						return $buttonType;
 					} elseif ($cargo == "superadmin" || ($cargo == "cajero" && $idusuario == $_SESSION["idusuario"])) {
 						return $buttonType;
@@ -115,7 +117,7 @@ if (!isset($_SESSION["nombre"])) {
 				{
 					if ($reg != "superadmin" && $cargo == "admin") {
 						return $buttonType;
-					} elseif ($cargo == "superadmin") {
+					} elseif ($cargo == "superadmin" || $cargo == "admin_total") {
 						return $buttonType;
 					} else {
 						return '';
@@ -131,6 +133,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -275,7 +280,7 @@ if (!isset($_SESSION["nombre"])) {
 				/* ======================= SELECTS ======================= */
 
 			case 'listarTodosLocalActivosPorUsuario':
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $venta->listarTodosLocalActivos();
 				} else {
 					$rspta = $venta->listarTodosLocalActivosPorUsuario($idlocalSession);
@@ -296,7 +301,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarArticulosPorCategoria':
 				$idcategoria = isset($_POST["idcategoria"]) ? limpiarCadena($_POST["idcategoria"]) : "";
 
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $venta->listarArticulosPorCategoria($idcategoria);
 				} else {
 					$rspta = $venta->listarArticulosPorCategoriaLocal($idcategoria, $idlocalSession);
@@ -354,7 +359,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listarClientes':
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $venta->listarClientes();
 				} else {
 					$rspta = $venta->listarClientesLocal($idlocalSession);

@@ -290,7 +290,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lArticulos"><a href="articulo.php"><i class="fa fa-circle-o"></i> Productos</a></li>
                 ';
-            if ($_SESSION['cargo'] == "superadmin") {
+            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") {
               echo '<li id="lArticulosExternos"><a href="articuloExterno.php"><i class="fa fa-circle-o"></i> Productos Externos</a></li>';
             }
             echo '
@@ -394,7 +394,7 @@ $local_login = $_SESSION['local'];
             <ul class="treeview-menu">
               <li id="lConfUsuario"><a href="confUsuario.php"><i class="fa fa-circle-o"></i> Configuración de perfil</a></li>
               ';
-            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin") {
+            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total" || $_SESSION['cargo'] == "admin") {
               echo '
                 <li id="lConfPortada"><a href="confPortada.php"><i class="fa fa-circle-o"></i> Configuración de portada</a></li>
                 <li id="lConfBoleta"><a href="confBoleta.php"><i class="fa fa-circle-o"></i> Configuración de boletas</a></li>
@@ -478,7 +478,7 @@ $local_login = $_SESSION['local'];
             </a>
           </li>
           <?php
-          // if ($_SESSION['cargo'] == "superadmin") {
+          // if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") {
           ?>
           <!-- <li id="sql_export">
               <a>

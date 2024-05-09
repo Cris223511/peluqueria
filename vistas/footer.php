@@ -375,7 +375,7 @@
       //           }
       //         });
       //       </script>';
-    } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin") {
+    } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin_total" && $_SESSION["cargo"] != "admin") {
       echo '<script>
               $(document).ajaxSuccess(function(event, xhr, settings) {
                 $(".dt-buttons").hide();

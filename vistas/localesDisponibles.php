@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin")) {
+  if ($_SESSION['perfilu'] == 1 && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") || $_SESSION['cargo'] == "admin") {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -23,7 +23,7 @@ if (!isset($_SESSION["nombre"])) {
                   <!-- <button class="btn btn-success" id="btnasignar" onclick="mostrarform2(true)">
                     <i class="fa fa-sign-out"></i> Asignar
                   </button> -->
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptlocalesdisponibles.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

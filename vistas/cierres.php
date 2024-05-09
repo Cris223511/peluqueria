@@ -17,7 +17,7 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Cierre de caja
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptcajascerradas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

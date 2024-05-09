@@ -17,7 +17,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="box-header with-border">
                 <h1 class="box-title">Usuarios
                   <?php
-                  if ($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') {
+                  if ($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') {
                   ?>
                     <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                       <i class="fa fa-plus-circle"></i> Agregar
@@ -25,7 +25,7 @@ if (!isset($_SESSION["nombre"])) {
                   <?php
                   }
                   ?>
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptusuarios.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

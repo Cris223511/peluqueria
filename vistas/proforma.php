@@ -364,7 +364,7 @@ if (!isset($_SESSION["nombre"])) {
                   <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
                     <i class="fa fa-plus-circle"></i> Nueva proforma
                   </button>
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptproformas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
@@ -908,7 +908,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6">
-                <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                     <label>Local (*):</label>
                     <select id="idlocal_session" class="form-control selectpicker" data-live-search="true" data-size="5" required onchange="actualizarCorrelativoLocal(this.value)">

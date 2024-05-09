@@ -41,6 +41,9 @@ switch ($_GET["op"]) {
 								case 'superadmin':
 									$cargo_detalle = "Superadministrador";
 									break;
+								case 'admin_total':
+									$cargo_detalle = "Admin Total";
+									break;
 								case 'admin':
 									$cargo_detalle = "Administrador";
 									break;

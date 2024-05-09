@@ -37,7 +37,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $cajas->listar();
     } else {
       $rspta = $cajas->listarPorUsuario($idlocal_session);

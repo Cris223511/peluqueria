@@ -16,7 +16,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocal = $_SESSION['idlocal'];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $compras10 = $consulta->comprasultimos_10dias();
       $ventas10 = $consulta->ventasultimos_10dias();
       $proformas10 = $consulta->proformasultimos_10dias();
@@ -26,7 +26,7 @@ if (!isset($_SESSION["nombre"])) {
       $proformas10 = $consulta->proformasultimos_10diasUsuario($idlocal);
     }
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $totalCompras = $consulta->totalCompras()["total"];
       $totalVentas = $consulta->totalVentas()["total"];
       $totalVentasProforma = $consulta->totalVentasProforma()["total"];

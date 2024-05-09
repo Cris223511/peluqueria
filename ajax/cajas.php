@@ -110,7 +110,7 @@ if (!isset($_SESSION["nombre"])) {
 				$param2 = $_GET["param2"]; // valor fecha fin
 				$param3 = $_GET["param3"]; // valor local
 
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
 						$rspta = $cajas->listarPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
@@ -140,6 +140,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -188,7 +191,7 @@ if (!isset($_SESSION["nombre"])) {
 				$param2 = $_GET["param2"]; // valor fecha fin
 				$param3 = $_GET["param3"]; // valor local
 
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					if ($param1 != '' && $param2 != '' && $param3 == '') {
 						$rspta = $cajas->listarCerradasPorParametro("DATE(c.fecha_hora) >= '$param1' AND DATE(c.fecha_hora) <= '$param2'");
 					} else if ($param1 != '' && $param2 != '' && $param3 != '') {
@@ -214,7 +217,7 @@ if (!isset($_SESSION["nombre"])) {
 				{
 					if ($reg != "superadmin" && $cargo == "admin") {
 						return $buttonType;
-					} elseif ($cargo == "superadmin") {
+					} elseif ($cargo == "superadmin" || $cargo == "admin_total") {
 						return $buttonType;
 					} else {
 						return '';
@@ -229,6 +232,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -349,7 +355,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectCajas':
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $cajas->listar();
 				} else {
 					$rspta = $cajas->listarPorUsuario($idlocalSession);

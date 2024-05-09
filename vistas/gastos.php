@@ -20,7 +20,7 @@ if (!isset($_SESSION["cajas"])) {
                   <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)">
                     <i class="fa fa-plus-circle"></i> Agregar gasto
                   </button>
-                  <?php if ($_SESSION["cargo"] == "superadmin") { ?>
+                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptgastos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte

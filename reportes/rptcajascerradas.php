@@ -37,7 +37,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocal_session = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $cajas->listarCerradas();
     } else {
       $rspta = $cajas->listarCerradasPorUsuario($idlocal_session);

@@ -36,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
     $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $metodo_pago->listar();
     } else {
       $rspta = $metodo_pago->listarPorUsuario($idusuario);

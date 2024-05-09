@@ -139,6 +139,12 @@ switch ($_GET["op"]) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
 							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
 							break;
@@ -155,11 +161,11 @@ switch ($_GET["op"]) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							(!($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin') ?
 								((($reg->estado) ?
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
 						"1" => $reg->login,
 						"2" => $cargo_detalle,
 						"3" => $reg->local,
@@ -198,6 +204,9 @@ switch ($_GET["op"]) {
 				case 'superadmin':
 					$cargo_detalle = "Superadministrador";
 					break;
+				case 'admin_total':
+					$cargo_detalle = "Admin Total";
+					break;
 				case 'admin':
 					$cargo_detalle = "Administrador";
 					break;
@@ -213,7 +222,7 @@ switch ($_GET["op"]) {
 
 	case 'selectUsuarios':
 		$cargoSession = $_SESSION["cargo"];
-		if ($cargoSession == "superadmin" || $cargoSession == "admin") {
+		if ($cargoSession == "superadmin" || $cargoSession == "admin_total" || $cargoSession == "admin") {
 			$rspta = $usuario->listarASCactivos();
 		} else {
 			$rspta = $usuario->listarPorUsuarioASCActivos($_SESSION['idusuario']);
@@ -225,6 +234,9 @@ switch ($_GET["op"]) {
 			switch ($reg->cargo) {
 				case 'superadmin':
 					$cargo_detalle = "Superadministrador";
+					break;
+				case 'admin_total':
+					$cargo_detalle = "Admin Total";
 					break;
 				case 'admin':
 					$cargo_detalle = "Administrador";
@@ -310,6 +322,9 @@ switch ($_GET["op"]) {
 			switch ($_SESSION['cargo']) {
 				case 'superadmin':
 					$_SESSION['cargo_detalle'] = "Superadministrador";
+					break;
+				case 'admin_total':
+					$_SESSION['cargo_detalle'] = "Admin Total";
 					break;
 				case 'admin':
 					$_SESSION['cargo_detalle'] = "Administrador";

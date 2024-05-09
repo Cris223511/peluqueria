@@ -69,6 +69,9 @@ if (!isset($_SESSION["nombre"])) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
 							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
 							break;
@@ -167,6 +170,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -268,6 +274,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -373,6 +382,9 @@ if (!isset($_SESSION["nombre"])) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
 							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
 							break;
@@ -472,6 +484,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
@@ -575,6 +590,9 @@ if (!isset($_SESSION["nombre"])) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
 							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";
 							break;
@@ -668,6 +686,9 @@ if (!isset($_SESSION["nombre"])) {
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
 							break;
 						case 'admin':
 							$cargo_detalle = "Administrador";

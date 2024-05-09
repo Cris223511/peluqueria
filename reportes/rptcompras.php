@@ -47,7 +47,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocalSession = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $compra->listar();
     } else {
       $rspta = $compra->listarPorUsuario($idlocalSession);
