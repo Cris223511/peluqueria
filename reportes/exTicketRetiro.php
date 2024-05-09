@@ -44,7 +44,8 @@ $y = $pdf->cuerpoCaja(
     $reg->local_ruc ?? '',
     $reg->nombre ?? '',
     $reg->caja ?? '',
-    $reg->monto ?? '',
+    'MONTO: ' . $reg->monto ?? '',
+    '',
     $reg->descripcion ?? '',
 );
 

@@ -125,9 +125,10 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+				// para que no le salga ninguna opción al cajero pero a los demás sí.
 				function mostrarBoton2($reg, $cargo, $idusuario, $buttonType)
 				{
-					if ($reg != "superadmin" && $cargo == "admin") {
+					if (($reg != "superadmin" && $reg != "admin_total") && $cargo == "admin") {
 						return $buttonType;
 					} elseif ($reg != "superadmin" && $cargo == "admin_total") {
 						return $buttonType;

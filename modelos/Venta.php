@@ -80,7 +80,7 @@ class Venta
 			$num_elementos = $num_elementos + 1;
 		}
 
-		$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '$total_venta', vendido = '1' WHERE idcaja = '$idcaja'";
+		$sql_actualizar_monto = "UPDATE cajas SET monto_total = monto_total + '$total_venta', vendido = '1' WHERE idcaja = '$idcaja'";
 		ejecutarConsulta($sql_actualizar_monto);
 
 		return [$sw, $idventanew];
@@ -183,7 +183,7 @@ class Venta
 		$resultado_verificar_eliminada = ejecutarConsulta($sql_verificar_eliminada);
 
 		if ($resultado_verificar_eliminada->num_rows > 0) {
-			$sql_actualizar_monto = "UPDATE cajas SET monto = GREATEST(0, monto - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
+			$sql_actualizar_monto = "UPDATE cajas SET monto_total = GREATEST(0, monto_total - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
 			ejecutarConsulta($sql_actualizar_monto);
 		}
 
@@ -200,7 +200,7 @@ class Venta
 		$resultado_verificar_anulada = ejecutarConsulta($sql_verificar_anulada);
 
 		if ($resultado_verificar_anulada->num_rows > 0) {
-			$sql_actualizar_monto = "UPDATE cajas SET monto = GREATEST(0, monto - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
+			$sql_actualizar_monto = "UPDATE cajas SET monto_total = GREATEST(0, monto_total - (SELECT total_venta FROM venta WHERE idventa = '$idventa')) WHERE idcaja = (SELECT idcaja FROM venta WHERE idventa = '$idventa')";
 			ejecutarConsulta($sql_actualizar_monto);
 		}
 

@@ -1275,7 +1275,7 @@ class FPDF
 	 *                  Ticket Apertura / Retiro / Gasto Design                    *
 	 *******************************************************************************/
 
-	function cuerpoCaja($y, $titulo, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $descripcion)
+	function cuerpoCaja($y, $titulo, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $monto_total, $descripcion)
 	{
 		# LOGO #
 		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
@@ -1329,7 +1329,14 @@ class FPDF
 		# MONTO #
 		$this->SetX(3);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 5, mb_convert_encoding("MONTO: $monto", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 5, mb_convert_encoding("$monto", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		if ($monto_total != "") {
+			# MONTO TOTAL #
+			$this->SetX(3);
+			$this->SetTextColor(0, 0, 0);
+			$this->MultiCell(0, 5, mb_convert_encoding("MONTO TOTAL: $monto_total", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		}
 
 		# DESCRIPCIÓN #
 		$this->Ln(2.5);

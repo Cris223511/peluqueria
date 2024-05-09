@@ -221,7 +221,7 @@ class Proforma
 			$idventa = ejecutarConsulta_retornarID($sql_insert_venta);
 
 			// Actualizar el monto en la caja correspondiente
-			$sql_actualizar_monto = "UPDATE cajas SET monto = monto + '{$datos_proforma['total_venta']}', vendido = '1' WHERE idcaja = '{$datos_proforma['idcaja']}'";
+			$sql_actualizar_monto = "UPDATE cajas SET monto_total = monto + '{$datos_proforma['total_venta']}', vendido = '1' WHERE idcaja = '{$datos_proforma['idcaja']}'";
 			ejecutarConsulta($sql_actualizar_monto);
 
 			// Insertar los detalles de la proforma en detalle_venta

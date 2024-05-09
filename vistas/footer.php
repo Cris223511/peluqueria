@@ -329,8 +329,8 @@
           let numValor = $(campo).val();
           if (typeof numValor !== 'undefined') {
             numValor = numValor.trim();
-            let num = parseInt(numValor, 10);
-            let numFormateado = num < 10000 ? num.toString().padStart(4, '0') : num.toString();
+            let num = numValor === '' ? siguienteCorrelativo || 0 : parseInt(numValor, 10);
+            let numFormateado = num < 10000 ? num.toString().padStart(5, '0') : num.toString();
             $(campo).val(numFormateado);
           }
         });

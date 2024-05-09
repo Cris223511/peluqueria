@@ -420,13 +420,13 @@ $y += 18;
 $cols = array(
     mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => 24,
     "FECHA Y HORA" => 22,
-    "MONTO" => 18,
+    "MONTO INICIAL" => 18,
 );
 
 $aligns = array(
     mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "L",
     "FECHA Y HORA" => "L",
-    "MONTO" => "R",
+    "MONTO INICIAL" => "R",
 );
 
 $pdf->SetFont('hypermarket', '', 8.5);
@@ -434,7 +434,7 @@ $pdf->addCols($cols, $aligns, $y);
 $cols = array(
     mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "L",
     "FECHA Y HORA" => "L",
-    "MONTO" => "R",
+    "MONTO INICIAL" => "R",
 );
 
 $pdf->addLineFormat($cols);
@@ -443,6 +443,7 @@ $pdf->addLineFormat($cols);
 $y += 4;
 
 $montoTotal = 0;
+$montoTotalAcumulado = 0;
 
 $esUltimoBucle = false;
 $hizoSaltoLinea = false;
@@ -457,7 +458,7 @@ while ($reg6) {
     $line = array(
         mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => ($reg6->caja ?? ''),
         "FECHA Y HORA" => ($reg6->fecha ?? 0.00),
-        "MONTO" => (number_format($reg6->monto, 2) ?? 0.00),
+        "MONTO INICIAL" => (number_format($reg6->monto, 2) ?? 0.00),
     );
     $pdf->SetFont('hypermarket', '', 8);
     $size = $pdf->addLine($y - 4, $line) ?? 0;
@@ -475,25 +476,39 @@ while ($reg6) {
     }
 
     $montoTotal += ($reg6->monto ?? 0.00);
+    $montoTotalAcumulado += ($reg6->monto_total ?? 0.00);
 
     $reg6 = $rspta6->fetch_object();
 }
 
 # Tabla para los totales de la caja aperturada (MONTOS) #
 
-# TOTAL #
+# TOTAL ACUMULADO #
 $y += ($size - 4) ?? 0;
 $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
 
-$lineTotal = array(
+$lineTotalAcumulado = array(
     mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
-    "FECHA Y HORA" => "TOTAL",
-    "MONTO" => number_format($montoTotal, 2),
+    "FECHA Y HORA" => "TOTAL ACUMULADO",
+    "MONTO INICIAL" => number_format($montoTotalAcumulado - $montoTotal, 2),
 );
 
 $pdf->SetFont('hypermarket', '', 8);
-$sizeSubtotal = $pdf->addLine($y, $lineTotal) ?? 0;
+$sizeTotalAcumulado = $pdf->addLine($y, $lineTotalAcumulado) ?? 0;
 
+$y += $sizeTotalAcumulado + 2;
+
+# TOTAL #
+$lineTotal = array(
+    mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
+    "FECHA Y HORA" => "TOTAL",
+    "MONTO INICIAL" => number_format($montoTotalAcumulado, 2),
+);
+
+$pdf->SetFont('hypermarket', '', 8);
+$sizeTotal = $pdf->addLine($y, $lineTotal);
+
+$pdf->addLineFormat($lineTotalAcumulado);
 $pdf->addLineFormat($lineTotal);
 
 $pdf->SetFont('hypermarket', '', 10);
