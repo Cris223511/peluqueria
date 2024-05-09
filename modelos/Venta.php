@@ -323,7 +323,7 @@ class Venta
 
 	public function getLastNumComprobante($idlocal)
 	{
-		$sql = "SELECT num_comprobante as last_num_comprobante FROM venta WHERE idlocal = '$idlocal' AND eliminado = '0' ORDER BY idventa DESC LIMIT 1";
+		$sql = "SELECT MAX(num_comprobante) AS last_num_comprobante FROM venta WHERE idlocal = '$idlocal' AND eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 

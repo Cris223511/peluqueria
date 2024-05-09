@@ -100,6 +100,18 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				// ANTIGUO
+				// function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
+				// {
+				// 	if ($reg != "superadmin" && $cargo == "admin") {
+				// 		return $buttonType;
+				// 	} elseif ($cargo == "superadmin" || ($cargo == "cajero" && $idusuario == $_SESSION["idusuario"])) {
+				// 		return $buttonType;
+				// 	} else {
+				// 		return '';
+				// 	}
+				// }
+
 				function mostrarBoton($reg, $cargo, $idusuario, $buttonType)
 				{
 					if (($reg != "superadmin" && $reg != "admin_total") && $cargo == "admin") {
@@ -117,7 +129,9 @@ if (!isset($_SESSION["nombre"])) {
 				{
 					if ($reg != "superadmin" && $cargo == "admin") {
 						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "admin_total") {
+					} elseif ($reg != "superadmin" && $cargo == "admin_total") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin") {
 						return $buttonType;
 					} else {
 						return '';

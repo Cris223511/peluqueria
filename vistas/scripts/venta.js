@@ -573,7 +573,7 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, stock, precio_compr
 	}
 
 	if (!existeProducto) {
-		if ($("#comisionar").val() == 1) {
+		if ($("#comisionar").val() == 1 || $("#comisionar").val() == "1") {
 			$('#myModal1').modal('show');
 			limpiarModalEmpleados();
 
@@ -870,9 +870,11 @@ function buscarSunat(e) {
 						$('#myModal6').modal('show');
 					}
 				})
+				$("#btnSunat").prop("disabled", false);
 			} else if (datos == "El DNI debe tener 8 caracteres." || datos == "El RUC debe tener 11 caracteres.") {
 				bootbox.alert(datos);
 				limpiarModalClientes();
+				$("#btnSunat").prop("disabled", false);
 			} else {
 				const obj = JSON.parse(datos);
 				console.log(obj);

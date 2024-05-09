@@ -113,7 +113,7 @@ class Servicio
 
 	public function getLastCodigo()
 	{
-		$sql = "SELECT codigo as last_codigo FROM servicios WHERE eliminado = '0' ORDER BY idservicio DESC LIMIT 1";
+		$sql = "SELECT MAX(codigo) AS last_codigo FROM servicios WHERE eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 }

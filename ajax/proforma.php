@@ -122,7 +122,9 @@ if (!isset($_SESSION["nombre"])) {
 				{
 					if ($reg != "superadmin" && $cargo == "admin") {
 						return $buttonType;
-					} elseif ($cargo == "superadmin" || $cargo == "admin_total") {
+					} elseif ($reg != "superadmin" && $cargo == "admin_total") {
+						return $buttonType;
+					} elseif ($cargo == "superadmin") {
 						return $buttonType;
 					} else {
 						return '';

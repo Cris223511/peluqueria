@@ -377,7 +377,7 @@ class Proforma
 
 	public function getLastNumComprobante($idlocal)
 	{
-		$sql = "SELECT num_comprobante as last_num_comprobante FROM proforma WHERE idlocal = '$idlocal' AND eliminado = '0' ORDER BY idproforma DESC LIMIT 1";
+		$sql = "SELECT MAX(num_comprobante) AS last_num_comprobante FROM proforma WHERE idlocal = '$idlocal' AND eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -695,9 +695,11 @@ function buscarSunat(e) {
 						$('#myModal6').modal('show');
 					}
 				})
+				$("#btnSunat").prop("disabled", false);
 			} else if (datos == "El DNI debe tener 8 caracteres." || datos == "El RUC debe tener 11 caracteres.") {
 				bootbox.alert(datos);
 				limpiarModalProveedor();
+				$("#btnSunat").prop("disabled", false);
 			} else {
 				const obj = JSON.parse(datos);
 				console.log(obj);

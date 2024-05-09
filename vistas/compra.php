@@ -30,11 +30,12 @@ if (!isset($_SESSION["nombre"])) {
         padding: 10px;
         text-align: center;
         border-radius: 5px;
-        border: 1px solid black;
+        border: 2px solid #1d262b;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+        transition: 0.2s ease all;
       }
 
       .categoriaSelected {
@@ -55,7 +56,7 @@ if (!isset($_SESSION["nombre"])) {
       }
 
       .productos {
-        margin: 20px 50px;
+        margin: 20px 5px;
         background-color: white;
         border-radius: 5px;
       }
@@ -150,11 +151,12 @@ if (!isset($_SESSION["nombre"])) {
       #detalles tbody tr {
         background-color: transparent;
         color: white;
-        font-size: 12px;
+        font-size: 14px;
       }
 
       #detalles tbody tr {
-        font-size: 10.5px;
+        font-size: 12.5px;
+        font-weight: bold;
       }
 
       #detalles thead th {
@@ -274,8 +276,8 @@ if (!isset($_SESSION["nombre"])) {
       .caja-pagos a {
         border-radius: 3px;
         margin-bottom: 10px;
-        width: 40px;
-        height: 30px;
+        width: 45px;
+        height: 35px;
         overflow: hidden;
         display: flex;
         align-items: center;
@@ -460,7 +462,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                 </div>
                 <div class="col-lg-12 col-md-12 col-sm-12 contenedor" style="display: flex; padding: 0;">
-                  <div class="col-lg-7 col-md-7 col-sm-12" style="background-color: #e4e6e7; padding: 10px">
+                  <div class="col-lg-6 col-md-6 col-sm-12" style="background-color: #e4e6e7; padding: 10px">
                     <div class="categoria">
                       <div class="g-scrolling-carousel carousel-three">
                         <div id="categoria" class="items">
@@ -474,7 +476,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                     </div>
                   </div>
-                  <div class="col-lg-5 col-md-5 col-sm-12" style="padding: 0; max-height: 100%; overflow: auto; height: 100%;">
+                  <div class="col-lg-6 col-md-6 col-sm-12" style="padding: 0; max-height: 100%; overflow: auto; height: 100%;">
                     <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 10px; padding-top: 0px; background-color: #2c3b42; height: 326px; max-height: 326px; overflow: auto;">
                       <table id="detalles" class="table table-dark table-striped table-hover w-100" style="width: 100% !important;">
                         <thead>
