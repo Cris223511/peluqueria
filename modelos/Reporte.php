@@ -4,6 +4,88 @@ require "../config/Conexion.php";
 
 class Reporte
 {
+	/* ======================= REPORTE DE VENTAS Y EMPLEADOS ======================= */
+
+	public function listarVentasEmpleados($condiciones = "")
+	{
+		$sql = "SELECT
+					dv.idventa,
+					dv.idarticulo,
+					dv.idservicio,
+					dv.idpersonal,
+					DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					v.idcliente,
+					c.nombre AS cliente,
+					c.tipo_documento AS cliente_tipo_documento,
+					c.num_documento AS cliente_num_documento,
+					c.direccion AS cliente_direccion,
+					v.idcaja,
+					ca.titulo AS caja,
+					al.idlocal,
+					al.titulo AS local,
+					u.idusuario,
+					u.nombre AS usuario,
+					u.cargo AS cargo,
+					v.tipo_comprobante,
+					v.num_comprobante,
+					v.vuelto,
+					v.impuesto,
+					v.total_venta,
+					v.estado,
+					a.nombre AS nombre_articulo,
+					s.titulo AS nombre_servicio,
+					CONCAT(p.nombre, ' - ', p.cargo) AS personal
+				FROM detalle_venta dv
+				LEFT JOIN venta v ON dv.idventa = v.idventa
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
+				LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+				LEFT JOIN locales al ON v.idlocal = al.idlocal
+				LEFT JOIN usuario u ON v.idusuario = u.idusuario
+				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
+				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
+				LEFT JOIN personales p ON dv.idpersonal = p.idpersonal
+				WHERE $condiciones
+				ORDER by dv.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarVentasEmpleadosLocal($idlocal, $condiciones = "")
+	{
+		$sql = "SELECT DISTINCT
+					  v.idventa,
+					  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					  v.idcliente,
+					  c.nombre AS cliente,
+					  c.tipo_documento AS cliente_tipo_documento,
+					  c.num_documento AS cliente_num_documento,
+					  c.direccion AS cliente_direccion,
+					  v.idcaja,
+					  ca.titulo AS caja,
+					  al.idlocal,
+					  al.titulo AS local,
+					  u.idusuario,
+					  u.nombre AS usuario,
+					  u.cargo AS cargo,
+					  v.tipo_comprobante,
+					  v.num_comprobante,
+					  v.vuelto,
+					  v.impuesto,
+					  v.total_venta,
+					  v.estado
+					FROM venta v
+					LEFT JOIN clientes c ON v.idcliente = c.idcliente
+					LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+					LEFT JOIN locales al ON v.idlocal = al.idlocal
+					LEFT JOIN usuario u ON v.idusuario = u.idusuario
+					LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
+					WHERE v.idlocal = '$idlocal'
+					AND $condiciones
+					ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
 	/* ======================= REPORTE DE COMPRAS ======================= */
 
 	public function listarCompras($condiciones = "")

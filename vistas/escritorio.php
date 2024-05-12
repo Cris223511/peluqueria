@@ -236,7 +236,7 @@ if (!isset($_SESSION["nombre"])) {
         data: {
           labels: [<?php echo $fechasc; ?>],
           datasets: [{
-            barPercentage: 0.3,
+            barPercentage: 0.5,
             label: 'Compras en S/ de los últimos 10 días',
             data: [<?php echo $totalesc; ?>],
             backgroundColor: [
@@ -295,7 +295,7 @@ if (!isset($_SESSION["nombre"])) {
         data: {
           labels: [<?php echo $fechasv; ?>],
           datasets: [{
-            barPercentage: 0.3,
+            barPercentage: 0.5,
             label: 'Ventas en S/ de los últimos 10 días',
             data: [<?php echo $totalesv; ?>],
             backgroundColor: [
@@ -354,7 +354,7 @@ if (!isset($_SESSION["nombre"])) {
         data: {
           labels: [<?php echo $fechasp; ?>],
           datasets: [{
-            barPercentage: 0.3,
+            barPercentage: 0.5,
             label: 'Proformas en S/ de los últimos 10 días',
             data: [<?php echo $totalesp; ?>],
             backgroundColor: [

@@ -24,6 +24,128 @@ if (!isset($_SESSION["nombre"])) {
 
 		switch ($_GET["op"]) {
 
+				/* ======================= REPORTE DE VENTAS Y EMPLEADOS ======================= */
+
+			case 'listarVentasEmpleados':
+				$parametros = array(
+					"v.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "v.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(v.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "v.tipo_comprobante = '{$_GET["param3"]}'",
+					"param4" => "v.idlocal = '{$_GET["param4"]}'",
+					"param5" => "u.idusuario = '{$_GET["param5"]}'",
+					"param6" => "v.estado = '{$_GET["param6"]}'",
+					"param7" => "dvp.idmetodopago = '{$_GET["param7"]}'",
+					"param8" => "c.nombre LIKE '%{$_GET["param8"]}%'",
+					"param9" => "c.num_documento = '{$_GET["param9"]}'",
+					"param10" => "v.num_comprobante = '{$_GET["param10"]}'"
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarVentasEmpleados($condiciones) : $reporte->listarVentasEmpleadosLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$lastIdVenta = null;
+				$firstIteration = true;
+				$totalPrecioVenta = 0;
+				$ventasUnicas = array();
+				$hayDatos = true;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$hayDatos = false;
+
+					// Verificar si el idventa actual es diferente al idventa del registro anterior
+					// Verificar si es la primera iteración
+					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
+						// Agregar una fila vacía al array antes de agregar el nuevo registro
+						$data[] = array_fill(0, 12, ''); // Esto crea una fila vacía con 11 celdas
+					}
+
+					$data[] = array(
+						"0" => $reg->fecha,
+						"1" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"2" => $reg->cliente,
+						"3" => ($reg->personal  == "") ? 'Sin registrar.' : $reg->personal,
+						"4" => ($reg->idarticulo != "0") ? strtoupper($reg->nombre_articulo) : strtoupper($reg->nombre_servicio),
+						"5" => $reg->local,
+						"6" => $reg->caja,
+						"7" => $reg->tipo_comprobante,
+						"8" => 'N° ' . $reg->num_comprobante,
+						"9" => $reg->total_venta,
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					if (!isset($ventasUnicas[$reg->idventa])) {
+						$ventasUnicas[$reg->idventa] = true;
+						$totalPrecioVenta += $reg->total_venta;
+					}
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+					$lastIdVenta = $reg->idventa;
+				}
+
+				if (!empty($data)) {
+					$data[] = array_fill(0, 12, '');
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "<strong>TOTAL</strong>",
+						"9" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"10" => "",
+						"11" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
 				/* ======================= REPORTE DE COMPRAS ======================= */
 
 			case 'listarCompras':

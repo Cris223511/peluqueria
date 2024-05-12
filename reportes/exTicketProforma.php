@@ -237,7 +237,7 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-$y += 23.5;
+$y += 15.5;
 
 # Tabla para los métodos de pago #
 $cols = array(
