@@ -17,6 +17,12 @@ if (!isset($_SESSION["nombre"])) {
         background-color: #ebc513 !important;
         color: black !important;
         font-weight: bold !important;
+        font-size: 20px !important;
+      }
+
+      #total_compra_valor {
+        position: relative;
+        top: -4px;
       }
 
       td {
@@ -463,7 +469,7 @@ if (!isset($_SESSION["nombre"])) {
                         <option value="FACTURA">FACTURA</option>
                       </select>
                     </div>
-                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_compra">s/. 0.00</button>
+                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_compra"><span id="total_compra_valor">s/. 0.00</span></button>
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
                   </div>
                 </div>

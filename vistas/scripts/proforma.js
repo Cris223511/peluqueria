@@ -113,7 +113,7 @@ function limpiar() {
 	$("#inputsMontoMetodoPago").empty();
 	$("#inputsMetodoPago").empty();
 
-	$("#total_venta").html("S/. 0.00");
+	$("#total_venta_valor").html("S/. 0.00");
 	$("#tipo_comprobante").val("NOTA DE VENTA");
 	$("#tipo_comprobante").selectpicker('refresh');
 
@@ -1071,7 +1071,7 @@ function verificarModalPrecuenta() {
 		return;
 	}
 
-	let totalVenta = parseFloat($("#total_venta").text().replace('S/. ', '').replace(',', ''));
+	let totalVenta = parseFloat($("#total_venta_valor").text().replace('S/. ', '').replace(',', ''));
 	if (totalVenta <= 0) {
 		bootbox.alert("El total de venta no puede ser negativo o igual a cero.");
 		return;
@@ -1094,7 +1094,7 @@ function mostrarDatosModalPrecuenta() {
 
 	$("#totalItems").html(cont);
 
-	let totalFinal = $("#total_venta").text();
+	let totalFinal = $("#total_venta_valor").text();
 
 	totalOriginal = Number(totalFinal).toFixed(2);
 
@@ -1783,7 +1783,7 @@ function modificarSubototales() {
 	console.log("Total Venta: ", totalVenta);
 	console.log("Total Descuento: ", descuentoFinal);
 
-	$("#total_venta").html("S/. " + totalVenta.toFixed(2));
+	$("#total_venta_valor").html("S/. " + totalVenta.toFixed(2));
 	evaluar();
 }
 

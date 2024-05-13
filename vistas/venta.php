@@ -17,6 +17,12 @@ if (!isset($_SESSION["nombre"])) {
         background-color: #ebc513 !important;
         color: black !important;
         font-weight: bold !important;
+        font-size: 20px !important;
+      }
+
+      #total_venta_valor {
+        position: relative;
+        top: -4px;
       }
 
       td {
@@ -477,7 +483,7 @@ if (!isset($_SESSION["nombre"])) {
                         <option value="FACTURA">FACTURA</option>
                       </select>
                     </div>
-                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_venta">s/. 0.00</button>
+                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_venta"><span id="total_venta_valor">s/. 0.00</span></button>
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
                     <div style="padding-bottom: 5px !important; padding-right: 0 !important; margin: 0 !important;">
                       <select id="comisionar" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;">
