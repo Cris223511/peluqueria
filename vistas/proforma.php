@@ -480,8 +480,8 @@ if (!isset($_SESSION["nombre"])) {
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
                     <div style="padding-bottom: 5px !important; padding-right: 0 !important; margin: 0 !important;">
                       <select id="comisionar" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;">
-                        <option value="1">COMISIONAR</option>
-                        <option value="2">NO COMISIONAR</option>
+                        <option value="1">NO COMISIONAR</option>
+                        <option value="2">COMISIONAR</option>
                       </select>
                     </div>
                   </div>

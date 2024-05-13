@@ -105,6 +105,7 @@ function agregarCategoria(e) {
 				processData: false,
 
 				success: function (datos) {
+			datos = limpiarCadena(datos);
 					datos = limpiarCadena(datos);
 					if (!datos) {
 						console.log("No se recibieron datos del servidor.");
@@ -143,6 +144,7 @@ function agregarMarca(e) {
 				processData: false,
 
 				success: function (datos) {
+			datos = limpiarCadena(datos);
 					datos = limpiarCadena(datos);
 					if (!datos) {
 						console.log("No se recibieron datos del servidor.");
@@ -181,6 +183,7 @@ function agregarMedida(e) {
 				processData: false,
 
 				success: function (datos) {
+			datos = limpiarCadena(datos);
 					datos = limpiarCadena(datos);
 					if (!datos) {
 						console.log("No se recibieron datos del servidor.");
@@ -395,6 +398,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El código de barra del producto que ha ingresado ya existe." || datos == "El código del producto que ha ingresado ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);

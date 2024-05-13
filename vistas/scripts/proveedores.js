@@ -108,6 +108,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);

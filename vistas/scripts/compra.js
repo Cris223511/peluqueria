@@ -578,6 +578,7 @@ function guardaryeditar2(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El nombre del método de pago ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardarMetodoPago").prop("disabled", false);
@@ -650,6 +651,7 @@ function guardaryeditar3(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			console.log(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
@@ -679,6 +681,7 @@ function buscarSunat(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			console.log(datos);
 			if (datos == "DNI no encontrado" || datos == "RUC no encontrado") {
 				limpiarModalProveedor();
@@ -776,6 +779,7 @@ function guardaryeditar4(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			console.log(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
@@ -825,6 +829,7 @@ function guardaryeditar6(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			console.log(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
@@ -1254,6 +1259,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			let obj;
 
 			try {

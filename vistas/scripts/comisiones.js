@@ -160,6 +160,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			limpiarModalComision();
 			$("#myModal1").modal("hide");
 			bootbox.alert(datos);

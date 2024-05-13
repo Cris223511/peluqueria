@@ -229,6 +229,7 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			datos = limpiarCadena(datos);
 			if (datos == "El monto que desea retirar no puede ser mayor al monto total de la caja.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
