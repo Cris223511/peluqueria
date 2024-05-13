@@ -1,65 +1,82 @@
 <?php
 ob_start();
 
-require('../modelos/Perfiles.php');
-$perfil = new Perfiles();
-$rspta = $perfil->mostrarReporte();
+if (strlen(session_id()) < 1) {
+    session_start(); //Validamos si existe o no la sesión
+}
 
-# Datos de la empresa #
-$logo = $rspta["imagen"];
-$ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
-$empresa = $rspta["titulo"];
-$auspiciado = $rspta["auspiciado"];
-$ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
-$direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
-$telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
-$email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
+if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
+    echo 'No está autorizado para realizar esta acción.';
+    exit();
+}
 
-require('../modelos/Retiros.php');
-$retiro = new Retiro();
+if (!isset($_SESSION["nombre"])) {
+    header("Location: ../vistas/login.html");
+} else {
+    if ($_SESSION['cajas'] == 1) {
+        require('../modelos/Perfiles.php');
+        $perfil = new Perfiles();
+        $rspta = $perfil->mostrarReporte();
 
-$rspta = $retiro->mostrar($_GET["id"]);
+        # Datos de la empresa #
+        $logo = $rspta["imagen"];
+        $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
+        $empresa = $rspta["titulo"];
+        $auspiciado = $rspta["auspiciado"];
+        $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
+        $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];
+        $telefono = ($rspta["telefono"] == '') ? 'Sin registrar' : number_format($rspta["telefono"], 0, '', ' ');
+        $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 
-$reg = (object) $rspta;
+        require('../modelos/Retiros.php');
+        $retiro = new Retiro();
 
-require('ticket/code128.php');
+        $rspta = $retiro->mostrar($_GET["id"]);
 
-# Modificando el ancho y alto del ticket #
-$pdf = new PDF_Code128('P', 'mm', array(70, 150));
-$pdf->SetAutoPageBreak(false);
-$pdf->SetMargins(4, 10, 4);
-$pdf->AddPage();
+        $reg = (object) $rspta;
 
-$y = 2; // inicialización de variable de posición Y.
-$size = 0; // inicialización de variable de tamaño.
+        require('ticket/code128.php');
 
-# Encabezado y datos del ticket #
-$y = $pdf->cuerpoCaja(
-    $y,
-    "RETIRO DE DINERO",
-    $logo,
-    $ext_logo,
-    $reg->fecha ?? '',
-    $reg->local ?? '',
-    $reg->local_ruc ?? '',
-    $reg->nombre ?? '',
-    $reg->caja ?? '',
-    'MONTO: ' . $reg->monto ?? '',
-    '',
-    $reg->descripcion ?? '',
-);
+        # Modificando el ancho y alto del ticket #
+        $pdf = new PDF_Code128('P', 'mm', array(70, 150));
+        $pdf->SetAutoPageBreak(false);
+        $pdf->SetMargins(4, 10, 4);
+        $pdf->AddPage();
 
-# Créditos #
-$pdf->creditos(
-    $y,
-    $empresa . "\n" .
-        "Ruc: " . $ruc . "\n" .
-        "Dirección: " . $direccion . "\n" .
-        "Teléfono: " . $telefono . "\n" .
-        "Email: " . $email . "\n"
-);
+        $y = 2; // inicialización de variable de posición Y.
+        $size = 0; // inicialización de variable de tamaño.
 
-# Nombre del archivo PDF #
-$pdf->Output("I", "ticket_retiro_" . mt_rand(10000000, 99999999) . ".pdf", true);
+        # Encabezado y datos del ticket #
+        $y = $pdf->cuerpoCaja(
+            $y,
+            "RETIRO DE DINERO",
+            $logo,
+            $ext_logo,
+            $reg->fecha ?? '',
+            $reg->local ?? '',
+            $reg->local_ruc ?? '',
+            $reg->nombre ?? '',
+            $reg->caja ?? '',
+            'MONTO: ' . $reg->monto ?? '',
+            '',
+            $reg->descripcion ?? '',
+        );
+
+        # Créditos #
+        $pdf->creditos(
+            $y,
+            $empresa . "\n" .
+                "Ruc: " . $ruc . "\n" .
+                "Dirección: " . $direccion . "\n" .
+                "Teléfono: " . $telefono . "\n" .
+                "Email: " . $email . "\n"
+        );
+
+        # Nombre del archivo PDF #
+        $pdf->Output("I", "ticket_retiro_" . mt_rand(10000000, 99999999) . ".pdf", true);
+    } else {
+        require 'noacceso.php';
+    }
+}
 
 ob_end_flush();

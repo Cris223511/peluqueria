@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html");
 } else {
   require 'header.php';
-  if ($_SESSION['reportes'] == 1 || $_SESSION['reportesP'] == 1) {
+  if ($_SESSION['reportesP'] == 1) {
 ?>
     <style>
       @media (max-width: 991px) {
@@ -159,10 +159,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Almacén</th>
                       <th>Marca</th>
                       <th style="white-space: nowrap;">C. producto</th>
-                      <th style="white-space: nowrap;">C. de barra</th>
                       <th style="white-space: nowrap;">Stock normal</th>
-                      <th style="white-space: nowrap;">Stock mínimo</th>
-                      <th style="white-space: nowrap;">P. compra</th>
                       <th style="white-space: nowrap;">P. venta</th>
                       <th style="white-space: nowrap;">Agregado por</th>
                       <th>Cargo</th>
@@ -178,10 +175,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Almacén</th>
                       <th>Marca</th>
                       <th>C. producto</th>
-                      <th>C. de barra</th>
                       <th>Stock normal</th>
-                      <th>Stock mínimo</th>
-                      <th>P. compra</th>
                       <th>P. venta</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>

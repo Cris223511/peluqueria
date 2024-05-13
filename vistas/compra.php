@@ -13,6 +13,12 @@ if (!isset($_SESSION["nombre"])) {
 ?>
     <link rel="stylesheet" href="../public/css/jquery.gScrollingCarousel.css">
     <style>
+      #total_compra {
+        background-color: #ebc513 !important;
+        color: black !important;
+        font-weight: bold !important;
+      }
+
       td {
         height: 30.84px !important;
       }

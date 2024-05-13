@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html");
 } else {
   require 'header.php';
-  if ($_SESSION['reportes'] == 1) {
+  if ($_SESSION['reportesM'] == 1) {
 ?>
     <style>
       @media (max-width: 991px) {

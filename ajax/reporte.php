@@ -14,7 +14,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['reportes'] == 1 || $_SESSION['reportesP'] == 1) {
+	if ($_SESSION['reportes'] == 1 || $_SESSION['reportesP'] == 1  || $_SESSION['reportesM'] == 1  || $_SESSION['reportesE'] == 1) {
 		require_once "../modelos/Reporte.php";
 
 		$reporte = new Reporte();

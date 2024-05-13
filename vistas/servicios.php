@@ -73,7 +73,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <label>Costo de servicio(*):</label>
-                    <input type="number" class="form-control" name="costo" id="costo" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el costo de servicio." required>
+                    <input type="number" class="form-control" name="costo" id="costo" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el costo de servicio." required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>

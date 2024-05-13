@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['personas'] == 1) {
+  if ($_SESSION['comisiones'] == 1) {
 ?>
     <style>
       #detallesProductosComisiones thead,
@@ -107,7 +107,7 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="detallesProductosComisiones" class="table w-100" style="width: 100% !important;">
                   <thead>
                     <th>PRODUCTOS / SERVICIOS</th>
-                    <th>COMISIONES</th>
+                    <th>COMISIÓN</th>
                     <th>OPCIONES</th>
                   </thead>
                   <tbody>
@@ -136,20 +136,39 @@ if (!isset($_SESSION["nombre"])) {
               <h4 class="modal-title infotitulo trabajador_comisionar" style="margin: 0; padding: 0;"></h4>
             </div>
           </div>
+          <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding: 10px; padding-bottom: 0px; margin-bottom: 0px;">
+            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="padding: 5px; margin: 0;">
+              <label>Fecha Inicial:</label>
+              <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
+            </div>
+            <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12" style="padding: 5px; margin: 0;">
+              <label>Fecha Final:</label>
+              <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">
+              <label id="labelCustom">ㅤ</label>
+              <div style="display: flex; gap: 10px;">
+                <button style="width: 100%;" class="btn btn-bcp" onclick="buscarComision()">Buscar</button>
+                <button style="height: 32px;" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
+              </div>
+            </div>
+          </div>
           <div class="panel-body" style="background-color: #ecf0f5 !important; padding: 0 !important; height: max-content;">
             <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
               <table id="tbldetalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                 <thead>
-                  <th>PRODUCTO / SERVICIO</th>
-                  <th>MONTO</th>
+                  <th>PRODUCTOS / SERVICIOS</th>
+                  <th>CLIENTE</th>
+                  <th>COMISIÓN</th>
                   <th>TIPO</th>
                   <th>FECHA Y HORA</th>
                 </thead>
                 <tbody>
                 </tbody>
                 <tfoot>
-                  <th>PRODUCTO / SERVICIO</th>
-                  <th>MONTO</th>
+                  <th>PRODUCTOS / SERVICIOS</th>
+                  <th>CLIENTE</th>
+                  <th>COMISIÓN</th>
                   <th>TIPO</th>
                   <th>FECHA Y HORA</th>
                 </tfoot>

@@ -8,8 +8,7 @@ function init() {
 		guardaryeditar(e);
 	});
 
-	$('#mPersonas').addClass("treeview active");
-	$('#lComisiones').addClass("active");
+	$('#mComisiones').addClass("treeview active");
 }
 
 function listar() {
@@ -85,8 +84,9 @@ function generarComision(idpersonal, idlocal, nombre, cargo, tipo_documento, num
                     <td style="width: 40%; min-width: 130px; white-space: nowrap;">
 						<div style="display: flex; width: 100%; flex-direction: row; justify-content: center; align-items: center; height: 34px; gap: 5px;">
 							<input type="hidden" name="idpersonal[]" value="${detalle.idpersonal}">
+							<input type="hidden" name="idcliente[]" value="${detalle.idcliente}">
 							<input type="hidden" name="${inputId}" value="${detalle.idarticulo !== "0" ? detalle.idarticulo : detalle.idservicio}">
-							<input style="width: 30%; min-width: 90px;" type="number" class="form-control" name="comision[]" lang="en-US" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required>
+							<input style="width: 30%; min-width: 90px;" type="number" class="form-control" name="comision[]" lang="en-US" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required>
 							<select style="width: 30%; min-width: 90px;" name="tipo[]" class="form-control" required>
 								<option value="1">S/.</option>
 								<option value="2">%</option>
@@ -168,8 +168,21 @@ function guardaryeditar(e) {
 	});
 }
 
+var idpersonalGlobal = 0;
+
 function verComision(idpersonal, nombre, cargo, tipo_documento, num_documento, local) {
 	$(".trabajador_comisionar").text(capitalizarTodasLasPalabras(`${nombre} (${cargo}) - ${tipo_documento}: ${num_documento} - ${local}`));
+	idpersonalGlobal = idpersonal;
+	listarComision();
+}
+
+function listarComision() {
+	$("#fecha_inicio").val("");
+	$("#fecha_fin").val("");
+	$("#estadoBuscar").val("");
+
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
 
 	tabla2 = $('#tbldetalles').dataTable(
 		{
@@ -193,7 +206,7 @@ function verComision(idpersonal, nombre, cargo, tipo_documento, num_documento, l
 			"ajax":
 			{
 				url: '../ajax/comisiones.php?op=verComision',
-				data: { idpersonal: idpersonal },
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, idpersonal: idpersonalGlobal },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -214,10 +227,80 @@ function verComision(idpersonal, nombre, cargo, tipo_documento, num_documento, l
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4)').addClass('nowrap-cell');
 			},
 			"initComplete": function (settings, json) {
 				$('#myModal2').modal('show');
+			}
+		}).DataTable();
+}
+
+function resetear() {
+	const selects = ["fecha_inicio", "fecha_fin"];
+
+	for (const selectId of selects) {
+		$("#" + selectId).val("");
+	}
+
+	listarComision();
+}
+
+function buscarComision() {
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+
+	if ((fecha_inicio != "" && fecha_fin == "") || (fecha_inicio == "" && fecha_fin != "") || (fecha_inicio != "" && fecha_fin == "") || (fecha_inicio == "" && fecha_fin != "")) {
+		bootbox.alert("Los campos de fecha inicial y fecha final son obligatorios.");
+		return;
+	} else if (fecha_inicio > fecha_fin) {
+		bootbox.alert("La fecha inicial no puede ser mayor que la fecha final.");
+		return;
+	}
+
+	tabla2 = $('#tbldetalles').dataTable(
+		{
+			"lengthMenu": [5, 10, 25, 75, 100],
+			"aProcessing": true,
+			"aServerSide": true,
+			dom: '<Bl<f>rtip>',
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+				{
+					'extend': 'pdfHtml5',
+					// 'orientation': 'landscape',
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 10;
+						doc.styles.tableHeader.fontSize = 10;
+					},
+				},
+			],
+			"ajax":
+			{
+				url: '../ajax/comisiones.php?op=verComision',
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin, idpersonal: idpersonalGlobal },
+				type: "get",
+				dataType: "json",
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			"language": {
+				"lengthMenu": "Mostrar : _MENU_ registros",
+				"buttons": {
+					"copyTitle": "Tabla Copiada",
+					"copySuccess": {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			"bDestroy": true,
+			"iDisplayLength": 5,
+			"order": [],
+			"createdRow": function (row, data, dataIndex) {
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }

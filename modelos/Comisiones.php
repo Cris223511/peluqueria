@@ -7,7 +7,7 @@ class Comision
 	{
 	}
 
-	public function insertar($idpersonalUniq, $detalles, $idpersonal, $comision, $tipo)
+	public function insertar($idpersonalUniq, $detalles, $idpersonal, $idcliente, $comision, $tipo)
 	{
 		$sw = true;
 		$totalComision = 0;
@@ -29,13 +29,14 @@ class Comision
 			$esServicio = strpos($detalle, '_servicio') !== false;
 			$id = str_replace(['_producto', '_servicio'], '', $detalle);
 			$idPersonalItem = $idpersonal[$i];
+			$idclienteItem = $idcliente[$i];
 			$comisionItem = $comision[$i];
 			$tipoItem = $tipo[$i];
 			$idArticulo = $esArticulo ? $id : 0;
 			$idServicio = $esServicio ? $id : 0;
 
 			// Insertar el detalle en la tabla comisiones
-			$sql_detalle = "INSERT INTO comisiones (idpersonal, idarticulo, idservicio, comision, tipo, fecha_hora) VALUES ('$idPersonalItem', '$idArticulo', '$idServicio', '$comisionItem', '$tipoItem', SYSDATE())";
+			$sql_detalle = "INSERT INTO comisiones (idpersonal, idarticulo, idservicio, idcliente, comision, tipo, fecha_hora) VALUES ('$idPersonalItem', '$idArticulo', '$idServicio', '$idclienteItem', '$comisionItem', '$tipoItem', SYSDATE())";
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
 			// Actualizar la suma de comisiones
@@ -64,6 +65,7 @@ class Comision
 					WHERE dv.idpersonal = p.idpersonal
 					AND v.idlocal = p.idlocal
 					AND v.estado <> 'Anulado'
+					AND v.eliminado = '0'
 				)
 				ORDER BY p.idpersonal DESC";
 		return ejecutarConsulta($sql);
@@ -93,27 +95,31 @@ class Comision
 	public function mostrarComisionesPersonal($idpersonal, $idlocal)
 	{
 		$sql = "SELECT
-				  dv.iddetalle_venta,
-				  dv.idventa,
-				  dv.idcaja,
-				  dv.idarticulo,
-				  dv.idservicio,
-				  a.nombre AS titulo_articulo,
-				  s.titulo AS titulo_servicio,
-				  dv.idpersonal,
-				  dv.cantidad,
-				  dv.precio_venta,
-				  dv.descuento,
-				  dv.impuesto,
-				  dv.fecha_hora
+					dv.iddetalle_venta,
+					dv.idventa,
+					dv.idcaja,
+					dv.idarticulo,
+					dv.idservicio,
+					c.idcliente,
+					a.nombre AS titulo_articulo,
+					s.titulo AS titulo_servicio,
+					dv.idpersonal,
+					dv.cantidad,
+					dv.precio_venta,
+					dv.descuento,
+					dv.impuesto,
+					dv.fecha_hora,
+					c.nombre AS nombre_cliente
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
 				LEFT JOIN servicios s ON dv.idservicio = s.idservicio
 				LEFT JOIN venta v ON dv.idventa = v.idventa AND v.estado <> 'Anulado'
+				LEFT JOIN clientes c ON v.idcliente = c.idcliente
 				WHERE v.idlocal = '$idlocal' AND dv.idpersonal = '$idpersonal' AND v.eliminado = '0'";
 
 		return ejecutarConsulta($sql);
 	}
+
 
 	public function verComisionesEmpleado($idpersonal)
 	{
@@ -121,6 +127,8 @@ class Comision
 				  c.idarticulo,
 				  c.idservicio,
 				  c.idpersonal,
+				  c.idcliente,
+				  cl.nombre as cliente,
 				  c.comision,
 				  c.tipo,
 				  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha,
@@ -129,7 +137,31 @@ class Comision
 				FROM comisiones c
 				LEFT JOIN articulo a ON c.idarticulo = a.idarticulo
 				LEFT JOIN servicios s ON c.idservicio = s.idservicio
+				LEFT JOIN clientes cl ON c.idcliente = cl.idcliente
 				WHERE c.idpersonal = '$idpersonal'";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function verComisionesEmpleadoPorFecha($idpersonal, $fecha_inicio, $fecha_fin)
+	{
+		$sql = "SELECT
+				  c.idarticulo,
+				  c.idservicio,
+				  c.idpersonal,
+				  c.idcliente,
+				  cl.nombre as cliente,
+				  c.comision,
+				  c.tipo,
+				  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha,
+				  a.nombre AS nombre_articulo,
+				  s.titulo AS nombre_servicio
+				FROM comisiones c
+				LEFT JOIN articulo a ON c.idarticulo = a.idarticulo
+				LEFT JOIN servicios s ON c.idservicio = s.idservicio
+				LEFT JOIN clientes cl ON c.idcliente = cl.idcliente
+				WHERE c.idpersonal = '$idpersonal'
+				AND DATE(c.fecha_hora) >= '$fecha_inicio' AND DATE(c.fecha_hora) <= '$fecha_fin'";
 
 		return ejecutarConsulta($sql);
 	}

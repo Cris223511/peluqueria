@@ -377,8 +377,18 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
               <li id="lTrabajadores"><a href="trabajadores.php"><i class="fa fa-circle-o"></i> Trabajadores</a></li>
               <li id="lPersonales"><a href="personales.php"><i class="fa fa-circle-o"></i> Empleados</a></li>
-              <li id="lComisiones"><a href="comisiones.php"><i class="fa fa-circle-o"></i> Comisiones</a></li>
               </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
+          if ($_SESSION['comisiones'] == 1) {
+            echo '<li id="mComisiones" class="treeview">
+              <a href="comisiones.php">
+                <i style="text-align: center; margin-left: -3px; margin-right: 1px" class="fa fa-dollar"></i>
+                <span>Comisiones</span>
+              </a>
             </li>';
           }
           ?>
@@ -449,9 +459,9 @@ $local_login = $_SESSION['local'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-              <li id="lReporteVentaMetodoPago"><a href="reporteVentaMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (ventas)</a></li>
-              <li id="lReporteProformaMetodoPago"><a href="reporteProformaMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (cotizaciones)</a></li>
-              <li id="lReporteCompraMetodoPago"><a href="reporteCompraMetodoPago.php"><i class="fa fa-circle-o"></i> Reporte pagos (compras)</a></li>
+              <li id="lReporteVentaMetodoPago"><a href="reporteVentaMetodoPago.php"><i class="fa fa-circle-o"></i> Métodos de pago (ventas)</a></li>
+              <li id="lReporteProformaMetodoPago"><a href="reporteProformaMetodoPago.php"><i class="fa fa-circle-o"></i> Métodos de pago (cotizaciones)</a></li>
+              <li id="lReporteCompraMetodoPago"><a href="reporteCompraMetodoPago.php"><i class="fa fa-circle-o"></i> Métodos de pago (compras)</a></li>
               </ul>
             </li>';
           }
@@ -466,7 +476,7 @@ $local_login = $_SESSION['local'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-              <li id="lReporteVentaEmpleados"><a href="reporteEmpleado.php"><i class="fa fa-circle-o"></i> Reporte empleado (ventas)</a></li>
+              <li id="lReporteVentaEmpleados"><a href="reporteEmpleado.php"><i class="fa fa-circle-o"></i> Reporte empleados (ventas)</a></li>
               </ul>
             </li>';
           }

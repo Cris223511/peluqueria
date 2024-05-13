@@ -12,7 +12,7 @@ if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['personas'] == 1) {
+	if ($_SESSION['comisiones'] == 1) {
 		require_once "../modelos/Comisiones.php";
 
 		$comisiones = new Comision();
@@ -27,8 +27,8 @@ if (!isset($_SESSION["nombre"])) {
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
-				$rspta = $comisiones->insertar($idpersonalUniq, $_POST["detalles"], $_POST["idpersonal"], $_POST["comision"], $_POST["tipo"]);
-				echo $rspta ? "Comisión realizada al empleado correctamente." : "La comición no se pudo realizar.";
+				$rspta = $comisiones->insertar($idpersonalUniq, $_POST["detalles"], $_POST["idpersonal"], $_POST["idcliente"],  $_POST["comision"], $_POST["tipo"]);
+				echo $rspta ? "Empleado comisionado correctamente." : "El empleado no se pudo comisionar.";
 				break;
 
 			case 'listar':
@@ -106,8 +106,15 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'verComision':
 				$idpersonal = $_GET['idpersonal'];
+				$fecha_inicio = $_GET["fecha_inicio"];
+				$fecha_fin = $_GET["fecha_fin"];
 
-				$rspta = $comisiones->verComisionesEmpleado($idpersonal);
+
+				if ($fecha_inicio == "" && $fecha_fin == "") {
+					$rspta = $comisiones->verComisionesEmpleado($idpersonal);
+				} else {
+					$rspta = $comisiones->verComisionesEmpleadoPorFecha($idpersonal, $fecha_inicio, $fecha_fin);
+				}
 
 				$data = array();
 
@@ -117,9 +124,10 @@ if (!isset($_SESSION["nombre"])) {
 				while ($reg = $rspta->fetch_object()) {
 					$data[] = array(
 						"0" => ($reg->idarticulo != "0") ? strtoupper($reg->nombre_articulo) : strtoupper($reg->nombre_servicio),
-						"1" => $reg->comision,
-						"2" => ($reg->tipo == "1") ? 'S/.' : '%',
-						"3" => $reg->fecha,
+						"1" => $reg->cliente,
+						"2" => $reg->comision,
+						"3" => ($reg->tipo == "1") ? 'S/.' : '%',
+						"4" => $reg->fecha,
 					);
 
 					$totalComision += $reg->comision;
@@ -128,10 +136,11 @@ if (!isset($_SESSION["nombre"])) {
 
 				if (!$firstIteration) {
 					$data[] = array(
-						"0" => "<div style='text-align: end; margin-right: 20px;'><strong>TOTAL</strong></div>",
-						"1" => '<strong>' . number_format($totalComision, 2) . '</strong>',
-						"2" => "",
+						"0" => "",
+						"1" => "<div style='text-align: end; margin-right: 20px;'><strong>TOTAL</strong></div>",
+						"2" => '<strong>' . number_format($totalComision, 2) . '</strong>',
 						"3" => "",
+						"4" => "",
 					);
 				}
 
