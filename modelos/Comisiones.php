@@ -129,6 +129,7 @@ class Comision
 				  c.idpersonal,
 				  c.idcliente,
 				  cl.nombre as cliente,
+				  p.nombre as personal,
 				  c.comision,
 				  c.tipo,
 				  DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha,
@@ -138,6 +139,7 @@ class Comision
 				LEFT JOIN articulo a ON c.idarticulo = a.idarticulo
 				LEFT JOIN servicios s ON c.idservicio = s.idservicio
 				LEFT JOIN clientes cl ON c.idcliente = cl.idcliente
+				LEFT JOIN personales p ON c.idpersonal = p.idpersonal
 				WHERE c.idpersonal = '$idpersonal'";
 
 		return ejecutarConsulta($sql);

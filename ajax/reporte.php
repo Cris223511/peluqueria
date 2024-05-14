@@ -41,10 +41,9 @@ if (!isset($_SESSION["nombre"])) {
 					"param4" => "v.idlocal = '{$_GET["param4"]}'",
 					"param5" => "u.idusuario = '{$_GET["param5"]}'",
 					"param6" => "v.estado = '{$_GET["param6"]}'",
-					"param7" => "dvp.idmetodopago = '{$_GET["param7"]}'",
-					"param8" => "c.nombre LIKE '%{$_GET["param8"]}%'",
-					"param9" => "c.num_documento = '{$_GET["param9"]}'",
-					"param10" => "v.num_comprobante = '{$_GET["param10"]}'"
+					"param7" => "c.nombre LIKE '%{$_GET["param7"]}%'",
+					"param8" => "c.num_documento = '{$_GET["param8"]}'",
+					"param9" => "v.num_comprobante = '{$_GET["param9"]}'"
 				);
 
 				foreach ($filtros as $param => $condicion) {

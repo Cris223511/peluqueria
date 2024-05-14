@@ -56,7 +56,6 @@ if (!isset($_SESSION["nombre"])) {
                   <thead>
                     <th style="width: 1%;">Opciones</th>
                     <th style="width: 30%; min-width: 150px; white-space: nowrap;">Nombres</th>
-                    <th>Cargo</th>
                     <th>Comisión total</th>
                     <th style="width: 30%; min-width: 200px; white-space: nowrap;">Almacén</th>
                     <th style="white-space: nowrap;">Tipo Doc.</th>
@@ -72,7 +71,6 @@ if (!isset($_SESSION["nombre"])) {
                   <tfoot>
                     <th>Opciones</th>
                     <th>Nombres</th>
-                    <th>Cargo</th>
                     <th>Comisión total</th>
                     <th>Almacén</th>
                     <th>Tipo Doc.</th>
@@ -159,6 +157,7 @@ if (!isset($_SESSION["nombre"])) {
                 <thead>
                   <th>PRODUCTOS / SERVICIOS</th>
                   <th>CLIENTE</th>
+                  <th>PERSONAL</th>
                   <th>COMISIÓN</th>
                   <th>TIPO</th>
                   <th>FECHA Y HORA</th>
@@ -168,6 +167,7 @@ if (!isset($_SESSION["nombre"])) {
                 <tfoot>
                   <th>PRODUCTOS / SERVICIOS</th>
                   <th>CLIENTE</th>
+                  <th>PERSONAL</th>
                   <th>COMISIÓN</th>
                   <th>TIPO</th>
                   <th>FECHA Y HORA</th>

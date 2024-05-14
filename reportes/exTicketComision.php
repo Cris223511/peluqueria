@@ -41,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
         require('ticket/code128.php');
 
         # Modificando el ancho y alto del ticket #
-        $pdf = new PDF_Code128('P', 'mm', array(70, 150));
+        $pdf = new PDF_Code128('P', 'mm', array(70, 220));
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(4, 10, 4);
         $pdf->AddPage();
@@ -139,8 +139,25 @@ if (!isset($_SESSION["nombre"])) {
             $reg3 = $rspta3->fetch_object();
         }
 
+        # Tabla para los totales de los productos (SUBTOTAL, IGV Y TOTAL) #
+
+        # SUBTOTAL #
+        $y += $size - 3.5 ?? 0;
+        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+
+        # TOTAL #
+        $lineTotal = array(
+            "PRODUCTO / SERVICIO" => "TOTAL",
+            mb_convert_encoding(mb_strtoupper("COMISIÓN"), 'ISO-8859-1', 'UTF-8') => number_format($comisionTotal ?? 0.00, 2),
+        );
+
+        $pdf->SetFont('hypermarket', '', 8);
+        $sizeTotal = $pdf->addLine($y, $lineTotal);
+
+        $pdf->addLineFormat($lineTotal);
+
         # SEPARADOR #
-        $pdf->Ln(3.5);
+        $pdf->Ln(4);
         $pdf->SetX(1.5);
         $pdf->SetFont('hypermarket', '', 10);
         $pdf->Cell(0, -2, utf8_decode("-----------------------------------------------"), 0, 0, 'L');

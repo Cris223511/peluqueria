@@ -81,16 +81,15 @@ if (!isset($_SESSION["nombre"])) {
 							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') : ('')) .
 							(($reg->comisionado == "1") ? ('<a target="_blank" href="../reportes/exTicketComision.php?id=' . $reg->idpersonal . '"> <button class="btn btn-success" style="margin-right: 3px; width: 38px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') : ('')) .
 							'</div>',
-						"1" => ucwords($reg->nombre),
-						"2" => $reg->cargo_personal,
-						"3" => $reg->total_comision,
-						"4" => $reg->local,
-						"5" => $reg->tipo_documento,
-						"6" => $reg->num_documento,
-						"7" => ucwords($reg->nombre),
-						"8" => ucwords($cargo_detalle),
-						"9" => ($reg->fecha != "00-00-0000 00:00:00") ? $reg->fecha : "Sin registrar.",
-						"10" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"1" => ucwords($reg->nombre) . ' - ' . $reg->cargo_personal,
+						"2" => $reg->total_comision,
+						"3" => $reg->local,
+						"4" => $reg->tipo_documento,
+						"5" => $reg->num_documento,
+						"6" => ucwords($reg->usuario),
+						"7" => ucwords($cargo_detalle),
+						"8" => ($reg->fecha != "00-00-0000 00:00:00") ? $reg->fecha : "Sin registrar.",
+						"9" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -125,9 +124,10 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => ($reg->idarticulo != "0") ? strtoupper($reg->nombre_articulo) : strtoupper($reg->nombre_servicio),
 						"1" => $reg->cliente,
-						"2" => $reg->comision,
-						"3" => ($reg->tipo == "1") ? 'S/.' : '%',
-						"4" => $reg->fecha,
+						"2" => $reg->personal,
+						"3" => $reg->comision,
+						"4" => ($reg->tipo == "1") ? 'S/.' : '%',
+						"5" => $reg->fecha,
 					);
 
 					$totalComision += $reg->comision;
@@ -137,10 +137,11 @@ if (!isset($_SESSION["nombre"])) {
 				if (!$firstIteration) {
 					$data[] = array(
 						"0" => "",
-						"1" => "<div style='text-align: end; margin-right: 20px;'><strong>TOTAL</strong></div>",
-						"2" => '<strong>' . number_format($totalComision, 2) . '</strong>',
-						"3" => "",
+						"1" => "",
+						"2" => "<div style='text-align: end; margin-right: 20px;'><strong>TOTAL</strong></div>",
+						"3" => '<strong>' . number_format($totalComision, 2) . '</strong>',
 						"4" => "",
+						"5" => "",
 					);
 				}
 
