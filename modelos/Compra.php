@@ -38,6 +38,11 @@ class Compra
 			$mensajeError = "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra.";
 		}
 
+		$error = $this->validarArticuloPorLocal($detalles, $idlocal);
+		if ($error) {
+			$mensajeError = "Uno de los artículos no forman parte del local seleccionado.";
+		}
+
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal
 		if ($mensajeError !== "") {
 			return $mensajeError;
@@ -145,6 +150,27 @@ class Compra
 		foreach ($idarticulos as $indice => $idarticulo) {
 			$id = str_replace('_producto', '', $idarticulo);
 			if ($precio_venta[$indice] < $precio_compra[$indice]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function validarArticuloPorLocal($detalles, $idlocal)
+	{
+		if (!is_array($detalles)) {
+			$detalles = json_decode($detalles, true);
+		}
+
+		$idarticulos = array_filter($detalles, function ($detalle) {
+			return strpos($detalle, '_producto') !== false;
+		});
+
+		foreach ($idarticulos as $indice => $idarticulo) {
+			$id = str_replace('_producto', '', $idarticulo);
+			$sql = "SELECT idarticulo FROM articulo WHERE idarticulo = '$id' AND idlocal = '$idlocal'";
+			$result = ejecutarConsultaSimpleFila($sql);
+			if (!$result) {
 				return true;
 			}
 		}

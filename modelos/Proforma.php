@@ -17,25 +17,24 @@ class Proforma
 		// Convertir $detalles a un array si es una cadena JSON
 		$detalles = json_decode($detalles, true);
 
-		// Primero, debemos verificar si hay suficiente stock para cada artículo
 		$error = $this->validarStock($detalles, $cantidad);
 		if ($error) {
-			// Si hay un error, no se puede insertar
 			$mensajeError = "Una de las cantidades superan al stock normal del artículo o servicio.";
 		}
 
-		// Luego verificamos si el subtotal es negativo
 		$error = $this->validarSubtotalNegativo($detalles, $cantidad, $precio_venta, $descuento);
 		if ($error) {
-			// Si cumple, o sea si es verdadero, asignamos el mensaje correspondiente
 			$mensajeError = "El subtotal de uno de los artículos o servicios no puede ser menor a 0.";
 		}
 
-		// Luego verificamos si el precio de venta es menor al precio de compra
 		$error = $this->validarPrecioCompraPrecioVenta($detalles, $precio_compra, $precio_venta);
 		if ($error) {
-			// Si cumple, o sea si es verdadero, no se puede insertar
 			$mensajeError = "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra.";
+		}
+
+		$error = $this->validarArticuloPorLocal($detalles, $idlocal);
+		if ($error) {
+			$mensajeError = "Uno de los artículos no forman parte del local seleccionado.";
 		}
 
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal
@@ -149,6 +148,27 @@ class Proforma
 		foreach ($idarticulos as $indice => $idarticulo) {
 			$id = str_replace('_producto', '', $idarticulo);
 			if ($precio_venta[$indice] < $precio_compra[$indice]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function validarArticuloPorLocal($detalles, $idlocal)
+	{
+		if (!is_array($detalles)) {
+			$detalles = json_decode($detalles, true);
+		}
+
+		$idarticulos = array_filter($detalles, function ($detalle) {
+			return strpos($detalle, '_producto') !== false;
+		});
+
+		foreach ($idarticulos as $indice => $idarticulo) {
+			$id = str_replace('_producto', '', $idarticulo);
+			$sql = "SELECT idarticulo FROM articulo WHERE idarticulo = '$id' AND idlocal = '$idlocal'";
+			$result = ejecutarConsultaSimpleFila($sql);
+			if (!$result) {
 				return true;
 			}
 		}
