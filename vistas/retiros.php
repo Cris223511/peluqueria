@@ -62,7 +62,9 @@ if (!isset($_SESSION["cajas"])) {
                       <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
                       <th style="white-space: nowrap;">Almacén</th>
+                      <th style="white-space: nowrap;">Monto caja</th>
                       <th style="white-space: nowrap;">Monto retirado</th>
+                      <th style="white-space: nowrap;">Monto total</th>
                       <th style="white-space: nowrap;">Agregado por</th>
                       <th>Cargo</th>
                       <th style="white-space: nowrap;">Fecha y hora</th>
@@ -73,7 +75,9 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Opciones</th>
                       <th>Caja</th>
                       <th>Almacén</th>
+                      <th>Monto caja</th>
                       <th>Monto retirado</th>
+                      <th>Monto total</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Fecha y hora</th>
@@ -143,8 +147,16 @@ if (!isset($_SESSION["cajas"])) {
                   <div class="nowrap-cell" id="hora_retiro"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
-                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO:</div>
-                  <div class="nowrap-cell" id="monto_retiro"></div>
+                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO DE CAJA:</div>
+                  <div class="nowrap-cell" id="monto_caja_mostrar"></div>
+                </div>
+                <div style="display: flex; justify-content: start;">
+                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO RETIRADO:</div>
+                  <div class="nowrap-cell" id="monto_retiro_mostrar"></div>
+                </div>
+                <div style="display: flex; justify-content: start;">
+                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO TOTAL:</div>
+                  <div class="nowrap-cell" id="monto_total_mostrar"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">COMENTARIO:</div>

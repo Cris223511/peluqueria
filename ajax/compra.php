@@ -39,7 +39,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $compra->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $compra->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -154,7 +154,7 @@ if (!isset($_SESSION["nombre"])) {
 							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
 							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoCompra(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>') .
 									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idcompra . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
 							mostrarBoton2($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idcompra . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
@@ -265,8 +265,8 @@ if (!isset($_SESSION["nombre"])) {
 				$row1 = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocal));
 				$row2 = mysqli_fetch_assoc($compra->getCajaLocal($idlocal));
 
-				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
-				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";
+				$lastNumComp = $row1["last_num_comprobante"] != null ? $row1["last_num_comprobante"] : "0";
+				$idcajaLocal = $row2["idcaja"] != null ? $row2["idcaja"] : "0";
 
 				$response = array(
 					"last_num_comprobante" => $lastNumComp,

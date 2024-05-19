@@ -1062,7 +1062,7 @@ class FPDF
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 
-		$textoOriginal = "Son: $textoEnMayusculas";
+		$textoOriginal = "Son: $textoEnMayusculas asdasdasd asddasasdasd";
 		$anchoTotalTexto = $this->GetStringWidth($textoOriginal);
 		$anchoMaximo = 63;
 

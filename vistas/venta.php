@@ -567,7 +567,7 @@ if (!isset($_SESSION["nombre"])) {
 
     <!-- Modal 1 -->
     <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog" style="width: 90% !important; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
+      <div class="modal-dialog smallModal" style="width: 70%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: visible;">
         <div class="modal-content">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -584,13 +584,15 @@ if (!isset($_SESSION["nombre"])) {
                 <thead>
                   <th>EMPLEADO</th>
                   <th>PRODUCTO / SERVICIO</th>
+                  <th>COMISIÓN</th>
                   <th>PRECIO</th>
                 </thead>
                 <tbody>
                   <tr>
                     <td style="width: 30%; min-width: 130px; white-space: nowrap;" id="empleadoSeleccionado">SIN SELECCIONAR</td>
                     <td style="width: 40%; min-width: 130px; white-space: nowrap;" id="ProductoSeleccionado"></td>
-                    <td style="width: 30%; min-width: 130px; white-space: nowrap;" id="PrecioSeleccionado"></td>
+                    <td style="width: 15%; min-width: 130px; white-space: nowrap;" id="ComisionSeleccionado"></td>
+                    <td style="width: 15%; min-width: 130px; white-space: nowrap;" id="PrecioSeleccionado"></td>
                   </tr>
                 </tbody>
               </table>
@@ -865,6 +867,7 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="text-align: start !important;">CÓDIGO</th>
                       <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">NOMBRE</th>
+                      <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">ALMACÉN</th>
                       <th>PRECIO</th>
                       <th>DESCUENTO</th>
                       <th>CANTIDAD</th>

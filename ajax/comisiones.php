@@ -53,6 +53,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				}
 
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -75,14 +76,16 @@ if (!isset($_SESSION["nombre"])) {
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
 
+					$totalEmpleado = mysqli_fetch_assoc($comisiones->verTotalComisionEmpleado($reg->idpersonal));
+
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							('<button class="btn btn-warning" style="margin-right: 3px; width: 38px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', ' . $reg->idlocal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
-							(($reg->comisionado == "1") ? ('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') : ('')) .
-							(($reg->comisionado == "1") ? ('<a target="_blank" href="../reportes/exTicketComision.php?id=' . $reg->idpersonal . '"> <button class="btn btn-success" style="margin-right: 3px; width: 38px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') : ('')) .
+							// ('<button class="btn btn-warning" style="margin-right: 3px; width: 38px; height: 35px;" onclick="generarComision(' . $reg->idpersonal . ', ' . $reg->idlocal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-usd"></i></button>') .
+							('<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="verComision(' . $reg->idpersonal . ', \'' . $reg->nombre . '\', \'' . $reg->cargo_personal . '\', \'' . $reg->tipo_documento . '\', \'' . $reg->num_documento . '\', \'' . $reg->local . '\')"><i class="fa fa-eye"></i></button>') .
+							('<a target="_blank" href="../reportes/exTicketComision.php?id=' . $reg->idpersonal . '"> <button class="btn btn-success" style="margin-right: 3px; width: 38px; height: 35px; color: white !important;"><i class="fa fa-print"></i></button></a>') .
 							'</div>',
 						"1" => ucwords($reg->nombre) . ' - ' . $reg->cargo_personal,
-						"2" => $reg->total_comision,
+						"2" => $totalEmpleado["comision_total"],
 						"3" => $reg->local,
 						"4" => $reg->tipo_documento,
 						"5" => $reg->num_documento,

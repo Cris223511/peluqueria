@@ -107,7 +107,7 @@ function listar() {
 			'iDisplayLength': 5,
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -202,14 +202,17 @@ function buscar() {
 			'iDisplayLength': 5,//Paginación
 			'order': [],
 			'createdRow': function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('nowrap-cell');
+				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
+var montoCaja = 0;
+var selectCaja = 0;
+
 function changeCaja() {
-	var selectCaja = document.getElementById("idcaja");
-	var montoCaja = selectCaja.options[selectCaja.selectedIndex].getAttribute("data-monto");
+	selectCaja = document.getElementById("idcaja");
+	montoCaja = selectCaja.options[selectCaja.selectedIndex].getAttribute("data-monto");
 	document.getElementById("monto_caja").value = montoCaja;
 }
 
@@ -219,6 +222,7 @@ function guardaryeditar(e) {
 
 	var idlocal = $("#idcaja option:selected").data("idlocal");
 	var formData = new FormData($("#formulario")[0]);
+	formData.append('monto_caja', montoCaja);
 	formData.append('idlocal', idlocal);
 
 	$.ajax({
@@ -264,7 +268,9 @@ function modalDetalles(idretiro) {
 		$("#fecha_retiro").text(formatFecha(fecha));
 		$("#hora_retiro").text(formatHora(hora));
 
-		$("#monto_retiro").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#monto_caja_mostrar").text("S/. " + parseFloat(data.monto_caja).toFixed(2));
+		$("#monto_retiro_mostrar").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#monto_total_mostrar").text("S/. " + parseFloat(data.monto_total).toFixed(2));
 		$("#descripcion_retiro").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
 
 		$("#myModal").modal("show");

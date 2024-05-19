@@ -155,7 +155,7 @@ while ($reg2 = $rspta2->fetch_object()) {
 
 # SUBTOTAL #
 $y += $size ?? 0;
-$pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+$pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
 $lineSubtotal = array(
     "PRODUCTO" => "",
@@ -300,7 +300,7 @@ while ($reg3 = $rspta3->fetch_object()) {
 
 # SUBTOTAL #
 $y += ($size - 4) ?? 0;
-$pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+$pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
 $lineSubtotal = array(
     "METODO PAGO" => "SUBTOTAL",

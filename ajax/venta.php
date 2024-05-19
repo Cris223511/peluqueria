@@ -40,7 +40,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $venta->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $venta->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -268,12 +268,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'getLastNumComprobante':
 				$row = mysqli_fetch_assoc($venta->getLastNumComprobante($idlocalSession));
-				if ($row != null) {
-					$last_num_comprobante = $row["last_num_comprobante"];
-					echo $last_num_comprobante;
-				} else {
-					echo $row;
-				}
+				$lastNumComp = $row["last_num_comprobante"] != null ? $row["last_num_comprobante"] : "0";
+				echo $lastNumComp;
 				break;
 
 			case 'getLastNumComprobanteLocal':
@@ -281,8 +277,8 @@ if (!isset($_SESSION["nombre"])) {
 				$row2 = mysqli_fetch_assoc($venta->getCajaLocal($idlocal));
 				$row3 = mysqli_fetch_assoc($venta->verificarCajaLocal($idlocal));
 
-				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
-				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";
+				$lastNumComp = $row1["last_num_comprobante"] != null ? $row1["last_num_comprobante"] : "0";
+				$idcajaLocal = $row2["idcaja"] != null ? $row2["idcaja"] : "0";
 
 				$response = array(
 					"last_num_comprobante" => $lastNumComp,

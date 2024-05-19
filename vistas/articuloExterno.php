@@ -57,7 +57,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos externos</strong>" data-html="true" data-content="Módulo en donde se registran los productos para que sean utilizados en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Solo visualizará los productos de los locales externos y no del local actual, es decir, solo lista los productos de los demás locales, a excepción del local en el que se encuentra trabajando." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos externos</strong>" data-html="true" data-content="Módulo en donde se registran los productos para que sean utilizados en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Solo visualizará los productos de los locales externos y no del local actual, es decir, solo lista los productos de los demás locales, a excepción del local en el estás trabajando (ya que esos locales son externos al tuyo)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
@@ -107,6 +107,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="white-space: nowrap;">Stock mínimo</th>
                       <th style="white-space: nowrap;">P. compra</th>
                       <th style="white-space: nowrap;">P. venta</th>
+                      <th>Comisión</th>
                       <th style="white-space: nowrap;">Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -126,6 +127,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Stock mínimo</th>
                       <th>P. compra</th>
                       <th>P. venta</th>
+                      <th>Comisión</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -167,10 +169,6 @@ if (!isset($_SESSION["nombre"])) {
                       <label>RUC local(*):</label>
                       <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                     </div>
-                    <div class="form-group col-lg-12 col-md-12">
-                      <label>Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del producto." autocomplete="off">
-                    </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Precio compra(*):</label>
                       <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
@@ -186,6 +184,14 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Stock mínimo(*):</label>
                       <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el stock mínimo." required>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12">
+                      <label>Comisión(*):</label>
+                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el precio de venta." required>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12">
+                      <label>Descripción:</label>
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del producto." autocomplete="off">
                     </div>
                     <div class="form-group col-lg-12 col-md-12">
                       <label>Imagen:</label>

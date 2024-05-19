@@ -26,6 +26,7 @@ if (!isset($_SESSION["nombre"])) {
 		$idcaja = isset($_POST["idcaja"]) ? limpiarCadena($_POST["idcaja"]) : "";
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 		$monto = isset($_POST["monto"]) ? limpiarCadena($_POST["monto"]) : "";
+		$monto_caja = isset($_POST["monto_caja"]) ? limpiarCadena($_POST["monto_caja"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 
 		switch ($_GET["op"]) {
@@ -35,7 +36,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($verificarMonto) {
 					echo "El monto que desea gastar no puede ser mayor al monto total de la caja.";
 				} else {
-					$rspta = $gastos->agregar($idusuario, $idcaja, $idlocal, $descripcion, $monto);
+					$rspta = $gastos->agregar($idusuario, $idcaja, $idlocal, $descripcion, $monto, $monto_caja);
 					echo $rspta ? "Gasto registrado" : "El gasto no se pudo registrar";
 				}
 				break;
@@ -122,10 +123,12 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->caja,
 						"2" => $reg->local,
-						"3" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
-						"4" => ucwords($reg->nombre),
-						"5" => ucwords($cargo_detalle),
-						"6" => $reg->fecha
+						"3" => 'S/. ' . number_format($reg->monto_caja, 2, '.', ','),
+						"4" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"5" => 'S/. ' . number_format($reg->monto_total, 2, '.', ','),
+						"6" => ucwords($reg->nombre),
+						"7" => ucwords($cargo_detalle),
+						"8" => $reg->fecha
 					);
 				}
 

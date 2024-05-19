@@ -157,9 +157,9 @@ function listarArticulos(articulos, servicios) {
 						<div class="subcaja-gris">
 							<span>STOCK: <strong>${stockHtml}</strong></span>
 							${labelHtml}
-							<span><strong>S/ ${articulo.precio_venta}</strong></span>
+							<span><strong>S/ ${articulo.precio_compra}</strong></span>
 						</div>
-						<a style="width: 100%;" onclick="verificarProducto('producto','${articulo.id}','${articulo.nombre}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
+						<a style="width: 100%;" onclick="verificarProducto('producto','${articulo.id}','${articulo.nombre}','${articulo.local}','${articulo.stock}','${articulo.precio_compra}','${articulo.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
 				</div>
 			`;
@@ -179,9 +179,9 @@ function listarArticulos(articulos, servicios) {
 							<div class="subcaja-gris">
 								<span><strong>ㅤ</strong></span>
 								<span class="label bg-green" style="width: min-content;">Disponible</span>
-								<span><strong>S/ ${servicio.precio_venta}</strong></span>
+								<span><strong>S/ ${servicio.precio_compra}</strong></span>
 							</div>
-							<a style="width: 100%;" onclick="verificarProducto('servicio','${servicio.id}','${servicio.nombre}','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
+							<a style="width: 100%;" onclick="verificarProducto('servicio','${servicio.id}','${servicio.nombre}','Sin registrar.','${servicio.stock}','${servicio.precio_compra}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 						</div>
 					</div>
 				`;
@@ -267,7 +267,7 @@ function listarSelects(articulos, servicios, proveedores, locales) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -275,7 +275,7 @@ function listarSelects(articulos, servicios, proveedores, locales) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar." data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -286,7 +286,7 @@ function listarSelects(articulos, servicios, proveedores, locales) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -294,7 +294,7 @@ function listarSelects(articulos, servicios, proveedores, locales) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar." data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -348,7 +348,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -356,7 +356,7 @@ function listarSelectsArticulos(articulos, servicios) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar." data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -366,7 +366,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -374,7 +374,7 @@ function listarSelectsArticulos(articulos, servicios) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar." data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -424,7 +424,7 @@ function checkDNI(value) {
 
 function seleccionarProducto(selectElement) {
 	var selectedOption = selectElement.options[selectElement.selectedIndex];
-	verificarProducto(selectedOption.getAttribute('data-tipo-producto'), selectedOption.value, selectedOption.getAttribute('data-nombre'), selectedOption.getAttribute('data-stock'), selectedOption.getAttribute('data-precio-compra'), selectedOption.getAttribute('data-precio-venta'), selectedOption.getAttribute('data-codigo'))
+	verificarProducto(selectedOption.getAttribute('data-tipo-producto'), selectedOption.value, selectedOption.getAttribute('data-nombre'), selectedOption.getAttribute('data-local'), selectedOption.getAttribute('data-stock'), selectedOption.getAttribute('data-precio-compra'), selectedOption.getAttribute('data-codigo'))
 	selectElement.value = "";
 	$(selectElement).selectpicker('refresh');
 	colocarNegritaStocksSelects();
@@ -432,12 +432,12 @@ function seleccionarProducto(selectElement) {
 
 let idarticuloGlobal = "";
 let nombreGlobal = "";
+let localGlobal = "";
 let precioCompraGlobal = "";
-let precioVentaGlobal = "";
 let codigoGlobal = "";
 let tipoProductoFinal = "";
 
-function verificarProducto(tipoarticulo, idarticulo, nombre, stock, precio_compra, precio_venta, codigo) {
+function verificarProducto(tipoarticulo, idarticulo, nombre, local, stock, precio_compra, codigo) {
 	var existeProducto = validarTablaProductos(tipoarticulo, idarticulo);
 
 	// if (stock == 0) {
@@ -446,16 +446,16 @@ function verificarProducto(tipoarticulo, idarticulo, nombre, stock, precio_compr
 	// }
 
 	if (!existeProducto) {
-		console.log("esto traigo =) =>", tipoarticulo, idarticulo, nombre, precio_compra, precio_venta, codigo);
+		console.log("esto traigo =) =>", tipoarticulo, idarticulo, nombre, local, stock, precio_compra, codigo);
 
 		idarticuloGlobal = idarticulo;
 		nombreGlobal = nombre;
+		localGlobal = local;
 		precioCompraGlobal = precio_compra;
-		precioVentaGlobal = precio_venta;
 		codigoGlobal = codigo;
 		tipoProductoFinal = tipoarticulo;
 
-		agregarDetalle(tipoProductoFinal, idarticuloGlobal, nombreGlobal, precioCompraGlobal, precioVentaGlobal, codigoGlobal);
+		agregarDetalle(tipoProductoFinal, idarticuloGlobal, nombreGlobal, localGlobal, precioCompraGlobal, codigoGlobal);
 	} else {
 		bootbox.alert("No puedes agregar el mismo artículo o servicio dos veces.");
 	}
@@ -853,13 +853,13 @@ function verificarModalPrecuenta() {
 	}
 
 	if ($('.filas').length === 0) {
-		bootbox.alert("Debe agregar por lo menos un artículo o servicio.");
+		bootbox.alert("Debe agregar por lo menos un producto o servicio.");
 		return;
 	}
 
 	let detallesValidos = true;
 	$('.filas').each(function (index, fila) {
-		let precioCompra = $(fila).find('input[name="precio_venta[]"]').val();
+		let precioCompra = $(fila).find('input[name="precio_compra[]"]').val();
 		let descuento = $(fila).find('input[name="descuento[]"]').val();
 		let cantidad = $(fila).find('input[name="cantidad[]"]').val();
 
@@ -919,12 +919,12 @@ function mostrarDatosModalPrecuenta() {
 
 function actualizarTablaDetallesProductosPrecuenta() {
 	$('.filas').each(function (index, fila) {
-		let precioVenta = $(fila).find('input[name="precio_venta[]"]').val();
+		let precioCompra = $(fila).find('input[name="precio_compra[]"]').val();
 		let descuento = $(fila).find('input[name="descuento[]"]').val();
 		let cantidad = $(fila).find('input[name="cantidad[]"]').val();
 
 		let filaPrecuenta = $('#detallesProductosPrecuenta .filas').eq(index);
-		filaPrecuenta.find('input[name="precio_venta[]"]').val(precioVenta);
+		filaPrecuenta.find('input[name="precio_compra[]"]').val(precioCompra);
 		filaPrecuenta.find('input[name="descuento[]"]').val(descuento);
 		filaPrecuenta.find('input[name="cantidad[]"]').val(cantidad);
 	});
@@ -934,22 +934,22 @@ function actualizarTablaDetallesProductosCompra() {
 	$('#detallesProductosPrecuenta .filas').each(function (index, fila) {
 		let id1 = $(fila).find('input[name="idarticulo[]"]').val();
 		let id2 = $(fila).find('input[name="idservicio[]"]').val();
-		let precioVenta = $(fila).find('input[name="precio_venta[]"]').val();
+		let precioCompra = $(fila).find('input[name="precio_compra[]"]').val();
 		let descuento = $(fila).find('input[name="descuento[]"]').val();
 		let cantidad = $(fila).find('input[name="cantidad[]"]').val();
 
-		let filaVenta = $('#detalles .filas').eq(index);
-		filaVenta.find('input[name="idarticulo[]"]').val(id1);
-		filaVenta.find('input[name="idservicio[]"]').val(id2);
-		filaVenta.find('input[name="precio_venta[]"]').val(precioVenta);
-		filaVenta.find('input[name="descuento[]"]').val(descuento);
-		filaVenta.find('input[name="cantidad[]"]').val(cantidad);
+		let filaCompra = $('#detalles .filas').eq(index);
+		filaCompra.find('input[name="idarticulo[]"]').val(id1);
+		filaCompra.find('input[name="idservicio[]"]').val(id2);
+		filaCompra.find('input[name="precio_compra[]"]').val(precioCompra);
+		filaCompra.find('input[name="descuento[]"]').val(descuento);
+		filaCompra.find('input[name="cantidad[]"]').val(cantidad);
 	});
 }
 
-function verificarCantidadArticulos() {
-	if ($('.filas').length === 0) {
-		bootbox.alert("Debe agregar por lo menos un artículo o servicio.");
+function verificarCantidadArticulos(param) {
+	if ($('.filas').length === 0 && param != 1) {
+		bootbox.alert("Debe agregar por lo menos un producto o servicio.");
 		$('#myModal7').modal('hide');
 	}
 }
@@ -1282,7 +1282,7 @@ function guardaryeditar(e) {
 					console.log(datos);
 					console.log("No se recibieron datos del servidor.");
 					return;
-				} else if (datos == "Una de las cantidades superan al stock normal del artículo o servicio." || datos == "El subtotal de uno de los artículos o servicios no puede ser menor a 0." || datos == "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra." || "El número correlativo que ha ingresado ya existe en el local seleccionado.") {
+				} else if (datos == "Una de las cantidades superan al stock normal del artículo o servicio." || datos == "El subtotal de uno de los artículos o servicios no puede ser menor a 0." || "El número correlativo que ha ingresado ya existe en el local seleccionado.") {
 					console.log(datos);
 					console.log(typeof (datos));
 					bootbox.alert(datos);
@@ -1338,7 +1338,7 @@ function limpiarModalPrecuentaFinal() {
 	});
 }
 
-// FUNCIONES Y BOTONES DE LAS VENTAS
+// FUNCIONES Y BOTONES DE LAS COMPRAS
 
 function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
@@ -1371,15 +1371,15 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_compra}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_venta) - item.descuento).toFixed(2)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_compra) - item.descuento).toFixed(2)}</td>
                 </tr>`;
 
 			tbody.append(row);
 
 			// Calcular subtotal
-			subtotal += item.cantidad * item.precio_venta;
+			subtotal += item.cantidad * item.precio_compra;
 		});
 
 		let igv = subtotal * (impuesto);
@@ -1439,19 +1439,19 @@ function limpiarModalImpresion() {
 	});
 }
 
-function modalEstadoVenta(idcompra, num_comprobante) {
-	limpiarModalEstadoVenta();
+function modalEstadoCompra(idcompra, num_comprobante) {
+	limpiarModalEstadoCompra();
 
 	$("#num_comprobante_final3").text(num_comprobante);
 
 	var nombresBotones = ['INICIADO', 'ENTREGADO', 'POR ENTREGAR', 'EN TRANSCURSO', 'FINALIZADO', 'ANULADO'];
 
 	nombresBotones.forEach(function (texto) {
-		$("button:contains('" + texto + "')").attr("onclick", "cambiarEstadoVenta('" + texto + "', " + idcompra + ");");
+		$("button:contains('" + texto + "')").attr("onclick", "cambiarEstadoCompra('" + texto + "', " + idcompra + ");");
 	});
 }
 
-function limpiarModalEstadoVenta() {
+function limpiarModalEstadoCompra() {
 	$("#num_comprobante_final3").text("");
 
 	var nombresBotones = ['INICIADO', 'ENTREGADO', 'POR ENTREGAR', 'EN TRANSCURSO', 'FINALIZADO', 'ANULADO'];
@@ -1461,7 +1461,7 @@ function limpiarModalEstadoVenta() {
 	});
 }
 
-function cambiarEstadoVenta(estado, idcompra) {
+function cambiarEstadoCompra(estado, idcompra) {
 	const mensajeAdicional = (estado === "ANULADO") ? " recuerde que esta opción hará que el estado de la compra no se pueda modificar de nuevo." : "";
 
 	bootbox.confirm("¿Estás seguro de cambiar el estado de la compra a <strong>" + minusTodasLasPalabras(estado) + "</strong>?" + mensajeAdicional, function (result) {
@@ -1470,7 +1470,7 @@ function cambiarEstadoVenta(estado, idcompra) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
 				$('#myModal11').modal('hide');
-				limpiarModalEstadoVenta();
+				limpiarModalEstadoCompra();
 			});
 		}
 	})
@@ -1482,6 +1482,15 @@ function anular(idcompra) {
 			$.post("../ajax/compra.php?op=anular", { idcompra: idcompra }, function (e) {
 				bootbox.alert(e);
 				tabla.ajax.reload();
+				$.post("../ajax/compra.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+					const obj = JSON.parse(data);
+
+					let articulo = obj.articulo;
+					let servicio = obj.servicio;
+
+					listarSelectsArticulos(articulo, servicio);
+					listarArticulos(articulo, servicio);
+				});
 			});
 		}
 	})
@@ -1512,27 +1521,28 @@ var detalles = 0;
 
 // $("#btnGuardar").hide();
 
-function agregarDetalle(tipoproducto, idarticulo, nombre, precio_compra, precio_venta, codigo) {
+function agregarDetalle(tipoproducto, idarticulo, nombre, local, precio_compra, codigo) {
 	var cantidad = 1;
 	var descuento = '0.00';
 
 	if (idarticulo != "") {
 		var fila = '<tr class="filas fila' + cont + ' principal">' +
-			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '">' + codigo + '</td>' +
+			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '">' + codigo + '</td>' +
 			'<td>' + capitalizarTodasLasPalabras(nombre) + '</td>' +
-			'<td><input type="number" step="any" name="precio_venta[]" oninput="modificarSubototales();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td><input type="number" step="any" name="precio_compra[]" oninput="modificarSubototales();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></td>' +
 			'<td><input type="number" step="any" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td><input type="number" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
-			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(' + cont + ');"><i class="fa fa-trash"></i></button></td>' +
+			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(1, ' + cont + ');"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
 
 		var fila2 = '<tr class="filas fila' + cont + ' principal2">' +
 			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '">' + codigo + '</td>' +
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
-			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
+			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(local) + '</td>' +
+			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_compra[]" oninput="modificarSubototales2();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></div></td>' +
-			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(' + cont + '); actualizarVuelto();"><i class="fa fa-trash"></i></button></td>' +
+			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(2, ' + cont + '); actualizarVuelto();"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
 
 		cont++;
@@ -1546,6 +1556,8 @@ function agregarDetalle(tipoproducto, idarticulo, nombre, precio_compra, precio_
 	} else {
 		bootbox.alert("Error al ingresar el detalle, revisar los datos del artículo o servicio");
 	}
+
+	mostrarOcultarColumnaAlmacen();
 }
 
 function modificarSubototales() {
@@ -1555,17 +1567,17 @@ function modificarSubototales() {
 
 	principalRows.forEach(function (row) {
 		var cantidad = row.querySelector('[name="cantidad[]"]').value;
-		var precioCompra = row.querySelector('[name="precio_venta[]"]').value;
+		var precioCompra = row.querySelector('[name="precio_compra[]"]').value;
 		var descuento = row.querySelector('[name="descuento[]"]').value;
 
 		var subtotal = (cantidad * precioCompra) - descuento;
 		totalCompra += subtotal;
 		descuentoFinal += Number(descuento);
 
-		// console.log("Cantidad:", cantidad, "Precio Venta:", precioCompra, "Descuento:", descuento);
+		// console.log("Cantidad:", cantidad, "Precio Compra:", precioCompra, "Descuento:", descuento);
 	});
 
-	console.log("Total Venta: ", totalCompra);
+	console.log("Total Compra: ", totalCompra);
 	console.log("Total Descuento: ", descuentoFinal);
 
 	$("#total_compra_valor").html("S/. " + totalCompra.toFixed(2));
@@ -1580,14 +1592,14 @@ function modificarSubototales2() {
 
 	principalRows.forEach(function (row) {
 		var cantidad = row.querySelector('[name="cantidad[]"]').value;
-		var precioCompra = row.querySelector('[name="precio_venta[]"]').value;
+		var precioCompra = row.querySelector('[name="precio_compra[]"]').value;
 		var descuento = row.querySelector('[name="descuento[]"]').value;
 
 		var subtotal = (cantidad * precioCompra) - descuento;
 		totalCompra += subtotal;
 		descuentoFinal2 += Number(descuento);
 
-		// console.log("Cantidad:", cantidad, "Precio Venta:", precioCompra, "Descuento:", descuento);
+		// console.log("Cantidad:", cantidad, "Precio Compra:", precioCompra, "Descuento:", descuento);
 	});
 
 	if (igvActual == 2) {
@@ -1597,7 +1609,7 @@ function modificarSubototales2() {
 	}
 
 	console.log("IGV: ", igvActual);
-	console.log("Total Venta: ", totalCompra);
+	console.log("Total Compra: ", totalCompra);
 	console.log("Total Descuento: ", descuentoFinal2);
 
 
@@ -1624,12 +1636,13 @@ function evaluar() {
 	}
 }
 
-function eliminarDetalle(indice) {
+function eliminarDetalle(param, indice) {
 	$(".fila" + indice).remove();
 	detalles = detalles - 1;
+	cont = cont - 1;
 	modificarSubototales();
 	$("#totalItems").html(cont);
-	verificarCantidadArticulos();
+	verificarCantidadArticulos(param);
 	mostrarDatosModalPrecuenta();
 }
 

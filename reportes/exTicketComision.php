@@ -32,16 +32,14 @@ if (!isset($_SESSION["nombre"])) {
 
         $rspta1 = $comision->verComisionesEmpleado($_GET["id"]);
         $rspta2 = $comision->verDatosEmpleado($_GET["id"]);
-        $rspta3 = $comision->verComisionesEmpleado($_GET["id"]);
 
-        $reg1 = (object) $rspta1;
+        $reg1 = $rspta1->fetch_object();
         $reg2 = (object) $rspta2;
-        $reg3 = $rspta3->fetch_object();
 
         require('ticket/code128.php');
 
         # Modificando el ancho y alto del ticket #
-        $pdf = new PDF_Code128('P', 'mm', array(70, 220));
+        $pdf = new PDF_Code128('P', 'mm', array(70, 250));
         $pdf->SetAutoPageBreak(false);
         $pdf->SetMargins(4, 10, 4);
         $pdf->AddPage();
@@ -101,49 +99,43 @@ if (!isset($_SESSION["nombre"])) {
         $hizoSaltoLinea = false;
         $contador = 0;
 
-        $totalRegistros = $rspta3->num_rows;
+        $totalRegistros = $rspta1->num_rows;
         $anchoColumna = 44;
 
-        $ultimoNombreProducto = null; // Variable para almacenar el último $nombreProducto impreso
-
-        while ($reg3) {
-            $nombreProducto = ($reg3->idarticulo != "0") ? $reg3->nombre_articulo : $reg3->nombre_servicio;
+        while ($reg1) {
+            $nombreProducto = ($reg1->idarticulo != "0") ? $reg1->nombre_articulo : $reg1->nombre_servicio;
             $anchoTexto = $pdf->GetStringWidth($nombreProducto ?? '');
 
-            // Verificamos si el $nombreProducto actual es igual al último $nombreProducto impreso
-            if ($nombreProducto != $ultimoNombreProducto) {
-                $line = array(
-                    "PRODUCTO / SERVICIO" => (mb_convert_encoding(mb_strtoupper($nombreProducto), 'ISO-8859-1', 'UTF-8')),
-                    mb_convert_encoding(mb_strtoupper("COMISIÓN"), 'ISO-8859-1', 'UTF-8') => (number_format($reg3->comision, 2) ?? 0.00),
-                );
-                $pdf->SetFont('hypermarket', '', 8);
-                $size = $pdf->addLine($y - 4, $line) ?? 0;
+            $line = array(
+                "PRODUCTO / SERVICIO" => (mb_convert_encoding(mb_strtoupper($nombreProducto), 'ISO-8859-1', 'UTF-8')),
+                mb_convert_encoding(mb_strtoupper("COMISIÓN"), 'ISO-8859-1', 'UTF-8') => (number_format($reg1->comision, 2) ?? 0.00),
+            );
 
-                $ultimoNombreProducto = $nombreProducto; // Actualizamos el último $nombreProducto impreso
+            $pdf->SetFont('hypermarket', '', 8);
+            $size = $pdf->addLine($y - 4, $line) ?? 0;
 
-                $contador++;
-                $esUltimoBucle = ($contador === $totalRegistros);
-                $hizoSaltoLinea = ($anchoTexto > $anchoColumna);
+            $contador++;
+            $esUltimoBucle = ($contador === $totalRegistros);
+            $hizoSaltoLinea = ($anchoTexto > $anchoColumna);
 
-                if ($esUltimoBucle && $hizoSaltoLinea) {
-                    $y += ($size - 1) ?? 0;
-                } else if ($esUltimoBucle) {
-                    $y += ($size + 1.5) ?? 0;
-                } else {
-                    $y += ($size + 2) ?? 0;
-                }
-
-                $comisionTotal += ($reg3->comision ?? 0.00);
+            if ($esUltimoBucle && $hizoSaltoLinea) {
+                $y += ($size - 1) ?? 0;
+            } else if ($esUltimoBucle) {
+                $y += ($size + 1.5) ?? 0;
+            } else {
+                $y += ($size + 2) ?? 0;
             }
 
-            $reg3 = $rspta3->fetch_object();
+            $comisionTotal += ($reg1->comision ?? 0.00);
+
+            $reg1 = $rspta1->fetch_object();
         }
 
-        # Tabla para los totales de los productos (SUBTOTAL, IGV Y TOTAL) #
+        # Tabla para los totales de la comisión (TOTALES) #
 
-        # SUBTOTAL #
-        $y += $size - 3.5 ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        # TOTAL #
+        $y += ($size - 4) ?? 0;
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         # TOTAL #
         $lineTotal = array(

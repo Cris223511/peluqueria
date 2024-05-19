@@ -45,6 +45,7 @@ if (!isset($_SESSION["nombre"])) {
 		$imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
 		$precio_compra = isset($_POST["precio_compra"]) ? limpiarCadena($_POST["precio_compra"]) : "";
 		$precio_venta = isset($_POST["precio_venta"]) ? limpiarCadena($_POST["precio_venta"]) : "";
+		$comision = isset($_POST["comision"]) ? limpiarCadena($_POST["comision"]) : "";
 		$barra = isset($_POST["barra"]) ? limpiarCadena($_POST["barra"]) : "";
 
 		switch ($_GET["op"]) {
@@ -81,7 +82,7 @@ if (!isset($_SESSION["nombre"])) {
 					} else if ($codigoExiste && $codigo != "") {
 						echo "El código de barra del producto que ha ingresado ya existe.";
 					} else {
-						$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta);
+						$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $descripcion);
 						echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
 					}
 				} else {
@@ -89,7 +90,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El código del producto que ha ingresado ya existe.";
 					} else {
-						$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta);
+						$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $descripcion);
 						echo $rspta ? "Producto actualizado" : "El producto no se pudo actualizar";
 					}
 				}
@@ -172,7 +173,7 @@ if (!isset($_SESSION["nombre"])) {
 						$rspta = $articulo->listarPorParametro($idlocalSession, "a.idmarca = '$param1' AND a.idcategoria = '$param2' AND a.stock = 0");
 					}
 				} else {
-					$rspta = $articulo->listar($idlocalSession, );
+					$rspta = $articulo->listar($idlocalSession,);
 				}
 
 				$data = array();
@@ -228,9 +229,10 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => $reg->stock_minimo,
 						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
 						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
-						"12" => $reg->usuario,
-						"13" => $cargo_detalle,
-						"14" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"12" => "S/. " . number_format($reg->comision, 2, '.', ','),
+						"13" => $reg->usuario,
+						"14" => $cargo_detalle,
+						"15" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(

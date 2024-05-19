@@ -230,6 +230,24 @@ if (!isset($_SESSION["nombre"])) {
     <script type="text/javascript">
       Chart.register(ChartDataLabels);
 
+      function ajustarMaximo(valor) {
+        if (valor < 10) {
+          return valor + 1;
+        } else {
+          const exponent = Math.floor(Math.log10(valor));
+          const increment = Math.pow(10, exponent - 1);
+          return valor + increment;
+        }
+      }
+
+      let totalesc = [<?php echo $totalesc; ?>];
+      let totalesv = [<?php echo $totalesv; ?>];
+      let totalesp = [<?php echo $totalesp; ?>];
+
+      let max1 = ajustarMaximo(Math.max(...totalesc));
+      let max2 = ajustarMaximo(Math.max(...totalesv));
+      let max3 = ajustarMaximo(Math.max(...totalesp));
+
       var ctx = document.getElementById("compras").getContext('2d');
       var compras = new Chart(ctx, {
         type: 'bar',
@@ -271,6 +289,11 @@ if (!isset($_SESSION["nombre"])) {
           }]
         },
         options: {
+          scales: {
+            y: {
+              suggestedMax: max1
+            }
+          },
           plugins: {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',
@@ -330,6 +353,11 @@ if (!isset($_SESSION["nombre"])) {
           }]
         },
         options: {
+          scales: {
+            y: {
+              suggestedMax: max2
+            }
+          },
           plugins: {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',
@@ -389,6 +417,11 @@ if (!isset($_SESSION["nombre"])) {
           }]
         },
         options: {
+          scales: {
+            y: {
+              suggestedMax: max3
+            }
+          },
           plugins: {
             datalabels: { //esta es la configuración de pluggin datalabels
               anchor: 'end',

@@ -176,7 +176,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotal = array(
             "DOCUMENTO" => "",
@@ -287,7 +287,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotal = array(
             "DOCUMENTO" => "",
@@ -398,7 +398,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotal = array(
             "DOCUMENTO" => "",
@@ -498,7 +498,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL ACUMULADO #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotalAcumulado = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
@@ -608,7 +608,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotal = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
@@ -705,7 +705,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # TOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotal = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
@@ -820,7 +820,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # SUBTOTAL #
         $y += ($size - 4) ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineSubtotal = array(
             "METODO PAGO" => "SUBTOTAL",
@@ -964,7 +964,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # SUBTOTAL #
         $y += $size ?? 0;
-        $pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+        $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineSubtotal = array(
             "PRODUCTO" => "",

@@ -314,14 +314,14 @@ if (!isset($_SESSION["nombre"])) {
         }
       }
 
-      .caja-ventas {
+      .caja-compras {
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
         justify-content: center;
       }
 
-      .caja-ventas button {
+      .caja-compras button {
         margin-bottom: 10px;
         width: 40px;
         height: 30px;
@@ -510,7 +510,7 @@ if (!isset($_SESSION["nombre"])) {
                       <div id="inputsMetodoPago"></div>
                       <div id="inputsMontoMetodoPago"></div>
                       <h1>OPCIONES DE COMPRA</h1>
-                      <div class="caja-ventas">
+                      <div class="caja-compras">
                         <!-- <a href="#"><button type="button" class="btn btn-default" style="padding-top: 4px;"><strong>%</strong></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-money"></i></button></a> -->
                         <a onclick="limpiarTodo();"><button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button></a>
@@ -774,6 +774,7 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="text-align: start !important;">CÓDIGO</th>
                       <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">NOMBRE</th>
+                      <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">ALMACÉN</th>
                       <th>PRECIO</th>
                       <th>DESCUENTO</th>
                       <th>CANTIDAD</th>

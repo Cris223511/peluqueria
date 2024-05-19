@@ -380,7 +380,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				echo '<option value="">- Seleccione -</option>';
 				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idcaja . '" data-idlocal="' . $reg->idlocal . '" data-monto="' . $reg->monto . '"> ' . $reg->titulo . ' - ' . $reg->local . '</option>';
+					echo '<option value="' . $reg->idcaja . '" data-idlocal="' . $reg->idlocal . '" data-monto="' . $reg->monto_total . '"> ' . $reg->titulo . ' - ' . $reg->local . '</option>';
 				}
 				break;
 		}

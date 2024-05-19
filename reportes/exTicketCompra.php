@@ -119,7 +119,7 @@ $totalRegistros = $rspta2->num_rows;
 $anchoColumnaProducto = 20;
 
 while ($reg2 = $rspta2->fetch_object()) {
-    $subtotal = ($reg2->cantidad * $reg2->precio_venta) - $reg2->descuento;
+    $subtotal = ($reg2->cantidad * $reg2->precio_compra) - $reg2->descuento;
 
     $textoProducto = utf8_decode(($reg2->articulo != "") ? mb_strtoupper($reg2->articulo) : mb_strtoupper($reg2->servicio));
     $anchoTexto = $pdf->GetStringWidth($textoProducto);
@@ -127,7 +127,7 @@ while ($reg2 = $rspta2->fetch_object()) {
     $line = array(
         "PRODUCTO" => $textoProducto,
         "CANTIDAD" => "$reg2->cantidad",
-        "P.U." => number_format($reg2->precio_venta, 2),
+        "P.U." => number_format($reg2->precio_compra, 2),
         "DSCTO" => number_format($reg2->descuento, 2),
         "SUBTOTAL" => number_format($subtotal, 2)
     );
@@ -155,7 +155,7 @@ while ($reg2 = $rspta2->fetch_object()) {
 
 # SUBTOTAL #
 $y += $size ?? 0;
-$pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+$pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
 $lineSubtotal = array(
     "PRODUCTO" => "",
@@ -300,7 +300,7 @@ while ($reg3 = $rspta3->fetch_object()) {
 
 # SUBTOTAL #
 $y += ($size - 4) ?? 0;
-$pdf->Line(3, $y - 2.3, 67, $y - 2.3);
+$pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
 $lineSubtotal = array(
     "METODO PAGO" => "SUBTOTAL",

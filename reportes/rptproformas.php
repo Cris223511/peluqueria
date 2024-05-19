@@ -7,7 +7,7 @@ if (strlen(session_id()) < 1)
 if (!isset($_SESSION["nombre"])) {
   echo 'Debe ingresar al sistema correctamente para visualizar el reporte';
 } else {
-  if ($_SESSION['ventas'] == 1) {
+  if ($_SESSION['compras'] == 1) {
 
     //Inlcuímos a la clase PDF_MC_Table
     require('PDF_MC_Table.php');
@@ -62,10 +62,10 @@ if (!isset($_SESSION["nombre"])) {
       $cliente = $reg->cliente;
       $tipo_comprobante = $reg->tipo_comprobante;
       $num_comprobante = $reg->num_comprobante;
-      $total_venta = $reg->total_venta;
+      $total_compra = $reg->total_compra;
 
       $pdf->SetFont('Arial', '', 10);
-      $pdf->Row(array($fecha, utf8_decode($usuario), utf8_decode($cliente), $tipo_comprobante, $num_comprobante, $total_venta));
+      $pdf->Row(array($fecha, utf8_decode($usuario), utf8_decode($cliente), $tipo_comprobante, $num_comprobante, $total_compra));
     }
 
     //Mostramos el documento pdf

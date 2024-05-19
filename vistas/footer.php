@@ -414,6 +414,39 @@
       });
     </script>
 
+    <script>
+      function mostrarOcultarColumnaAlmacen() {
+        <?php
+        // Verificar el rol del usuario
+        $mostrarColumna = ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total");
+
+        // Script JavaScript para mostrar u ocultar la columna
+        $script = '';
+
+        if (!$mostrarColumna) {
+          $script .= '
+            // Obtener la tabla
+            var tabla = document.getElementById("detallesProductosPrecuenta");
+
+            // Obtener el índice de la columna del almacén
+            var indiceColumnaAlmacen = 2;
+
+            // Ocultar la cabecera
+            tabla.rows[0].cells[indiceColumnaAlmacen].style.display = "none";
+
+            // Ocultar el cuerpo
+            for (var i = 0; i < tabla.rows.length; i++) {
+                tabla.rows[i].cells[indiceColumnaAlmacen].style.display = "none";
+            }
+        ';
+        }
+
+        // Imprimir el script JavaScript
+        echo $script;
+        ?>
+      }
+    </script>
+
     </body>
 
     </html>

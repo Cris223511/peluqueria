@@ -40,7 +40,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -275,8 +275,8 @@ if (!isset($_SESSION["nombre"])) {
 				$row2 = mysqli_fetch_assoc($proforma->getCajaLocal($idlocal));
 				$row3 = mysqli_fetch_assoc($proforma->verificarCajaLocal($idlocal));
 
-				$lastNumComp = $row1 !== null ? $row1["last_num_comprobante"] : "0";
-				$idcajaLocal = $row2 !== null ? $row2["idcaja"] : "0";
+				$lastNumComp = $row1["last_num_comprobante"] != null ? $row1["last_num_comprobante"] : "0";
+				$idcajaLocal = $row2["idcaja"] != null ? $row2["idcaja"] : "0";
 
 				$response = array(
 					"last_num_comprobante" => $lastNumComp,

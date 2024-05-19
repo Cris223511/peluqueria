@@ -132,7 +132,7 @@ $anchoColumnaProducto = 20;
 $y += 9;
 
 while ($reg2 = $rspta2->fetch_object()) {
-  $subtotal = ($reg2->cantidad * $reg2->precio_venta) - $reg2->descuento;
+  $subtotal = ($reg2->cantidad * $reg2->precio_compra) - $reg2->descuento;
 
   $textoProducto = utf8_decode($reg2->idarticulo == "0" ? mb_strtoupper($reg2->servicio) : mb_strtoupper($reg2->articulo));
   $anchoTexto = $pdf->GetStringWidth($textoProducto);
@@ -140,7 +140,7 @@ while ($reg2 = $rspta2->fetch_object()) {
   $line = array(
     "PRODUCTO" => $textoProducto,
     "CANTIDAD" => "$reg2->cantidad",
-    "P.U." => number_format($reg2->precio_venta ?? 0.00, 2),
+    "P.U." => number_format($reg2->precio_compra ?? 0.00, 2),
     "DSCTO" => number_format($reg2->descuento ?? 0.00, 2),
     "SUBTOTAL" => number_format($subtotal ?? 0.00, 2)
   );
