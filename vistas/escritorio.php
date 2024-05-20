@@ -68,7 +68,7 @@ if (!isset($_SESSION["nombre"])) {
       $totalesp = $totalesp . $regfechap->total . ',';
     }
 
-    //Quitamos la última coma
+    //Quitamos la ultima coma
     $fechasp = substr($fechasp, 0, -1);
     $totalesp = substr($totalesp, 0, -1);
 ?>
