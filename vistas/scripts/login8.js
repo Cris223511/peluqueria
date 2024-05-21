@@ -7,6 +7,7 @@ $("#frmAcceso").on('submit', function (e) {
 
     $.post("../ajax/usuario.php?op=verificar", { "logina": login, "clavea": clave },
         function (data) {
+            data = limpiarCadena(data);
             console.log(data);
             if (data == 0) {
                 $("#btnGuardar").prop("disabled", false);
@@ -76,6 +77,12 @@ function mostrar() {
             $(".fondo-login").css("background-image", "url('../files/portadas/default.jpg')");
         }
     });
+}
+
+function limpiarCadena(cadena) {
+    let cadenaLimpia = cadena.trim();
+    cadenaLimpia = cadenaLimpia.replace(/^[\n\r]+/, '');
+    return cadenaLimpia;
 }
 
 mostrar();

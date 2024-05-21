@@ -7,6 +7,7 @@ $("#frmAcceso").on('submit', function (e) {
 
     $.post('../ajax/login.php?op=verificar', { "usuario": usuario, "clave": clave },
         function (data) {
+            data = limpiarCadena(data);
             console.log(data);
             var parsedData = JSON.parse(data);
             console.log(parsedData);

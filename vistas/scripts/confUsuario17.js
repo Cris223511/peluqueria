@@ -74,6 +74,7 @@ function actualizarInfoUsuario() {
 		url: "../ajax/confUsuario.php?op=actualizarSession",
 		dataType: 'json',
 		success: function (data) {
+			data = limpiarCadena(data);
 			console.log(data)
 			// actualizar la imagen y el nombre del usuario en la cabecera
 			$('.user-image, .img-circle').attr('src', '../files/usuarios/' + data.imagen);

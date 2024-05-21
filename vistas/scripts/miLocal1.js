@@ -141,6 +141,7 @@ function actualizarInfoUsuario() {
 		url: "../ajax/locales.php?op=actualizarSession",
 		dataType: 'json',
 		success: function (data) {
+			data = limpiarCadena(data);
 			console.log(data)
 			// actualizar la imagen y el nombre del usuario en la cabecera
 			$('.user-menu .local').html('<strong> Local: ' + data.local + '</strong>');
