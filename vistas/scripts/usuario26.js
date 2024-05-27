@@ -77,7 +77,6 @@ function limpiar() {
 	$("#local_ruc").val("");
 	$("#cargo").val("admin");
 	$('#cargo option[value="superadmin"]').remove();
-	$('#cargo option[value="admin_total"]').remove();
 	$("#cargo").selectpicker('refresh');
 	$("#login").val("");
 	$("#clave").val("");
@@ -120,13 +119,9 @@ function cancelarform() {
 function verificarCargo(cargo) {
 	console.log(cargo);
 	$('#cargo option[value="superadmin"]').remove();
-	$('#cargo option[value="admin_total"]').remove();
 
 	if (cargo == "superadmin") {
 		$('#cargo').prepend('<option value="superadmin">Superadministrador</option>');
-		$('#cargo').selectpicker('refresh');
-	} else if (cargo == "admin_total") {
-		$('#cargo').prepend('<option value="admin_total">Admin Total</option>');
 		$('#cargo').selectpicker('refresh');
 	}
 }
@@ -178,7 +173,7 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
+				// $(row).find('td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
 			},
 		}).DataTable();
 }

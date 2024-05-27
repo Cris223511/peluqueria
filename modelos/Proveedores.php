@@ -77,6 +77,7 @@ class Proveedor
 				  c.vuelto,
 				  c.impuesto,
 				  c.total_compra,
+				  c.comentario_interno,
 				  c.estado
 				FROM compra c
 				LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor

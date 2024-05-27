@@ -36,18 +36,18 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
-                    <th style="width: 30%; min-width: 150px; white-space: nowrap;">Nombres</th>
+                    <th style="width: 20%; min-width: 220px;">Nombres</th>
                     <th>Cargo de empleado</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Almacén</th>
-                    <th style="white-space: nowrap;">Tipo Doc.</th>
-                    <th style="white-space: nowrap;">Número Doc.</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Dirección</th>
+                    <th style="width: 30%; min-width: 200px;">Almacén</th>
+                    <th>Tipo Doc.</th>
+                    <th>Número Doc.</th>
+                    <th style="width: 30%; min-width: 200px;">Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción</th>
-                    <th style="white-space: nowrap;">Agregado por</th>
+                    <th style="width: 30%; min-width: 350px;">Descripción</th>
+                    <th>Agregado por</th>
                     <th>Cargo</th>
-                    <th style="white-space: nowrap;">Fecha y hora</th>
+                    <th>Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -95,7 +95,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Dirección:</label>
-                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="40">
+                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="80">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Tipo Documento(*):</label>
@@ -120,7 +120,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" rows="4" placeholder="Ingrese una descripción."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

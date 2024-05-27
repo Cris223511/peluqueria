@@ -41,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				} else {
 					$rspta = $proveedores->editar($idproveedor, $nombre, $tipo_documento, $num_documento, $direccion, $descripcion, $telefono, $email);
-					echo $rspta ? "Proveedor actualizado" : "El proveedor no se pudo actualizar";
+					echo $rspta ? "Proveedor actualizado correctamente" : "El proveedor no se pudo actualizar";
 				}
 				break;
 
@@ -104,7 +104,7 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
-					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
+					$reg->descripcion = (strlen($reg->descripcion) > 100) ? substr($reg->descripcion, 0, 100) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -187,15 +187,17 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal3"><button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idcompra . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
-						"1" => $reg->fecha,
-						"2" => $reg->local,
-						"3" => $reg->tipo_comprobante,
-						"4" => 'N° ' . $reg->num_comprobante,
-						"5" => $reg->total_compra,
-						"6" => $reg->usuario . ' - ' . $cargo_detalle,
-						"7" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"1" => '<a target="_blank" href="../reportes/exA4Compra.php?id=' . $reg->idcompra . '"> <button class="btn btn-info" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
+						"2" => $reg->fecha,
+						"3" => $reg->local,
+						"4" => $reg->tipo_comprobante,
+						"5" => 'N° ' . $reg->num_comprobante,
+						"6" => $reg->total_compra,
+						"7" => $reg->usuario . ' - ' . $cargo_detalle,
+						"8" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
 					$totalPrecioCompra += $reg->total_compra;
@@ -208,10 +210,11 @@ if (!isset($_SESSION["nombre"])) {
 						"1" => "",
 						"2" => "",
 						"3" => "",
-						"4" => "<strong>TOTAL</strong>",
-						"5" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
-						"6" => "",
+						"4" => "",
+						"5" => "<strong>TOTAL</strong>",
+						"6" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
 						"7" => "",
+						"8" => "",
 					);
 				}
 

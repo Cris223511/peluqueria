@@ -12,7 +12,7 @@ if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
-	if ($_SESSION['almacen'] == 1) {
+	if ($_SESSION['servicios'] == 1) {
 		require_once "../modelos/Servicios.php";
 
 		$servicios = new Servicio();
@@ -116,7 +116,7 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					$reg->descripcion = (strlen($reg->descripcion) > 70) ? substr($reg->descripcion, 0, 70) . "..." : $reg->descripcion;
+					$reg->descripcion = (strlen($reg->descripcion) > 100) ? substr($reg->descripcion, 0, 100) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .

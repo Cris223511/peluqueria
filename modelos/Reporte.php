@@ -117,6 +117,7 @@ class Reporte
 					  c.vuelto,
 					  c.impuesto,
 					  c.total_compra,
+					  c.comentario_interno,
 					  c.estado
 					FROM compra c
 					LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
@@ -149,6 +150,7 @@ class Reporte
 					  c.vuelto,
 					  c.impuesto,
 					  c.total_compra,
+					  c.comentario_interno,
 					  c.estado
 					FROM compra c
 					LEFT JOIN proveedores p ON c.idproveedor = p.idproveedor
@@ -186,6 +188,7 @@ class Reporte
 				  v.vuelto,
 				  v.impuesto,
 				  v.total_venta,
+				  v.comentario_interno,
 				  v.estado
 				FROM venta v
 				LEFT JOIN clientes c ON v.idcliente = c.idcliente
@@ -221,6 +224,7 @@ class Reporte
 				  v.vuelto,
 				  v.impuesto,
 				  v.total_venta,
+				  v.comentario_interno,
 				  v.estado
 				FROM venta v
 				LEFT JOIN clientes c ON v.idcliente = c.idcliente
@@ -259,6 +263,7 @@ class Reporte
 				  p.vuelto,
 				  p.impuesto,
 				  p.total_venta,
+				  p.comentario_interno,
 				  p.estado
 				FROM proforma p
 				LEFT JOIN clientes c ON p.idcliente = c.idcliente
@@ -294,6 +299,7 @@ class Reporte
 				  p.vuelto,
 				  p.impuesto,
 				  p.total_venta,
+				  p.comentario_interno,
 				  p.estado
 				FROM proforma p
 				LEFT JOIN clientes c ON p.idcliente = c.idcliente
@@ -617,6 +623,83 @@ class Reporte
 				WHERE a.idlocal = '$idlocal'
 				AND $condiciones
 				GROUP BY dv.idarticulo
+				ORDER BY cantidad DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	/* ======================= REPORTE DE ARTICULOS MÁS COMRPADOS ======================= */
+
+	public function listarArticulosMasComprados($condiciones = "")
+	{
+		$sql = "SELECT
+				  a.idarticulo,
+				  a.idusuario,
+				  a.idmarca,
+				  a.idcategoria,
+				  COUNT(dc.idarticulo) as cantidad,
+				  u.nombre as usuario,
+				  u.cargo as cargo,
+				  u.cargo,
+				  c.titulo as categoria,
+				  al.titulo as local,
+				  m.titulo as marca,
+				  a.codigo,
+				  a.codigo_producto,
+				  a.nombre,
+				  a.stock,
+				  a.stock_minimo,
+				  a.descripcion,
+				  a.imagen,
+				  a.precio_compra,
+				  a.precio_compra,
+				  a.estado
+				FROM detalle_compra dc
+				LEFT JOIN articulo a ON dc.idarticulo = a.idarticulo
+				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN locales al ON a.idlocal = al.idlocal
+				LEFT JOIN usuario u ON a.idusuario = u.idusuario
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				WHERE $condiciones
+				GROUP BY dc.idarticulo
+				ORDER BY cantidad DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarArticulosMasCompradosLocal($idlocal, $condiciones = "")
+	{
+		$sql = "SELECT
+				  a.idarticulo,
+				  a.idusuario,
+				  a.idmarca,
+				  a.idcategoria,
+				  COUNT(dc.idarticulo) as cantidad,
+				  u.nombre as usuario,
+				  u.cargo as cargo,
+				  u.cargo,
+				  c.titulo as categoria,
+				  al.titulo as local,
+				  m.titulo as marca,
+				  a.codigo,
+				  a.codigo_producto,
+				  a.nombre,
+				  a.stock,
+				  a.stock_minimo,
+				  a.descripcion,
+				  a.imagen,
+				  a.precio_compra,
+				  a.precio_compra,
+				  a.estado
+				FROM detalle_compra dc
+				LEFT JOIN articulo a ON dc.idarticulo = a.idarticulo
+				LEFT JOIN categoria c ON a.idcategoria = c.idcategoria
+				LEFT JOIN locales al ON a.idlocal = al.idlocal
+				LEFT JOIN usuario u ON a.idusuario = u.idusuario
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				WHERE a.idlocal = '$idlocal'
+				AND $condiciones
+				GROUP BY dc.idarticulo
 				ORDER BY cantidad DESC";
 
 		return ejecutarConsulta($sql);

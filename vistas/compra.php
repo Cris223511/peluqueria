@@ -345,12 +345,6 @@ if (!isset($_SESSION["nombre"])) {
         width: 90px;
         height: 30px;
       }
-
-      @media (max-width: 991.50px) {
-        .smallModal {
-          width: 90% !important;
-        }
-      }
     </style>
 
     <!--Contenido-->
@@ -413,8 +407,8 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="width: 1%;">Opciones</th>
                       <th>PDF</th>
-                      <th>Proveedor</th>
-                      <th>Almacén</th>
+                      <th style="width: 20%; min-width: 200px;">Proveedor</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
                       <th>Total Compra (S/.)</th>
@@ -493,7 +487,7 @@ if (!isset($_SESSION["nombre"])) {
                       <table id="detalles" class="table table-dark table-striped table-hover w-100" style="width: 100% !important;">
                         <thead>
                           <th>CÓDIGO</th>
-                          <th style="width: 30%; min-width: 130px; white-space: nowrap;">NOMBRE</th>
+                          <th style="width: 30%; min-width: 130px;">NOMBRE</th>
                           <th>PRECIO</th>
                           <th>DESCUENTO</th>
                           <th>CANTIDAD</th>
@@ -520,8 +514,8 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                     </div>
                     <div id="comentarios" style="display: none;">
-                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="120" rows="4" autocomplete="off"></textarea>
-                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="120" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="1000" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="1000" rows="4" autocomplete="off"></textarea>
                     </div>
                     <select style="display: none;" id="idlocal_session_final" name="idlocal" class="form-control">
                       <option value="">- Seleccione -</option>
@@ -566,7 +560,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" rows="4" placeholder="Ingrese una descripción."></textarea>
+                <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
@@ -618,7 +612,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
-                <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="40" disabled>
+                <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="80" disabled>
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Teléfono:</label>
@@ -672,7 +666,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
-                <input type="text" class="form-control" name="direccion" id="direccion2" placeholder="Ingrese la dirección." maxlength="40">
+                <input type="text" class="form-control" name="direccion" id="direccion2" placeholder="Ingrese la dirección." maxlength="80">
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Teléfono:</label>
@@ -728,7 +722,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Dirección:</label>
-                <input type="text" class="form-control" name="direccion" id="direccion3" placeholder="Ingrese la dirección." maxlength="40">
+                <input type="text" class="form-control" name="direccion" id="direccion3" placeholder="Ingrese la dirección." maxlength="80">
               </div>
               <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <label>Teléfono:</label>
@@ -796,11 +790,11 @@ if (!isset($_SESSION["nombre"])) {
                 <?php } ?>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO INTERNO (*):</h4>
-                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="120" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off"></textarea>
+                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="1000" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off"></textarea>
                 </div>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO EXTERNO (*):</h4>
-                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="120" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off"></textarea>
+                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="1000" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off"></textarea>
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6" style="display: flex; flex-direction: column;">
@@ -934,11 +928,11 @@ if (!isset($_SESSION["nombre"])) {
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
               <table id="detallesProductosFinal" class="table w-100" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
-                  <th style="white-space: nowrap;">DESCRIPCIÓN DEL PRODUCTO</th>
-                  <th style="white-space: nowrap;">CANTIDAD</th>
-                  <th style="white-space: nowrap;">PRECIO UNITARIO</th>
-                  <th style="white-space: nowrap;">DESCUENTO</th>
-                  <th style="white-space: nowrap;">SUBTOTAL</th>
+                  <th>DESCRIPCIÓN DEL PRODUCTO</th>
+                  <th>CANTIDAD</th>
+                  <th>PRECIO UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th>SUBTOTAL</th>
                 </thead>
                 <tfoot>
                   <tr>
@@ -991,6 +985,10 @@ if (!isset($_SESSION["nombre"])) {
                 <tbody>
                 </tbody>
               </table>
+            </div>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <label>Comentario interno:</label>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>

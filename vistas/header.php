@@ -176,6 +176,13 @@ $local_login = $_SESSION['local'];
     margin: 0;
     line-height: 1;
   }
+
+
+  @media (max-width: 991.50px) {
+    .smallModal {
+      width: 90% !important;
+    }
+  }
 </style>
 
 <!DOCTYPE html>
@@ -444,7 +451,8 @@ $local_login = $_SESSION['local'];
                 <i class="fa fa-angle-left pull-right"></i>
               </a>
               <ul class="treeview-menu">
-              <li id="lReporteProductos"><a href="reporteProductoMasVendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+              <li id="lReporteProductosV"><a href="reporteProductoMasVendido.php"><i class="fa fa-circle-o"></i> Productos más vendidos</a></li>
+              <li id="lReporteProductosC"><a href="reporteProductoMasComprado.php"><i class="fa fa-circle-o"></i> Productos más comprados</a></li>
               </ul>
             </li>';
           }

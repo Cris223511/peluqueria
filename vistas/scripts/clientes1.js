@@ -115,7 +115,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7), td:eq(9), td:eq(10), td:eq(11), td:eq(12)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(2), td:eq(3), td:eq(4), td:eq(6), td:eq(7), td:eq(9), td:eq(10), td:eq(11), td:eq(12)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -133,16 +133,23 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			console.log(datos);
 			datos = limpiarCadena(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El cliente no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else if (!isNaN(Number(datos))) {
+				limpiar();
+				bootbox.alert("Cliente registrado correctamente.");
+				mostrarform(false);
+				tabla.ajax.reload();
+			} else {
+				limpiar();
+				bootbox.alert(datos);
+				mostrarform(false);
+				tabla.ajax.reload();
 			}
-			limpiar();
-			bootbox.alert("Cliente registrado correctamente.");
-			mostrarform(false);
-			tabla.ajax.reload();
 		}
 	});
 }
@@ -296,7 +303,7 @@ function modalVentasCliente(idcliente, nombre, tipo_documento, num_documento, lo
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			},
 			"initComplete": function (settings, json) {
 				$('#myModal1').modal('show');
@@ -304,7 +311,7 @@ function modalVentasCliente(idcliente, nombre, tipo_documento, num_documento, lo
 		}).DataTable();
 }
 
-function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
+function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto, comentario_interno) {
 	$.post("../ajax/venta.php?op=listarDetallesProductoVenta", { idventa: idventa }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -375,7 +382,31 @@ function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_
 		$('#vueltos_pagos').text(vuelto);
 		$('#total_pagos').text(total_venta);
 
+		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
+
+		$('#comentario_interno_detalle').text(comentario_val);
 		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
+	});
+}
+
+function modalImpresion(idventa, num_comprobante) {
+	$("#num_comprobante_final").text(num_comprobante);
+
+	limpiarModalImpresion();
+
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto, index) {
+		var ruta = (index === 0) ? "exTicketVenta" : "exA4Venta";
+		$("#myModal5 a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idventa);
+	});
+}
+
+function limpiarModalImpresion() {
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto) {
+		$("#myModal5 a:has(button:contains('" + texto + "'))").removeAttr("href");
 	});
 }
 
@@ -435,7 +466,7 @@ function modalProformasCliente(idcliente, nombre, tipo_documento, num_documento,
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
 			},
 			"initComplete": function (settings, json) {
 				$('#myModal3').modal('show');
@@ -515,6 +546,27 @@ function modalDetalles2(idproforma, usuario, num_comprobante, cliente, cliente_t
 		$('#total_pagos2').text(total_venta);
 
 		$('#atendido_venta2').text(capitalizarTodasLasPalabras(usuario));
+	});
+}
+
+function modalImpresion2(idproforma, num_comprobante) {
+	$("#num_comprobante_final2").text(num_comprobante);
+
+	limpiarModalImpresion2();
+
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto, index) {
+		var ruta = (index === 0) ? "exTicketProforma" : "exA4Proforma";
+		$("#myModal6 a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idproforma);
+	});
+}
+
+function limpiarModalImpresion2() {
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto) {
+		$("#myModal6 a:has(button:contains('" + texto + "'))").removeAttr("href");
 	});
 }
 

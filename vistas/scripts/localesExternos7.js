@@ -95,7 +95,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -184,7 +184,7 @@ function trabajadores(idlocal, titulo) {
 		"iDisplayLength": 5,
 		"order": [],
 		"createdRow": function (row, data, dataIndex) {
-			$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+			// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
 		}
 	});
 }

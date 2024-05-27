@@ -84,7 +84,7 @@ function listar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -126,6 +126,11 @@ function buscar() {
 
 	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && clienteBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
+		return;
+	}
+
+	if (fecha_inicio.value > fecha_fin.value) {
+		bootbox.alert("La fecha inicial no puede ser mayor que la fecha final.");
 		return;
 	}
 
@@ -186,12 +191,12 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
-function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto) {
+function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto, comentario_interno) {
 	$.post("../ajax/proforma.php?op=listarDetallesProductoVenta", { idproforma: idproforma }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -262,6 +267,9 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 		$('#vueltos_pagos').text(vuelto);
 		$('#total_pagos').text(total_venta);
 
+		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
+
+		$('#comentario_interno_detalle').text(comentario_val);
 		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
 	});
 }

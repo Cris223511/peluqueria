@@ -205,7 +205,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
@@ -307,7 +307,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
@@ -411,7 +411,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
@@ -782,6 +782,7 @@ if (!isset($_SESSION["nombre"])) {
 				$estadoSeleccionado = isset($_GET["param7"]) ? $_GET["param7"] : '';
 
 				$filtros = array(
+					"param1" => "DATE(dv.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
 					"param3" => "a.idlocal = '{$_GET["param3"]}'",
 					"param4" => "a.idmarca = '{$_GET["param4"]}'",
 					"param5" => "a.idcategoria = '{$_GET["param5"]}'",
@@ -833,6 +834,88 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => $reg->codigo_producto,
 						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
 						"8" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
+						"9" => $reg->usuario,
+						"10" => $cargo_detalle,
+						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
+				/* ======================= REPORTE DE ARTICULOS MÁS COMPRADOS ======================= */
+
+			case 'listarArticulosMasComprados':
+				$parametros = array(
+					"a.eliminado = '0'"
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "a.idlocal = '$idlocalSession'";
+				}
+
+				$estadoSeleccionado = isset($_GET["param7"]) ? $_GET["param7"] : '';
+
+				$filtros = array(
+					"param1" => "DATE(dc.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "a.idlocal = '{$_GET["param3"]}'",
+					"param4" => "a.idmarca = '{$_GET["param4"]}'",
+					"param5" => "a.idcategoria = '{$_GET["param5"]}'",
+					"param6" => "a.idusuario = '{$_GET["param6"]}'",
+					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'")
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarArticulosMasComprados($condiciones) : $reporte->listarArticulosMasCompradosLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<a href="../files/articulos/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
+						"1" => $reg->nombre,
+						"2" => $reg->cantidad,
+						"3" => $reg->categoria,
+						"4" => $reg->local,
+						"5" => $reg->marca,
+						"6" => $reg->codigo_producto,
+						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"8" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
 						"9" => $reg->usuario,
 						"10" => $cargo_detalle,
 						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')

@@ -23,12 +23,12 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
-                    <th>Nombre</th>
+                    <th style="width: 20%; min-width: 260px;">Nombre</th>
                   </thead>
                   <tbody>
                   </tbody>
                   <tfoot>
-                    <th>Nombre</th>
+                    <th style="width: 20%; min-width: 260px;">Nombre</th>
                   </tfoot>
                 </table>
               </div>

@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 } else {
   require 'header.php';
 
-  if ($_SESSION['almacen'] == 1) {
+  if ($_SESSION['servicios'] == 1) {
 ?>
     <div class="content-wrapper">
       <section class="content">
@@ -36,13 +36,13 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
-                    <th>Nombre</th>
-                    <th style="white-space: nowrap;">Código servicio</th>
-                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del servicio</th>
+                    <th style="width: 20%; min-width: 260px;">Nombre</th>
+                    <th>Código servicio</th>
+                    <th style="width: 30%; min-width: 350px;">Descripción</th>
                     <th>Costo</th>
-                    <th style="white-space: nowrap;">Agregado por</th>
+                    <th>Agregado por</th>
                     <th>Cargo</th>
-                    <th style="white-space: nowrap;">Fecha y hora</th>
+                    <th>Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -51,7 +51,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Nombre</th>
                     <th>Código servicio</th>
-                    <th>Descripción del servicio</th>
+                    <th>Descripción</th>
                     <th>Costo</th>
                     <th>Agregado por</th>
                     <th>Cargo</th>
@@ -77,7 +77,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" rows="4" placeholder="Ingrese una descripción."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

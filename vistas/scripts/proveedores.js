@@ -90,7 +90,7 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(2), td:eq(3), td:eq(5), td:eq(6), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -108,16 +108,23 @@ function guardaryeditar(e) {
 		processData: false,
 
 		success: function (datos) {
+			console.log(datos);
 			datos = limpiarCadena(datos);
 			if (datos == "El número de documento que ha ingresado ya existe." || datos == "El proveedor no se pudo registrar") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
+			} else if (!isNaN(Number(datos))) {
+				limpiar();
+				bootbox.alert("Proveedor registrado correctamente");
+				mostrarform(false);
+				tabla.ajax.reload();
+			} else {
+				limpiar();
+				bootbox.alert(datos);
+				mostrarform(false);
+				tabla.ajax.reload();
 			}
-			limpiar();
-			bootbox.alert(datos);
-			mostrarform(false);
-			tabla.ajax.reload();
 		}
 	});
 }
@@ -229,7 +236,7 @@ function modalComprasProveedor(idproveedor, nombre, tipo_documento, num_document
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			},
 			"initComplete": function (settings, json) {
 				$('#myModal1').modal('show');
@@ -237,7 +244,7 @@ function modalComprasProveedor(idproveedor, nombre, tipo_documento, num_document
 		}).DataTable();
 }
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -268,15 +275,15 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_compra}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_venta) - item.descuento).toFixed(2)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_compra) - item.descuento).toFixed(2)}</td>
                 </tr>`;
 
 			tbody.append(row);
 
 			// Calcular subtotal
-			subtotal += item.cantidad * item.precio_venta;
+			subtotal += item.cantidad * item.precio_compra;
 		});
 
 		let igv = subtotal * (impuesto);
@@ -308,8 +315,33 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		$('#vueltos_pagos').text(vuelto);
 		$('#total_pagos').text(total_compra);
 
+		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
+
+		$('#comentario_interno_detalle').text(comentario_val);
 		$('#atendido_compra').text(capitalizarTodasLasPalabras(usuario));
 	});
 }
+
+function modalImpresion(idcompra, num_comprobante) {
+	$("#num_comprobante_final").text(num_comprobante);
+
+	limpiarModalImpresion();
+
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto, index) {
+		var ruta = (index === 0) ? "exTicketCompra" : "exA4Compra";
+		$("#myModal3 a:has(button:contains('" + texto + "'))").attr("href", "../reportes/" + ruta + ".php?id=" + idcompra);
+	});
+}
+
+function limpiarModalImpresion() {
+	var nombresBotones = ['GENERAR TICKET', 'GENERAR PDF-A4'];
+
+	nombresBotones.forEach(function (texto) {
+		$("#myModal3 a:has(button:contains('" + texto + "'))").removeAttr("href");
+	});
+}
+
 
 init();

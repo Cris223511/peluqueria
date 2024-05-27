@@ -1162,7 +1162,7 @@ function listar() {
 			"iDisplayLength": 10,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -1228,7 +1228,7 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -1340,7 +1340,7 @@ function limpiarModalPrecuentaFinal() {
 
 // FUNCIONES Y BOTONES DE LAS COMPRAS
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -1411,6 +1411,9 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		$('#vueltos_pagos').text(vuelto);
 		$('#total_pagos').text(total_compra);
 
+		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
+
+		$('#comentario_interno_detalle').text(comentario_val);
 		$('#atendido_compra').text(capitalizarTodasLasPalabras(usuario));
 	});
 }

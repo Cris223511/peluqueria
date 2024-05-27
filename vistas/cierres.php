@@ -58,13 +58,13 @@ if (!isset($_SESSION["cajas"])) {
                     <thead>
                       <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
-                      <th>Almacén</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Monto Inicial</th>
                       <th>Monto Total</th>
-                      <th style="white-space: nowrap;">Cerrado por</th>
+                      <th>Cerrado por</th>
                       <th>Cargo</th>
-                      <th style="white-space: nowrap;">Fecha apertura</th>
-                      <th style="white-space: nowrap;">Fecha cierre</th>
+                      <th>Fecha apertura</th>
+                      <th>Fecha cierre</th>
                       <th>Estado</th>
                     </thead>
                     <tbody>
@@ -110,9 +110,9 @@ if (!isset($_SESSION["cajas"])) {
                   <th>PRODUCTO / SERVICIO</th>
                   <th>CÓDIGO</th>
                   <th>CANTIDAD</th>
-                  <th style="white-space: nowrap;">P. UNITARIO</th>
+                  <th>P. UNITARIO</th>
                   <th>DESCUENTO</th>
-                  <th style="white-space: nowrap;">P. TOTAL</th>
+                  <th>P. TOTAL</th>
                   <th>FECHA REGISTRO</th>
                 </thead>
                 <tbody>

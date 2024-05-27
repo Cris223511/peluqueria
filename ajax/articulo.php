@@ -96,6 +96,11 @@ if (!isset($_SESSION["nombre"])) {
 				}
 				break;
 
+			case 'guardarComision':
+				$rspta = $articulo->comisionArticulo($comision);
+				echo $rspta ? "Comisión de productos modificados correctamente" : "Comisión de productos no se pudieron modificar";
+				break;
+
 			case 'desactivar':
 				$rspta = $articulo->desactivar($idarticulo);
 				echo $rspta ? "Producto desactivado" : "El producto no se puede desactivar";

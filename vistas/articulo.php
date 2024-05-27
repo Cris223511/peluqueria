@@ -41,6 +41,16 @@ if (!isset($_SESSION["nombre"])) {
       tbody td:nth-child(12) {
         white-space: nowrap !important;
       }
+
+      #camera video {
+        width: 250px;
+        height: auto;
+      }
+
+      #camera canvas.drawingBuffer {
+        height: auto;
+        position: absolute;
+      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -54,6 +64,11 @@ if (!isset($_SESSION["nombre"])) {
                     <a href="../reportes/rptarticulos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
                         <i class="fa fa-clipboard"></i> Reporte
+                      </button>
+                    </a>
+                    <a data-toggle="modal" href="#myModal">
+                      <button id="btncomisiones" onclick="limpiarModalComision()" class="btn btn-warning">
+                        <i class="fa fa-usd"></i> Modificar comisiones
                       </button>
                     </a>
                   <?php } ?>
@@ -97,18 +112,18 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="width: 1%;">Opciones</th>
                       <th>Imagen</th>
-                      <th>Nombre</th>
+                      <th style="width: 20%; min-width: 260px;">Nombre</th>
                       <th>Categoría</th>
-                      <th>Almacén</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Marca</th>
-                      <th style="white-space: nowrap;">C. producto</th>
-                      <th style="white-space: nowrap;">C. de barra</th>
-                      <th style="white-space: nowrap;">Stock normal</th>
-                      <th style="white-space: nowrap;">Stock mínimo</th>
-                      <th style="white-space: nowrap;">P. compra</th>
-                      <th style="white-space: nowrap;">P. venta</th>
+                      <th>C. producto</th>
+                      <th>C. de barra</th>
+                      <th>Stock normal</th>
+                      <th>Stock mínimo</th>
+                      <th>P. compra</th>
+                      <th>P. venta</th>
                       <th>Comisión</th>
-                      <th style="white-space: nowrap;">Agregado por</th>
+                      <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
                     </thead>
@@ -138,14 +153,14 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                   <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-left: 0 !important; padding-right: 20px;">
-                    <div class="contenedor" style="background-color: white; border-top: 3px #3686b4 solid; padding: 10px 20px 20px 20px;">
+                    <div class="contenedor" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 10px 20px 20px 20px;">
                       <label>Imagen de muestra:</label>
                       <div>
                         <img src="" width="100%" id="imagenmuestra">
                       </div>
                     </div>
                   </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #3686b4 solid; padding: 20px;">
+                  <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 20px;">
                     <div class="form-group col-lg-12 col-md-12">
                       <label>Nombre(*):</label>
                       <input type="hidden" name="idarticulo" id="idarticulo">
@@ -187,11 +202,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Comisión(*):</label>
-                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el precio de venta." required>
+                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="50" placeholder="Ingrese la descripción del producto." autocomplete="off">
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" placeholder="Ingrese la descripción del producto." autocomplete="off">
                     </div>
                     <div class="form-group col-lg-12 col-md-12">
                       <label>Imagen:</label>
@@ -283,7 +298,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form marcas -->
@@ -297,10 +312,39 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="150" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form medidas -->
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 45%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <form name="formulario2" id="formulario2" method="POST">
+          <div class="modal-content">
+            <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+                <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: center;">CAMBIAR COMISIÓN DE PRODUCTOS</h4>
+              </div>
+            </div>
+            <div class="panel-body">
+              <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; overflow: auto; overflow: auto;">
+                <div class="form-group col-12">
+                  <label>Comisión(*):</label>
+                  <input type="number" class="form-control" name="comision" id="comision2" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión para todos los productos." required>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+              <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalComision();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
+              <button class="btn btn-bcp" type="button" onclick="verificarModalComision();" id="btnGuardarComision"><i class="fa fa-save"></i> Guardar</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- Fin Modal 1 -->
   <?php
   } else {
     require 'noacceso.php';

@@ -94,11 +94,6 @@ if (!isset($_SESSION["nombre"])) {
         border: none !important;
       }
 
-      @media (max-width: 991.50px) {
-        .smallModal {
-          width: 90% !important;
-        }
-      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -181,8 +176,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 1%;">Opciones</th>
                       <th>Fecha y hora</th>
                       <th>DNI / RUC</th>
-                      <th>Cliente</th>
-                      <th>Almacén</th>
+                      <th style="width: 20%; min-width: 260px;">Cliente</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
@@ -230,11 +225,11 @@ if (!isset($_SESSION["nombre"])) {
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
               <table id="detallesProductosFinal" class="table w-100" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
-                  <th style="white-space: nowrap;">DESCRIPCIÓN DEL PRODUCTO</th>
-                  <th style="white-space: nowrap;">CANTIDAD</th>
-                  <th style="white-space: nowrap;">PRECIO UNITARIO</th>
-                  <th style="white-space: nowrap;">DESCUENTO</th>
-                  <th style="white-space: nowrap;">SUBTOTAL</th>
+                  <th>DESCRIPCIÓN DEL PRODUCTO</th>
+                  <th>CANTIDAD</th>
+                  <th>PRECIO UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th>SUBTOTAL</th>
                 </thead>
                 <tfoot>
                   <tr>
@@ -287,6 +282,10 @@ if (!isset($_SESSION["nombre"])) {
                 <tbody>
                 </tbody>
               </table>
+            </div>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <label>Comentario interno:</label>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta" style="font-weight: 600;"></span></h4>

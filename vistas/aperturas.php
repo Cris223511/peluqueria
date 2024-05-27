@@ -65,12 +65,12 @@ if (!isset($_SESSION["cajas"])) {
                     <thead>
                       <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
-                      <th>Almacén</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Monto Inicial</th>
                       <th>Monto Total</th>
-                      <th style="white-space: nowrap;">Empleado</th>
+                      <th>Empleado</th>
                       <th>Cargo</th>
-                      <th style="white-space: nowrap;">Fecha apertura</th>
+                      <th>Fecha apertura</th>
                       <th>Estado</th>
                     </thead>
                     <tbody>
@@ -117,7 +117,7 @@ if (!isset($_SESSION["cajas"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <label>Comentario:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="150" rows="4" placeholder="Ingrese un comentario."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese un comentario."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

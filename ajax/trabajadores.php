@@ -57,15 +57,15 @@ switch ($_GET["op"]) {
 							$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
 
 							$data[] = array(
-								"0" => $reg->login,
-								"1" => $cargo_detalle,
-								"2" => $reg->nombre,
-								"3" => $reg->tipo_documento,
-								"4" => $reg->num_documento,
-								"5" => $telefono,
-								"6" => $reg->email,
-								"7" => $reg->local,
-								"8" => "N° " . $reg->local_ruc,
+								"0" => $reg->nombre,
+								"1" => $reg->login,
+								"2" => $cargo_detalle,
+								"3" => $reg->local,
+								"4" => "N° " . $reg->local_ruc,
+								"5" => $reg->tipo_documento,
+								"6" => $reg->num_documento,
+								"7" => $telefono,
+								"8" => $reg->email,
 								"9" => '<a href="../files/usuarios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
 											<img src="../files/usuarios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 										</a>',

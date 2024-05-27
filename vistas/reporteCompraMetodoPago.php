@@ -130,11 +130,11 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th>Fecha y hora</th>
                       <th>DNI / RUC</th>
-                      <th>Proveedor</th>
+                      <th style="width: 20%; min-width: 260px;">Proveedor</th>
                       <th>Método de pago</th>
                       <th>Monto</th>
                       <th>Número Ticket</th>
-                      <th>Almacén</th>
+                      <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Documento</th>
                       <th>Agregado por</th>
                       <th>Estado</th>

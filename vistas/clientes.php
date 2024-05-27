@@ -62,12 +62,6 @@ if (!isset($_SESSION["nombre"])) {
       .detallesPagosFinal tfoot tr td {
         border: none !important;
       }
-
-      @media (max-width: 991.50px) {
-        .smallModal {
-          width: 90% !important;
-        }
-      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -95,17 +89,17 @@ if (!isset($_SESSION["nombre"])) {
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
                   <thead>
                     <th style="width: 1%;">Opciones</th>
-                    <th style="width: 30%; min-width: 150px; white-space: nowrap;">Nombres</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Almacén</th>
-                    <th style="white-space: nowrap;">Tipo Doc.</th>
-                    <th style="white-space: nowrap;">Número Doc.</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">Dirección</th>
+                    <th style="width: 20%; min-width: 220px;">Nombres</th>
+                    <th style="width: 30%; min-width: 200px;">Almacén</th>
+                    <th>Tipo Doc.</th>
+                    <th>Número Doc.</th>
+                    <th style="width: 30%; min-width: 200px;">Dirección</th>
                     <th>Teléfono</th>
                     <th>Email</th>
-                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción</th>
-                    <th style="white-space: nowrap;">Agregado por</th>
+                    <th style="width: 30%; min-width: 350px;">Descripción</th>
+                    <th>Agregado por</th>
                     <th>Cargo</th>
-                    <th style="white-space: nowrap;">Fecha y hora</th>
+                    <th>Fecha y hora</th>
                     <th>Estado</th>
                   </thead>
                   <tbody>
@@ -148,7 +142,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Dirección:</label>
-                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="40">
+                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="80">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Tipo Documento(*):</label>
@@ -174,7 +168,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" rows="4" placeholder="Ingrese una descripción."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
@@ -231,8 +225,9 @@ if (!isset($_SESSION["nombre"])) {
               <table id="tbldetalles" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                 <thead>
                   <th style="width: 1%;">Opciones</th>
+                  <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th>Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Almacén</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -244,6 +239,7 @@ if (!isset($_SESSION["nombre"])) {
                 </tbody>
                 <tfoot>
                   <th>Opciones</th>
+                  <th>PDF</th>
                   <th>Fecha y hora</th>
                   <th>Almacén</th>
                   <th>Caja</th>
@@ -280,11 +276,11 @@ if (!isset($_SESSION["nombre"])) {
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
               <table class="detallesProductosFinal table w-100" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
-                  <th style="white-space: nowrap;">DESCRIPCIÓN DEL PRODUCTO</th>
-                  <th style="white-space: nowrap;">CANTIDAD</th>
-                  <th style="white-space: nowrap;">PRECIO UNITARIO</th>
-                  <th style="white-space: nowrap;">DESCUENTO</th>
-                  <th style="white-space: nowrap;">SUBTOTAL</th>
+                  <th>DESCRIPCIÓN DEL PRODUCTO</th>
+                  <th>CANTIDAD</th>
+                  <th>PRECIO UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th>SUBTOTAL</th>
                 </thead>
                 <tfoot>
                   <tr>
@@ -338,6 +334,10 @@ if (!isset($_SESSION["nombre"])) {
                 </tbody>
               </table>
             </div>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <label>Comentario interno:</label>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
+            </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta" style="font-weight: 600;"></span></h4>
             </div>
@@ -363,8 +363,9 @@ if (!isset($_SESSION["nombre"])) {
               <table id="tbldetalles2" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                 <thead>
                   <th style="width: 1%;">Opciones</th>
+                  <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th>Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Almacén</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -376,8 +377,9 @@ if (!isset($_SESSION["nombre"])) {
                 </tbody>
                 <tfoot>
                   <th>Opciones</th>
+                  <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th>Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Almacén</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -412,11 +414,11 @@ if (!isset($_SESSION["nombre"])) {
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
               <table class="detallesProductosFinal table w-100" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
-                  <th style="white-space: nowrap;">DESCRIPCIÓN DEL PRODUCTO</th>
-                  <th style="white-space: nowrap;">CANTIDAD</th>
-                  <th style="white-space: nowrap;">PRECIO UNITARIO</th>
-                  <th style="white-space: nowrap;">DESCUENTO</th>
-                  <th style="white-space: nowrap;">SUBTOTAL</th>
+                  <th>DESCRIPCIÓN DEL PRODUCTO</th>
+                  <th>CANTIDAD</th>
+                  <th>PRECIO UNITARIO</th>
+                  <th>DESCUENTO</th>
+                  <th>SUBTOTAL</th>
                 </thead>
                 <tfoot>
                   <tr>
@@ -478,6 +480,60 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </div>
     <!-- Fin modal 4 -->
+
+    <!-- Modal 5 -->
+    <div class="modal fade" id="myModal5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 55%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content" style="background-color: #f2d150 !important;">
+          <div class="modal-header" style="border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">TICKET N° <span id="num_comprobante_final"></span></h4>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0;">
+              <div style="margin: 5px;">
+                <a target="_blank" style="color: #333;"><button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">GENERAR TICKET</button></a>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0;">
+              <div style="margin: 5px;">
+                <a target="_blank" style="color: #333;"><button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">GENERAR PDF-A4</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin modal 5 -->
+
+    <!-- Modal 6 -->
+    <div class="modal fade" id="myModal6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 55%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content" style="background-color: #f2d150 !important;">
+          <div class="modal-header" style="border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold;">TICKET N° <span id="num_comprobante_final2"></span></h4>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0;">
+              <div style="margin: 5px;">
+                <a target="_blank" style="color: #333;"><button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">GENERAR TICKET</button></a>
+              </div>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6" style="padding: 0;">
+              <div style="margin: 5px;">
+                <a target="_blank" style="color: #333;"><button class="btn btn-secondary" style="width: 100%; text-align: center; font-weight: bold;" type="button">GENERAR PDF-A4</button></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin modal 6 -->
   <?php
   } else {
     require 'noacceso.php';

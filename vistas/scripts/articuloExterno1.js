@@ -9,6 +9,10 @@ function init() {
 		guardaryeditar(e);
 	})
 
+	$("#formulario2").on("submit", function (e) {
+		guardaryeditar2(e);
+	})
+
 	$("#imagenmuestra").hide();
 	$('#mAlmacen').addClass("treeview active");
 	$('#lArticulosExternos').addClass("active");
@@ -258,6 +262,7 @@ function mostrarform(flag) {
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
+		$("#btncomisiones").hide();
 		$(".caja1").hide();
 		$(".caja2").removeClass("col-lg-10 col-md-8 col-sm-12").addClass("col-lg-12 col-md-12 col-sm-12");
 		$(".botones").removeClass("col-lg-10 col-md-8 col-sm-12").addClass("col-lg-12 col-md-12 col-sm-12");
@@ -269,6 +274,7 @@ function mostrarform(flag) {
 		$(".listadoregistros").show();
 		$("#formularioregistros").hide();
 		$("#btnagregar").show();
+		$("#btncomisiones").show();
 		$(".caja1").show();
 		$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
 		$(".botones").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
@@ -344,10 +350,11 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
+
 //Función para guardar o editar
 
 function guardaryeditar(e) {
@@ -473,9 +480,44 @@ function mostrar(idarticulo) {
 	})
 }
 
+function limpiarModalComision() {
+	$("#comision2").val("");
+	$("#btnGuardarComision").prop("disabled", false);
+}
+
+function verificarModalComision() {
+	bootbox.confirm("¿Está seguro de modificar la comisión de todos los productos?", function (result) {
+		if (result) {
+			$("#formulario2").submit();
+		}
+	})
+}
+
+function guardaryeditar2(e) {
+	e.preventDefault(); //No se activará la acción predeterminada del evento
+	$("#btnGuardarComision").prop("disabled", true);
+	var formData = new FormData($("#formulario2")[0]);
+
+	$.ajax({
+		url: "../ajax/articuloExterno.php?op=guardarComision",
+		type: "POST",
+		data: formData,
+		contentType: false,
+		processData: false,
+
+		success: function (datos) {
+			datos = limpiarCadena(datos);
+			limpiarModalComision();
+			bootbox.alert(datos);
+			$('#myModal').modal('hide');
+			tabla.ajax.reload();
+		}
+	});
+}
+
 //Función para desactivar registros
 function desactivar(idarticulo) {
-	bootbox.confirm("¿Está Seguro de desactivar el producto?", function (result) {
+	bootbox.confirm("¿Está seguro de desactivar el producto?", function (result) {
 		if (result) {
 			$.post("../ajax/articuloExterno.php?op=desactivar", { idarticulo: idarticulo }, function (e) {
 				bootbox.alert(e);
@@ -487,7 +529,7 @@ function desactivar(idarticulo) {
 
 //Función para activar registros
 function activar(idarticulo) {
-	bootbox.confirm("¿Está Seguro de activar el producto?", function (result) {
+	bootbox.confirm("¿Está seguro de activar el producto?", function (result) {
 		if (result) {
 			$.post("../ajax/articuloExterno.php?op=activar", { idarticulo: idarticulo }, function (e) {
 				bootbox.alert(e);
@@ -593,7 +635,7 @@ function buscar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -601,34 +643,42 @@ function buscar() {
 var quaggaIniciado = false;
 
 function escanear() {
-	$(".btn1").hide();
-	$(".btn2").show();
-	$("#camera").show();
 
-	Quagga.init({
-		inputStream: {
-			name: "Live",
-			type: "LiveStream",
-			target: document.querySelector('#camera')    // Or '#yourElement' (optional)
-		},
-		decoder: {
-			readers: ["code_128_reader"]
-		}
-	}, function (err) {
-		if (err) {
-			console.log(err);
-			return
-		}
-		console.log("Initialization finished. Ready to start");
-		Quagga.start();
-		quaggaIniciado = true;
-	});
+	navigator.mediaDevices.getUserMedia({ video: true })
+		.then(function (stream) {
+			$(".btn1").hide();
+			$(".btn2").show();
 
-	Quagga.onDetected(function (data) {
-		console.log(data.codeResult.code);
-		var codigoBarra = data.codeResult.code;
-		document.getElementById('codigo').value = codigoBarra;
-	});
+			Quagga.init({
+				inputStream: {
+					name: "Live",
+					type: "LiveStream",
+					target: document.querySelector('#camera')
+				},
+				decoder: {
+					readers: ["code_128_reader"]
+				}
+			}, function (err) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				console.log("Initialization finished. Ready to start");
+				Quagga.start();
+				quaggaIniciado = true;
+			});
+
+			$("#camera").show();
+
+			Quagga.onDetected(function (data) {
+				console.log(data.codeResult.code);
+				var codigoBarra = data.codeResult.code;
+				document.getElementById('codigo').value = codigoBarra;
+			});
+		})
+		.catch(function (error) {
+			bootbox.alert("No se encontró una cámara conectada.");
+		});
 }
 
 function detenerEscaneo() {

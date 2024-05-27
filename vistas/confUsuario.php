@@ -13,7 +13,7 @@ if (!isset($_SESSION["nombre"])) {
     <style>
       .marco {
         background-color: white;
-        border-top: 3px #3686b4 solid;
+        border-top: 3px #002a8e solid !important;
       }
     </style>
     <div class="content-wrapper">

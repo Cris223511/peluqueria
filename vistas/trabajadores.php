@@ -31,30 +31,30 @@ if (!isset($_SESSION["nombre"])) {
               <div class="panel-body table-responsive" id="listadoregistros">
                 <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                   <thead>
+                    <th style="width: 20%; min-width: 180px;">Nombre</th>
                     <th>usuario</th>
                     <th>cargo</th>
-                    <th style="width: 30%; min-width: 200px; white-space: nowrap;">nombre</th>
+                    <th style="width: 30%; min-width: 200px;">Almacén</th>
+                    <th>RUC del local</th>
                     <th>documento</th>
                     <th>Número Doc.</th>
                     <th>teléfono</th>
                     <th>email</th>
-                    <th>Almacén</th>
-                    <th>RUC del local</th>
                     <th>foto</th>
                     <th>estado</th>
                   </thead>
                   <tbody>
                   </tbody>
                   <tfoot>
+                    <th>Nombre</th>
                     <th>usuario</th>
                     <th>cargo</th>
-                    <th>nombre</th>
+                    <th>Almacén</th>
+                    <th>RUC del local</th>
                     <th>documento</th>
                     <th>Número Doc.</th>
                     <th>teléfono</th>
                     <th>email</th>
-                    <th>Almacén</th>
-                    <th>RUC del local</th>
                     <th>foto</th>
                     <th>estado</th>
                   </tfoot>
@@ -92,7 +92,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Dirección:</label>
-                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Dirección" maxlength="40">
+                    <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Dirección" maxlength="80">
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Teléfono:</label>

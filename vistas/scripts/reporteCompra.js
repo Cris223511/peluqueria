@@ -84,7 +84,7 @@ function listar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -126,6 +126,11 @@ function buscar() {
 
 	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && proveedorBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
+		return;
+	}
+
+	if (fecha_inicio.value > fecha_fin.value) {
+		bootbox.alert("La fecha inicial no puede ser mayor que la fecha final.");
 		return;
 	}
 
@@ -186,12 +191,12 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				$(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -222,15 +227,15 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_compra}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_venta) - item.descuento).toFixed(2)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_compra) - item.descuento).toFixed(2)}</td>
                 </tr>`;
 
 			tbody.append(row);
 
 			// Calcular subtotal
-			subtotal += item.cantidad * item.precio_venta;
+			subtotal += item.cantidad * item.precio_compra;
 		});
 
 		let igv = subtotal * (impuesto);
@@ -262,6 +267,9 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		$('#vueltos_pagos').text(vuelto);
 		$('#total_pagos').text(total_compra);
 
+		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
+
+		$('#comentario_interno_detalle').text(comentario_val);
 		$('#atendido_compra').text(capitalizarTodasLasPalabras(usuario));
 	});
 }

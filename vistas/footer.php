@@ -10,6 +10,8 @@
     <script src="../public/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="../public/js/app.min.js"></script>
+    <!-- Quagga JS -->
+    <script src="../public/js/quagga.min.js"></script>
     <!-- Lightbox JS -->
     <script src="../public/glightbox/js/glightbox.min.js"></script>
 
@@ -39,6 +41,37 @@
 
     <script>
       $('[data-toggle="popover"]').popover();
+    </script>
+
+    <script>
+      $('#imagen').on('change', function() {
+        const file = this.files[0];
+        const maxSizeMB = 3;
+        const maxSizeBytes = maxSizeMB * 1024 * 1024;
+        const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/bmp'];
+
+        // Validar tamaño
+        if (file.size > maxSizeBytes) {
+          bootbox.alert(`El archivo es demasiado grande. El tamaño máximo permitido es de ${maxSizeMB} MB.`);
+          $(this).val('');
+          $('#imagenmuestra').attr('src', '').hide();
+          return;
+        }
+
+        // Validar tipo
+        if (!allowedTypes.includes(file.type)) {
+          bootbox.alert('El archivo debe ser una imagen de tipo JPG, JPEG, PNG, GIF o BMP.');
+          $(this).val('');
+          $('#imagenmuestra').attr('src', '').hide();
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          $('#imagenmuestra').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(file);
+      });
     </script>
 
     <script>
@@ -191,6 +224,50 @@
         if (e.key === "-")
           e.preventDefault();
       }
+
+      function nowrapCell() {
+        ["#tbllistado", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbldetalles", "#tbldetalles2"].forEach(selector => {
+          addClassToCells(selector, "nowrap-cell");
+        });
+      }
+
+      function addClassToCells(selector, className) {
+        var table = document.querySelector(selector);
+
+        if (!table) return;
+
+        var columnIndices = Array.from(table.querySelectorAll("th")).reduce((indices, th, index) => {
+          if (["CLIENTE", "PROVEEDOR", "NOMBRE", "NOMBRES", "DESCRIPCIÓN", "DESCRIPCIÓN DEL LOCAL", "ALMACÉN"].includes(th.innerText.trim())) {
+            indices.push(index);
+          }
+          return indices;
+        }, []);
+
+        table.querySelectorAll("td, th").forEach((cell, index) => {
+          var cellIndex = index % table.rows[0].cells.length;
+          if (!columnIndices.includes(cellIndex)) {
+            cell.classList.add(className);
+          }
+        });
+      }
+
+      $(document).on('draw.dt', function(e, settings) {
+        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#detalles') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbldetalles') || $(settings.nTable).is('#tbldetalles2')) {
+          const table = $(settings.nTable).DataTable();
+          if (table.rows({
+              page: 'current'
+            }).count() > 0) {
+            inicializeGLightbox();
+            nowrapCell();
+          }
+        }
+      });
+
+      $(document).ajaxSuccess(function(event, xhr, settings) {
+        if (settings.url.includes("op=listar") || settings.url.includes("op=listarDetalle")) {
+          nowrapCell();
+        }
+      });
     </script>
 
     <script>
@@ -317,6 +394,10 @@
       }
 
       function limpiarCadena(cadena) {
+        if (typeof cadena === 'object' && cadena !== null) {
+          return cadena;
+        }
+
         let cadenaLimpia = cadena.trim();
         cadenaLimpia = cadenaLimpia.replace(/^[\n\r]+/, '');
         return cadenaLimpia;

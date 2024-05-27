@@ -69,6 +69,12 @@ class Articulo
 		return ejecutarConsulta($sql);
 	}
 
+	public function comisionArticulo($comision)
+	{
+		$sql = "UPDATE articulo SET comision = '$comision'";
+		return ejecutarConsulta($sql);
+	}
+
 	//Implementamos un método para editar registros
 	public function editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $comision)
 	{
