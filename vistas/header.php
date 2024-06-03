@@ -297,7 +297,7 @@ $local_login = $_SESSION['local'];
               <ul class="treeview-menu">
                 <li id="lArticulos"><a href="articulo.php"><i class="fa fa-circle-o"></i> Productos</a></li>
                 ';
-            if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") {
+            if (($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") && $_SESSION['PExternos'] == 1) {
               echo '<li id="lArticulosExternos"><a href="articuloExterno.php"><i class="fa fa-circle-o"></i> Productos Externos</a></li>';
             }
             echo '

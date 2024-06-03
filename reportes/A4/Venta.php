@@ -884,9 +884,11 @@ class PDF_Invoice extends FPDF
 		$this->SetFont('Arial', 'B', 8);
 		$this->MultiCell(80, 3, mb_convert_encoding(mb_strtoupper("$tipo_comprobante"), 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
 
-		# POWERED BY #
-		$this->SetXY(13.5, $y += 34);
-		$this->SetFont('Arial', 'I', 8);
-		$this->MultiCell(0, 3, mb_convert_encoding(("Powered by $auspiciado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		if ($auspiciado != "") {
+			# POWERED BY #
+			$this->SetXY(13.5, $y += 34);
+			$this->SetFont('Arial', 'I', 8);
+			$this->MultiCell(0, 3, mb_convert_encoding(("Powered by $auspiciado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		}
 	}
 }

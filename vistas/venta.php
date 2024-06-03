@@ -13,6 +13,10 @@ if (!isset($_SESSION["nombre"])) {
 ?>
     <link rel="stylesheet" href="../public/css/jquery.gScrollingCarousel.css">
     <style>
+      [data-id="idlocal_session"] .filter-option {
+        font-weight: bold;
+      }
+
       #total_venta {
         background-color: #ebc513 !important;
         color: black !important;
@@ -862,6 +866,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="text-align: start !important;">CÓDIGO</th>
                       <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">NOMBRE</th>
                       <th style="width: 30%; min-width: 130px; white-space: nowrap; text-align: start !important;">ALMACÉN</th>
+                      <th>STOCK</th>
                       <th>PRECIO</th>
                       <th>DESCUENTO</th>
                       <th>CANTIDAD</th>

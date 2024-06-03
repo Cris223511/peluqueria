@@ -561,6 +561,7 @@ function seleccionarProducto(selectElement) {
 let idarticuloGlobal = "";
 let nombreGlobal = "";
 let localGlobal = "";
+let stockGlobal = "";
 let precioCompraGlobal = "";
 let precioVentaGlobal = "";
 let comisionGlobal = "";
@@ -585,6 +586,7 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, local, stock, preci
 			idarticuloGlobal = idarticulo;
 			nombreGlobal = nombre;
 			localGlobal = local;
+			stockGlobal = stock;
 			precioCompraGlobal = precio_compra;
 			precioVentaGlobal = precio_venta;
 			comisionGlobal = comision;
@@ -597,7 +599,7 @@ function verificarEmpleado(tipoarticulo, idarticulo, nombre, local, stock, preci
 
 			evaluarBotonEmpleado();
 		} else {
-			agregarDetalle(tipoarticulo, idarticulo, '0', nombre, local, precio_compra, precio_venta, comision, codigo);
+			agregarDetalle(tipoarticulo, idarticulo, '0', nombre, local, stock, precio_compra, precio_venta, comision, codigo);
 		}
 	} else {
 		bootbox.alert("No puedes agregar el mismo artículo o servicio dos veces.");
@@ -632,7 +634,7 @@ function evaluarBotonEmpleado() {
 		$("#btnGuardarArticulo").show();
 		let textoSeleccionado = $("#idpersonal option:selected").text();
 		$("#empleadoSeleccionado").html(capitalizarTodasLasPalabras(textoSeleccionado));
-		$("#btnGuardarArticulo").attr("onclick", `agregarDetalle('${tipoProductoFinal}','${idarticuloGlobal}', '${valorEmpleado}', '${nombreGlobal}', '${localGlobal}', '${precioCompraGlobal}', '${precioVentaGlobal}', '${comisionGlobal}', '${codigoGlobal}'); limpiarModalEmpleados();`);
+		$("#btnGuardarArticulo").attr("onclick", `agregarDetalle('${tipoProductoFinal}','${idarticuloGlobal}', '${valorEmpleado}', '${nombreGlobal}', '${localGlobal}', '${stockGlobal}', '${precioCompraGlobal}', '${precioVentaGlobal}', '${comisionGlobal}', '${codigoGlobal}'); limpiarModalEmpleados();`);
 	}
 }
 
@@ -1476,18 +1478,20 @@ function guardaryeditar(e) {
 
 			} catch (e) {
 				// Si la conversión a JSON falla, datos es probablemente una cadena.
-				if (!datos) {
-					console.log(datos);
-					console.log("No se recibieron datos del servidor.");
-					return;
-				} else if (datos == "Una de las cantidades superan al stock normal del artículo o servicio." || datos == "El subtotal de uno de los artículos o servicios no puede ser menor a 0." || datos == "El precio de venta de uno de los artículos o servicios no puede ser menor al precio de compra." || "El número correlativo que ha ingresado ya existe en el local seleccionado.") {
-					console.log(datos);
-					console.log(typeof (datos));
-					bootbox.alert(datos);
-					return;
+				console.log(datos);
+				console.log(typeof (datos));
+				if (datos == "Uno de los productos no forman parte del local seleccionado.") {
+					console.log("entro al if =)");
+
+					var local = $("#idlocal_session option:selected").text();
+					var localLimpiado = local.replace(/ - \d{3,}.*/, '');
+
+					bootbox.alert(datos + " Debe asegurarse de seleccionar solo los productos que sean del local: <strong>" + localLimpiado + "</strong>.");
 				} else {
-					console.log(datos);
+					bootbox.alert(datos);
 				}
+
+				return;
 			}
 		},
 	});
@@ -1744,7 +1748,7 @@ var detalles = 0;
 
 // $("#btnGuardar").hide();
 
-function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, precio_compra, precio_venta, comision, codigo) {
+function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, stock, precio_compra, precio_venta, comision, codigo) {
 	var cantidad = 1;
 	var descuento = '0.00';
 
@@ -1761,7 +1765,8 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, pre
 		var fila2 = '<tr class="filas fila' + cont + ' principal2">' +
 			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '"><input type="hidden" name="idpersonal[]" value="' + idpersonal + '"><input type="hidden" name="comision[]" value="' + comision + '">' + codigo + '</td>' +
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
-			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(local) + '</td>' +
+			'<td style="text-align: start !important;"><strong>' + capitalizarTodasLasPalabras(local) + '</strong></td>' +
+			'<td style="text-align: start !important;">' + (tipoproducto == "producto" ? stock : "") + '</td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></div></td>' +

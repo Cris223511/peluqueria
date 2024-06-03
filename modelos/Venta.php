@@ -35,7 +35,7 @@ class Venta
 
 		$error = $this->validarArticuloPorLocal($detalles, $idlocal);
 		if ($error) {
-			$mensajeError = "Uno de los artículos no forman parte del local seleccionado.";
+			$mensajeError = "Uno de los productos no forman parte del local seleccionado.";
 		}
 
 		// Si hay un mensaje de error, retornar false y mostrar el mensaje en el script principal

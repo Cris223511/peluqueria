@@ -1062,7 +1062,7 @@ class FPDF
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 
-		$textoOriginal = "Son: $textoEnMayusculas asdasdasd asddasasdasd";
+		$textoOriginal = "Son: $textoEnMayusculas";
 		$anchoTotalTexto = $this->GetStringWidth($textoOriginal);
 		$anchoMaximo = 63;
 
@@ -1102,11 +1102,13 @@ class FPDF
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("Gracias por su compra"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
-		# POWERED BY #
-		$this->Ln(3);
-		$this->SetFont('hypermarket', '', 9);
-		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(63, 5, "Powered by $auspiciado", 0, 'R', false);
+		if ($auspiciado != "") {
+			# POWERED BY #
+			$this->Ln(3);
+			$this->SetFont('hypermarket', '', 9);
+			$this->SetTextColor(0, 0, 0);
+			$this->MultiCell(63, 5, "Powered by $auspiciado", 0, 'R', false);
+		}
 
 		return $y;
 	}
