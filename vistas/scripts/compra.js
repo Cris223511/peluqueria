@@ -684,11 +684,11 @@ function buscarSunat(e) {
 		success: function (datos) {
 			datos = limpiarCadena(datos);
 			console.log(datos);
-			if (datos == "DNI no encontrado" || datos == "RUC no encontrado") {
+			if (datos == "DNI no valido" || datos == "RUC no valido") {
 				limpiarModalProveedor();
 				bootbox.confirm(datos + ", ¿deseas crear un proveedor manualmente?", function (result) {
 					if (result) {
-						(datos == "DNI no encontrado") ? $("#tipo_documento4").val("DNI") : $("#tipo_documento4").val("RUC");
+						(datos == "DNI no valido") ? $("#tipo_documento4").val("DNI") : $("#tipo_documento4").val("RUC");
 
 						$("#tipo_documento4").trigger("change");
 
@@ -708,16 +708,27 @@ function buscarSunat(e) {
 				const obj = JSON.parse(datos);
 				console.log(obj);
 
-				$("#nombre").val(obj.nombre);
+				if (obj.tipoDocumento == "1") {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.nombres + " " + obj.apellidoPaterno + " " + obj.apellidoMaterno);
+					var direccionCompleta = "";
+				} else {
+					var nombreCompleto = capitalizarTodasLasPalabras(obj.razonSocial);
+					var direccionCompleta = capitalizarTodasLasPalabras(obj.provincia + ", " + obj.distrito + ", " + obj.direccion);
+				}
+
+				console.log("Nombre completo es =) =>" + nombreCompleto);
+				console.log("Direccion completa es =) =>" + direccionCompleta);
+
+				$("#nombre").val(nombreCompleto);
 				$("#tipo_documento").val(obj.tipoDocumento == "1" ? "DNI" : "RUC");
 				$("#num_documento").val(obj.numeroDocumento);
-				$("#direccion").val(obj.direccion);
+				$("#direccion").val(direccionCompleta);
 				$("#telefono").val(obj.telefono);
 				$("#email").val(obj.email);
 
 				// Deshabilitar los campos solo si están vacíos
-				$("#nombre").prop("disabled", obj.hasOwnProperty("nombre") && obj.nombre !== "" ? true : false);
-				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && obj.direccion !== "" ? true : false);
+				$("#nombre").prop("disabled", (obj.hasOwnProperty("nombres") || obj.hasOwnProperty("razonSocial")) && nombreCompleto !== "" ? true : false);
+				$("#direccion").prop("disabled", obj.hasOwnProperty("direccion") && direccionCompleta !== "" ? true : false);
 				$("#telefono").prop("disabled", obj.hasOwnProperty("telefono") && obj.telefono !== "" ? true : false);
 				$("#email").prop("disabled", obj.hasOwnProperty("email") && obj.email !== "" ? true : false);
 

@@ -210,50 +210,63 @@ if (!isset($_SESSION["nombre"])) {
 				/* ======================= SUNAT ======================= */
 
 			case 'consultaSunat':
+				// Token para la API
+				$token = 'apis-token-8814.1Tq4Gy-yKM7ZSWPx6eQC0feuDpVKbuEZ';
+
 				$data = "";
 				$curl = curl_init();
 
 				try {
 					if (strlen($sunat) == 8) {
 						// DNI
-						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/dni?numero=' . $sunat);
+						$url = 'https://api.apis.net.pe/v2/reniec/dni?numero=' . $sunat;
+						$referer = 'https://apis.net.pe/consulta-dni-api';
 					} elseif (strlen($sunat) == 11) {
 						// RUC
-						curl_setopt($curl, CURLOPT_URL, 'https://api.apis.net.pe/v1/ruc?numero=' . $sunat);
+						$url = 'https://api.apis.net.pe/v2/sunat/ruc?numero=' . $sunat;
+						$referer = 'http://apis.net.pe/api-ruc';
 					} elseif (strlen($sunat) < 8) {
 						// Mensaje para DNI no válido
 						$data = "El DNI debe tener 8 caracteres.";
+						echo $data;
+						break;
 					} elseif (strlen($sunat) > 8 && strlen($sunat) < 11) {
 						// Mensaje para RUC no válido
 						$data = "El RUC debe tener 11 caracteres.";
-					}
-
-					if (!empty($data)) {
 						echo $data;
 						break;
 					}
 
-					// Configurar opciones de cURL
-					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+					// configuración de cURL
+					curl_setopt_array($curl, array(
+						CURLOPT_URL => $url,
+						CURLOPT_RETURNTRANSFER => true,
+						CURLOPT_SSL_VERIFYPEER => 0,
+						CURLOPT_ENCODING => '',
+						CURLOPT_MAXREDIRS => 2,
+						CURLOPT_TIMEOUT => 0,
+						CURLOPT_FOLLOWLOCATION => true,
+						CURLOPT_CUSTOMREQUEST => 'GET',
+						CURLOPT_HTTPHEADER => array(
+							'Referer: ' . $referer,
+							'Authorization: Bearer ' . $token
+						),
+					));
 
-					// Ejecutar la solicitud
 					$response = curl_exec($curl);
 
 					if ($response === false) {
 						throw new Exception(curl_error($curl));
 					}
 
-					// Verificar si la respuesta contiene "Not Found" y ajustar el mensaje en consecuencia
-					if (stripos($response, 'Not Found') !== false || stripos($response, '{"error":"RUC invalido"}') !== false) {
-						$data = (strlen($sunat) == 8) ? "DNI no encontrado" : "RUC no encontrado";
+					if (stripos($response, 'Not Found') !== false || stripos($response, '{"message":"ruc no valido"}') !== false) {
+						$data = (strlen($sunat) == 8) ? "DNI no valido" : "RUC no valido";
 					} else {
 						$data = $response;
 					}
 				} catch (Exception $e) {
-					// Capturar excepción y proporcionar mensaje controlado
 					$data = "Error al procesar la solicitud: " . $e->getMessage();
 				} finally {
-					// Cerrar cURL
 					curl_close($curl);
 				}
 
