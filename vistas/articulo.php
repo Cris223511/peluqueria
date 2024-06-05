@@ -45,11 +45,20 @@ if (!isset($_SESSION["nombre"])) {
       #camera video {
         width: 250px;
         height: auto;
+        border-radius: 15px;
+        margin-top: 10px;
       }
 
       #camera canvas.drawingBuffer {
         height: auto;
         position: absolute;
+      }
+
+      .form-control,
+      .form-control button {
+        height: 45px !important;
+        font-size: 16px !important;
+        align-content: center;
       }
     </style>
     <div class="content-wrapper">
@@ -161,66 +170,62 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 20px;">
-                    <div class="form-group col-lg-12 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                      <label>Código del producto(*):</label>
+                      <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="10" placeholder="Código del producto" onblur="convertirMayus()" required>
+                    </div>
+                    <div class="form-group col-lg-8 col-md-6 col-sm-12">
                       <label>Nombre(*):</label>
                       <input type="hidden" name="idarticulo" id="idarticulo">
                       <input type="text" class="form-control" name="nombre" id="nombre" maxlength="100" placeholder="Ingrese el nombre del producto." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Categoría(*):</label>
                       <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Marca(*):</label>
                       <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Local(*):</label>
                       <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
                         <option value="">- Seleccione -</option>
                       </select>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>RUC local(*):</label>
                       <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Precio compra(*):</label>
                       <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Precio venta(*):</label>
                       <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Stock(*):</label>
                       <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el stock." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Stock mínimo(*):</label>
                       <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el stock mínimo." required>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
-                      <label>Comisión(*):</label>
-                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12">
-                      <label>Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" placeholder="Ingrese la descripción del producto." autocomplete="off">
-                    </div>
-                    <div class="form-group col-lg-12 col-md-12">
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Imagen:</label>
                       <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                       <input type="hidden" name="imagenactual" id="imagenactual">
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
-                      <label>Código del producto(*):</label>
-                      <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="10" placeholder="Código del producto" onblur="convertirMayus()" required>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                      <label>Descripción:</label>
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" placeholder="Ingrese la descripción del producto." autocomplete="off">
                       <div style="display: flex; justify-content: end;">
                         <div id="camera"></div>
                       </div>
                     </div>
-                    <div class="form-group col-lg-6 col-md-12">
+                    <div class="form-group col-lg-6 col-md-12 col-sm-12">
                       <div>
                         <label>Código de barra(*):</label>
                         <input type="text" class="form-control" name="codigo" id="codigo" maxlength="18" placeholder="Ingrese el código de barra.">
@@ -242,6 +247,10 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <!-- form detalles -->
                     <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
+                      <div class="form-group col-lg-6 col-md-12">
+                        <label>Comisión:</label>
+                        <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
+                      </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Talla:</label>
                         <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">

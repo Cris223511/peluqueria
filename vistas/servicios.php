@@ -10,6 +10,19 @@ if (!isset($_SESSION["nombre"])) {
 
   if ($_SESSION['servicios'] == 1) {
 ?>
+    <style>
+      .form-control,
+      .form-control button {
+        height: 45px !important;
+        font-size: 16px !important;
+        align-content: center;
+      }
+
+      textarea {
+        align-content: center;
+      }
+    </style>
+
     <div class="content-wrapper">
       <section class="content">
         <div class="row">

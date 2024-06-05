@@ -1,8 +1,8 @@
     <footer class="main-footer">
       <div class="pull-right hidden-xs">
-        <b>Version</b> 4.0.0
+        <b>Version</b> 4.0.2
       </div>
-      <strong>Copyright &copy; 2024 <a href="escritorio.php" style="color: #002a8e;">Sistema de Peluquería</a>.</strong> Todos los derechos reservados.
+      <strong>Copyright &copy; 2024 <a href="escritorio.php" style="color: #002a8e;">Sistema de ventas</a>.</strong> Todos los derechos reservados.
     </footer>
     <!-- jQuery -->
     <script src="../public/js/jquery-3.1.1.min.js"></script>

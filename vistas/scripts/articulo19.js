@@ -252,6 +252,8 @@ function limpiar() {
 
 	$(".btn1").show();
 	$(".btn2").hide();
+
+	detenerEscaneo();
 }
 
 //Función mostrar formulario
