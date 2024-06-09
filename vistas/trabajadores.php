@@ -130,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Imagen:</label>
                     <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                     <input type="hidden" name="imagenactual" id="imagenactual">
-                    <img src="" width="150px" id="imagenmuestra">
+                    <img src="" width="150px" id="imagenmuestra" style="display: none;">
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

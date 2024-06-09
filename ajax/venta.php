@@ -280,7 +280,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'getLastNumComprobante':
-				$row = mysqli_fetch_assoc($compra->getLastNumComprobante($idlocalSession));
+				$row = mysqli_fetch_assoc($venta->getLastNumComprobante($idlocalSession));
 				if ($row != null) {
 					$last_num_comprobante = $row["last_num_comprobante"];
 					echo $last_num_comprobante;

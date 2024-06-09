@@ -66,7 +66,7 @@ if (!isset($_SESSION["nombre"])) {
                   <div class="panel-body marco" id="formularioregistros">
                     <label>Imagen actual:</label>
                     <div class="imgContenido">
-                      <img src="" width="100%" id="imagenmuestra">
+                      <img src="" width="100%" id="imagenmuestra" style="display: none;">
                     </div>
                   </div>
                 </div>

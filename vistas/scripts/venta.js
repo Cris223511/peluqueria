@@ -903,6 +903,7 @@ function buscarSunat(e) {
 				$("#nombre").val(nombreCompleto);
 				$("#tipo_documento").val(obj.tipoDocumento == "1" ? "DNI" : "RUC");
 				$("#num_documento").val(obj.numeroDocumento);
+				$("#direccion").val(direccionCompleta);
 				$("#telefono").val(obj.telefono);
 				$("#email").val(obj.email);
 

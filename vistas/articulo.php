@@ -165,7 +165,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="contenedor" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 10px 20px 20px 20px;">
                       <label>Imagen de muestra:</label>
                       <div>
-                        <img src="" width="100%" id="imagenmuestra">
+                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
                       </div>
                     </div>
                   </div>
