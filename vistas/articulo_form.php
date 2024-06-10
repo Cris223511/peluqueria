@@ -67,99 +67,8 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Productos Externos
-                  <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button> -->
-                  <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
-                    <a href="../reportes/rptarticulosExternos.php" target="_blank">
-                      <button class="btn btn-secondary" style="color: black !important;">
-                        <i class="fa fa-clipboard"></i> Reporte
-                      </button>
-                    </a>
-                    <a data-toggle="modal" href="#myModal">
-                      <button id="btncomisiones" onclick="limpiarModalComision()" class="btn btn-warning">
-                        <i class="fa fa-usd"></i> Modificar comisiones
-                      </button>
-                    </a>
-                  <?php } ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos</strong>" data-html="true" data-content="Módulo en donde se registran los productos para que sean utilizados en las ventas, proformas y compras.<br><br><strong>Nota:</strong> Solo visualizará los productos de su local, de la cual, los productos que registre serán visibles y utilizados por los trabajadores <strong>de su local</strong> (solo puede editar y eliminar los productos que ustéd agrega y no el de los demás)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
-                </h1>
-                <div class="box-tools pull-right"></div>
-                <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Buscar por marca:</label>
-                    <select id="idmarcaBuscar" name="idmarcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Buscar por categoría:</label>
-                    <select id="idcategoriaBuscar" name="idcategoriaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                      <option value="">- Seleccione -</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Buscar por estado:</label>
-                    <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                      <option value="">- Seleccione -</option>
-                      <option value="1">Disponible</option>
-                      <option value="2">Agotándose</option>
-                      <option value="3">Agotado</option>
-                    </select>
-                  </div>
-                  <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label id="labelCustom">ㅤ</label>
-                    <div style="display: flex; gap: 10px;">
-                      <button style="width: 100%;" class="btn btn-bcp" onclick="buscar()">Buscar</button>
-                      <button style="height: 32px;" class="btn btn-success" onclick="resetear()"><i class="fa fa-repeat"></i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="panel-body listadoregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important; height: max-content;">
-                <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
-                  <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
-                    <thead>
-                      <th style="width: 1%;">Opciones</th>
-                      <th>Imagen</th>
-                      <th style="width: 20%; min-width: 260px;">Nombre</th>
-                      <th>Categoría</th>
-                      <th style="width: 15%; min-width: 200px;">Almacén</th>
-                      <th>Marca</th>
-                      <th>C. producto</th>
-                      <th>C. de barra</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
-                      <th>P. compra</th>
-                      <th>P. venta</th>
-                      <th>Ganancia</th>
-                      <th>Comisión</th>
-                      <th>Agregado por</th>
-                      <th>Cargo</th>
-                      <th>Estado</th>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                    <tfoot>
-                      <th>Opciones</th>
-                      <th>Imagen</th>
-                      <th>Nombre</th>
-                      <th>Categoría</th>
-                      <th>Almacén</th>
-                      <th>Marca</th>
-                      <th>C. producto</th>
-                      <th>C. de barra</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
-                      <th>P. compra</th>
-                      <th>P. venta</th>
-                      <th>Ganancia</th>
-                      <th>Comisión</th>
-                      <th>Agregado por</th>
-                      <th>Cargo</th>
-                      <th>Estado</th>
-                    </tfoot>
-                  </table>
-                </div>
+                <h1 class="box-title">Agregar Productos</h1>
+                <button class="btn btn-danger" type="button" onclick="window.history.back()"><i class="fa fa-arrow-circle-left"></i> Volver</button>
               </div>
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
@@ -286,7 +195,6 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px !important; float: right;">
                     <div style="float: left;">
-                      <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                       <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                     </div>
                   </div>
@@ -339,35 +247,6 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </form>
     <!-- Fin form medidas -->
-
-    <!-- Modal 1 -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-dialog smallModal" style="width: 45%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
-        <form name="formulario2" id="formulario2" method="POST">
-          <div class="modal-content">
-            <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-                <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: center;">CAMBIAR COMISIÓN DE PRODUCTOS</h4>
-              </div>
-            </div>
-            <div class="panel-body">
-              <div class="col-lg-12 col-md-12 col-sm-12" style="background-color: white; overflow: auto; overflow: auto;">
-                <div class="form-group col-12">
-                  <label>Comisión(*):</label>
-                  <input type="number" class="form-control" name="comision" id="comision2" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión para todos los productos." required>
-                </div>
-              </div>
-            </div>
-            <div class="modal-footer form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
-              <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalComision();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
-              <button class="btn btn-bcp" type="button" onclick="verificarModalComision();" id="btnGuardarComision"><i class="fa fa-save"></i> Guardar</button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div>
-    <!-- Fin Modal 1 -->
   <?php
   } else {
     require 'noacceso.php';
@@ -376,7 +255,7 @@ if (!isset($_SESSION["nombre"])) {
   ?>
   <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
   <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
-  <script type="text/javascript" src="scripts/articuloExterno1.js"></script>
+  <script type="text/javascript" src="scripts/articulo_form.js"></script>
 <?php
 }
 ob_end_flush();

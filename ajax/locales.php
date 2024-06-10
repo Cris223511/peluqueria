@@ -4,16 +4,6 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-// si no está logeado o no tiene ningún cargo...
-if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
-	// opciones a las que NO pueden tener acceso... si no colocamos ninguno, quiere decir
-	// que tiene acceso a todas las opciones si es que está logeado o tiene un cargo.
-	if (($_GET["op"] == 'selectLocal' || $_GET["op"] == 'selectLocalUsuario' || $_GET["op"] == 'selectLocalDisponible')) {
-		echo 'No está autorizado para realizar esta acción.';
-		exit();
-	}
-}
-
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {

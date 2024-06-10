@@ -4,11 +4,6 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-if (empty($_SESSION['idusuario']) && empty($_SESSION['cargo'])) {
-	echo json_encode(['error' => 'No está autorizado para realizar esta acción.']);
-	exit();
-}
-
 require_once "../modelos/Usuario.php";
 
 $usuario = new Usuario();

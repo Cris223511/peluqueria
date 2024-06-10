@@ -978,7 +978,7 @@ class FPDF
 	 *                              Ticket Design                                  *
 	 *******************************************************************************/
 
-	function encabezado1($y, $logo, $ext_logo, $num_comprobante, $fecha_hora, $tipo_comprobante, $local, $local_ruc, $estado)
+	function encabezado1($y, $logo, $ext_logo, $empresa, $num_comprobante, $fecha_hora, $tipo_comprobante, $local, $local_ruc, $estado)
 	{
 		# N° TICKET #
 		$this->SetXY(3, $y);
@@ -1005,16 +1005,22 @@ class FPDF
 		$this->SetY($y + 32);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
+		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$empresa"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		# TIPO DE COMPROBANTE #
+		$this->SetY($y + 38);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$tipo_comprobante"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
-		$this->SetY($y + 38);
+		$this->SetY($y + 44);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# RUC #
-		$this->SetY($y + 42);
+		$this->SetY($y + 48);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
@@ -1113,9 +1119,17 @@ class FPDF
 		return $y;
 	}
 
-	function creditos($y, $adresse)
+	function caja($y, $caja)
 	{
 		$this->Ln(1);
+		$this->SetX(3);
+		$this->SetFont('hypermarket', '', 10);
+		$this->MultiCell(0, 3.3, mb_convert_encoding(mb_strtoupper("CAJA: " . $caja), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+	}
+
+	function creditos($y, $adresse)
+	{
+		$this->Ln(2);
 		$this->SetX(3);
 		$this->SetFont('hypermarket', '', 8.5);
 		$this->MultiCell(0, 3.3, mb_convert_encoding(mb_strtoupper($adresse), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);

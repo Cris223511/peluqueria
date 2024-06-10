@@ -22,6 +22,12 @@ function init() {
 		$('#metodopagoBuscar').selectpicker('refresh');
 	})
 
+	$.post("../ajax/proveedores.php?op=selectProveedores", function (r) {
+		console.log(r);
+		$("#proveedorBuscar").html(r);
+		$('#proveedorBuscar').selectpicker('refresh');
+	})
+
 	$('#mReportes').addClass("treeview active");
 	$('#lReporteCompra').addClass("active");
 }

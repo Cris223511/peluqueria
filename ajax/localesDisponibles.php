@@ -5,8 +5,10 @@ if (strlen(session_id()) < 1) {
 }
 
 // si no está logeado o no tiene ningún cargo, no accede a ninguna opción, si está logeado, accede a todas las opciones.
-if ((empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) && ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") || $_SESSION['cargo'] == "admin") {
-	echo 'No está autorizado para realizar esta acción.';
+if ((empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) || ($_SESSION['cargo'] != "superadmin" && $_SESSION['cargo'] != "admin_total") && $_SESSION['cargo'] != "admin") {
+	session_unset();
+	session_destroy();
+	header("Location: ../vistas/login.html");
 	exit();
 }
 

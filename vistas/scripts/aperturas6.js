@@ -59,6 +59,7 @@ function limpiar() {
 
 function validarCaja() {
 	$.post("../ajax/cajas.php?op=validarCaja", function (e) {
+		e = limpiarCadena(e);
 		console.log(e);
 		if (e == "true" || e == true) {
 			bootbox.alert("Usted ya tiene una caja registrada en su local actual. <br><br><strong>Nota:</strong> Solo puede agregar cuando su local no tenga una caja registrada.");
@@ -226,7 +227,8 @@ function modalDetalles(idcaja) {
 		$("#fecha_caja").text(formatFecha(fecha));
 		$("#hora_caja").text(formatHora(hora));
 
-		$("#monto_caja").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#monto_inicial_caja").text("S/. " + parseFloat(data.monto).toFixed(2));
+		$("#monto_total_caja").text("S/. " + parseFloat(data.monto_total).toFixed(2));
 		$("#descripcion_caja").text((data.descripcion != "") ? data.descripcion : "Sin registrar.");
 
 		$("#myModal").modal("show");
@@ -339,10 +341,10 @@ function buscar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			'lengthMenu': [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-			'aProcessing': true,//Activamos el procesamiento del datatables
-			'aServerSide': true,//Paginación y filtrado realizados por el servidor
-			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+			'lengthMenu': [5, 10, 25, 75, 100],
+			'aProcessing': true,
+			'aServerSide': true,
+			dom: '<Bl<f>rtip>',
 			buttons: [
 				'copyHtml5',
 				'excelHtml5',

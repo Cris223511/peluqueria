@@ -55,6 +55,18 @@ class Proveedor
 		return ejecutarConsulta($sql);
 	}
 
+	/* ======================= LISTAR PROVEEDORES (INCLUIDO AL PUBLICO GENERAL) ======================= */
+
+	public function listarProveedoresGeneral()
+	{
+		$sql = "SELECT p.idproveedor, p.nombre, p.tipo_documento, p.num_documento, p.direccion, p.descripcion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+				DATE_FORMAT(p.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
+				FROM proveedores p
+				LEFT JOIN usuario u ON p.idusuario = u.idusuario
+				WHERE p.eliminado = '0' ORDER BY p.idproveedor DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	/* ======================= REPORTE DE COMPRAS POR PROVEEDOR ======================= */
 
 	public function listarComprasProveedor($idproveedor)

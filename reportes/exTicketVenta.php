@@ -40,6 +40,7 @@ $pdf->encabezado1(
     $y,
     $logo,
     $ext_logo,
+    $empresa,
     $reg1->num_comprobante ?? '',
     $reg1->fecha_hora ?? '',
     $reg1->tipo_comprobante ?? '',
@@ -55,7 +56,7 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-$y += 52;
+$y += 58;
 
 # Encabezado y datos del ticket #
 $pdf->encabezado2(
@@ -372,6 +373,9 @@ QRcode::png($codeText, $filePath, $level, $size ?? 0);
 $pdf->Image($filePath, 20, null, 30);
 
 unlink($filePath);
+
+# Caja #
+$pdf->caja($y, $reg1->caja ?? '');
 
 # Créditos #
 $pdf->creditos(

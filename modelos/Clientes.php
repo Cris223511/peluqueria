@@ -91,6 +91,30 @@ class Cliente
 		return ejecutarConsulta($sql);
 	}
 
+	/* ======================= LISTAR CLIENTES (INCLUIDO AL PUBLICO GENERAL) ======================= */
+
+	public function listarClientesGeneral()
+	{
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.descripcion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
+				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
+				LEFT JOIN locales l ON c.idlocal = l.idlocal
+				WHERE c.eliminado = '0' ORDER BY c.idcliente DESC";
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarClientesGeneralPorUsuario($idlocal_session)
+	{
+		$sql = "SELECT c.idcliente, c.nombre, l.titulo AS local, c.tipo_documento, c.num_documento, c.direccion, c.descripcion, c.telefono, c.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+				DATE_FORMAT(c.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha, c.estado
+				FROM clientes c
+				LEFT JOIN usuario u ON c.idusuario = u.idusuario
+				LEFT JOIN locales l ON c.idlocal = l.idlocal
+				WHERE c.idlocal = '$idlocal_session' AND c.eliminado = '0' ORDER BY c.idcliente DESC";
+		return ejecutarConsulta($sql);
+	}
+
 	/* ======================= REPORTE DE VENTAS POR CLIENTE ======================= */
 
 	public function listarVentasCliente($idcliente)

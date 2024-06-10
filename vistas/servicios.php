@@ -11,8 +11,8 @@ if (!isset($_SESSION["nombre"])) {
   if ($_SESSION['servicios'] == 1) {
 ?>
     <style>
-      .form-control,
-      .form-control button {
+      #formulario .form-control,
+      #formulario .form-control button {
         height: 45px !important;
         font-size: 16px !important;
         align-content: center;
@@ -82,7 +82,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-4 col-md-4 col-sm-6 col-xs-12">
                     <label>Código de servicio(*):</label>
-                    <input type="text" class="form-control" name="codigo" id="codigo" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumero(this)" maxlength="10" placeholder="Ingrese el código de servicio." required />
+                    <input type="text" class="form-control" name="codigo" id="codigo" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumeroCorrelativo(this)" maxlength="10" placeholder="Ingrese el código de servicio." required />
                   </div>
                   <div class="form-group col-lg-4 col-md-4 col-sm-12 col-xs-12">
                     <label>Costo de servicio(*):</label>

@@ -403,8 +403,9 @@
         return cadenaLimpia;
       }
 
-      function formatearNumero() {
-        var campos = ["#codigo"];
+      function formatearNumeroCorrelativo() {
+        console.log("entro =)");
+        var campos = ["#codigo", "#cod_part_2"];
 
         campos.forEach(function(campo) {
           let numValor = $(campo).val();

@@ -5,7 +5,9 @@ if (strlen(session_id()) < 1) {
 }
 
 if (empty($_SESSION['idusuario']) && empty($_SESSION['cargo']) && $_GET["op"] !== 'verificar') {
-	echo json_encode(['error' => 'No está autorizado para realizar esta acción.']);
+	session_unset();
+	session_destroy();
+	header("Location: ../vistas/login.html");
 	exit();
 }
 

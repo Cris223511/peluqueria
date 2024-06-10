@@ -148,7 +148,8 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Cliente:</label>
-                    <input type="text" class="form-control" name="clienteBuscar" id="clienteBuscar" maxlength="100" placeholder="Ingrese el nombre del cliente." required>
+                    <select id="clienteBuscar" name="clienteBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                    </select>
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>DNI / RUC:</label>
@@ -175,8 +176,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>DNI / RUC</th>
                       <th style="width: 20%; min-width: 260px;">Cliente</th>
                       <th>Empleado</th>
-                      <th>Producto / servicio</th>
-                      <th style="width: 15%; min-width: 200px;">Almacén</th>
+                      <th style="width: 20%; min-width: 260px;">Producto / servicio</th>
+                      <th style="width: 20%; min-width: 200px;">Almacén</th>
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>

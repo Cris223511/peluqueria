@@ -1,5 +1,22 @@
 var tabla;
 
+var idlocal = 0;
+
+function actualizarCorrelativo(idlocal) {
+	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal.value }, function (num) {
+		console.log(num);
+		const partes = num.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
+
+		const letras = partes[1];
+		const numeros = partes[2];
+
+		const siguienteCorrelativo = generarSiguienteCorrelativo(numeros);
+
+		$("#cod_part_1").val(letras);
+		$("#cod_part_2").val(siguienteCorrelativo);
+	});
+}
+
 //Función que se ejecuta al inicio
 function init() {
 	mostrarform(false);
@@ -205,6 +222,17 @@ function agregarMedida(e) {
 	}
 }
 
+function changeGanancia() {
+	let precio_venta = $("#precio_venta").val();
+	let precio_compra = $("#precio_compra").val();
+
+	// Verificar si ambos campos están llenos
+	if (precio_venta !== '' && precio_compra !== '') {
+		let ganancia = precio_venta - precio_compra;
+		$("#ganancia").val(ganancia.toFixed(2));
+	}
+}
+
 function actualizarRUC() {
 	const selectLocal = document.getElementById("idlocal");
 	const localRUCInput = document.getElementById("local_ruc");
@@ -220,8 +248,9 @@ function actualizarRUC() {
 
 //Función limpiar
 function limpiar() {
-	$("#codigo").val("");
-	$("#codigo_producto").val("");
+	$("#codigo_barra").val("");
+	$("#cod_part_1").val("");
+	$("#cod_part_2").val("");
 	$("#nombre").val("");
 	$("#local_ruc").val("");
 	$("#descripcion").val("");
@@ -236,6 +265,7 @@ function limpiar() {
 	$("#imagen").val("");
 	$("#precio_compra").val("");
 	$("#precio_venta").val("");
+	$("#ganancia").val("0.00");
 	$("#comision").val("");
 	$("#print").hide();
 	$("#idarticulo").val("");
@@ -306,10 +336,10 @@ function listar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-			"aProcessing": true,//Activamos el procesamiento del datatables
-			"aServerSide": true,//Paginación y filtrado realizados por el servidor
-			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+			"lengthMenu": [5, 10, 25, 75, 100],
+			"aProcessing": true,
+			"aServerSide": true,
+			dom: '<Bl<f>rtip>',
 			buttons: [
 				'copyHtml5',
 				'excelHtml5',
@@ -362,7 +392,7 @@ function listar() {
 function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
 
-	var codigoBarra = $("#codigo").val();
+	var codigoBarra = $("#codigo_barra").val();
 
 	var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
 
@@ -389,13 +419,26 @@ function guardaryeditar(e) {
 	}
 
 	$("#btnGuardar").prop("disabled", true);
+	$("#ganancia").prop("disabled", false);
+
+	formatearNumeroCorrelativo();
+
+	var parteLetras = $("#cod_part_1").val();
+	var parteNumeros = $("#cod_part_2").val();
+	var codigoCompleto = parteLetras + parteNumeros;
+
 	var formData = new FormData($("#formulario")[0]);
+	formData.append("codigo_producto", codigoCompleto);
+
+	$("#ganancia").prop("disabled", true);
 
 	let detalles = frmDetallesVisible() ? obtenerDetalles() : { talla: '', color: '', idmedida: '0', peso: '0.00' };
 
 	for (let key in detalles) {
 		formData.append(key, detalles[key]);
 	}
+
+	$("#idlocal").attr("onchange", "actualizarRUC();");
 
 	$.ajax({
 		url: "../ajax/articulo.php?op=guardaryeditar",
@@ -406,7 +449,7 @@ function guardaryeditar(e) {
 
 		success: function (datos) {
 			datos = limpiarCadena(datos);
-			if (datos == "El código de barra del producto que ha ingresado ya existe." || datos == "El código del producto que ha ingresado ya existe.") {
+			if (datos == "El código de barra del producto que ha ingresado ya existe." || datos == "El código del producto que ha ingresado ya existe en el local seleccionado.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -461,8 +504,16 @@ function mostrar(idarticulo) {
 		$('#idmarca').selectpicker('refresh');
 		$("#idmedida").val(data.idmedida);
 		$('#idmedida').selectpicker('refresh');
-		$("#codigo").val(data.codigo);
-		$("#codigo_producto").val(data.codigo_producto);
+		$("#codigo_barra").val(data.codigo);
+
+		const partes = data.codigo_producto.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
+
+		const letras = partes[1];
+		const numeros = partes[2];
+
+		$("#cod_part_1").val(letras);
+		$("#cod_part_2").val(numeros);
+
 		$("#nombre").val(data.nombre);
 		$("#stock").val(data.stock);
 		$("#stock_minimo").val(data.stock_minimo);
@@ -474,11 +525,14 @@ function mostrar(idarticulo) {
 		$("#imagenmuestra").attr("src", "../files/articulos/" + data.imagen);
 		$("#precio_compra").val(data.precio_compra);
 		$("#precio_venta").val(data.precio_venta);
+		$("#ganancia").val(data.ganancia);
 		$("#comision").val(data.comision);
 		$("#imagenactual").val(data.imagen);
 		$("#idarticulo").val(data.idarticulo);
 		generarbarcode(0);
 		actualizarRUC();
+
+		$("#idlocal").attr("onchange", "actualizarRUC(); actualizarCorrelativo(this);");
 	})
 }
 
@@ -591,10 +645,10 @@ function buscar() {
 
 	tabla = $('#tbllistado').dataTable(
 		{
-			"lengthMenu": [5, 10, 25, 75, 100],//mostramos el menú de registros a revisar
-			"aProcessing": true,//Activamos el procesamiento del datatables
-			"aServerSide": true,//Paginación y filtrado realizados por el servidor
-			dom: '<Bl<f>rtip>',//Definimos los elementos del control de tabla
+			"lengthMenu": [5, 10, 25, 75, 100],
+			"aProcessing": true,
+			"aServerSide": true,
+			dom: '<Bl<f>rtip>',
 			buttons: [
 				'copyHtml5',
 				'excelHtml5',
@@ -696,12 +750,12 @@ function detenerEscaneo() {
 	}
 }
 
-$("#codigo").on("input", function () {
+$("#codigo_barra").on("input", function () {
 	formatearNumero();
 });
 
 function formatearNumero() {
-	var codigo = $("#codigo").val().replace(/\s/g, '').replace(/\D/g, '');
+	var codigo = $("#codigo_barra").val().replace(/\s/g, '').replace(/\D/g, '');
 	var formattedCode = '';
 
 	for (var i = 0; i < codigo.length; i++) {
@@ -712,18 +766,18 @@ function formatearNumero() {
 		formattedCode += codigo[i];
 	}
 
-	var maxLength = parseInt($("#codigo").attr("maxlength"));
+	var maxLength = parseInt($("#codigo_barra").attr("maxlength"));
 	if (formattedCode.length > maxLength) {
 		formattedCode = formattedCode.substring(0, maxLength);
 	}
 
-	$("#codigo").val(formattedCode);
+	$("#codigo_barra").val(formattedCode);
 	generarbarcode(0);
 }
 
 function borrar() {
-	$("#codigo").val("");
-	$("#codigo").focus();
+	$("#codigo_barra").val("");
+	$("#codigo_barra").focus();
 	$("#print").hide();
 }
 
@@ -734,7 +788,7 @@ function generar() {
 	codigo += Math.floor(Math.random() * 10) + " ";
 	codigo += generarNumero(100, 9) + " ";
 	codigo += Math.floor(Math.random() * 10);
-	$("#codigo").val(codigo);
+	$("#codigo_barra").val(codigo);
 	generarbarcode(1);
 }
 
@@ -748,7 +802,7 @@ function generarNumero(max, min) {
 function generarbarcode(param) {
 
 	if (param == 1) {
-		var codigo = $("#codigo").val().replace(/\s/g, '');
+		var codigo = $("#codigo_barra").val().replace(/\s/g, '');
 		console.log(codigo.length);
 
 		if (!/^\d+$/.test(codigo)) {
@@ -761,12 +815,12 @@ function generarbarcode(param) {
 			codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
 		}
 	} else {
-		var codigo = $("#codigo").val()
+		var codigo = $("#codigo_barra").val()
 	}
 
 	if (codigo != "") {
 		JsBarcode("#barcode", codigo);
-		$("#codigo").val(codigo);
+		$("#codigo_barra").val(codigo);
 		$("#print").show();
 	} else {
 		$("#print").hide();

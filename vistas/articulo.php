@@ -26,15 +26,15 @@ if (!isset($_SESSION["nombre"])) {
         .caja1 .contenedor img {
           width: 25% !important;
         }
-
-        #label {
-          display: none;
-        }
       }
 
       @media (max-width: 767px) {
         .botones {
           width: 100% !important;
+        }
+
+        #label {
+          display: none;
         }
       }
 
@@ -54,8 +54,8 @@ if (!isset($_SESSION["nombre"])) {
         position: absolute;
       }
 
-      .form-control,
-      .form-control button {
+      #formulario .form-control,
+      #formulario .form-control button {
         height: 45px !important;
         font-size: 16px !important;
         align-content: center;
@@ -68,7 +68,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Productos
-                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
+                  <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button> -->
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptarticulos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -131,6 +131,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Stock mínimo</th>
                       <th>P. compra</th>
                       <th>P. venta</th>
+                      <th>Ganancia</th>
                       <th>Comisión</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
@@ -151,6 +152,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Stock mínimo</th>
                       <th>P. compra</th>
                       <th>P. venta</th>
+                      <th>Ganancia</th>
                       <th>Comisión</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
@@ -170,9 +172,15 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                   </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 20px;">
-                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                      <label>Código del producto(*):</label>
-                      <input type="text" class="form-control" name="codigo_producto" id="codigo_producto" maxlength="10" placeholder="Código del producto" onblur="convertirMayus()" required>
+                    <div class="form-group col-lg-4 col-md-6 col-sm-12" style="margin: 0; padding: 0;">
+                      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                        <label>Código(*):</label>
+                        <input type="text" class="form-control" id="cod_part_1" maxlength="10" placeholder="PRO" onblur="convertirMayus()" required>
+                      </div>
+                      <div class="form-group col-lg-6 col-md-6 col-sm-6">
+                        <label id="label">ㅤ</label>
+                        <input type="text" class="form-control" id="cod_part_2" maxlength="10" placeholder="0001" oninput="onlyNumbersAndMaxLenght(this)" onblur="formatearNumeroCorrelativo()" required>
+                      </div>
                     </div>
                     <div class="form-group col-lg-8 col-md-6 col-sm-12">
                       <label>Nombre(*):</label>
@@ -197,13 +205,19 @@ if (!isset($_SESSION["nombre"])) {
                       <label>RUC local(*):</label>
                       <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                     </div>
-                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                      <label>Precio compra(*):</label>
-                      <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                      <label>Precio venta(*):</label>
-                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
+                    <div class="form-group col-lg-8 col-md-12 col-sm-12" style="padding: 0; margin: 0;">
+                      <div class="form-group col-lg-4 col-md-4 col-sm-12">
+                        <label>Precio compra(*):</label>
+                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
+                      </div>
+                      <div class="form-group col-lg-4 col-md-4 col-sm-12">
+                        <label>Precio venta(*):</label>
+                        <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
+                      </div>
+                      <div class="form-group col-lg-4 col-md-4 col-sm-12">
+                        <label>Ganancia(*):</label>
+                        <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" value="0.00" disabled>
+                      </div>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Stock(*):</label>
@@ -228,7 +242,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-6 col-md-12 col-sm-12">
                       <div>
                         <label>Código de barra(*):</label>
-                        <input type="text" class="form-control" name="codigo" id="codigo" maxlength="18" placeholder="Ingrese el código de barra.">
+                        <input type="text" class="form-control" name="codigo" id="codigo_barra" maxlength="18" placeholder="Ingrese el código de barra.">
                       </div>
                       <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
                         <button class="btn btn-info" type="button" onclick="generar()">Generar</button>

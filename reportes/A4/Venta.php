@@ -654,7 +654,7 @@ class PDF_Invoice extends FPDF
 	 *                              Reporte Design                                 *
 	 *******************************************************************************/
 
-	function encabezado($y, $logo, $ext_logo, $num_comprobante, $tipo_comprobante, $local, $local_ruc, $estado, $usuario, $content1, $empresa, $content2)
+	function encabezado($y, $logo, $ext_logo, $num_comprobante, $tipo_comprobante, $local, $local_ruc, $estado, $caja, $usuario, $content1, $empresa, $content2)
 	{
 		# LOGO #
 		$this->Image('../files/logo_reportes/' . $logo, 15, 10, 30, 30, $ext_logo);
@@ -718,9 +718,14 @@ class PDF_Invoice extends FPDF
 		$this->Cell($r2 - $r1 - 1, 5, $num_comprobante, 0, 0, "C");
 
 		# ESTADO #
-		$this->SetXY(66, $y + 32);
-		$this->SetFont('Arial', 'B', 9);
+		$this->SetXY(66, $y + 30);
+		$this->SetFont('Arial', 'B', 8);
 		$this->MultiCell(130, 4, mb_convert_encoding(mb_strtoupper("Estado: $estado"), 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
+
+		# CAJA #
+		$this->SetXY(66, $y + 34);
+		$this->SetFont('Arial', 'B', 8);
+		$this->MultiCell(130, 4, mb_convert_encoding(mb_strtoupper("Caja: $caja"), 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
 
 		# USUARIO #
 		$this->SetXY(66, $y + 41);

@@ -3,6 +3,7 @@ ob_start();
 if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
+
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {

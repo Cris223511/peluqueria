@@ -103,7 +103,7 @@ function listar() {
 function guardaryeditar(e) {
 	e.preventDefault();
 	$("#btnGuardar").prop("disabled", true);
-	formatearNumero();
+	formatearNumeroCorrelativo();
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({

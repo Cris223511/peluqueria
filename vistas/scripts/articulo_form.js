@@ -3,7 +3,7 @@ var tabla;
 var idlocal = 0;
 
 function actualizarCorrelativo(idlocal) {
-	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal.value }, function (num) {
+	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal }, function (num) {
 		console.log(num);
 		const partes = num.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
 
@@ -19,22 +19,22 @@ function actualizarCorrelativo(idlocal) {
 
 //Función que se ejecuta al inicio
 function init() {
-	mostrarform(false);
-	listar();
-
 	$("#formulario").on("submit", function (e) {
 		guardaryeditar(e);
 	})
 
-	$("#formulario2").on("submit", function (e) {
-		guardaryeditar2(e);
-	})
+	$("#btnDetalles1").show();
+	$("#btnDetalles2").hide();
+	$("#frmDetalles").hide();
+
+	$(".btn1").show();
+	$(".btn2").hide();
 
 	$("#imagenmuestra").hide();
 	$('#mAlmacen').addClass("treeview active");
-	$('#lArticulosExternos').addClass("active");
+	$('#lArticulos').addClass("active");
 
-	$.post("../ajax/articuloExterno.php?op=listarTodosActivos", function (data) {
+	$.post("../ajax/articulo.php?op=listarTodosActivos", function (data) {
 		// console.log(data)
 		const obj = JSON.parse(data);
 		console.log(obj);
@@ -83,7 +83,7 @@ function init() {
 }
 
 function listarTodosActivos(selectId) {
-	$.post("../ajax/articuloExterno.php?op=listarTodosActivos", function (data) {
+	$.post("../ajax/articulo.php?op=listarTodosActivos", function (data) {
 		const obj = JSON.parse(data);
 
 		const select = $("#" + selectId);
@@ -244,6 +244,9 @@ function actualizarRUC() {
 	} else {
 		localRUCInput.value = "";
 	}
+
+	idlocal = $("#idlocal").val();
+	actualizarCorrelativo(idlocal);
 }
 
 //Función limpiar
@@ -282,107 +285,17 @@ function limpiar() {
 
 	$(".btn1").show();
 	$(".btn2").hide();
-}
 
-//Función mostrar formulario
-function mostrarform(flag) {
-	limpiar();
-	if (flag) {
-		$(".listadoregistros").hide();
-		$("#formularioregistros").show();
-		$("#btnGuardar").prop("disabled", false);
-		$("#btnagregar").hide();
-		$("#btncomisiones").hide();
-		$(".caja1").hide();
-		$(".caja2").removeClass("col-lg-10 col-md-8 col-sm-12").addClass("col-lg-12 col-md-12 col-sm-12");
-		$(".botones").removeClass("col-lg-10 col-md-8 col-sm-12").addClass("col-lg-12 col-md-12 col-sm-12");
-		$("#btnDetalles1").show();
-		$("#btnDetalles2").hide();
-		$("#frmDetalles").hide();
-	}
-	else {
-		$(".listadoregistros").show();
-		$("#formularioregistros").hide();
-		$("#btnagregar").show();
-		$("#btncomisiones").show();
-		$(".caja1").show();
-		$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
-		$(".botones").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
-		$("#btnDetalles1").show();
-		$("#btnDetalles2").hide();
-		$("#frmDetalles").hide();
-	}
+	detenerEscaneo();
+
+	idlocal = 0;
+	actualizarCorrelativo(idlocal);
 }
 
 function frmDetalles(bool) {
 	if (bool == true) { $("#frmDetalles").show(); $("#btnDetalles1").hide(); $("#btnDetalles2").show(); }
 	if (bool == false) { $("#frmDetalles").hide(); $("#btnDetalles1").show(); $("#btnDetalles2").hide(); }
 	// $('html, body').animate({ scrollTop: $(document).height() }, 10);
-}
-
-//Función cancelarform
-function cancelarform() {
-	limpiar();
-	mostrarform(false);
-}
-
-//Función Listar
-function listar() {
-	let param1 = "";
-	let param2 = "";
-	let param3 = "";
-
-	tabla = $('#tbllistado').dataTable(
-		{
-			"lengthMenu": [5, 10, 25, 75, 100],
-			"aProcessing": true,
-			"aServerSide": true,
-			dom: '<Bl<f>rtip>',
-			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
-				{
-					'extend': 'pdfHtml5',
-					'orientation': 'landscape',
-					'exportOptions': {
-						'columns': function (idx, data, node) {
-							return idx > 1 ? true : false;
-						}
-					},
-					'customize': function (doc) {
-						doc.defaultStyle.fontSize = 7;
-						doc.styles.tableHeader.fontSize = 7;
-					},
-				},
-			],
-			"ajax":
-			{
-				url: '../ajax/articuloExterno.php?op=listar',
-				type: "get",
-				data: { param1: param1, param2: param2, param3: param3 },
-				dataType: "json",
-				error: function (e) {
-					console.log(e.responseText);
-				}
-			},
-			"language": {
-				"lengthMenu": "Mostrar : _MENU_ registros",
-				"buttons": {
-					"copyTitle": "Tabla Copiada",
-					"copySuccess": {
-						_: '%d líneas copiadas',
-						1: '1 línea copiada'
-					}
-				}
-			},
-			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
-			"order": [],
-			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
-			}
-		}).DataTable();
 }
 
 //Función para guardar o editar
@@ -437,7 +350,7 @@ function guardaryeditar(e) {
 	}
 
 	$.ajax({
-		url: "../ajax/articuloExterno.php?op=guardaryeditar",
+		url: "../ajax/articulo.php?op=guardaryeditar",
 		type: "POST",
 		data: formData,
 		contentType: false,
@@ -452,8 +365,9 @@ function guardaryeditar(e) {
 			}
 			limpiar();
 			bootbox.alert(datos);
-			mostrarform(false);
-			tabla.ajax.reload();
+			setTimeout(() => {
+				history.back();
+			}, 1500);
 		}
 	});
 }
@@ -478,229 +392,17 @@ function frmDetallesVisible() {
 	return $("#frmDetalles").is(":visible");
 }
 
-function mostrar(idarticulo) {
-	mostrarform(true);
-
-	$(".caja1").show();
-	$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
-	$(".botones").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");
-
-	$(".btn1").show();
-	$(".btn2").hide();
-
-	$.post("../ajax/articuloExterno.php?op=mostrar", { idarticulo: idarticulo }, function (data, status) {
-		data = JSON.parse(data);
-		console.log(data);
-
-		$("#idcategoria").val(data.idcategoria);
-		$('#idcategoria').selectpicker('refresh');
-		$("#idlocal").val(data.idlocal);
-		$('#idlocal').selectpicker('refresh');
-		$("#idmarca").val(data.idmarca);
-		$('#idmarca').selectpicker('refresh');
-		$("#idmedida").val(data.idmedida);
-		$('#idmedida').selectpicker('refresh');
-		$("#codigo_barra").val(data.codigo);
-
-		const partes = data.codigo_producto.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
-
-		const letras = partes[1];
-		const numeros = partes[2];
-
-		$("#cod_part_1").val(letras);
-		$("#cod_part_2").val(numeros);
-
-		$("#nombre").val(data.nombre);
-		$("#stock").val(data.stock);
-		$("#stock_minimo").val(data.stock_minimo);
-		$("#descripcion").val(data.descripcion);
-		$("#talla").val(data.talla);
-		$("#color").val(data.color);
-		$("#peso").val(data.peso);
-		$("#imagenmuestra").show();
-		$("#imagenmuestra").attr("src", "../files/articulos/" + data.imagen);
-		$("#precio_compra").val(data.precio_compra);
-		$("#precio_venta").val(data.precio_venta);
-		$("#ganancia").val(data.ganancia);
-		$("#comision").val(data.comision);
-		$("#imagenactual").val(data.imagen);
-		$("#idarticulo").val(data.idarticulo);
-		generarbarcode(0);
-		actualizarRUC();
-
-		$("#idlocal").attr("onchange", "actualizarRUC(); actualizarCorrelativo(this);");
-	})
-}
-
-function limpiarModalComision() {
-	$("#comision2").val("");
-	$("#btnGuardarComision").prop("disabled", false);
-}
-
-function verificarModalComision() {
-	bootbox.confirm("¿Está seguro de modificar la comisión de todos los productos?", function (result) {
-		if (result) {
-			$("#formulario2").submit();
-		}
-	})
-}
-
-function guardaryeditar2(e) {
-	e.preventDefault(); //No se activará la acción predeterminada del evento
-	$("#btnGuardarComision").prop("disabled", true);
-	var formData = new FormData($("#formulario2")[0]);
-
-	$.ajax({
-		url: "../ajax/articuloExterno.php?op=guardarComision",
-		type: "POST",
-		data: formData,
-		contentType: false,
-		processData: false,
-
-		success: function (datos) {
-			datos = limpiarCadena(datos);
-			limpiarModalComision();
-			bootbox.alert(datos);
-			$('#myModal').modal('hide');
-			tabla.ajax.reload();
-		}
-	});
-}
-
-//Función para desactivar registros
-function desactivar(idarticulo) {
-	bootbox.confirm("¿Está seguro de desactivar el producto?", function (result) {
-		if (result) {
-			$.post("../ajax/articuloExterno.php?op=desactivar", { idarticulo: idarticulo }, function (e) {
-				bootbox.alert(e);
-				tabla.ajax.reload();
-			});
-		}
-	})
-}
-
-//Función para activar registros
-function activar(idarticulo) {
-	bootbox.confirm("¿Está seguro de activar el producto?", function (result) {
-		if (result) {
-			$.post("../ajax/articuloExterno.php?op=activar", { idarticulo: idarticulo }, function (e) {
-				bootbox.alert(e);
-				tabla.ajax.reload();
-			});
-		}
-	})
-}
-
-//Función para eliminar los registros
-function eliminar(idarticulo) {
-	bootbox.confirm("¿Estás seguro de eliminar el producto?", function (result) {
-		if (result) {
-			$.post("../ajax/articuloExterno.php?op=eliminar", { idarticulo: idarticulo }, function (e) {
-				bootbox.alert(e);
-				tabla.ajax.reload();
-			});
-		}
-	})
-}
-
-function convertirMayus() {
-	var inputCodigo = document.getElementById("codigo_producto");
-	inputCodigo.value = inputCodigo.value.toUpperCase();
-}
-
-function resetear() {
-	const selects = ["idmarcaBuscar", "idcategoriaBuscar", "estadoBuscar", "fecha_inicio", "fecha_fin"];
-
-	for (const selectId of selects) {
-		$("#" + selectId).val("");
-		$("#" + selectId).selectpicker('refresh');
-	}
-
-	listar();
-}
-
-//Función buscar
-function buscar() {
-	let param1 = "";
-	let param2 = "";
-	let param3 = "";
-
-	// Obtener los selectores
-	const selectMarca = document.getElementById("idmarcaBuscar");
-	const selectCategoria = document.getElementById("idcategoriaBuscar");
-	const selectEstado = document.getElementById("estadoBuscar");
-
-	if (selectMarca.value == "" && selectCategoria.value == "" && selectEstado.value == "") {
-		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
-		return;
-	}
-
-	param1 = selectMarca.value;
-	param2 = selectCategoria.value;
-	param3 = selectEstado.value;
-
-	tabla = $('#tbllistado').dataTable(
-		{
-			"lengthMenu": [5, 10, 25, 75, 100],
-			"aProcessing": true,
-			"aServerSide": true,
-			dom: '<Bl<f>rtip>',
-			buttons: [
-				'copyHtml5',
-				'excelHtml5',
-				'csvHtml5',
-				{
-					'extend': 'pdfHtml5',
-					'orientation': 'landscape',
-					'exportOptions': {
-						'columns': function (idx, data, node) {
-							return idx > 1 ? true : false;
-						}
-					},
-					'customize': function (doc) {
-						doc.defaultStyle.fontSize = 7;
-						doc.styles.tableHeader.fontSize = 7;
-					},
-				},
-			],
-			"ajax":
-			{
-				url: '../ajax/articuloExterno.php?op=listar',
-				data: { param1: param1, param2: param2, param3: param3 },
-				type: "get",
-				dataType: "json",
-				error: function (e) {
-					console.log(e.responseText);
-				}
-			},
-			"language": {
-				"lengthMenu": "Mostrar : _MENU_ registros",
-				"buttons": {
-					"copyTitle": "Tabla Copiada",
-					"copySuccess": {
-						_: '%d líneas copiadas',
-						1: '1 línea copiada'
-					}
-				}
-			},
-			"bDestroy": true,
-			"iDisplayLength": 5,//Paginación
-			"order": [],
-			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
-			}
-		}).DataTable();
-}
-
 var quaggaIniciado = false;
 
 function escanear() {
 
+	// Intentar acceder a la cámara
 	navigator.mediaDevices.getUserMedia({ video: true })
 		.then(function (stream) {
 			$(".btn1").hide();
 			$(".btn2").show();
 
+			// Acceso a la cámara exitoso, inicializa Quagga
 			Quagga.init({
 				inputStream: {
 					name: "Live",
@@ -822,7 +524,7 @@ function generarbarcode(param) {
 }
 
 function convertirMayus() {
-	var inputCodigo = document.getElementById("codigo_producto");
+	var inputCodigo = document.getElementById("cod_part_1");
 	inputCodigo.value = inputCodigo.value.toUpperCase();
 }
 

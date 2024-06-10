@@ -16,6 +16,12 @@ function init() {
 		$('#usuarioBuscar').selectpicker('refresh');
 	})
 
+	$.post("../ajax/clientes.php?op=selectClientes", function (r) {
+		console.log(r);
+		$("#clienteBuscar").html(r);
+		$('#clienteBuscar').selectpicker('refresh');
+	})
+
 	$('#mReportesE').addClass("treeview active");
 	$('#lReporteVentaEmpleados').addClass("active");
 }

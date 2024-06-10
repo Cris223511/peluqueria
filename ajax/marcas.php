@@ -4,11 +4,6 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
-	echo 'No está autorizado para realizar esta acción.';
-	exit();
-}
-
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {

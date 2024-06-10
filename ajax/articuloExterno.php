@@ -4,16 +4,6 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-// si no está logeado o no tiene ningún cargo...
-if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
-	// opciones a las que NO pueden tener acceso... si no colocamos ninguno, quiere decir
-	// que tiene acceso a todas las opciones si es que está logeado o tiene un cargo.
-	if (($_GET["op"] == 'selectLocal' || $_GET["op"] == 'selectLocalUsuario' || $_GET["op"] == 'selectLocalDisponible')) {
-		echo 'No está autorizado para realizar esta acción.';
-		exit();
-	}
-}
-
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
@@ -45,6 +35,7 @@ if (!isset($_SESSION["nombre"])) {
 		$imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
 		$precio_compra = isset($_POST["precio_compra"]) ? limpiarCadena($_POST["precio_compra"]) : "";
 		$precio_venta = isset($_POST["precio_venta"]) ? limpiarCadena($_POST["precio_venta"]) : "";
+		$ganancia = isset($_POST["ganancia"]) ? limpiarCadena($_POST["ganancia"]) : "";
 		$comision = isset($_POST["comision"]) ? limpiarCadena($_POST["comision"]) : "";
 		$barra = isset($_POST["barra"]) ? limpiarCadena($_POST["barra"]) : "";
 
@@ -76,21 +67,21 @@ if (!isset($_SESSION["nombre"])) {
 
 				if (empty($idarticulo)) {
 					$codigoExiste = $articulo->verificarCodigoExiste($codigo);
-					$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto);
+					$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto, $idlocal);
 					if ($codigoProductoExiste) {
-						echo "El código del producto que ha ingresado ya existe.";
+						echo "El código del producto que ha ingresado ya existe en el local seleccionado.";
 					} else if ($codigoExiste && $codigo != "") {
 						echo "El código de barra del producto que ha ingresado ya existe.";
 					} else {
-						$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $descripcion);
+						$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia,  $comision);
 						echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
 					}
 				} else {
-					$nombreExiste = $articulo->verificarCodigoProductoEditarExiste($codigo_producto, $idarticulo);
+					$nombreExiste = $articulo->verificarCodigoProductoEditarExiste($codigo_producto, $idlocal, $idarticulo);
 					if ($nombreExiste) {
-						echo "El código del producto que ha ingresado ya existe.";
+						echo "El código del producto que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $descripcion);
+						$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia,  $comision);
 						echo $rspta ? "Producto actualizado" : "El producto no se pudo actualizar";
 					}
 				}
@@ -234,10 +225,11 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => $reg->stock_minimo,
 						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
 						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
-						"12" => "S/. " . number_format($reg->comision, 2, '.', ','),
-						"13" => $reg->usuario,
-						"14" => $cargo_detalle,
-						"15" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+						"12" => "S/. " . number_format($reg->ganancia, 2, '.', ','),
+						"13" => "S/. " . number_format($reg->comision, 2, '.', ','),
+						"14" => $reg->usuario,
+						"15" => $cargo_detalle,
+						"16" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
 				}
 				$results = array(
@@ -248,6 +240,22 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
+				break;
+
+			case 'getLastCodigo':
+				if ($_POST["idlocal"] == 0 || $_POST["idlocal"] == "") {
+					$result = $articulo->getLastCodigo($idlocalSession);
+				} else {
+					$result = $articulo->getLastCodigo($idlocal);
+				}
+
+				if (mysqli_num_rows($result) > 0) {
+					$row = mysqli_fetch_assoc($result);
+					$last_codigo = $row["last_codigo"];
+				} else {
+					$last_codigo = 'PRO0001';
+				}
+				echo $last_codigo;
 				break;
 
 				/* ======================= SELECTS ======================= */

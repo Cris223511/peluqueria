@@ -4,11 +4,6 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
-	echo 'No está autorizado para realizar esta acción.';
-	exit();
-}
-
 if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html");
 } else {
@@ -337,6 +332,19 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
+				break;
+
+			case 'selectClientes':
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
+					$rspta = $clientes->listarClientesGeneral();
+				} else {
+					$rspta = $clientes->listarClientesGeneralPorUsuario($idlocal_session);
+				}
+
+				echo '<option value="">- Seleccione -</option>';
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->nombre . '"> ' . $reg->nombre . '</option>';
+				}
 				break;
 		}
 	} else {

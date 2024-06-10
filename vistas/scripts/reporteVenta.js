@@ -22,6 +22,12 @@ function init() {
 		$('#metodopagoBuscar').selectpicker('refresh');
 	})
 
+	$.post("../ajax/clientes.php?op=selectClientes", function (r) {
+		console.log(r);
+		$("#clienteBuscar").html(r);
+		$('#clienteBuscar').selectpicker('refresh');
+	})
+
 	$('#mReportes').addClass("treeview active");
 	$('#lReporteVenta').addClass("active");
 }

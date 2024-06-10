@@ -161,8 +161,12 @@ if (!isset($_SESSION["cajas"])) {
                   <div class="nowrap-cell" id="hora_caja"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
-                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO:</div>
-                  <div class="nowrap-cell" id="monto_caja"></div>
+                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO INICIAL:</div>
+                  <div class="nowrap-cell" id="monto_inicial_caja"></div>
+                </div>
+                <div style="display: flex; justify-content: start;">
+                  <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO TOTAL:</div>
+                  <div class="nowrap-cell" id="monto_total_caja"></div>
                 </div>
                 <div style="display: flex; justify-content: start;">
                   <div style="width: 200px; min-width: 200px; font-weight: bold;">COMENTARIO:</div>

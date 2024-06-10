@@ -4,14 +4,8 @@ if (strlen(session_id()) < 1) {
 	session_start(); //Validamos si existe o no la sesión
 }
 
-// si no está logeado o no tiene ningún cargo...
-if (empty($_SESSION['idusuario']) || empty($_SESSION['cargo'])) {
-	echo 'No está autorizado para realizar esta acción.';
-	exit();
-}
-
 if (!isset($_SESSION["nombre"])) {
-	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
+	header("Location: ../vistas/login.html");
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
 	if ($_SESSION['reportes'] == 1 || $_SESSION['reportesP'] == 1  || $_SESSION['reportesM'] == 1  || $_SESSION['reportesE'] == 1) {

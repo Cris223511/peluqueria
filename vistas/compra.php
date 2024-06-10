@@ -371,6 +371,7 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
+                  <a href="articulo_form.php"><button class="btn btn-warning" id="btnagregar"><i class="fa fa-cart-plus"></i> Agregar productos</button></a>
                   <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Compras</strong>" data-html="true" data-content="Módulo para registrar las compras de los productos, no es necesario que su caja esté abierta para que pueda comprar.<br><br><strong>Nota:</strong> Al hacer la compra, el monto total de la compra no aumentará a su caja. También, el stock del producto comprado se aumenta al almacén (no importa si el stock del artículo esté en 0)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
