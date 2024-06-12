@@ -282,7 +282,7 @@ class Caja
 				AND dv.fecha_hora <= cc.fecha_cierre
 				ORDER BY v.idventa ASC
 				LIMIT 1)
-					
+				
 				UNION ALL
 				
 				(SELECT 
@@ -382,6 +382,50 @@ class Caja
 				AND cc.idcaja = '$idcaja'
 				AND g.fecha_hora >= cc.fecha_hora
 				AND g.fecha_hora <= cc.fecha_cierre";
+		return ejecutarConsulta($sql);
+	}
+
+	public function obtenerTotalAcumuladoEnEfectivo($idcaja, $idcaja_cerrada)
+	{
+		$sql = "SELECT 
+                  SUM(dvp.monto) AS total_efectivo
+				FROM venta v
+				LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
+				LEFT JOIN metodo_pago mp ON dvp.idmetodopago = mp.idmetodopago
+				LEFT JOIN cajas_cerradas cc ON v.idcaja = cc.idcaja_cerrada
+				WHERE cc.idcaja = '$idcaja'
+				AND cc.idcaja_cerrada = '$idcaja_cerrada'
+				AND v.fecha_hora >= cc.fecha_hora
+				AND v.fecha_hora <= cc.fecha_cierre
+				AND mp.titulo = 'EFECTIVO'";
+		return ejecutarConsulta($sql);
+	}
+
+	public function obtenerTotalRetirosYGastos($idcaja, $idcaja_cerrada)
+	{
+		$sql = "SELECT 
+                SUM(monto_total) AS total_retiros_gastos
+            FROM (
+                SELECT r.monto AS monto_total
+                FROM retiros r 
+                LEFT JOIN cajas c ON r.idcaja = c.idcaja 
+                LEFT JOIN cajas_cerradas cc ON c.idcaja = cc.idcaja_cerrada
+                WHERE r.idcaja = '$idcaja_cerrada'
+                AND cc.idcaja = '$idcaja'
+                AND r.fecha_hora >= cc.fecha_hora
+                AND r.fecha_hora <= cc.fecha_cierre
+                
+                UNION ALL
+                
+                SELECT g.monto AS monto_total
+                FROM gastos g 
+                LEFT JOIN cajas c ON g.idcaja = c.idcaja 
+                LEFT JOIN cajas_cerradas cc ON c.idcaja = cc.idcaja_cerrada
+                WHERE g.idcaja = '$idcaja_cerrada'
+                AND cc.idcaja = '$idcaja'
+                AND g.fecha_hora >= cc.fecha_hora
+                AND g.fecha_hora <= cc.fecha_cierre
+            ) AS combined";
 		return ejecutarConsulta($sql);
 	}
 }

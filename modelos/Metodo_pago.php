@@ -9,6 +9,9 @@ class MetodoPago
 
 	public function agregar($idusuario, $titulo, $descripcion, $imagen)
 	{
+		if (empty($imagen))
+			$imagen = "default.jpg";
+
 		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO metodo_pago (idusuario, titulo, descripcion, imagen, fecha_hora, estado, eliminado)
             VALUES ('$idusuario','$titulo', '$descripcion', '$imagen', SYSDATE(), 'activado','0')";

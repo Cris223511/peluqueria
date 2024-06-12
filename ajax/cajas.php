@@ -85,7 +85,7 @@ if (!isset($_SESSION["nombre"])) {
 			case 'prueba':
 				$idcaja = $_POST['idcaja'];
 				$idcaja_cerrada = $_POST['idcaja_cerrada'];
-				$rspta = $cajas->listarDetallesVentasAnuladasCajaCerrada($idcaja, $idcaja_cerrada);
+				$rspta = $cajas->obtenerTotalRetirosYGastos($idcaja, $idcaja_cerrada);
 
 				$data = array();
 

@@ -30,7 +30,6 @@ function mostrarform(flag) {
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
-		$("#imagen").attr("required", true);
 	}
 	else {
 		$("#listadoregistros").show();

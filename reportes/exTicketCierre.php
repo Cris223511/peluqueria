@@ -35,6 +35,8 @@ if (!isset($_SESSION["nombre"])) {
         $rspta6 = $cajas->listarDetallesCajaAperturada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
         $rspta7 = $cajas->listarDetallesRetirosCajaAperurada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
         $rspta8 = $cajas->listarDetallesGastosCajaAperurada($_GET["idcaja"], $_GET["idcaja_cerrada"]);
+        $rspta9 = $cajas->obtenerTotalAcumuladoEnEfectivo($_GET["idcaja"], $_GET["idcaja_cerrada"]);
+        $rspta10 = $cajas->obtenerTotalRetirosYGastos($_GET["idcaja"], $_GET["idcaja_cerrada"]);
 
         $reg1 = (object) $rspta1;
         $reg2 = $rspta2->fetch_object();
@@ -44,6 +46,8 @@ if (!isset($_SESSION["nombre"])) {
         $reg4 = $rspta4->fetch_object();
         $reg5 = $rspta5->fetch_object();
         $reg6 = $rspta6->fetch_object();
+        $reg9 = $rspta9->fetch_object();
+        $reg10 = $rspta10->fetch_object();
 
         $reg7 = '';
         if ($rspta7 !== false) {
@@ -450,7 +454,6 @@ if (!isset($_SESSION["nombre"])) {
         $y += 4;
 
         $montoTotal = 0;
-        $montoTotalAcumulado = 0;
 
         $esUltimoBucle = false;
         $hizoSaltoLinea = false;
@@ -483,21 +486,24 @@ if (!isset($_SESSION["nombre"])) {
             }
 
             $montoTotal += ($reg6->monto ?? 0.00);
-            $montoTotalAcumulado += ($reg6->monto_total ?? 0.00);
 
             $reg6 = $rspta6->fetch_object();
         }
 
         # Tabla para los totales de la caja aperturada (MONTOS) #
 
-        # TOTAL ACUMULADO #
+        # Calculamos el total en efectivo y el subtotal
+        $total_acumulado = ($reg9->total_efectivo ?? 0.00) - ($reg10->total_retiros_gastos ?? 0.00);
+        $monto_total = $montoTotal + $total_acumulado;
+
+        # TOTAL ACUMULADO E.F #
         $y += ($size - 4) ?? 0;
         $pdf->Line(3, $y - 2.1, 67, $y - 2.1);
 
         $lineTotalAcumulado = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
-            "FECHA Y HORA" => "TOTAL ACUMULADO",
-            "MONTO INICIAL" => number_format($montoTotalAcumulado - $montoTotal, 2),
+            "FECHA Y HORA" => "TOTAL ACUMULADO E.F",
+            "MONTO INICIAL" => number_format($total_acumulado, 2),
         );
 
         $pdf->SetFont('hypermarket', '', 8);
@@ -509,7 +515,7 @@ if (!isset($_SESSION["nombre"])) {
         $lineTotal = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
             "FECHA Y HORA" => "TOTAL",
-            "MONTO INICIAL" => number_format($montoTotalAcumulado, 2),
+            "MONTO INICIAL" => number_format($monto_total, 2),
         );
 
         $pdf->SetFont('hypermarket', '', 8);
