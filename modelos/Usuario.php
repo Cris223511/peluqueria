@@ -26,13 +26,18 @@ class Usuario
 		//return ejecutarConsulta($sql1);
 		$idusuarionew = ejecutarConsulta_retornarID($sql1);
 
+		// Elimina todos los permisos previos de este usuario
+		$sql_delete_permisos = "DELETE FROM usuario_permiso WHERE idusuario='$idusuarionew'";
+		ejecutarConsulta($sql_delete_permisos);
+
+		// Inserta los nuevos permisos
 		$num_elementos = 0;
 		$sw = true;
 
 		while ($num_elementos < count($permisos)) {
 			$sql_detalle = "INSERT INTO usuario_permiso(idusuario, idpermiso) VALUES('$idusuarionew', '$permisos[$num_elementos]')";
 			ejecutarConsulta($sql_detalle) or $sw = false;
-			$num_elementos = $num_elementos + 1;
+			$num_elementos++;
 		}
 
 		$sql2 = "UPDATE locales SET idusuario='$idusuarionew' WHERE idlocal='$idlocal'";
