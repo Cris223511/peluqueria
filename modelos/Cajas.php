@@ -89,9 +89,9 @@ class Caja
 		return ejecutarConsulta($sql);
 	}
 
-	public function aperturar($idcaja)
+	public function aperturar($idcaja, $monto)
 	{
-		$sql = "UPDATE cajas SET estado='aperturado', fecha_hora=SYSDATE(), monto='0.00', monto_total='0.00', contador='3', fecha_cierre='0000-00-00 00:00:00' WHERE idcaja='$idcaja'";
+		$sql = "UPDATE cajas SET estado='aperturado', fecha_hora=SYSDATE(), monto='$monto', monto_total='$monto', contador='3', fecha_cierre='0000-00-00 00:00:00' WHERE idcaja='$idcaja'";
 		return ejecutarConsulta($sql);
 	}
 

@@ -63,7 +63,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'aperturar':
-				$rspta = $cajas->aperturar($idcaja);
+				$rspta = $cajas->aperturar($idcaja, $monto);
 				echo $rspta ? "Caja aperturada" : "La caja no se pudo aperturar";
 				break;
 

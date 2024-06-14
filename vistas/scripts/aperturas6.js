@@ -273,14 +273,45 @@ function cerrar(idcaja) {
 }
 
 function aperturar(idcaja) {
-	bootbox.confirm("¿Está seguro de aperturar la caja?", function (result) {
-		if (result) {
-			$.post("../ajax/cajas.php?op=aperturar", { idcaja: idcaja }, function (e) {
-				bootbox.alert(e);
-				tabla.ajax.reload();
-			});
+	bootbox.dialog({
+		message: `
+			<form id="form_apertura" style="margin-bottom: 0px;">
+				<div class="bootbox-body">
+					¿Está seguro de aperturar la caja? Si es así, digite el monto inicial de la caja.
+				</div>
+				<div class="form-group" style="margin-top: 15px; margin-bottom: 0px;">
+					<label for="monto_inicial">Monto inicial(*):</label>
+					<input type="number" class="form-control" name="monto" id="monto_inicial" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
+				</div>
+			</form>
+		`,
+		buttons: {
+			cancel: {
+				label: "Cancelar",
+				className: "btn-default"
+			},
+			confirm: {
+				label: "Aceptar",
+				className: "btn-bcp",
+				callback: function () {
+					var form = document.getElementById("form_apertura");
+					if (form.checkValidity()) {
+						var monto = $('#monto_inicial').val();
+						$.post("../ajax/cajas.php?op=aperturar", { idcaja: idcaja, monto: monto }, function (e) {
+							bootbox.alert(e);
+							tabla.ajax.reload();
+						});
+					} else {
+						form.reportValidity();
+						return false;
+					}
+				}
+			}
 		}
-	})
+	}).on('shown.bs.modal', function () {
+		evitarCaracteresEspecialesCamposNumericos();
+		aplicarRestrictATodosLosInputs();
+	});
 }
 
 function eliminar(idcaja) {
