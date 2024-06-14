@@ -167,7 +167,7 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-4 col-md-6 col-sm-12" style="margin: 0; padding: 0;">
                       <div class="form-group col-lg-6 col-md-6 col-sm-6">
                         <label>Código(*):</label>
-                        <input type="text" class="form-control" id="cod_part_1" maxlength="10" placeholder="PRO" onblur="convertirMayus()" required>
+                        <input type="text" class="form-control" id="cod_part_1" maxlength="10" placeholder="PRO" onblur="convertirMayus(this)" required>
                       </div>
                       <div class="form-group col-lg-6 col-md-6 col-sm-6">
                         <label id="label">ㅤ</label>

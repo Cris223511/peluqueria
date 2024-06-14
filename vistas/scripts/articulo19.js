@@ -828,7 +828,7 @@ function generarbarcode(param) {
 }
 
 function convertirMayus() {
-	var inputCodigo = document.getElementById("codigo_producto");
+	var inputCodigo = document.getElementById("cod_part_1");
 	inputCodigo.value = inputCodigo.value.toUpperCase();
 }
 
