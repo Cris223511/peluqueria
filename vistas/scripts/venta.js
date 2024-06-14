@@ -135,6 +135,7 @@ function limpiarTodo() {
 
 function validarCaja() {
 	$.post("../ajax/venta.php?op=validarCaja", function (e) {
+		e = limpiarCadena(e);
 		console.log(e);
 		const obj = JSON.parse(e);
 		console.log(obj);
