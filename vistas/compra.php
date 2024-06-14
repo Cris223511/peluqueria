@@ -327,8 +327,9 @@ if (!isset($_SESSION["nombre"])) {
 
       .caja-compras button {
         margin-bottom: 10px;
-        width: 40px;
-        height: 30px;
+        width: 50px;
+        height: 35px;
+        font-size: 16px;
       }
 
       .g-scrolling-carousel .items>* {
@@ -512,6 +513,7 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="caja-compras">
                         <!-- <a href="#"><button type="button" class="btn btn-default" style="padding-top: 4px;"><strong>%</strong></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-money"></i></button></a> -->
+                        <!-- <a onclick="verificarModalPrecuenta();"><button type="button" class="btn btn-bcp"><i class="fa fa-shopping-cart"></i></button></a> -->
                         <a onclick="limpiarTodo();"><button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button></a>
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-usd"></i></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-cogs"></i></button></a> -->

@@ -339,8 +339,9 @@ if (!isset($_SESSION["nombre"])) {
 
       .caja-ventas button {
         margin-bottom: 10px;
-        width: 40px;
-        height: 30px;
+        width: 50px;
+        height: 35px;
+        font-size: 16px;
       }
 
       .g-scrolling-carousel .items>* {

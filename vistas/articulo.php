@@ -163,14 +163,6 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-right: 0 !important;">
                 <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
-                  <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-left: 0 !important; padding-right: 20px;">
-                    <div class="contenedor" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 10px 20px 20px 20px;">
-                      <label>Imagen de muestra:</label>
-                      <div>
-                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
-                      </div>
-                    </div>
-                  </div>
                   <div class="form-group col-lg-10 col-md-8 col-sm-12 caja2" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 20px;">
                     <div class="form-group col-lg-4 col-md-6 col-sm-12" style="margin: 0; padding: 0;">
                       <div class="form-group col-lg-6 col-md-6 col-sm-6">
@@ -284,7 +276,15 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <!-- end form detalles -->
                   </div>
-                  <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px !important; float: right;">
+                  <div class="form-group col-lg-2 col-md-4 col-sm-12 caja1" style="padding-right: 0 !important; padding-left: 20px;">
+                    <div class="contenedor" style="background-color: white; border-top: 3px #002a8e solid !important; padding: 10px 20px 20px 20px;">
+                      <label>Imagen de muestra:</label>
+                      <div>
+                        <img src="" width="100%" id="imagenmuestra" style="display: none;">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-10 col-md-8 col-sm-12 botones" style="background-color: white !important; padding: 10px !important; float: left;">
                     <div style="float: left;">
                       <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                       <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
