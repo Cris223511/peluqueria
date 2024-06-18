@@ -246,6 +246,7 @@ function actualizarRUC() {
 	}
 
 	idlocal = $("#idlocal").val();
+	console.log("mi idlocal es =) =>", idlocal);
 	actualizarCorrelativo(idlocal);
 }
 
@@ -289,7 +290,6 @@ function limpiar() {
 	detenerEscaneo();
 
 	idlocal = 0;
-	actualizarCorrelativo(idlocal);
 }
 
 function frmDetalles(bool) {

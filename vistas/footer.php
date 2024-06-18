@@ -44,7 +44,7 @@
     </script>
 
     <script>
-      $('#imagen').on('change', function() {
+      $('#imagen,#imagen2').on('change', function() {
         const file = this.files[0];
         const maxSizeMB = 3;
         const maxSizeBytes = maxSizeMB * 1024 * 1024;
