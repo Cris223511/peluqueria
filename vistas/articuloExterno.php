@@ -131,15 +131,19 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 20%; min-width: 260px;">Nombre</th>
                       <th>Categoría</th>
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
+                      <th>Stock normal</th>
+                      <th>Stock mínimo</th>
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>C. de barra</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
                       <th>P. compra</th>
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
+                      <th>Color</th>
+                      <th>Talla</th>
+                      <th>Peso</th>
+                      <th>Medida</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -152,15 +156,19 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Nombre</th>
                       <th>Categoría</th>
                       <th>Almacén</th>
+                      <th>Stock normal</th>
+                      <th>Stock mínimo</th>
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>C. de barra</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
                       <th>P. compra</th>
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
+                      <th>Color</th>
+                      <th>Talla</th>
+                      <th>Peso</th>
+                      <th>Medida</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>

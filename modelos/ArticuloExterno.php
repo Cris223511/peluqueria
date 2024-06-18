@@ -125,26 +125,26 @@ class ArticuloExterno
 	//Implementar un método para listar los registros
 	public function listar($idlocalSession)
 	{
-		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal <> '$idlocalSession' AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,me.titulo as medida,a.talla,a.color,a.peso,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal <> '$idlocalSession' AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorParametro($idlocalSession, $param)
 	{
-		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal <> '$idlocalSession' AND $param AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,me.titulo as medida,a.talla,a.color,a.peso,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal <> '$idlocalSession' AND $param AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	//Implementar un método para listar los registros
 	public function listarPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal = '$idlocalSession' AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,me.titulo as medida,a.talla,a.color,a.peso,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE a.idlocal = '$idlocalSession' AND a.eliminado = '0' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioParametro($idlocalSession, $param)
 	{
-		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE $param AND a.eliminado = '0' AND a.idlocal = '$idlocalSession' ORDER BY a.idarticulo DESC";
+		$sql = "SELECT a.idarticulo,a.idusuario,u.nombre as usuario,u.cargo as cargo,u.cargo,a.idcategoria,c.titulo as categoria,al.titulo as local,m.titulo as marca,a.codigo,a.codigo_producto,a.nombre,a.stock,a.stock_minimo,a.descripcion,a.imagen,a.precio_compra,a.precio_venta,a.ganancia,a.comision,me.titulo as medida,a.talla,a.color,a.peso,a.estado FROM articulo a LEFT JOIN categoria c ON a.idcategoria=c.idcategoria LEFT JOIN medidas me ON a.idmedida=me.idmedida LEFT JOIN locales al ON a.idlocal=al.idlocal LEFT JOIN usuario u ON a.idusuario=u.idusuario LEFT JOIN marcas m ON a.idmarca=m.idmarca WHERE $param AND a.eliminado = '0' AND a.idlocal = '$idlocalSession' ORDER BY a.idarticulo DESC";
 		return ejecutarConsulta($sql);
 	}
 

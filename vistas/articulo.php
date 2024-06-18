@@ -140,6 +140,10 @@ if (!isset($_SESSION["nombre"])) {
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
+                      <th>Color</th>
+                      <th>Talla</th>
+                      <th>Peso</th>
+                      <th>Medida</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -161,6 +165,10 @@ if (!isset($_SESSION["nombre"])) {
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
+                      <th>Color</th>
+                      <th>Talla</th>
+                      <th>Peso</th>
+                      <th>Medida</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>

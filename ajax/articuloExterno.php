@@ -218,19 +218,23 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->nombre,
 						"3" => $reg->categoria,
 						"4" => $reg->local,
-						"5" => $reg->marca,
-						"6" => $reg->codigo_producto,
-						"7" => $reg->codigo,
-						"8" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"9" => $reg->stock_minimo,
+						"5" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
+						"6" => $reg->stock_minimo,
+						"7" => $reg->marca,
+						"8" => $reg->codigo_producto,
+						"9" => $reg->codigo,
 						"10" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
 						"11" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
 						"12" => "S/. " . number_format($reg->ganancia, 2, '.', ','),
 						"13" => "S/. " . number_format($reg->comision, 2, '.', ','),
-						"14" => $reg->usuario,
-						"15" => $cargo_detalle,
-						"16" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
-					);
+						"14" => ($reg->color != "") ? $reg->color : "Sin registrar.",
+						"15" => ($reg->talla != "") ? $reg->talla : "Sin registrar.",
+						"16" => ($reg->peso != "") ? $reg->peso : "Sin registrar.",
+						"17" => ($reg->medida != "") ? $reg->medida : "Sin registrar.",
+						"18" => $reg->usuario,
+						"19" => $cargo_detalle,
+						"20" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+							);
 				}
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
