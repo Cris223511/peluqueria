@@ -31,8 +31,9 @@ function guardaryeditar(e) {
 
 function mostrar() {
 	$.post("../ajax/confPortada.php?op=mostrar", function (datas, status) {
-		data = JSON.parse(datas);
+		var data = JSON.parse(datas);
 		console.log(data);
+		$("#imagenmuestra").show();
 
 		if (data && data !== "") {
 			$("#imagenmuestra").attr("src", "../files/portadas/" + data.imagen);

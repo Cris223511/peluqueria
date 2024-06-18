@@ -49,6 +49,7 @@ function mostrar() {
 		$("#telefono").val(data.telefono);
 		$("#email").val(data.email);
 		$("#imagenmuestra").attr("src", "../files/logo_reportes/" + data.imagen);
+		$("#imagenmuestra").show();
 		$("#imagenactual").val(data.imagen);
 	});
 }

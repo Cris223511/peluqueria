@@ -44,7 +44,7 @@
     </script>
 
     <script>
-      $('#imagen,#imagen2').on('change', function() {
+      $('#imagen, #imagen2').on('change', function() {
         const file = this.files[0];
         const maxSizeMB = 3;
         const maxSizeBytes = maxSizeMB * 1024 * 1024;
@@ -59,8 +59,9 @@
         }
 
         // Validar tipo
+        console.log("el file type es =) =>", file.type);
         if (!allowedTypes.includes(file.type)) {
-          bootbox.alert('El archivo debe ser una imagen de tipo JPG, JPEG, PNG, GIF o BMP.');
+          bootbox.alert('El archivo debe ser una imagen de tipo JPG, JPEG, PNG, JFIF o BMP.');
           $(this).val('');
           $('#imagenmuestra').attr('src', '').hide();
           return;

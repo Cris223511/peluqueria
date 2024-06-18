@@ -98,6 +98,7 @@ function mostrar() {
 		$("#login").val(data.login);
 		$("#clave").val(data.clave);
 		$("#imagenmuestra").attr("src", "../files/usuarios/" + data.imagen);
+		$("#imagenmuestra").show();
 		$("#imagenactual").val(data.imagen);
 	});
 }
