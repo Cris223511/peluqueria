@@ -36,7 +36,7 @@ $y = 2; // inicialización de variable de posición Y.
 $size = 0; // inicialización de variable de tamaño.
 
 # Encabezado y datos del ticket #
-$pdf->encabezado1(
+$y = $pdf->encabezado1(
     $y,
     $logo,
     $ext_logo,
@@ -56,16 +56,18 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-$y += 58;
+$y += 10;
 
 # Encabezado y datos del ticket #
-$pdf->encabezado2(
+$y = $pdf->encabezado2(
     $y,
     "PROVEEDOR: " . $reg1->proveedor ?? '',
     ($reg1->telefono  ?? '' != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
     $reg1->tipo_documento ?? '',
     $reg1->num_documento ?? '',
 );
+
+$y += 17.5;
 
 # Separador #
 $pdf->Ln(3);
@@ -91,8 +93,6 @@ $aligns = array(
     "DSCTO" => "R",
     "SUBTOTAL" => "R"
 );
-
-$y += 24.5;
 
 $pdf->SetFont('hypermarket', '', 8.5);
 $pdf->addCols($cols, $aligns, $y);
@@ -238,7 +238,7 @@ $pdf->Ln(1);
 $pdf->SetX(1.5);
 $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-$y += 15.5;
+$y += 23.5;
 
 # Tabla para los métodos de pago #
 $cols = array(

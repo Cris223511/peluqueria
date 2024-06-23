@@ -253,13 +253,17 @@ if (!isset($_SESSION["nombre"])) {
 					$result = $articulo->getLastCodigo($idlocal);
 				}
 
-				if (mysqli_num_rows($result) > 0) {
+				if ($result && mysqli_num_rows($result) > 0) {
 					$row = mysqli_fetch_assoc($result);
-					$last_codigo = $row["last_codigo"];
+					if ($row && !empty($row["last_codigo"])) {
+						$last_codigo = $row["last_codigo"];
+					} else {
+						$last_codigo = 'PRO0000';
+					}
 				} else {
-					$last_codigo = 'PRO0001';
+					$last_codigo = 'PRO0000';
 				}
-				echo $last_codigo;
+						echo $last_codigo;
 				break;
 
 				/* ======================= SELECTS ======================= */

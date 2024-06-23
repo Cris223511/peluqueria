@@ -71,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
         $size = 0; // inicialización de variable de tamaño.
 
         # Encabezado y datos del ticket #
-        $pdf->encabezadoCierre(
+        $y = $pdf->encabezadoCierre(
             $y,
             $logo,
             $ext_logo,
@@ -93,13 +93,13 @@ if (!isset($_SESSION["nombre"])) {
         $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
         # TÍTULO #
-        $pdf->SetY($y + 65.5);
+        $pdf->SetY($y += 8.5);
         $pdf->SetFont('hypermarket', '', 10);
         $pdf->SetTextColor(0, 0, 0);
         $pdf->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("DOCUMENTOS POR VENTA"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
         $pdf->Ln(3);
 
-        $y += 78;
+        $y += 12.5;
 
         # Tabla para los detalles de la venta #
         $cols = array(

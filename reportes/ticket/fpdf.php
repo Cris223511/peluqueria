@@ -993,7 +993,7 @@ class FPDF
 		$this->Cell(0, 5, mb_convert_encoding("$fecha_hora", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# ESTADO #
-		$this->SetXY(3, $y + 4.5);
+		$this->SetXY(3, $y += 4.5);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("Estado: $estado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
@@ -1001,29 +1001,42 @@ class FPDF
 		# LOGO #
 		$this->Image('../files/logo_reportes/' . $logo, 25, 12, 20, 20, $ext_logo);
 
-		# TIPO DE COMPROBANTE #
-		$this->SetY($y + 32);
+		# EMPRESA #
+		$this->SetY($y += 27.5);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$empresa"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# TIPO DE COMPROBANTE #
-		$this->SetY($y + 38);
+		$this->SetY($y += 6);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$tipo_comprobante"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
-		$this->SetY($y + 44);
+		$this->SetY($y += 6.8);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		$textoOriginal = "$local";
+		$anchoTotalTexto = $this->GetStringWidth($textoOriginal);
+		$anchoMaximo = 63;
+
+		if ($anchoTotalTexto > $anchoMaximo) {
+			$lineas = ceil($anchoTotalTexto / $anchoMaximo);
+			$y += ($lineas) * 4 - 4.5;
+			// $y += ($lineas) * 4 - 13;
+		}
+
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$textoOriginal"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# RUC #
-		$this->SetY($y + 48);
+		$this->SetY($y += 3);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		return $y;
 	}
 
 	function encabezado2($y, $cliente, $telefono, $tipo_documento, $num_documento)
@@ -1032,19 +1045,21 @@ class FPDF
 		$this->SetXY(3, $y);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->Cell(0, 5, mb_convert_encoding(mb_strtoupper("$cliente"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$cliente"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# TELEFONO #
-		$this->SetXY(3, $y + 4);
+		$this->SetXY(3, $y += 4);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->Cell(0, 5, mb_convert_encoding("TELÉFONO: " . ($telefono != "" ? $telefono : "SIN REGISTRAR"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->MultiCell(0, 5, mb_convert_encoding("TELÉFONO: " . ($telefono != "" ? $telefono : "SIN REGISTRAR"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# TIPO Y NÚMERO DE DOCUMENTO #
-		$this->SetXY(3, $y + 8);
+		$this->SetXY(3, $y += 4);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, ($tipo_documento != "") ? mb_convert_encoding(mb_strtoupper("$tipo_documento: $num_documento"), 'ISO-8859-1', 'UTF-8') : mb_convert_encoding("TIPO Y N° DOC. SIN REGISTRAR", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		return $y;
 	}
 
 	function cuerpo($y, $totalProductos, $totalUnidades, $textoEnMayusculas)
@@ -1072,13 +1087,13 @@ class FPDF
 		$anchoTotalTexto = $this->GetStringWidth($textoOriginal);
 		$anchoMaximo = 63;
 
-		if ($totalProductos == 0 && $totalUnidades == 0) {
-			$y -= 8;
-		}
-		if ($anchoTotalTexto > $anchoMaximo) {
+		if ($totalProductos == 0) {
+			$y += 8;
+		} else if ($anchoTotalTexto > $anchoMaximo) {
 			$lineas = ceil($anchoTotalTexto / $anchoMaximo);
-			$y += ($lineas) * 4 - 5;
-			// $y += ($lineas) * 4 - 13;
+			$y += ($lineas) * 4 - 13;
+		} else {
+			$y -= 7.5;
 		}
 
 		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper($textoOriginal), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
@@ -1228,52 +1243,64 @@ class FPDF
 		$this->Image('../files/logo_reportes/' . $logo, 25, 3, 20, 20, $ext_logo);
 
 		# TÍTULO #
-		$this->SetY($y + 23);
+		$this->SetY($y += 23);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$titulo"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# LOCAL #
-		$this->SetY($y + 29);
+		$this->SetY($y += 7);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
-		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$local"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		$textoOriginal = "$local";
+		$anchoTotalTexto = $this->GetStringWidth($textoOriginal);
+		$anchoMaximo = 59;
+
+		if ($anchoTotalTexto > $anchoMaximo) {
+			$lineas = ceil($anchoTotalTexto / $anchoMaximo);
+			$y += ($lineas) * 3 - 2;
+		}
+
+		$this->MultiCell(0, 3.5, mb_convert_encoding(mb_strtoupper("$textoOriginal"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# RUC #
-		$this->SetY($y + 33);
+		$this->SetY($y += 3);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("RUC: $local_ruc"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# FECHA Y HORA REGISTRO #
-		$this->SetY($y + 39);
+		$this->SetY($y += 5.8);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding("$fecha_hora", 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# FECHA Y HORA CIERRE #
-		$this->SetY($y + 43.5);
+		$this->SetY($y += 4.5);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding("$fecha_cierre", 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# TICKETS EMITIDOS #
-		$this->SetY($y + 49);
+		$this->SetY($y += 5.8);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("TICKETS EMITIDOS: $emitidos"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# TICKETS ANULADOS #
-		$this->SetY($y + 53);
+		$this->SetY($y += 3.8);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("TICKETS ANULADOS: $anulados"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
 
 		# TICKETS VÁLIDOS #
-		$this->SetY($y + 57);
+		$this->SetY($y += 4);
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("TICKETS VÁLIDOS: $validos"), 'ISO-8859-1', 'UTF-8'), 0, 'C', false);
+
+		return $y;
 	}
 
 	function pieCierre($y, $usuario)

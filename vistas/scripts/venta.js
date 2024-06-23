@@ -731,8 +731,8 @@ function listarTodosLosArticulos() {
 	$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
 		const obj = JSON.parse(data);
 
-		let articulo = obj.articulo;
-		let servicio = obj.servicio;
+		let articulo = obj.articulo || [];
+		let servicio = obj.servicio || [];
 
 		listarArticulos(articulo, servicio);
 	});
@@ -773,7 +773,7 @@ function listarArticulos(articulos, servicios) {
 							${labelHtml}
 							<span><strong>S/ ${articulo.precio_venta}</strong></span>
 						</div>
-						<a style="width: 100%;" onclick="verificarEmpleado('producto','${articulo.id}','${articulo.nombre}','${articulo.local}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.comision}','${articulo.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
+						<a style="width: 100%;" onclick="verificarEmpleado('producto','${articulo.id}','${articulo.nombre}','${articulo.local}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.comision}','${articulo.codigo_producto}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
 				</div>
 			`;
@@ -880,7 +880,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -899,7 +899,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -1015,7 +1015,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -1033,7 +1033,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 

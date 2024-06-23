@@ -583,6 +583,7 @@ class Reporte
 				LEFT JOIN locales al ON a.idlocal = al.idlocal
 				LEFT JOIN usuario u ON a.idusuario = u.idusuario
 				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				LEFT JOIN venta v ON dv.idventa = v.idventa
 				WHERE $condiciones
 				GROUP BY dv.idarticulo
 				ORDER BY cantidad DESC";
@@ -620,6 +621,7 @@ class Reporte
 				LEFT JOIN locales al ON a.idlocal = al.idlocal
 				LEFT JOIN usuario u ON a.idusuario = u.idusuario
 				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				LEFT JOIN venta v ON dv.idventa = v.idventa
 				WHERE a.idlocal = '$idlocal'
 				AND $condiciones
 				GROUP BY dv.idarticulo
@@ -660,6 +662,7 @@ class Reporte
 				LEFT JOIN locales al ON a.idlocal = al.idlocal
 				LEFT JOIN usuario u ON a.idusuario = u.idusuario
 				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				LEFT JOIN compra co ON dc.idcompra = co.idcompra
 				WHERE $condiciones
 				GROUP BY dc.idarticulo
 				ORDER BY cantidad DESC";
@@ -697,6 +700,7 @@ class Reporte
 				LEFT JOIN locales al ON a.idlocal = al.idlocal
 				LEFT JOIN usuario u ON a.idusuario = u.idusuario
 				LEFT JOIN marcas m ON a.idmarca = m.idmarca
+				LEFT JOIN compra co ON dc.idcompra = co.idcompra
 				WHERE a.idlocal = '$idlocal'
 				AND $condiciones
 				GROUP BY dc.idarticulo

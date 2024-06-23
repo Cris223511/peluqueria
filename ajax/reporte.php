@@ -22,7 +22,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarVentasEmpleados':
 				$parametros = array(
-					"v.eliminado = '0'"
+					"v.eliminado = '0'",
+					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -143,7 +144,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarCompras':
 				$parametros = array(
-					"c.eliminado = '0'"
+					"c.eliminado = '0'",
+					"c.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -245,7 +247,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarVentas':
 				$parametros = array(
-					"v.eliminado = '0'"
+					"v.eliminado = '0'",
+					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -349,7 +352,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarProformas':
 				$parametros = array(
-					"p.eliminado = '0'"
+					"p.eliminado = '0'",
+					"p.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -453,7 +457,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarComprasMetodosPago':
 				$parametros = array(
-					"co.eliminado = '0'"
+					"co.eliminado = '0'",
+					"co.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -556,7 +561,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarVentasMetodosPago':
 				$parametros = array(
-					"v.eliminado = '0'"
+					"v.eliminado = '0'",
+					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -661,7 +667,8 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarProformasMetodosPago':
 				$parametros = array(
-					"p.eliminado = '0'"
+					"p.eliminado = '0'",
+					"p.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -766,7 +773,9 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarArticulosMasVendidos':
 				$parametros = array(
-					"a.eliminado = '0'"
+					"a.eliminado = '0'",
+					"v.eliminado = '0'",
+					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -848,7 +857,9 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'listarArticulosMasComprados':
 				$parametros = array(
-					"a.eliminado = '0'"
+					"a.eliminado = '0'",
+					"co.eliminado = '0'",
+					"co.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {

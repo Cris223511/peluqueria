@@ -146,6 +146,7 @@ if (!isset($_SESSION["nombre"])) {
 
       .caja-productos img {
         width: 100px;
+        height: 100px;
         margin-bottom: 20px;
         border-radius: 10px;
       }
@@ -567,10 +568,10 @@ if (!isset($_SESSION["nombre"])) {
                         <!-- <a href="#"><button type="button" class="btn btn-default" style="padding-top: 4px;"><strong>%</strong></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-money"></i></button></a> -->
                         <a data-toggle="modal" href="#myModal12" onclick="limpiarModalArticulos();"><button type="button" class="btn btn-bcp"><i class="fa fa-shopping-cart"></i></button></a>
+                        <a onclick="verificarModalPrecuenta();"><button type="button" class="btn btn-warning"><i class="fa fa-book"></i></button></a>
                         <a onclick="limpiarTodo();"><button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button></a>
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-usd"></i></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-cogs"></i></button></a> -->
-                        <a onclick="verificarModalPrecuenta();"><button type="button" class="btn btn-warning"><i class="fa fa-book"></i></button></a>
                       </div>
                     </div>
                     <div id="comentarios" style="display: none;">
@@ -1148,7 +1149,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-4 col-md-6 col-sm-12">
                     <label>Local(*):</label>
-                    <select id="idlocal3" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC5()" required>
+                    <select id="idlocal3" name="idlocal" class="form-control selectpicker idlocal" data-local="0" data-live-search="true" data-size="5" onchange="actualizarRUC5()" required>
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>

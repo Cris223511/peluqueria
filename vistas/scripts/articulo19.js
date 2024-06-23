@@ -484,6 +484,7 @@ function frmDetallesVisible() {
 
 function mostrar(idarticulo) {
 	mostrarform(true);
+	frmDetalles(true);
 
 	$(".caja1").show();
 	$(".caja2").removeClass("col-lg-12 col-md-12 col-sm-12").addClass("col-lg-10 col-md-8 col-sm-12");

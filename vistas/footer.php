@@ -411,6 +411,13 @@
         campos.forEach(function(campo) {
           let numValor = $(campo).val();
           if (typeof numValor !== 'undefined') {
+            if (numValor === "") {
+              idlocal = $('select[data-local="0"]').val();
+              console.log("el idlocal actual es =) =>", idlocal);
+              actualizarCorrelativoProducto(idlocal);
+              return;
+            }
+
             numValor = numValor.trim();
             let num = numValor === '' ? siguienteCorrelativo || 0 : parseInt(numValor, 10);
             let numFormateado = num < 10000 ? num.toString().padStart(5, '0') : num.toString();
