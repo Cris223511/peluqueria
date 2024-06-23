@@ -18,9 +18,9 @@ $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 require('../modelos/Proforma.php');
 $proforma = new Proforma();
 
-$rspta1 = $proforma->listarDetallesVenta($_GET["id"]);
-$rspta2 = $proforma->listarDetallesProductoVenta($_GET["id"]);
-$rspta3 = $proforma->listarDetallesMetodosPagoVenta($_GET["id"]);
+$rspta1 = $proforma->listarDetallesVenta($_GET["id"] ?? 0);
+$rspta2 = $proforma->listarDetallesProductoVenta($_GET["id"] ?? 0);
+$rspta3 = $proforma->listarDetallesMetodosPagoVenta($_GET["id"] ?? 0);
 
 $reg1 = $rspta1->fetch_object();
 
@@ -61,7 +61,7 @@ $y += 10;
 # Encabezado y datos del ticket #
 $y = $pdf->encabezado2(
     $y,
-    "CLIENTE: " . $reg1->cliente ?? '',
+    "CLIENTE: " . ($reg1->cliente ?? ''),
     ($reg1->telefono  ?? '' != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
     $reg1->tipo_documento ?? '',
     $reg1->num_documento ?? '',

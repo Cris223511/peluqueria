@@ -18,9 +18,9 @@ $email = ($rspta["email"] == '') ? 'Sin registrar' : $rspta["email"];
 require('../modelos/Compra.php');
 $compra = new Compra();
 
-$rspta1 = $compra->listarDetallesCompra($_GET["id"]);
-$rspta2 = $compra->listarDetallesProductoCompra($_GET["id"]);
-$rspta3 = $compra->listarDetallesMetodosPagoCompra($_GET["id"]);
+$rspta1 = $compra->listarDetallesCompra($_GET["id"] ?? 0);
+$rspta2 = $compra->listarDetallesProductoCompra($_GET["id"] ?? 0);
+$rspta3 = $compra->listarDetallesMetodosPagoCompra($_GET["id"] ?? 0);
 
 $reg1 = $rspta1->fetch_object();
 
@@ -61,7 +61,7 @@ $y += 10;
 # Encabezado y datos del ticket #
 $y = $pdf->encabezado2(
     $y,
-    "PROVEEDOR: " . $reg1->proveedor ?? '',
+    "PROVEEDOR: " . ($reg1->proveedor ?? ''),
     ($reg1->telefono  ?? '' != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
     $reg1->tipo_documento ?? '',
     $reg1->num_documento ?? '',
@@ -375,6 +375,8 @@ $pdf->Image($filePath, 20, null, 30);
 unlink($filePath);
 
 # Créditos #
+$pdf->Ln(29);
+
 $pdf->creditos(
     $y,
     $empresa . "\n" .
