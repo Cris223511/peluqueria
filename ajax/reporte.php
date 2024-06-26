@@ -830,7 +830,7 @@ if (!isset($_SESSION["nombre"])) {
 									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
 						"1" => $reg->nombre,
-						"2" => $reg->cantidad,
+						"2" => $reg->total_cantidad,
 						"3" => $reg->categoria,
 						"4" => $reg->local,
 						"5" => $reg->marca,
@@ -914,7 +914,7 @@ if (!isset($_SESSION["nombre"])) {
 									<img src="../files/articulos/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
 								</a>',
 						"1" => $reg->nombre,
-						"2" => $reg->cantidad,
+						"2" => $reg->total_cantidad,
 						"3" => $reg->categoria,
 						"4" => $reg->local,
 						"5" => $reg->marca,
