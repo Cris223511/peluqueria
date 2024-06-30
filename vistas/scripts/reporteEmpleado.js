@@ -16,6 +16,12 @@ function init() {
 		$('#usuarioBuscar').selectpicker('refresh');
 	})
 
+	$.post("../ajax/personales.php?op=selectPersonales", function (r) {
+		console.log(r);
+		$("#empleadoBuscar").html(r);
+		$('#empleadoBuscar').selectpicker('refresh');
+	})
+
 	$.post("../ajax/clientes.php?op=selectClientes", function (r) {
 		console.log(r);
 		$("#clienteBuscar").html(r);
@@ -36,6 +42,7 @@ function listar() {
 	let param7 = "";
 	let param8 = "";
 	let param9 = "";
+	let param10 = "";
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -63,7 +70,7 @@ function listar() {
 			{
 				url: '../ajax/reporte.php?op=listarVentasEmpleados',
 				type: "get",
-				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9 },
+				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
 				error: function (e) {
 					console.log(e.responseText);
@@ -89,7 +96,7 @@ function listar() {
 }
 
 function resetear() {
-	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "clienteBuscar", "numDocBuscar", "numTicketBuscar", "usuarioBuscar"];
+	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "clienteBuscar", "numDocBuscar", "numTicketBuscar", "usuarioBuscar", "empleadoBuscar"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");
@@ -109,6 +116,7 @@ function buscar() {
 	let param7 = "";
 	let param8 = "";
 	let param9 = "";
+	let param10 = "";
 
 	// Obtener los selectores
 	const fecha_inicio = document.getElementById("fecha_inicio");
@@ -120,8 +128,9 @@ function buscar() {
 	const clienteBuscar = document.getElementById("clienteBuscar");
 	const numDocBuscar = document.getElementById("numDocBuscar");
 	const numTicketBuscar = document.getElementById("numTicketBuscar");
+	const empleadoBuscar = document.getElementById("empleadoBuscar");
 
-	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && clienteBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
+	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && clienteBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "" && empleadoBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
 		return;
 	}
@@ -140,6 +149,7 @@ function buscar() {
 	param7 = clienteBuscar.value;
 	param8 = numDocBuscar.value;
 	param9 = numTicketBuscar.value;
+	param10 = empleadoBuscar.value;
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -167,7 +177,7 @@ function buscar() {
 			{
 				url: '../ajax/reporte.php?op=listarVentasEmpleados',
 				type: "get",
-				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9 },
+				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
 				error: function (e) {
 					console.log(e.responseText);

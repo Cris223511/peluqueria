@@ -124,17 +124,22 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="FACTURA">FACTURA</option>
                     </select>
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Local:</label>
                     <select id="localBuscar" name="localBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     </select>
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Usuario:</label>
                     <select id="usuarioBuscar" name="usuarioBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     </select>
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
+                    <label>Empleado:</label>
+                    <select id="empleadoBuscar" name="empleadoBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                    </select>
+                  </div>
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Estado:</label>
                     <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-size="5">
                       <option value="">- Seleccione -</option>

@@ -334,8 +334,8 @@ class Caja
 		$sql = "SELECT
 					mp.titulo AS metodo_pago,
 					SUM(dvp.monto) AS monto_total,
-					v.vuelto AS vuelto,
-					v.idventa
+					GROUP_CONCAT(DISTINCT v.vuelto) AS vuelto,
+					GROUP_CONCAT(DISTINCT v.idventa) AS idventa
 				FROM detalle_venta_pagos dvp
 				LEFT JOIN metodo_pago mp ON dvp.idmetodopago = mp.idmetodopago
 				LEFT JOIN venta v ON dvp.idventa = v.idventa
@@ -347,7 +347,7 @@ class Caja
 					AND cc.idcaja_cerrada = '$idcaja_cerrada'
 					AND dv.fecha_hora BETWEEN cc.fecha_hora AND cc.fecha_cierre
 				)
-				GROUP BY mp.titulo, v.vuelto, v.idventa
+				GROUP BY mp.titulo
 				ORDER BY dvp.iddetalle_venta_pago ASC;";
 
 		return ejecutarConsulta($sql);

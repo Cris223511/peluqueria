@@ -389,7 +389,7 @@ function limpiar() {
 
 	listarDatos();
 
-	$("#comisionar").val(1);
+	$("#comisionar").val(2);
 	$("#comisionar").selectpicker("refresh");
 
 	$("#detalles tbody").empty();

@@ -118,8 +118,7 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idpersonal . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idpersonal . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idpersonal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idpersonal . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idpersonal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idpersonal . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => ucwords($reg->nombre),
@@ -146,6 +145,19 @@ if (!isset($_SESSION["nombre"])) {
 				);
 
 				echo json_encode($results);
+				break;
+
+			case 'selectPersonales':
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
+					$rspta = $personales->listarPersonales();
+				} else {
+					$rspta = $personales->listarPersonalesPorUsuario($idlocal_session);
+				}
+
+				echo '<option value="">- Seleccione -</option>';
+				while ($reg = $rspta->fetch_object()) {
+					echo '<option value="' . $reg->nombre . '"> ' . $reg->nombre . '</option>';
+				}
 				break;
 		}
 	} else {

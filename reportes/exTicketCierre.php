@@ -514,7 +514,7 @@ if (!isset($_SESSION["nombre"])) {
         # TOTAL #
         $lineTotal = array(
             mb_convert_encoding(mb_strtoupper("DESCRIPCIÓN"), 'ISO-8859-1', 'UTF-8') => "",
-            "FECHA Y HORA" => "TOTAL",
+            "FECHA Y HORA" => "TOTAL DE CAJA FINAL",
             "MONTO INICIAL" => number_format($monto_total, 2),
         );
 

@@ -38,7 +38,8 @@ if (!isset($_SESSION["nombre"])) {
 					"param6" => "v.estado = '{$_GET["param6"]}'",
 					"param7" => "c.nombre LIKE '%{$_GET["param7"]}%'",
 					"param8" => "c.num_documento = '{$_GET["param8"]}'",
-					"param9" => "v.num_comprobante = '{$_GET["param9"]}'"
+					"param9" => "v.num_comprobante = '{$_GET["param9"]}'",
+					"param10" => "p.nombre LIKE '%{$_GET["param10"]}%'",
 				);
 
 				foreach ($filtros as $param => $condicion) {

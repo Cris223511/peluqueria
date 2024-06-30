@@ -395,7 +395,7 @@ function limpiar() {
 
 	listarDatos();
 
-	$("#comisionar").val(1);
+	$("#comisionar").val(2);
 	$("#comisionar").selectpicker("refresh");
 
 	$("#detalles tbody").empty();
@@ -1004,6 +1004,9 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('oninput', 'checkDNI(this)');
 	$('#idcliente').closest('.form-group').find('.dropdown-menu.open').addClass('idclienteInput');
+
+	$("#idcliente").val(0);
+	$("#idcliente").selectpicker("refresh");
 
 	colocarNegritaStocksSelects();
 }
