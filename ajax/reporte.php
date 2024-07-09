@@ -146,7 +146,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarCompras':
 				$parametros = array(
 					"c.eliminado = '0'",
-					"c.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -249,7 +248,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarVentas':
 				$parametros = array(
 					"v.eliminado = '0'",
-					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -354,7 +352,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarProformas':
 				$parametros = array(
 					"p.eliminado = '0'",
-					"p.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -459,7 +456,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarComprasMetodosPago':
 				$parametros = array(
 					"co.eliminado = '0'",
-					"co.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -563,7 +559,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarVentasMetodosPago':
 				$parametros = array(
 					"v.eliminado = '0'",
-					"v.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {
@@ -669,7 +664,6 @@ if (!isset($_SESSION["nombre"])) {
 			case 'listarProformasMetodosPago':
 				$parametros = array(
 					"p.eliminado = '0'",
-					"p.estado <> 'Anulado'",
 				);
 
 				if ($cargo != "superadmin") {

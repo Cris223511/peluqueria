@@ -211,7 +211,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'consultaSunat':
 				// Token para la API
-				$token = 'apis-token-8814.1Tq4Gy-yKM7ZSWPx6eQC0feuDpVKbuEZ';
+				$token = 'apis-token-9398.CgMfcskFz1G61BmjTE6j4lt8mXwqhxwL';
 
 				$data = "";
 				$curl = curl_init();

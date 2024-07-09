@@ -459,9 +459,6 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="FINALIZADO">FINALIZADO</option>
                       <option value="ENTREGADO">ENTREGADO</option>
                       <option value="ANULADO">ANULADO</option>
-                      <option value="INICIADO">INICIADO</option>
-                      <option value="POR ENTREGAR">POR ENTREGAR</option>
-                      <option value="EN TRANSCURSO">EN TRANSCURSO</option>
                     </select>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">
@@ -1167,22 +1164,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="panel-body">
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
               <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">INICIADO</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
                 <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">ENTREGADO</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">POR ENTREGAR</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">EN TRANSCURSO</button>
               </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">

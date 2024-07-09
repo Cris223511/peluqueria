@@ -218,7 +218,7 @@ if (!isset($_SESSION["nombre"])) {
 
 			case 'consultaSunat':
 				// Token para la API
-				$token = 'apis-token-8814.1Tq4Gy-yKM7ZSWPx6eQC0feuDpVKbuEZ';
+				$token = 'apis-token-9398.CgMfcskFz1G61BmjTE6j4lt8mXwqhxwL';
 
 				$data = "";
 				$curl = curl_init();
@@ -267,8 +267,13 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					if (stripos($response, 'Not Found') !== false || stripos($response, '{"message":"ruc no valido"}') !== false) {
+						// Mensaje para DNI no válido o RUC no válido
 						$data = (strlen($sunat) == 8) ? "DNI no valido" : "RUC no valido";
+					} elseif (stripos($response, '{"message":"Superaste el limite permitido por tu token"}') !== false) {
+						// Mensaje cuando se supera el límite de consultas a la SUNAT
+						$data = "Acaba de superar el límite de 1000 consultas a la SUNAT este mes";
 					} else {
+						// Respuesta válida de la API
 						$data = $response;
 					}
 				} catch (Exception $e) {

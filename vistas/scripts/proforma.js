@@ -124,6 +124,14 @@ function init() {
 		$('#idmedida').closest('.form-group').find('input[type="text"]').attr('maxlength', '40');
 
 		actualizarRUC5();
+
+		var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+		$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+		$("#comisionar").on('change', function () {
+			localStorage.setItem('comisionarValor', $(this).val());
+		});
 	});
 
 }
@@ -389,8 +397,13 @@ function limpiar() {
 
 	listarDatos();
 
-	$("#comisionar").val(2);
-	$("#comisionar").selectpicker("refresh");
+	var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+	$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+	$("#comisionar").on('change', function () {
+		localStorage.setItem('comisionarValor', $(this).val());
+	});
 
 	$("#detalles tbody").empty();
 	$("#inputsMontoMetodoPago").empty();
@@ -999,6 +1012,14 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	$('#idcliente').closest('.form-group').find('input[type="text"]').attr('oninput', 'checkDNI(this)');
 	$('#idcliente').closest('.form-group').find('.dropdown-menu.open').addClass('idclienteInput');
+
+	var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+	$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+	$("#comisionar").on('change', function () {
+		localStorage.setItem('comisionarValor', $(this).val());
+	});
 
 	colocarNegritaStocksSelects();
 }

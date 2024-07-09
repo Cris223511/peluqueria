@@ -1,6 +1,6 @@
 <?php
 // Datos
-$token = 'apis-token-8814.1Tq4Gy-yKM7ZSWPx6eQC0feuDpVKbuEZ';
+$token = 'apis-token-9398.CgMfcskFz1G61BmjTE6j4lt8mXwqhxwL';
 $dni = '71798440';
 
 // Iniciar llamada a API

@@ -131,6 +131,14 @@ function init() {
 		$('#idmedida').closest('.form-group').find('input[type="text"]').attr('maxlength', '40');
 
 		actualizarRUC5();
+
+		var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+		$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+		$("#comisionar").on('change', function () {
+			localStorage.setItem('comisionarValor', $(this).val());
+		});
 	});
 }
 
@@ -395,8 +403,13 @@ function limpiar() {
 
 	listarDatos();
 
-	$("#comisionar").val(2);
-	$("#comisionar").selectpicker("refresh");
+	var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+	$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+	$("#comisionar").on('change', function () {
+		localStorage.setItem('comisionarValor', $(this).val());
+	});
 
 	$("#detalles tbody").empty();
 	$("#inputsMontoMetodoPago").empty();
@@ -1410,7 +1423,7 @@ function buscarSunat(e) {
 		success: function (datos) {
 			datos = limpiarCadena(datos);
 			console.log(datos);
-			if (datos == "DNI no valido" || datos == "RUC no valido") {
+			if (datos == "DNI no valido" || datos == "RUC no valido" || datos == "Acaba de superar el límite de 1000 consultas a la SUNAT este mes") {
 				limpiarModalClientes();
 				bootbox.confirm(datos + ", ¿deseas crear un cliente manualmente?", function (result) {
 					if (result) {

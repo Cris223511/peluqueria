@@ -459,9 +459,6 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="FINALIZADO">FINALIZADO</option>
                       <option value="ENTREGADO">ENTREGADO</option>
                       <option value="ANULADO">ANULADO</option>
-                      <option value="INICIADO">INICIADO</option>
-                      <option value="POR ENTREGAR">POR ENTREGAR</option>
-                      <option value="EN TRANSCURSO">EN TRANSCURSO</option>
                     </select>
                   </div>
                   <div class="col-lg-3 col-md-3 col-sm-12 col-xs-12" style="padding: 5px; margin: 0;">

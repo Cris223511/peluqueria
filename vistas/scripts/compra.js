@@ -123,6 +123,14 @@ function init() {
 		$('#idmedida').closest('.form-group').find('input[type="text"]').attr('maxlength', '40');
 
 		actualizarRUC5();
+
+		var comisionarValor = localStorage.getItem('comisionarValor') || '2';
+
+		$("#comisionar").val(comisionarValor).selectpicker("refresh");
+
+		$("#comisionar").on('change', function () {
+			localStorage.setItem('comisionarValor', $(this).val());
+		});
 	});
 }
 
@@ -876,6 +884,9 @@ function listarSelects(articulos, servicios, proveedores, locales) {
 	$('#idproveedor').closest('.form-group').find('input[type="text"]').attr('onkeydown', 'checkEnter(event)');
 	$('#idproveedor').closest('.form-group').find('input[type="text"]').attr('oninput', 'checkDNI(this)');
 	$('#idproveedor').closest('.form-group').find('.dropdown-menu.open').addClass('idproveedorInput');
+
+	$("#idproveedor").val(0);
+	$("#idproveedor").selectpicker("refresh");
 
 	colocarNegritaStocksSelects();
 }
@@ -2094,7 +2105,7 @@ function agregarDetalle(tipoproducto, idarticulo, nombre, local, stock, precio_c
 			'</tr>';
 
 		var fila2 = '<tr class="filas fila' + cont + ' principal2">' +
-			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '">' + codigo + '</td>' +
+			'<td class="nowrap-cell" style="text-align: start !important;"><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '">' + codigo + '</td>' +
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td style="text-align: start !important;"><strong>' + capitalizarTodasLasPalabras(local) + '</strong></td>' +
 			'<td style="text-align: start !important;">' + (tipoproducto == "producto" ? stock : "") + '</td>' +
