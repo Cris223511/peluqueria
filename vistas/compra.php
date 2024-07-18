@@ -1071,22 +1071,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="panel-body">
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
               <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">INICIADO</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
                 <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">ENTREGADO</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">POR ENTREGAR</button>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
-              <div style="margin: 5px;">
-                <button class="btn btn-secondary" style="font-weight: bold; width: 100%; text-align: center;" type="button">EN TRANSCURSO</button>
               </div>
             </div>
             <div class="col-lg-4 col-md-6 col-sm-6" style="padding: 0;">
