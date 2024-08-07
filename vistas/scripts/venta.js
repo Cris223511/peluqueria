@@ -2,6 +2,9 @@ var tabla;
 let lastNumComp = 0;
 let idCajaFinal = 0;
 
+let moneda = $("#moneda").val();
+let valor_dolar = 0.27;
+
 var idlocal = 0;
 
 inicializeGLightbox();
@@ -415,7 +418,7 @@ function limpiar() {
 	$("#inputsMontoMetodoPago").empty();
 	$("#inputsMetodoPago").empty();
 
-	$("#total_venta_valor").html("S/. 0.00");
+	$("#total_venta_valor").html((moneda === 'dolares') ? "0.00 $" : "S/. 0.00");
 	$("#tipo_comprobante").val("NOTA DE VENTA");
 	$("#tipo_comprobante").selectpicker('refresh');
 
@@ -759,7 +762,6 @@ function listarArticulosPorCategoria(idcategoria) {
 		listarArticulos(articulos, []);
 	});
 }
-
 function listarArticulos(articulos, servicios) {
 	$("#productos").empty();
 	let productosContainer = $("#productos");
@@ -767,8 +769,11 @@ function listarArticulos(articulos, servicios) {
 	if ((articulos.length > 0 || servicios.length > 0) && !(articulos.length === 0 && servicios.length === 0)) {
 		articulos.forEach((articulo) => {
 
-			articulo.stock = +articulo.stock; // Convierte a número
-			articulo.stock_minimo = +articulo.stock_minimo; // Convierte a número
+			articulo.stock = +articulo.stock;
+			articulo.stock_minimo = +articulo.stock_minimo;
+
+			// Formatear precios
+			let precioVentaFormateado = (moneda === 'dolares') ? articulo.precio_venta + ' $' : 'S/ ' + articulo.precio_venta;
 
 			var stockHtml = (articulo.stock > 0 && articulo.stock < articulo.stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' + articulo.stock + '</span>' : ((articulo.stock != '0') ? '<span style="color: #00a65a; font-weight: bold">' + articulo.stock + '</span>' : '<span style="color: red; font-weight: bold">' + articulo.stock + '</span>');
 			var labelHtml = (articulo.stock > 0 && articulo.stock < articulo.stock_minimo) ? '<span class="label bg-orange" style="width: min-content;">agotandose</span>' : ((articulo.stock != '0') ? '<span class="label bg-green" style="width: min-content;">Disponible</span>' : '<span class="label bg-red" style="width: min-content;">agotado</span>');
@@ -784,7 +789,7 @@ function listarArticulos(articulos, servicios) {
 						<div class="subcaja-gris">
 							<span>STOCK: <strong>${stockHtml}</strong></span>
 							${labelHtml}
-							<span><strong>S/ ${articulo.precio_venta}</strong></span>
+							<span><strong>${precioVentaFormateado}</strong></span>
 						</div>
 						<a style="width: 100%;" onclick="verificarEmpleado('producto','${articulo.id}','${articulo.nombre}','${articulo.local}','${articulo.stock}','${articulo.precio_compra}','${articulo.precio_venta}','${articulo.comision}','${articulo.codigo_producto}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
@@ -795,6 +800,10 @@ function listarArticulos(articulos, servicios) {
 		});
 
 		servicios.forEach((servicio) => {
+
+			// Formatear precios
+			let precioVentaFormateado = (moneda === 'dolares') ? servicio.precio_venta + ' $' : 'S/ ' + servicio.precio_venta;
+
 			let html = `
 					<div class="draggable" style="padding: 10px; width: 180px;">
 						<div class="caja-productos">
@@ -806,7 +815,7 @@ function listarArticulos(articulos, servicios) {
 							<div class="subcaja-gris">
 								<span><strong>ㅤ</strong></span>
 								<span class="label bg-green" style="width: min-content;">Disponible</span>
-								<span><strong>S/ ${servicio.precio_venta}</strong></span>
+								<span><strong>${precioVentaFormateado}</strong></span>
 							</div>
 							<a style="width: 100%;" onclick="verificarEmpleado('servicio','${servicio.id}','${servicio.nombre}','Sin registrar','${servicio.stock}','${servicio.precio_compra}','${servicio.precio_venta}','${servicio.comision}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 						</div>
@@ -1646,7 +1655,8 @@ function verificarModalPrecuenta() {
 		return;
 	}
 
-	let totalVenta = parseFloat($("#total_venta_valor").text().replace('S/. ', '').replace(',', ''));
+	let totalVenta = parseFloat($("#total_venta_valor").text().replace(moneda === 'dolares' ? ' $' : 'S/. ', '').replace(',', ''));
+
 	if (totalVenta <= 0) {
 		bootbox.alert("El total de venta no puede ser negativo o igual a cero.");
 		return;
@@ -1678,7 +1688,7 @@ function mostrarDatosModalPrecuenta() {
 
 	$("#igv").val("0.00");
 
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal.toFixed(2));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? descuentoFinal.toFixed(2) + ' $' : 'S/. ' + descuentoFinal.toFixed(2)));
 
 	totalTemp = 0;
 	totalOriginalBackup = 0;
@@ -1722,7 +1732,7 @@ function verificarCantidadArticulos(param) {
 }
 
 function actualizarVuelto() {
-	var totalAPagar = parseFloat($('.totalFinal1').text().replace('TOTAL A PAGAR: S/. ', ''));
+	var totalAPagar = parseFloat($('.totalFinal1').text().replace(moneda === 'dolares' ? 'TOTAL A PAGAR: ' : 'TOTAL A PAGAR: S/. ', '').replace(moneda === 'dolares' ? ' $' : '', ''));
 	var sumaMontosMetodoPago = 0;
 
 	$('#montoMetodoPago input[type="number"]').each(function () {
@@ -1739,7 +1749,7 @@ let totalOriginalBackup = 0;  // Variable para guardar el valor original
 
 function actualizarIGV(igv) {
 	let textoTotal = $(".totalFinal1").text();
-	let numeroTotal = textoTotal.match(/S\/\. (\d+\.\d+)/);
+	let numeroTotal = textoTotal.match(moneda === 'dolares' ? /(\d+\.\d+) \$/ : /S\/\. (\d+\.\d+)/);
 
 	if (numeroTotal && numeroTotal.length > 1) {
 		totalOriginal = parseFloat(numeroTotal[1]);
@@ -1760,8 +1770,8 @@ function actualizarIGV(igv) {
 		totalTemp = totalOriginalBackup;  // Restablece totalTemp al valor original
 	}
 
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + Number(totalVenta).toFixed(2));
-	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + Number(totalVenta).toFixed(2));
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? Number(totalVenta).toFixed(2) + ' $' : 'S/. ' + Number(totalVenta).toFixed(2)));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? Number(totalVenta).toFixed(2) + ' $' : 'S/. ' + Number(totalVenta).toFixed(2)));
 
 	actualizarVuelto();
 }
@@ -1833,9 +1843,9 @@ function guardaryeditar7(e) {
 
 function limpiarModalPrecuenta() {
 	$("#clienteFinal").html("");
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. 0.00');
-	$(".totalFinal2").html('OP. GRAVADAS: S/. 0.00');
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. 0.00');
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
 	$("#detallesProductosPrecuenta tbody").empty();
 	$("#montoMetodoPago").empty();
 
@@ -2358,7 +2368,7 @@ function modificarSubototales() {
 	console.log("Total Venta: ", totalVenta);
 	console.log("Total Descuento: ", descuentoFinal);
 
-	$("#total_venta_valor").html("S/. " + totalVenta.toFixed(2));
+	$("#total_venta_valor").html((moneda === 'dolares') ? totalVenta.toFixed(2) + " $" : "S/. " + totalVenta.toFixed(2));
 	evaluar();
 }
 
@@ -2390,12 +2400,11 @@ function modificarSubototales2() {
 	console.log("Total Venta: ", totalVenta);
 	console.log("Total Descuento: ", descuentoFinal2);
 
-
 	totalOriginal = totalVenta;
 
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + totalVenta.toFixed(2));
-	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + totalVenta.toFixed(2));
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal2.toFixed(2));
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? totalVenta.toFixed(2) + ' $' : 'S/. ' + totalVenta.toFixed(2)));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? totalVenta.toFixed(2) + ' $' : 'S/. ' + totalVenta.toFixed(2)));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? descuentoFinal2.toFixed(2) + ' $' : 'S/. ' + descuentoFinal2.toFixed(2)));
 
 	actualizarVuelto();
 

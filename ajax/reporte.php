@@ -56,9 +56,11 @@ if (!isset($_SESSION["nombre"])) {
 
 				$lastIdVenta = null;
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
 				$ventasUnicas = array();
 				$hayDatos = true;
+
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -100,13 +102,19 @@ if (!isset($_SESSION["nombre"])) {
 						"7" => $reg->tipo_comprobante,
 						"8" => 'N° ' . $reg->num_comprobante,
 						"9" => $reg->total_venta,
-						"10" => $reg->usuario . ' - ' . $cargo_detalle,
-						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"10" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"11" => $reg->usuario . ' - ' . $cargo_detalle,
+						"12" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
 					if (!isset($ventasUnicas[$reg->idventa])) {
 						$ventasUnicas[$reg->idventa] = true;
-						$totalPrecioVenta += $reg->total_venta;
+
+						if ($reg->moneda == 'soles') {
+							$totalPrecioVentaSoles += $reg->total_venta;
+						} else {
+							$totalPrecioVentaDolares += $reg->total_venta;
+						}
 					}
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -124,10 +132,27 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => "",
 						"6" => "",
 						"7" => "",
-						"8" => "<strong>TOTAL</strong>",
-						"9" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"8" => "<strong>TOTAL EN SOLES</strong>",
+						"9" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"10" => "",
 						"11" => "",
+						"12" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "<strong>TOTAL EN DÓLARES</strong>",
+						"9" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"10" => "",
+						"11" => "",
+						"12" => "",
 					);
 				}
 
@@ -177,7 +202,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalPrecioCompra = 0;
+				$totalPrecioCompraSoles = 0;
+				$totalPrecioCompraDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -210,11 +236,17 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
 						"7" => $reg->total_compra,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioCompra += $reg->total_compra;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioCompraSoles += $reg->total_compra;
+					} else {
+						$totalPrecioCompraDolares += $reg->total_compra;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -226,10 +258,25 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioCompra, 2) . '</strong>',
+						"6" => "<strong>TOTAL EN SOLES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioCompraSoles, 2) . '</strong>',
 						"8" => "",
 						"9" => "",
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL EN DÓLARES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioCompraDolares, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+						"10" => "",
 					);
 				}
 
@@ -279,7 +326,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -313,11 +361,17 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => $reg->tipo_comprobante,
 						"7" => 'N° ' . $reg->num_comprobante,
 						"8" => $reg->total_venta,
-						"9" => $reg->usuario . ' - ' . $cargo_detalle,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"9" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -330,10 +384,26 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => "",
 						"5" => "",
 						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "<strong>TOTAL EN SOLES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"9" => "",
 						"10" => "",
+						"11" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL EN DÓLARES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 
@@ -383,7 +453,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -417,11 +488,17 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => $reg->tipo_comprobante,
 						"7" => 'N° ' . $reg->num_comprobante,
 						"8" => $reg->total_venta,
-						"9" => $reg->usuario . ' - ' . $cargo_detalle,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"9" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -434,10 +511,26 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => "",
 						"5" => "",
 						"6" => "",
-						"7" => "<strong>TOTAL</strong>",
-						"8" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"7" => "<strong>TOTAL EN SOLES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"9" => "",
 						"10" => "",
+						"11" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL EN DÓLARES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 

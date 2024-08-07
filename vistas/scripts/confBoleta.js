@@ -44,6 +44,7 @@ function mostrar() {
 		$("#idreporte").val(data.idreporte);
 		$("#titulo").val(data.titulo);
 		$("#auspiciado").val(data.auspiciado);
+		$("#moneda").val(data.moneda);
 		$("#ruc").val(data.ruc);
 		$("#direccion").val(data.direccion);
 		$("#telefono").val(data.telefono);

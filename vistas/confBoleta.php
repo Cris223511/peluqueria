@@ -64,6 +64,14 @@ if (!isset($_SESSION["nombre"])) {
                       <input type="hidden" name="imagenactual" id="imagenactual"><br>
                       <img src="" width="150px" id="imagenmuestra" style="display: none;">
                     </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                      <label>Tipo de cambio:</label>
+                      <select name="moneda" id="moneda" class="form-control" required>
+                        <option value="">- Seleccione -</option>
+                        <option value="soles">Soles</option>
+                        <option value="dolares">Dólares</option>
+                      </select>
+                    </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0;">
                       <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>
                     </div>

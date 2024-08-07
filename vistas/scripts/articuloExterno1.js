@@ -2,8 +2,8 @@ var tabla;
 
 var idlocal = 0;
 
-function actualizarCorrelativo(idlocal) {
-	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal.value }, function (num) {
+function actualizarCorrelativoProducto(idlocal) {
+	$.post("../ajax/articuloExterno.php?op=getLastCodigo", { idlocal: idlocal }, function (num) {
 		console.log(num);
 		const partes = num.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
 
@@ -79,6 +79,9 @@ function init() {
 		$('#idmedida').closest('.form-group').find('input[type="text"]').attr('maxlength', '40');
 
 		actualizarRUC();
+
+		idlocal = $("#idlocal").val();
+		actualizarCorrelativoProducto(idlocal);
 	});
 }
 
@@ -280,8 +283,13 @@ function limpiar() {
 	$("#idmedida").selectpicker('refresh');
 	actualizarRUC();
 
+	idlocal = $("#idlocal").val();
+	actualizarCorrelativoProducto(idlocal);
+
 	$(".btn1").show();
 	$(".btn2").hide();
+
+	detenerEscaneo();
 }
 
 //Función mostrar formulario
@@ -380,7 +388,7 @@ function listar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -435,6 +443,9 @@ function guardaryeditar(e) {
 	for (let key in detalles) {
 		formData.append(key, detalles[key]);
 	}
+
+	idlocal = $("#idlocal").val();
+	actualizarCorrelativoProducto(idlocal);
 
 	$.ajax({
 		url: "../ajax/articuloExterno.php?op=guardaryeditar",
@@ -528,8 +539,6 @@ function mostrar(idarticulo) {
 		$("#idarticulo").val(data.idarticulo);
 		generarbarcode(0);
 		actualizarRUC();
-
-		$("#idlocal").attr("onchange", "actualizarRUC(); actualizarCorrelativo(this);");
 	})
 }
 
@@ -688,7 +697,7 @@ function buscar() {
 			"iDisplayLength": 5,//Paginación
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -697,11 +706,13 @@ var quaggaIniciado = false;
 
 function escanear() {
 
+	// Intentar acceder a la cámara
 	navigator.mediaDevices.getUserMedia({ video: true })
 		.then(function (stream) {
 			$(".btn1").hide();
 			$(".btn2").show();
 
+			// Acceso a la cámara exitoso, inicializa Quagga
 			Quagga.init({
 				inputStream: {
 					name: "Live",

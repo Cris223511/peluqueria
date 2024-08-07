@@ -58,10 +58,10 @@ $pdf->encabezado(
 $y += 67;
 
 # Separador #
-$pdf->SetDrawColor(241, 210, 76);
+$pdf->SetDrawColor(0, 112, 186);
 $pdf->SetLineWidth(1);
 $pdf->Line(15, $y, 195, $y);
-$pdf->SetFillColor(241, 210, 76);
+$pdf->SetFillColor(0, 112, 186);
 $pdf->Circle(195, $y, 2, 'F');
 
 # Datos del proveedor #
@@ -71,16 +71,17 @@ $y = $pdf->proveedor(
   ($reg1->telefono != "") ? number_format($reg1->telefono, 0, '', ' ') : '',
   $reg1->tipo_documento ?? '',
   $reg1->num_documento ?? '',
+  $reg1->moneda ?? '',
   $reg1->fecha_hora ?? '',
   $reg1->impuesto ?? '',
   $reg1->comentario_externo ?? '',
 );
 
 # Separador #
-$pdf->SetDrawColor(241, 210, 76);
+$pdf->SetDrawColor(0, 112, 186);
 $pdf->SetLineWidth(1);
 $pdf->Line(15, $y, 195, $y);
-$pdf->SetFillColor(241, 210, 76);
+$pdf->SetFillColor(0, 112, 186);
 $pdf->Circle(195, $y, 2, 'F');
 
 $pdf->SetDrawColor(255, 255, 255);
@@ -218,10 +219,10 @@ $pdf->addLineFormat($lineTotal);
 $y += 6;
 
 # Separador #
-$pdf->SetDrawColor(241, 210, 76);
+$pdf->SetDrawColor(0, 112, 186);
 $pdf->SetLineWidth(1);
 $pdf->Line(15, $y, 195, $y);
-$pdf->SetFillColor(241, 210, 76);
+$pdf->SetFillColor(0, 112, 186);
 $pdf->Circle(195, $y, 2, 'F');
 
 $y += 5;
@@ -233,7 +234,12 @@ $total_compra = $reg1->total_compra ?? 0.00;
 $izquierda = floor($total_compra);
 $derecha = round(($total_compra - $izquierda) * 100);
 
-$texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+if ($reg1->moneda === 'dolares') {
+  $texto = $formatterES->format($izquierda) . " DÓLARES CON " . $formatterES->format($derecha) . " CENTAVOS";
+} else {
+  $texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+}
+
 $textoEnMayusculas = mb_strtoupper($texto, 'UTF-8');
 
 $y = $pdf->cuerpo(
@@ -246,10 +252,10 @@ $y = $pdf->cuerpo(
 $y += 8;
 
 # Separador #
-$pdf->SetDrawColor(241, 210, 76);
+$pdf->SetDrawColor(0, 112, 186);
 $pdf->SetLineWidth(1);
 $pdf->Line(15, $y, 195, $y);
-$pdf->SetFillColor(241, 210, 76);
+$pdf->SetFillColor(0, 112, 186);
 $pdf->Circle(195, $y, 2, 'F');
 
 $pdf->SetDrawColor(255, 255, 255);

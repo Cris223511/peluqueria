@@ -75,7 +75,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Productos Externos
-                  <!-- <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button> -->
+                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -183,7 +183,7 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="form-group col-lg-4 col-md-6 col-sm-12" style="margin: 0; padding: 0;">
                         <div class="form-group col-lg-6 col-md-6 col-sm-6">
                           <label>Código(*):</label>
-                          <input type="text" class="form-control" id="cod_part_1" maxlength="10" placeholder="PRO" onblur="convertirMayus(this)" required>
+                          <input type="text" class="form-control" id="cod_part_1" maxlength="10" placeholder="PRO" onblur="convertirMayus()" required>
                         </div>
                         <div class="form-group col-lg-6 col-md-6 col-sm-6">
                           <label id="label">ㅤ</label>
@@ -205,7 +205,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-4 col-md-6 col-sm-12">
                         <label>Local(*):</label>
-                        <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC()" required>
+                        <select id="idlocal" name="idlocal" class="form-control selectpicker idlocal" data-live-search="true" data-size="5" onchange="actualizarRUC(); actualizarCorrelativoProducto(this.value);" required>
                           <option value="">- Seleccione -</option>
                         </select>
                       </div>

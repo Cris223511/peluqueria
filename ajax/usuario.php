@@ -321,6 +321,11 @@ switch ($_GET["op"]) {
 			$_SESSION['clave'] = $fetch->clave;
 			$_SESSION['cargo'] = $fetch->cargo;
 
+			require('../modelos/Perfiles.php');
+			$perfil = new Perfiles();
+			$rspta = $perfil->mostrarReporte();
+			$_SESSION['moneda'] = $rspta["moneda"];
+
 			switch ($_SESSION['cargo']) {
 				case 'superadmin':
 					$_SESSION['cargo_detalle'] = "Superadministrador";

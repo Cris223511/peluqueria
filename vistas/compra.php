@@ -468,7 +468,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Compra (S/.)</th>
+                      <th>Total Compra</th>
+                      <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -482,7 +483,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Almacén</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Compra (S/.)</th>
+                      <th>Total Compra</th>
+                      <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
                       <th>Estado</th>
@@ -494,6 +496,7 @@ if (!isset($_SESSION["nombre"])) {
 
             <div class="panel-body" id="formularioregistros" style="background-color: #ecf0f5 !important; padding-left: 0 !important; padding-top: 0 !important; padding-right: 0 !important;">
               <form name="formulario" id="formulario" method="POST">
+                <input type="hidden" name="moneda" id="moneda" value="<?php echo $_SESSION["moneda"] ?>">
                 <div class="form-group col-lg-12 col-md-12 col-sm-12" style="background-color: #1d262b; padding: 10px; padding-bottom: 5px; margin: 0;">
                   <div style="display: flex; padding: 0; margin: 0; flex-wrap: wrap;">
                     <div class="form-group col-lg-2 col-md-4 col-sm-4" style="padding-bottom: 5px !important; padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
@@ -516,11 +519,11 @@ if (!isset($_SESSION["nombre"])) {
                     <a data-toggle="modal" href="#myModal4"><button class="btn btn-primary" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;">CARNET EXTRANJERÍA</button></a>
                     <div style="padding-left: 0 !important; padding-right: 5px !important; margin: 0 !important;">
                       <select name="tipo_comprobante" id="tipo_comprobante" class="form-control selectpicker" style="padding: 0 !important; margin: 0 !important;" required>
-                        <option value="BOLETA DE COMPRA">BOLETA DE COMPRA</option>
+                        <option value="ORDEN DE COMPRA">ORDEN DE COMPRA</option>
                         <option value="FACTURA">FACTURA</option>
                       </select>
                     </div>
-                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_compra"><span id="total_compra_valor">s/. 0.00</span></button>
+                    <button type="button" class="btn btn-danger" style="height: 33.6px; margin-right: 5px; margin-bottom: 5px;" id="total_compra"><span id="total_compra_valor"><?php echo ($_SESSION["moneda"] === 'dolares') ? '0.00 $' : 'S/. 0.00'; ?></span></button>
                     <button type="button" class="btn btn-success" style="height: 33.6px; margin-bottom: 5px;" onclick="listarTodosLosArticulos();"><i class="fa fa-refresh"></i></button>
                   </div>
                 </div>
@@ -872,7 +875,7 @@ if (!isset($_SESSION["nombre"])) {
               <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; padding-top: 15px;">
                 <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 5px 10px; font-weight: bold; text-align: center; display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center;">
-                    <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">IGV: S/</h5>
+                    <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">IGV: <?php echo ($_SESSION["moneda"] === 'dolares') ? '$' : 'S/'; ?></h5>
                     <select id="igv" style="height: 28px; padding: 4px 10px; width: 100px;" class="form-control" data-size="2" onchange="actualizarIGV(this);">
                       <option value="0.00">0.00</option>
                       <option value="0.18">0.18</option>
@@ -978,7 +981,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">BOLETA DE COMPRA: <span id="boleta" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">ORDEN DE COMPRA: <span id="boleta" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
             </div>

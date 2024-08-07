@@ -2,8 +2,8 @@ var tabla;
 
 var idlocal = 0;
 
-function actualizarCorrelativo(idlocal) {
-	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal.value }, function (num) {
+function actualizarCorrelativoProducto(idlocal) {
+	$.post("../ajax/articulo.php?op=getLastCodigo", { idlocal: idlocal }, function (num) {
 		console.log(num);
 		const partes = num.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
 
@@ -79,6 +79,9 @@ function init() {
 		$('#idmedida').closest('.form-group').find('input[type="text"]').attr('maxlength', '40');
 
 		actualizarRUC();
+
+		idlocal = $("#idlocal").val();
+		actualizarCorrelativoProducto(idlocal);
 	});
 }
 
@@ -280,6 +283,9 @@ function limpiar() {
 	$("#idmedida").selectpicker('refresh');
 	actualizarRUC();
 
+	idlocal = $("#idlocal").val();
+	actualizarCorrelativoProducto(idlocal);
+
 	$(".btn1").show();
 	$(".btn2").hide();
 
@@ -438,7 +444,8 @@ function guardaryeditar(e) {
 		formData.append(key, detalles[key]);
 	}
 
-	$("#idlocal").attr("onchange", "actualizarRUC();");
+	idlocal = $("#idlocal").val();
+	actualizarCorrelativoProducto(idlocal);
 
 	$.ajax({
 		url: "../ajax/articulo.php?op=guardaryeditar",
@@ -532,8 +539,6 @@ function mostrar(idarticulo) {
 		$("#idarticulo").val(data.idarticulo);
 		generarbarcode(0);
 		actualizarRUC();
-
-		$("#idlocal").attr("onchange", "actualizarRUC(); actualizarCorrelativo(this);");
 	})
 }
 

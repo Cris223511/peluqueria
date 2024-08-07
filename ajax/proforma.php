@@ -23,6 +23,7 @@ if (!isset($_SESSION["nombre"])) {
 		$idcaja = isset($_POST["idcaja"]) ? limpiarCadena($_POST["idcaja"]) : "";
 		$tipo_comprobante = isset($_POST["tipo_comprobante"]) ? limpiarCadena($_POST["tipo_comprobante"]) : "";
 		$num_comprobante = isset($_POST["num_comprobante"]) ? limpiarCadena($_POST["num_comprobante"]) : "";
+		$moneda = isset($_POST["moneda"]) ? limpiarCadena($_POST["moneda"]) : "";
 		$impuesto = isset($_POST["impuesto"]) ? limpiarCadena($_POST["impuesto"]) : "";
 		$total_venta = isset($_POST["total_venta"]) ? limpiarCadena($_POST["total_venta"]) : "";
 		$vuelto = isset($_POST["vuelto"]) ? limpiarCadena($_POST["vuelto"]) : "";
@@ -40,7 +41,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -133,7 +134,8 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -172,12 +174,18 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
 						"7" => $reg->total_venta,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => $reg->fecha,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => $reg->fecha,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -189,11 +197,27 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL EN SOLES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"8" => "",
 						"9" => "",
 						"10" => "",
+						"11" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL EN DÓLARES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 

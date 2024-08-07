@@ -75,8 +75,13 @@ switch ($_GET["op"]) {
 			} else if ($codigoExiste && $codigo != "") {
 				echo "El código de barra del producto que ha ingresado ya existe.";
 			} else {
-				$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia,  $comision);
-				echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
+				if (isset($_POST['param']) && $_POST['param'] == '0') {
+					$rspta = $articulo->insertar2($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia,  $comision);
+					echo json_encode($rspta);
+				} else {
+					$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia,  $comision);
+					echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
+				}
 			}
 		} else {
 			$nombreExiste = $articulo->verificarCodigoProductoEditarExiste($codigo_producto, $idlocal, $idarticulo);

@@ -1,6 +1,9 @@
 var tabla;
 let lastNumComp = 0;
 
+let moneda = $("#moneda").val();
+let valor_dolar = 0.27;
+
 inicializeGLightbox();
 
 //correlativos
@@ -359,8 +362,8 @@ function limpiar() {
 	$("#inputsMontoMetodoPago").empty();
 	$("#inputsMetodoPago").empty();
 
-	$("#total_compra_valor").html("S/. 0.00");
-	$("#tipo_comprobante").val("BOLETA DE COMPRA");
+	$("#total_compra_valor").html((moneda === 'dolares') ? "0.00 $" : "S/. 0.00");
+	$("#tipo_comprobante").val("ORDEN DE COMPRA");
 	$("#tipo_comprobante").selectpicker('refresh');
 
 	$("#comentario_interno_final").val("");
@@ -393,23 +396,14 @@ function frmDetalles(bool) {
 //Función para guardar o editar
 
 function guardaryeditar8(e) {
-	e.preventDefault(); //No se activará la acción predeterminada del evento
+	e.preventDefault(); // No se activará la acción predeterminada del evento
 
-	var codigoBarra = $("#codigo_barra").val();
+	// var codigoBarra = $("#codigo_barra").val();
+	// var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
 
-	var formatoValido = /^[0-9]{1} [0-9]{2} [0-9]{4} [0-9]{1} [0-9]{4} [0-9]{1}$/.test(codigoBarra);
-
-	if (!formatoValido && codigoBarra != "") {
-		bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
-		$("#btnGuardarProducto").prop("disabled", false);
-		return;
-	}
-
-	// var stock = parseFloat($("#stock").val());
-	// var stock_minimo = parseFloat($("#stock_minimo").val());
-
-	// if (stock_minimo > stock) {
-	// 	bootbox.alert("El stock mínimo no puede ser mayor que el stock normal.");
+	// if (!formatoValido && codigoBarra != "") {
+	// 	bootbox.alert("El formato del código de barra no es válido. El formato correcto es: X XX XXXX X XXXX X");
+	// 	$("#btnGuardarProducto").prop("disabled", false);
 	// 	return;
 	// }
 
@@ -433,6 +427,8 @@ function guardaryeditar8(e) {
 	var formData = new FormData($("#formulario8")[0]);
 	formData.append("codigo_producto", codigoCompleto);
 
+	formData.append("param", "0");
+
 	$("#ganancia").prop("disabled", true);
 
 	let detalles = frmDetallesVisible() ? obtenerDetalles() : { talla: '', color: '', idmedida: '0', peso: '0.00' };
@@ -449,18 +445,32 @@ function guardaryeditar8(e) {
 		processData: false,
 
 		success: function (datos) {
-			datos = limpiarCadena(datos);
-			if (datos == "El código de barra del producto que ha ingresado ya existe." || datos == "El código del producto que ha ingresado ya existe en el local seleccionado.") {
-				bootbox.alert(datos);
+			console.log(datos);
+			var response = JSON.parse(datos);
+			console.log(response);
+			let idarticulo = response[0];
+			let mensaje = response[1];
+
+			if (mensaje == "El código de barra del producto que ha ingresado ya existe." || mensaje == "El código del producto que ha ingresado ya existe en el local seleccionado.") {
+				bootbox.alert(mensaje);
 				$("#btnGuardarProducto").prop("disabled", false);
 				return;
 			}
+
+			if (idarticulo == 0) {
+				bootbox.alert(mensaje);
+				$("#btnGuardarProducto").prop("disabled", false);
+				return;
+			}
+
+			console.log("el idarticulo es =) => ", idarticulo);
+
 			limpiarModalArticulos();
 			$("#myModal12").modal("hide");
-			$("#btnGuardar").prop("disabled", false);
-			bootbox.alert(datos);
+			$("#btnGuardarProducto").prop("disabled", false);
+			bootbox.alert(mensaje);
 
-			$.post("../ajax/venta.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+			$.post("../ajax/compra.php?op=listarTodosLocalActivosPorUsuario", function (data) {
 				const obj = JSON.parse(data);
 
 				let articulo = obj.articulo;
@@ -468,9 +478,37 @@ function guardaryeditar8(e) {
 
 				listarSelectsArticulos(articulo, servicio);
 				listarArticulos(articulo, servicio);
+
+				setTimeout(function () {
+					seleccionarProductoPorId(idarticulo);
+				}, 500);
 			});
 		}
 	});
+}
+
+function seleccionarProductoPorId(idarticulo) {
+	var selectElement = document.getElementById('productos1');
+	var options = selectElement.options;
+
+	for (var i = 0; i < options.length; i++) {
+		if (options[i].value == idarticulo) {
+			selectElement.selectedIndex = i;
+			verificarProducto(
+				options[i].getAttribute('data-tipo-producto'),
+				options[i].value,
+				options[i].getAttribute('data-nombre'),
+				options[i].getAttribute('data-local'),
+				options[i].getAttribute('data-stock'),
+				options[i].getAttribute('data-precio-compra'),
+				options[i].getAttribute('data-codigo')
+			);
+			selectElement.value = "";
+			$(selectElement).selectpicker('refresh');
+			colocarNegritaStocksSelects();
+			break;
+		}
+	}
 }
 
 function obtenerDetalles() {
@@ -552,23 +590,23 @@ $("#codigo_barra").on("input", function () {
 });
 
 function formatearNumero() {
-	var codigo = $("#codigo_barra").val().replace(/\s/g, '').replace(/\D/g, '');
-	var formattedCode = '';
+	// var codigo = $("#codigo_barra").val().replace(/\s/g, '').replace(/\D/g, '');
+	// var formattedCode = '';
 
-	for (var i = 0; i < codigo.length; i++) {
-		if (i === 1 || i === 3 || i === 7 || i === 8 || i === 12 || i === 13) {
-			formattedCode += ' ';
-		}
+	// for (var i = 0; i < codigo.length; i++) {
+	// 	if (i === 1 || i === 3 || i === 7 || i === 8 || i === 12 || i === 13) {
+	// 		formattedCode += ' ';
+	// 	}
 
-		formattedCode += codigo[i];
-	}
+	// 	formattedCode += codigo[i];
+	// }
 
-	var maxLength = parseInt($("#codigo_barra").attr("maxlength"));
-	if (formattedCode.length > maxLength) {
-		formattedCode = formattedCode.substring(0, maxLength);
-	}
+	// var maxLength = parseInt($("#codigo_barra").attr("maxlength"));
+	// if (formattedCode.length > maxLength) {
+	// 	formattedCode = formattedCode.substring(0, maxLength);
+	// }
 
-	$("#codigo_barra").val(formattedCode);
+	// $("#codigo_barra").val(formattedCode);
 	generarbarcode(0);
 }
 
@@ -580,10 +618,10 @@ function borrar() {
 
 //función para generar el número aleatorio del código de barra
 function generar() {
-	var codigo = "7 75 ";
-	codigo += generarNumero(10000, 999) + " ";
-	codigo += Math.floor(Math.random() * 10) + " ";
-	codigo += generarNumero(100, 9) + " ";
+	var codigo = "775";
+	codigo += generarNumero(10000, 999) + "";
+	codigo += Math.floor(Math.random() * 10) + "";
+	codigo += generarNumero(100, 9) + "";
 	codigo += Math.floor(Math.random() * 10);
 	$("#codigo_barra").val(codigo);
 	generarbarcode(1);
@@ -687,8 +725,11 @@ function listarArticulos(articulos, servicios) {
 	if ((articulos.length > 0 || servicios.length > 0) && !(articulos.length === 0 && servicios.length === 0)) {
 		articulos.forEach((articulo) => {
 
-			articulo.stock = +articulo.stock; // Convierte a número
-			articulo.stock_minimo = +articulo.stock_minimo; // Convierte a número
+			articulo.stock = +articulo.stock;
+			articulo.stock_minimo = +articulo.stock_minimo;
+
+			// Formatear precios
+			let precioCompraFormateado = (moneda === 'dolares') ? articulo.precio_compra + ' $' : 'S/ ' + articulo.precio_compra;
 
 			var stockHtml = ((articulo.stock) > 0 && (articulo.stock) < (articulo.stock_minimo)) ? '<span style="color: #Ea9900; font-weight: bold">' + articulo.stock + '</span>' : ((articulo.stock != '0') ? '<span style="color: #00a65a; font-weight: bold">' + articulo.stock + '</span>' : '<span style="color: red; font-weight: bold">' + articulo.stock + '</span>');
 			var labelHtml = ((articulo.stock) > 0 && (articulo.stock) < (articulo.stock_minimo)) ? '<span class="label bg-orange" style="width: min-content;">agotandose</span>' : ((articulo.stock != '0') ? '<span class="label bg-green" style="width: min-content;">Disponible</span>' : '<span class="label bg-red" style="width: min-content;">agotado</span>');
@@ -704,7 +745,7 @@ function listarArticulos(articulos, servicios) {
 						<div class="subcaja-gris">
 							<span>STOCK: <strong>${stockHtml}</strong></span>
 							${labelHtml}
-							<span><strong>S/ ${articulo.precio_compra}</strong></span>
+							<span><strong>${precioCompraFormateado}</strong></span>
 						</div>
 						<a style="width: 100%;" onclick="verificarProducto('producto','${articulo.id}','${articulo.nombre}','${articulo.local}','${articulo.stock}','${articulo.precio_compra}','${articulo.codigo_producto}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 					</div>
@@ -715,6 +756,10 @@ function listarArticulos(articulos, servicios) {
 		});
 
 		servicios.forEach((servicio) => {
+			
+			// Formatear precios
+			let precioCompraFormateado = (moneda === 'dolares') ? servicio.precio_compra + ' $' : 'S/ ' + servicio.precio_compra;
+
 			let html = `
 					<div class="draggable" style="padding: 10px; width: 180px;">
 						<div class="caja-productos">
@@ -726,7 +771,7 @@ function listarArticulos(articulos, servicios) {
 							<div class="subcaja-gris">
 								<span><strong>ㅤ</strong></span>
 								<span class="label bg-green" style="width: min-content;">Disponible</span>
-								<span><strong>S/ ${servicio.precio_compra}</strong></span>
+								<span><strong>${precioCompraFormateado}</strong></span>
 							</div>
 							<a style="width: 100%;" onclick="verificarProducto('servicio','${servicio.id}','${servicio.nombre}','Sin registrar.','${servicio.stock}','${servicio.precio_compra}','${servicio.codigo}')"><button type="button" class="btn btn-warning" style="height: 33.6px; width: 100%;">AGREGAR</button></a>
 						</div>
@@ -1441,7 +1486,8 @@ function verificarModalPrecuenta() {
 		return;
 	}
 
-	let totalCompra = parseFloat($("#total_compra_valor").text().replace('S/. ', '').replace(',', ''));
+	let totalCompra = parseFloat($("#total_compra_valor").text().replace(moneda === 'dolares' ? ' $' : 'S/. ', '').replace(',', ''));
+
 	if (totalCompra <= 0) {
 		bootbox.alert("El total de compra no puede ser negativo o igual a cero.");
 		return;
@@ -1473,7 +1519,7 @@ function mostrarDatosModalPrecuenta() {
 
 	$("#igv").val("0.00");
 
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal.toFixed(2));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? descuentoFinal.toFixed(2) + ' $' : 'S/. ' + descuentoFinal.toFixed(2)));
 
 	totalTemp = 0;
 	totalOriginalBackup = 0;
@@ -1517,7 +1563,7 @@ function verificarCantidadArticulos(param) {
 }
 
 function actualizarVuelto() {
-	var totalAPagar = parseFloat($('.totalFinal1').text().replace('TOTAL A PAGAR: S/. ', ''));
+	var totalAPagar = parseFloat($('.totalFinal1').text().replace(moneda === 'dolares' ? 'TOTAL A PAGAR: ' : 'TOTAL A PAGAR: S/. ', '').replace(moneda === 'dolares' ? ' $' : '', ''));
 	var sumaMontosMetodoPago = 0;
 
 	$('#montoMetodoPago input[type="number"]').each(function () {
@@ -1534,7 +1580,7 @@ let totalOriginalBackup = 0;  // Variable para guardar el valor original
 
 function actualizarIGV(igv) {
 	let textoTotal = $(".totalFinal1").text();
-	let numeroTotal = textoTotal.match(/S\/\. (\d+\.\d+)/);
+	let numeroTotal = textoTotal.match(moneda === 'dolares' ? /(\d+\.\d+) \$/ : /S\/\. (\d+\.\d+)/);
 
 	if (numeroTotal && numeroTotal.length > 1) {
 		totalOriginal = parseFloat(numeroTotal[1]);
@@ -1555,8 +1601,8 @@ function actualizarIGV(igv) {
 		totalTemp = totalOriginalBackup;  // Restablece totalTemp al valor original
 	}
 
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + Number(totalCompra).toFixed(2));
-	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + Number(totalCompra).toFixed(2));
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? Number(totalCompra).toFixed(2) + ' $' : 'S/. ' + Number(totalCompra).toFixed(2)));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? Number(totalCompra).toFixed(2) + ' $' : 'S/. ' + Number(totalCompra).toFixed(2)));
 
 	actualizarVuelto();
 }
@@ -1628,9 +1674,9 @@ function guardaryeditar7(e) {
 
 function limpiarModalPrecuenta() {
 	$("#proveedorFinal").html("");
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. 0.00');
-	$(".totalFinal2").html('OP. GRAVADAS: S/. 0.00');
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. 0.00');
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? '0.00 $' : 'S/. 0.00'));
 	$("#detallesProductosPrecuenta tbody").empty();
 	$("#montoMetodoPago").empty();
 
@@ -2150,7 +2196,7 @@ function modificarSubototales() {
 	console.log("Total Compra: ", totalCompra);
 	console.log("Total Descuento: ", descuentoFinal);
 
-	$("#total_compra_valor").html("S/. " + totalCompra.toFixed(2));
+	$("#total_compra_valor").html((moneda === 'dolares') ? totalCompra.toFixed(2) + " $" : "S/. " + totalCompra.toFixed(2));
 	evaluar();
 }
 
@@ -2185,9 +2231,9 @@ function modificarSubototales2() {
 
 	totalOriginal = totalCompra;
 
-	$(".totalFinal1").html('TOTAL A PAGAR: S/. ' + totalCompra.toFixed(2));
-	$(".totalFinal2").html('OP. GRAVADAS: S/. ' + totalCompra.toFixed(2));
-	$(".descuentoFinal").html('DESCUENTOS TOTALES: S/. ' + descuentoFinal2.toFixed(2));
+	$(".totalFinal1").html('TOTAL A PAGAR: ' + (moneda === 'dolares' ? totalCompra.toFixed(2) + ' $' : 'S/. ' + totalCompra.toFixed(2)));
+	$(".totalFinal2").html('OP. GRAVADAS: ' + (moneda === 'dolares' ? totalCompra.toFixed(2) + ' $' : 'S/. ' + totalCompra.toFixed(2)));
+	$(".descuentoFinal").html('DESCUENTOS TOTALES: ' + (moneda === 'dolares' ? descuentoFinal2.toFixed(2) + ' $' : 'S/. ' + descuentoFinal2.toFixed(2)));
 
 	actualizarVuelto();
 

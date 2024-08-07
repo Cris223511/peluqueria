@@ -226,7 +226,7 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <div style="text-align: center; display: flex; justify-content: center; flex-direction: column; gap: 5px;">
-              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">BOLETA DE COMPRA: <span id="boleta_de_compra" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">ORDEN DE COMPRA: <span id="boleta_de_compra" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
             </div>

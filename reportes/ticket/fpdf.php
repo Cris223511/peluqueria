@@ -973,7 +973,7 @@ class FPDF
 	 *                              Ticket Design                                  *
 	 *******************************************************************************/
 
-	function encabezado1($y, $logo, $ext_logo, $empresa, $num_comprobante, $fecha_hora, $tipo_comprobante, $local, $local_ruc, $estado)
+	function encabezado1($y, $logo, $ext_logo, $empresa, $num_comprobante, $moneda, $fecha_hora, $tipo_comprobante, $local, $local_ruc, $estado)
 	{
 		# N° TICKET #
 		$this->SetXY(3, $y);
@@ -986,6 +986,12 @@ class FPDF
 		$this->SetFont('hypermarket', '', 10);
 		$this->SetTextColor(0, 0, 0);
 		$this->Cell(0, 5, mb_convert_encoding("$fecha_hora", 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+
+		# TIPO DE CAMBIO #
+		$this->SetXY(($moneda === 'soles') ? 49.5 : 46.5, $y + 4.5);
+		$this->SetFont('hypermarket', '', 10);
+		$this->SetTextColor(0, 0, 0);
+		$this->Cell(0, 5, mb_convert_encoding("MONEDA: " . (($moneda === 'dolares') ? 'DÓLARES' : 'SOLES'), 'ISO-8859-1', 'UTF-8'), 0, 'R', false);
 
 		# ESTADO #
 		$this->SetXY(3, $y += 4.5);

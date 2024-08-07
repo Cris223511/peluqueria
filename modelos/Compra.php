@@ -2,6 +2,8 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
+define('VALOR_DOLAR', 0.27);
+
 class Compra
 {
 	//Implementamos nuestro constructor
@@ -9,7 +11,7 @@ class Compra
 	{
 	}
 
-	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $cantidad, $precio_compra, $descuento, $metodo_pago, $monto)
+	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $cantidad, $precio_compra, $descuento, $metodo_pago, $monto)
 	{
 		// Inicializar variable de mensaje
 		$mensajeError = "";
@@ -35,8 +37,8 @@ class Compra
 		}
 
 		// Si no hay errores, continuamos con el registro de la compra
-		$sql = "INSERT INTO compra (idusuario,idlocal,idproveedor,tipo_comprobante,num_comprobante,fecha_hora,impuesto,total_compra,vuelto,comentario_interno,comentario_externo,estado,eliminado)
-		VALUES ('$idusuario','$idlocal','$idproveedor','$tipo_comprobante','$num_comprobante',SYSDATE(),'$impuesto','$total_compra','$vuelto','$comentario_interno','$comentario_externo','Finalizado','0')";
+		$sql = "INSERT INTO compra (idusuario,idlocal,idproveedor,tipo_comprobante,num_comprobante,moneda,fecha_hora,impuesto,total_compra,vuelto,comentario_interno,comentario_externo,estado,eliminado)
+		VALUES ('$idusuario','$idlocal','$idproveedor','$tipo_comprobante','$num_comprobante','$moneda',SYSDATE(),'$impuesto','$total_compra','$vuelto','$comentario_interno','$comentario_externo','Finalizado','0')";
 		//return ejecutarConsulta($sql);
 
 		$idcompranew = ejecutarConsulta_retornarID($sql);
@@ -164,54 +166,57 @@ class Compra
 
 	public function listar()
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarEstado($estado)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorFecha($fecha_inicio, $fecha_fin)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorFechaEstado($fecha_inicio, $fecha_fin, $estado)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioEstado($idlocalSession, $estado)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioFecha($idlocalSession, $fecha_inicio, $fecha_fin)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioFechaEstado($idlocalSession, $fecha_inicio, $fecha_fin, $estado)
 	{
-		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
+		$sql = "SELECT co.idcompra,DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,co.idproveedor,p.nombre AS proveedor,p.tipo_documento AS proveedor_tipo_documento,p.num_documento AS proveedor_num_documento,p.direccion AS proveedor_direccion,al.idlocal,al.titulo AS local,u.idusuario,u.nombre AS usuario, u.cargo AS cargo,co.tipo_comprobante,co.num_comprobante,co.moneda,co.total_compra,co.vuelto,co.comentario_interno,co.comentario_externo,co.impuesto,co.estado FROM compra co LEFT JOIN proveedores p ON co.idproveedor=p.idproveedor LEFT JOIN locales al ON co.idlocal = al.idlocal LEFT JOIN usuario u ON co.idusuario=u.idusuario WHERE co.idlocal = '$idlocalSession' AND DATE(co.fecha_hora) >= '$fecha_inicio' AND DATE(co.fecha_hora) <= '$fecha_fin' AND co.estado = '$estado' AND co.eliminado = '0' ORDER by co.idcompra DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarTodosLocalActivosPorUsuario($idlocal)
 	{
+		$moneda = $_SESSION["moneda"];
+		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
+
 		$sql = "SELECT 'metodo_pago' AS tabla, m.idmetodopago AS id, m.titulo AS nombre, NULL AS local_ruc, m.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM metodo_pago m WHERE m.eliminado='0' AND m.estado='activado'
 				UNION
 				SELECT 'proveedores' AS tabla, p.idproveedor AS id, p.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, p.tipo_documento AS tipo_documento, p.num_documento AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM proveedores p WHERE p.eliminado='0' AND p.estado='activado'
@@ -220,7 +225,7 @@ class Compra
 				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.idlocal = '$idlocal' AND a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION
-				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, a.precio_compra AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.eliminado = '0'
+				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.eliminado = '0'
 				UNION
 				SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo AS nombre, NULL AS local_ruc, 'servicios.jpg' AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, 'Servicio' AS marca, NULL AS local, s.codigo AS codigo, NULL AS codigo_producto, s.costo AS precio_compra, '1' AS stock, '1' AS stock_minimo FROM servicios s WHERE s.eliminado = '0'";
 		return ejecutarConsulta($sql);
@@ -228,6 +233,9 @@ class Compra
 
 	public function listarTodosLocalActivos()
 	{
+		$moneda = $_SESSION["moneda"];
+		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
+
 		$sql = "SELECT 'metodo_pago' AS tabla, m.idmetodopago AS id, m.titulo AS nombre, NULL AS local_ruc, m.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM metodo_pago m WHERE m.eliminado='0' AND m.estado='activado'
 				UNION
 				SELECT 'proveedores' AS tabla, p.idproveedor AS id, p.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, p.tipo_documento AS tipo_documento, p.num_documento AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM proveedores p WHERE p.eliminado='0' AND p.estado='activado'
@@ -236,7 +244,7 @@ class Compra
 				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION
-				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, a.precio_compra AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.eliminado = '0'
+				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.eliminado = '0'
 				UNION
 				SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo AS nombre, NULL AS local_ruc, 'servicios.jpg' AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, 'Servicio' AS marca, NULL AS local, s.codigo AS codigo, NULL AS codigo_producto, s.costo AS precio_compra, '1' AS stock, '1' AS stock_minimo FROM servicios s WHERE s.eliminado = '0'";
 		return ejecutarConsulta($sql);
@@ -244,13 +252,19 @@ class Compra
 
 	public function listarArticulosPorCategoria($idcategoria)
 	{
-		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, a.precio_compra AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
+		$moneda = $_SESSION["moneda"];
+		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
+
+		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarArticulosPorCategoriaLocal($idcategoria, $idlocal)
 	{
-		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, a.precio_compra AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
+		$moneda = $_SESSION["moneda"];
+		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
+
+		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -301,6 +315,7 @@ class Compra
 				  p.num_documento AS num_documento,
 				  co.tipo_comprobante,
 				  co.num_comprobante,
+				  co.moneda,
 				  DATE_FORMAT(co.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha_hora,
 				  co.impuesto,
 				  co.total_compra,

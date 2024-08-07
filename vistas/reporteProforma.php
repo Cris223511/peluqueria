@@ -93,7 +93,6 @@ if (!isset($_SESSION["nombre"])) {
       #detallesPagosFinal tfoot tr td {
         border: none !important;
       }
-
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -178,7 +177,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma (S/.)</th>
+                      <th>Total Proforma</th>
+                      <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
                     </thead>
@@ -193,7 +193,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma (S/.)</th>
+                      <th>Total Proforma</th>
+                      <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
                     </tfoot>

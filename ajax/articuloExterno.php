@@ -234,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
 						"18" => $reg->usuario,
 						"19" => $cargo_detalle,
 						"20" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
-							);
+					);
 				}
 				$results = array(
 					"sEcho" => 1, //Información para el datatables
@@ -263,7 +263,7 @@ if (!isset($_SESSION["nombre"])) {
 				} else {
 					$last_codigo = 'PRO0000';
 				}
-						echo $last_codigo;
+				echo $last_codigo;
 				break;
 
 				/* ======================= SELECTS ======================= */

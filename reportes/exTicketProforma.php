@@ -27,7 +27,7 @@ $reg1 = $rspta1->fetch_object();
 require('ticket/code128.php');
 
 # Modificando el ancho y alto del ticket #
-$pdf = new PDF_Code128('P', 'mm', array(70, 300));
+$pdf = new PDF_Code128('P', 'mm', array(71, 300));
 $pdf->SetAutoPageBreak(false);
 $pdf->SetMargins(4, 10, 4);
 $pdf->AddPage();
@@ -42,6 +42,7 @@ $y = $pdf->encabezado1(
     $ext_logo,
     $empresa,
     $reg1->num_comprobante ?? '',
+    $reg1->moneda ?? '',
     $reg1->fecha_hora ?? '',
     $reg1->tipo_comprobante ?? '',
     $reg1->local ?? '',
@@ -219,7 +220,12 @@ $total_venta = $reg1->total_venta ?? 0.00;
 $izquierda = floor($total_venta);
 $derecha = round(($total_venta - $izquierda) * 100);
 
-$texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+if ($reg1->moneda === 'dolares') {
+    $texto = $formatterES->format($izquierda) . " DÓLARES CON " . $formatterES->format($derecha) . " CENTAVOS";
+} else {
+    $texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+}
+
 $textoEnMayusculas = mb_strtoupper($texto, 'UTF-8');
 
 $y = $pdf->cuerpo(

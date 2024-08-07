@@ -20,6 +20,24 @@ class Articulo
 		return ejecutarConsulta($sql);
 	}
 
+	public function insertar2($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $imagen, $precio_compra, $precio_venta, $ganancia, $comision)
+	{
+		if (empty($imagen))
+			$imagen = "product.jpg";
+
+		$sql = "INSERT INTO articulo (idusuario,idcategoria,idlocal,idmarca,idmedida,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,talla,color,peso,imagen,precio_compra,precio_venta,ganancia,comision,estado,eliminado)
+		VALUES ('$idusuario','$idcategoria','$idlocal','$idmarca','$idmedida','$codigo','$codigo_producto','$nombre','$stock', '$stock_minimo','$descripcion','$talla','$color','$peso','$imagen','$precio_compra','$precio_venta','$ganancia','$comision','1','0')";
+
+		$idarticulo = ejecutarConsulta_retornarID($sql);
+
+		if ($idarticulo) {
+			return array($idarticulo, "Producto registrado");
+		} else {
+			return array(0, "El producto no se pudo registrar");
+		}
+	}
+
+
 	public function verificarCodigoExiste($codigo)
 	{
 		$sql = "SELECT * FROM articulo WHERE codigo = '$codigo' AND eliminado = '0'";

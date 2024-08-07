@@ -32,11 +32,11 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFillColor(232, 232, 232);
     $pdf->SetFont('Arial', 'B', 10);
     $pdf->Cell(37, 6, 'Fecha y hora', 1, 0, 'C', 1);
-    $pdf->Cell(38, 6, 'Usuario', 1, 0, 'C', 1);
+    $pdf->Cell(33, 6, 'Usuario', 1, 0, 'C', 1);
     $pdf->Cell(38, 6, 'Proveedor', 1, 0, 'C', 1);
     $pdf->Cell(33, 6, 'Documento', 1, 0, 'C', 1);
     $pdf->Cell(25, 6, utf8_decode('Número'), 1, 0, 'C', 1);
-    $pdf->Cell(20, 6, 'Total', 1, 0, 'C', 1);
+    $pdf->Cell(25, 6, 'Total', 1, 0, 'C', 1);
 
     $pdf->Ln(10);
     //Comenzamos a crear las filas de los registros según la consulta mysql
@@ -54,7 +54,7 @@ if (!isset($_SESSION["nombre"])) {
     }
 
     //Table with rows and columns
-    $pdf->SetWidths(array(37, 38, 38, 33, 25, 20));
+    $pdf->SetWidths(array(37, 33, 38, 33, 25, 25));
 
     while ($reg = $rspta->fetch_object()) {
       $fecha = $reg->fecha;
@@ -65,7 +65,7 @@ if (!isset($_SESSION["nombre"])) {
       $total_compra = $reg->total_compra;
 
       $pdf->SetFont('Arial', '', 10);
-      $pdf->Row(array($fecha, utf8_decode($usuario), utf8_decode($proveedor), $tipo_comprobante, $num_comprobante, $total_compra));
+      $pdf->Row(array($fecha, utf8_decode($usuario), utf8_decode($proveedor), $tipo_comprobante, $num_comprobante, $total_compra . ' ' . (($reg->moneda == 'soles') ? 'S/.' : '$')));
     }
 
     //Mostramos el documento pdf
