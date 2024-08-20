@@ -26,10 +26,6 @@ if (!isset($_SESSION["nombre"])) {
         .caja1 .contenedor img {
           width: 25% !important;
         }
-
-        #labelCustom {
-          display: block !important;
-        }
       }
 
       @media (max-width: 767px) {
@@ -108,23 +104,32 @@ if (!isset($_SESSION["nombre"])) {
                 <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Productos más vendidos</strong>" data-html="true" data-content="Módulo para ver los productos que más se vendieron." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Inicial:</label>
                     <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Final:</label>
                     <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Local:</label>
-                    <select id="localBuscar" name="localBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    </select>
-                  </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                    <label>Marcas:</label>
-                    <select id="marcaBuscar" name="marcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
-                    </select>
+                  <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin: 0px;">
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                      <label>Tipo de moneda: <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Tipo de moneda</strong>" data-html="true" data-content="Filtra las ventas de los artículos que se vendieron en soles o en dólares." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a></label>
+                      <select id="monedaBuscar" name="monedaBuscar" class="form-control selectpicker" data-size="5">
+                        <option value="soles">Soles</option>
+                        <option value="dolares">Dólares</option>
+                      </select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                      <label>Local:</label>
+                      <select id="localBuscar" name="localBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      </select>
+                    </div>
+                    <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                      <label>Marcas:</label>
+                      <select id="marcaBuscar" name="marcaBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
+                      </select>
+                    </div>
                   </div>
                   <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Categorías:</label>
@@ -166,7 +171,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>Stock normal</th>
-                      <th>P. venta</th>
+                      <th>P. total venta</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -182,7 +187,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>Stock normal</th>
-                      <th>P. venta</th>
+                      <th>P. total venta</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>

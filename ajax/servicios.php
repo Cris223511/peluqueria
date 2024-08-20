@@ -111,7 +111,6 @@ if (!isset($_SESSION["nombre"])) {
 						default:
 							break;
 					}
-					$reg->descripcion = (strlen($reg->descripcion) > 100) ? substr($reg->descripcion, 0, 100) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -123,7 +122,7 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->codigo,
-						"3" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
+						"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 						"4" => "S/. " . number_format($reg->costo, 2, '.', ','),
 						"5" => ucwords($reg->nombre),
 						"6" => ucwords($cargo_detalle),

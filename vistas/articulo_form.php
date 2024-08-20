@@ -109,11 +109,11 @@ if (!isset($_SESSION["nombre"])) {
                     <div class="form-group col-lg-8 col-md-12 col-sm-12" style="padding: 0; margin: 0;">
                       <div class="form-group col-lg-4 col-md-4 col-sm-12">
                         <label>Precio compra(*):</label>
-                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de compra." required>
+                        <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de compra." required>
                       </div>
                       <div class="form-group col-lg-4 col-md-4 col-sm-12">
                         <label>Precio venta(*):</label>
-                        <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el precio de venta." required>
+                        <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de venta." required>
                       </div>
                       <div class="form-group col-lg-4 col-md-4 col-sm-12">
                         <label>Ganancia(*):</label>
@@ -122,11 +122,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Stock(*):</label>
-                      <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el stock." required>
+                      <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock." required>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Stock mínimo(*):</label>
-                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el stock mínimo." required>
+                      <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock mínimo." required>
                     </div>
                     <div class="form-group col-lg-4 col-md-6 col-sm-12">
                       <label>Imagen:</label>
@@ -142,8 +142,8 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12 col-sm-12">
                       <div>
-                        <label>Código de barra(*):</label>
-                        <input type="text" class="form-control" name="codigo" id="codigo_barra" maxlength="18" placeholder="Ingrese el código de barra.">
+                        <label>Código de barra:</label>
+                        <input type="text" class="form-control" name="codigo" id="codigo_barra" maxlength="13" placeholder="Ingrese el código de barra.">
                       </div>
                       <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
                         <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
@@ -175,8 +175,8 @@ if (!isset($_SESSION["nombre"])) {
                         <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
-                        <label>Unidad de medida:</label>
-                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true"></select>
+                        <label>Unidad de medida(*):</label>
+                        <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
                       </div>
                       <div class="form-group col-lg-6 col-md-12">
                         <label>Peso:</label>
@@ -215,7 +215,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <label>Descripción:</label>
-        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="256" placeholder="Descripción">
+        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="1000" placeholder="Descripción">
       </div>
     </form>
     <!-- Fin form categoría -->

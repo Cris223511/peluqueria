@@ -112,7 +112,6 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
-					$reg->descripcion = (strlen($reg->descripcion) > 100) ? substr($reg->descripcion, 0, 100) . "..." : $reg->descripcion;
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
@@ -129,7 +128,7 @@ if (!isset($_SESSION["nombre"])) {
 						"6" => ($reg->direccion == "") ? "Sin registrar" : $reg->direccion,
 						"7" => $telefono,
 						"8" => ($reg->email == "") ? "Sin registrar" : $reg->email,
-						"9" => ($reg->descripcion == "") ? "Sin registrar" : $reg->descripcion,
+						"9" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 						"10" => ucwords($reg->usuario),
 						"11" => ucwords($cargo_detalle),
 						"12" => $reg->fecha,

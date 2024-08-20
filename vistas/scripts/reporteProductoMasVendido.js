@@ -40,6 +40,7 @@ function listar() {
 	let param5 = "";
 	let param6 = "";
 	let param7 = "";
+	let param8 = "soles";
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -67,7 +68,7 @@ function listar() {
 			{
 				url: '../ajax/reporte.php?op=listarArticulosMasVendidos',
 				type: "get",
-				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7 },
+				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8 },
 				dataType: "json",
 				error: function (e) {
 					console.log(e.responseText);
@@ -87,13 +88,12 @@ function listar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
 function resetear() {
-	const selects = ["fecha_inicio", "fecha_fin", "localBuscar", "marcaBuscar", "categoriaBuscar", "usuarioBuscar", "estadoBuscar"];
+	const selects = ["fecha_inicio", "fecha_fin", "localBuscar", "marcaBuscar", "categoriaBuscar", "usuarioBuscar", "estadoBuscar", "monedaBuscar"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");
@@ -111,6 +111,7 @@ function buscar() {
 	let param5 = "";
 	let param6 = "";
 	let param7 = "";
+	let param8 = "";
 
 	// Obtener los selectores
 	const fecha_inicio = document.getElementById("fecha_inicio");
@@ -120,8 +121,9 @@ function buscar() {
 	const categoriaBuscar = document.getElementById("categoriaBuscar");
 	const usuarioBuscar = document.getElementById("usuarioBuscar");
 	const estadoBuscar = document.getElementById("estadoBuscar");
+	const monedaBuscar = document.getElementById("monedaBuscar");
 
-	if (fecha_inicio.value == "" && fecha_fin.value == "" && localBuscar.value == "" && marcaBuscar.value == "" && categoriaBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "") {
+	if (fecha_inicio.value == "" && fecha_fin.value == "" && localBuscar.value == "" && marcaBuscar.value == "" && categoriaBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && monedaBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
 		return;
 	}
@@ -138,6 +140,7 @@ function buscar() {
 	param5 = categoriaBuscar.value;
 	param6 = usuarioBuscar.value;
 	param7 = estadoBuscar.value;
+	param8 = monedaBuscar.value;
 
 	tabla = $('#tbllistado').dataTable(
 		{
@@ -165,7 +168,7 @@ function buscar() {
 			{
 				url: '../ajax/reporte.php?op=listarArticulosMasVendidos',
 				type: "get",
-				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7 },
+				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8 },
 				dataType: "json",
 				error: function (e) {
 					console.log(e.responseText);
@@ -185,7 +188,6 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }

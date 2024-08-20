@@ -183,6 +183,12 @@ $local_login = $_SESSION['local'];
       width: 90% !important;
     }
   }
+
+  @media screen and (max-width: 767px) {
+    .table-responsive {
+      margin-bottom: 0 !important;
+    }
+  }
 </style>
 
 <!DOCTYPE html>

@@ -108,8 +108,6 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
-					$reg->descripcion = (strlen($reg->descripcion) > 100) ? substr($reg->descripcion, 0, 100) . "..." : $reg->descripcion;
-
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idgasto . ', ' . $reg->idcaja . ')"><i class="fa fa-trash"></i></button>') .

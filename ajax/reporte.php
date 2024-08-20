@@ -88,7 +88,7 @@ if (!isset($_SESSION["nombre"])) {
 					// Verificar si es la primera iteración
 					if (!$firstIteration && $reg->idventa != $lastIdVenta) {
 						// Agregar una fila vacía al array antes de agregar el nuevo registro
-						$data[] = array_fill(0, 12, ''); // Esto crea una fila vacía con 11 celdas
+						$data[] = array_fill(0, 13, ''); // Esto crea una fila vacía con 13 celdas
 					}
 
 					$data[] = array(
@@ -122,7 +122,7 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				if (!empty($data)) {
-					$data[] = array_fill(0, 12, '');
+					$data[] = array_fill(0, 13, '');
 					$data[] = array(
 						"0" => "",
 						"1" => "",
@@ -878,7 +878,8 @@ if (!isset($_SESSION["nombre"])) {
 					"param4" => "a.idmarca = '{$_GET["param4"]}'",
 					"param5" => "a.idcategoria = '{$_GET["param5"]}'",
 					"param6" => "a.idusuario = '{$_GET["param6"]}'",
-					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'")
+					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'"),
+					"param8" => "v.moneda = '{$_GET["param8"]}'",
 				);
 
 				foreach ($filtros as $param => $condicion) {
@@ -924,7 +925,7 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->marca,
 						"6" => $reg->codigo_producto,
 						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"8" => "S/. " . number_format($reg->precio_venta, 2, '.', ','),
+						"8" => ($_GET["param8"] == "soles") ? "S/. " . number_format($reg->total_precio_venta, 2, '.', ',') : number_format($reg->total_precio_venta, 2, '.', ',') . " $",
 						"9" => $reg->usuario,
 						"10" => $cargo_detalle,
 						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')

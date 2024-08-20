@@ -116,7 +116,7 @@ switch ($_GET["op"]) {
 					mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idcategoria . ')"><i class="fa fa-trash"></i></button>') .
 					'</div>',
 				"1" => $reg->titulo,
-				"2" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
+				"2" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 				"3" => ucwords($reg->nombre),
 				"4" => ucwords($cargo_detalle),
 				"5" => $reg->fecha,

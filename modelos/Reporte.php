@@ -583,7 +583,7 @@ class Reporte
 				  a.descripcion,
 				  a.imagen,
 				  a.precio_compra,
-				  a.precio_venta,
+				  SUM(dv.precio_venta) as total_precio_venta,
 				  a.estado
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
@@ -594,7 +594,7 @@ class Reporte
 				LEFT JOIN venta v ON dv.idventa = v.idventa
 				WHERE $condiciones
 				GROUP BY dv.idarticulo
-				ORDER BY cantidad DESC";
+				ORDER BY total_cantidad DESC, total_precio_venta DESC";
 
 		return ejecutarConsulta($sql);
 	}

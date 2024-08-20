@@ -281,7 +281,7 @@ function aperturar(idcaja) {
 				</div>
 				<div class="form-group" style="margin-top: 15px; margin-bottom: 0px;">
 					<label for="monto_inicial">Monto inicial(*):</label>
-					<input type="number" class="form-control" name="monto" id="monto_inicial" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
+					<input type="number" class="form-control" name="monto" id="monto_inicial" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el monto inicial de la caja." required>
 				</div>
 			</form>
 		`,

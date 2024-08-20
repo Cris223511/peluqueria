@@ -119,7 +119,7 @@ if (!isset($_SESSION["nombre"])) {
 						'</div>',
 					"1" => $reg->titulo,
 					"2" => "N° " . $reg->local_ruc,
-					"3" => ($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion,
+					"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
 					"4" => $reg->fecha,
 					"5" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 						'<span class="label bg-red">Desactivado</span>'

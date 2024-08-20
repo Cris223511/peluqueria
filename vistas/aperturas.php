@@ -111,7 +111,7 @@ if (!isset($_SESSION["cajas"])) {
                   <div class="form-group col-lg-6 col-md-6 col-sm-12">
                     <label>Monto inicial(*):</label>
                     <div style="display: flex;">
-                      <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" placeholder="Ingrese el monto inicial de la caja." required>
+                      <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el monto inicial de la caja." required>
                       <a id="desbloquearMonto" class="btn btn-bcp" style="display: flex; align-items: center;"><i class="fa fa-lock"></i></a>
                     </div>
                   </div>

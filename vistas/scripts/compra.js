@@ -315,6 +315,10 @@ function limpiarModalArticulos() {
 	$("#talla").val("");
 	$("#color").val("");
 	$("#peso").val("");
+	$("#fecha_emision").val("");
+	$("#fecha_vencimiento").val("");
+	$("#nota_1").val("");
+	$("#nota_2").val("");
 	$("#stock").val("");
 	$("#stock_minimo").val("");
 	$("#imagenmuestra").attr("src", "");
@@ -431,7 +435,7 @@ function guardaryeditar8(e) {
 
 	$("#ganancia").prop("disabled", true);
 
-	let detalles = frmDetallesVisible() ? obtenerDetalles() : { talla: '', color: '', idmedida: '0', peso: '0.00' };
+	let detalles = frmDetallesVisible() ? obtenerDetalles() : { comision: '0.00', talla: '', color: '', peso: '0.00', codigo: '' };
 
 	for (let key in detalles) {
 		formData.append(key, detalles[key]);
@@ -481,7 +485,7 @@ function guardaryeditar8(e) {
 
 				setTimeout(function () {
 					seleccionarProductoPorId(idarticulo);
-				}, 500);
+				}, 200);
 			});
 		}
 	});
@@ -513,16 +517,26 @@ function seleccionarProductoPorId(idarticulo) {
 
 function obtenerDetalles() {
 	let detalles = {
+		comision: $("#comision").val(),
 		talla: $("#talla").val(),
 		color: $("#color").val(),
-		idmedida: $("#idmedida").val(),
-		peso: $("#peso").val()
+		peso: $("#peso").val(),
+		fecha_emision: $("#fecha_emision").val(),
+		fecha_vencimiento: $("#fecha_vencimiento").val(),
+		nota_1: $("#nota_1").val(),
+		nota_2: $("#nota_2").val(),
+		codigo: $("#codigo_barra").val()
 	};
 
+	if (!detalles.comision) detalles.comision = '0.00';
 	if (!detalles.talla) detalles.talla = '';
 	if (!detalles.color) detalles.color = '';
-	if (!detalles.idmedida) detalles.idmedida = '0';
 	if (!detalles.peso) detalles.peso = '0.00';
+	if (!detalles.fecha_emision) detalles.fecha_emision = '';
+	if (!detalles.fecha_vencimiento) detalles.fecha_vencimiento = '';
+	if (!detalles.nota_1) detalles.nota_1 = '';
+	if (!detalles.nota_2) detalles.nota_2 = '';
+	if (!detalles.codigo) detalles.codigo = '';
 
 	return detalles;
 }
@@ -636,22 +650,24 @@ function generarNumero(max, min) {
 // Función para generar el código de barras
 function generarbarcode(param) {
 
-	if (param == 1) {
-		var codigo = $("#codigo_barra").val().replace(/\s/g, '');
-		console.log(codigo.length);
+	// if (param == 1) {
+	// 	var codigo = $("#codigo_barra").val().replace(/\s/g, '');
+	// 	console.log(codigo.length);
 
-		if (!/^\d+$/.test(codigo)) {
-			bootbox.alert("El código de barra debe contener solo números.");
-			return;
-		} else if (codigo.length !== 13) {
-			bootbox.alert("El código de barra debe tener 13 dígitos.");
-			return;
-		} else {
-			codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
-		}
-	} else {
-		var codigo = $("#codigo_barra").val()
-	}
+	// 	if (!/^\d+$/.test(codigo)) {
+	// 		bootbox.alert("El código de barra debe contener solo números.");
+	// 		return;
+	// 	} else if (codigo.length !== 13) {
+	// 		bootbox.alert("El código de barra debe tener 13 dígitos.");
+	// 		return;
+	// 	} else {
+	// 		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+	// 	}
+	// } else {
+	// 	var codigo = $("#codigo_barra").val()
+	// }
+
+	var codigo = $("#codigo_barra").val().replace(/\s/g, '');
 
 	if (codigo != "") {
 		JsBarcode("#barcode", codigo);
@@ -756,7 +772,7 @@ function listarArticulos(articulos, servicios) {
 		});
 
 		servicios.forEach((servicio) => {
-			
+
 			// Formatear precios
 			let precioCompraFormateado = (moneda === 'dolares') ? servicio.precio_compra + ' $' : 'S/ ' + servicio.precio_compra;
 
@@ -1106,7 +1122,7 @@ function cambiarEstado(id, nombre) {
 		divMontoMetodoPago.innerHTML = `
 			<div style="padding: 10px; border-top: 1px solid #d2d6de; display: flex; justify-content: space-between; align-items: center;">
 				<h5 class="infotitulo" style="margin: 0; padding: 0;">${capitalizarTodasLasPalabras(nombre)}</h5>
-				<input type="number" class="form-control" step="any" style="width: 120px; height: 30px;" value="0.00" lang="en-US" oninput="actualizarVuelto();" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required>
+				<input type="number" class="form-control" step="any" style="width: 120px; height: 30px;" value="0.00" lang="en-US" oninput="actualizarVuelto();" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" required>
 			</div>
 		`;
 		montoMetodoPago.appendChild(divMontoMetodoPago);
@@ -1952,7 +1968,7 @@ function limpiarModalPrecuentaFinal() {
 
 // FUNCIONES Y BOTONES DE LAS COMPRAS
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno, moneda) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -1967,6 +1983,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 
 		$('#nombre_proveedor').text(nombreCompleto);
 		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "Sin registrar");
+		$('#tipo_moneda').text(moneda == "soles" ? "SOLES" : "DÓLARES");
 		$('#boleta').text("N° " + num_comprobante);
 
 		// Actualizar detalles de la tabla productos
@@ -1978,14 +1995,17 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		data.articulos.forEach(item => {
 			let descripcion = item.articulo ? item.articulo : item.servicio;
 			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
+			let precio = moneda == "soles" ? "S/. " + item.precio_compra : item.precio_compra + " $";
+			let subtotal = ((item.cantidad * item.precio_compra) - item.descuento).toFixed(2);
+			let subtotalFinal = moneda == "soles" ? "S/. " + subtotal : subtotal + " $";
 
 			let row = `
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_compra}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${precio}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_compra) - item.descuento).toFixed(2)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${subtotalFinal}</td>
                 </tr>`;
 
 			tbody.append(row);
@@ -1996,9 +2016,13 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 
 		let igv = subtotal * (impuesto);
 
-		$('#subtotal_detalle').text(subtotal.toFixed(2));
-		$('#igv_detalle').text(igv.toFixed(2));
-		$('#total_detalle').text(total_compra);
+		let subtotal_detalle = moneda == "soles" ? "S/. " + subtotal.toFixed(2) : subtotal.toFixed(2) + " $";
+		let igv_detalle = moneda == "soles" ? "S/. " + igv.toFixed(2) : igv.toFixed(2) + " $";
+		let total_detalle = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+
+		$('#subtotal_detalle').text(subtotal_detalle);
+		$('#igv_detalle').text(igv_detalle);
+		$('#total_detalle').text(total_detalle);
 
 		// Actualizar detalles de la tabla pagos
 		let tbodyPagos = $('#detallesPagosFinal tbody');
@@ -2007,10 +2031,12 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		let subtotalPagos = 0;
 
 		data.pagos.forEach(item => {
+			let monto = moneda == "soles" ? "S/. " + item.monto : item.monto + " $";
+
 			let row = `
                 <tr>
                     <td width: 80%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(item.metodo_pago)}</td>
-                    <td width: 20%; min-width: 40px; white-space: nowrap;">${item.monto}</td>
+                    <td width: 20%; min-width: 40px; white-space: nowrap;">${monto}</td>
                 </tr>`;
 
 			tbodyPagos.append(row);
@@ -2019,9 +2045,13 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 			subtotalPagos += parseFloat(item.monto);
 		});
 
-		$('#subtotal_pagos').text(subtotalPagos.toFixed(2));
-		$('#vueltos_pagos').text(vuelto);
-		$('#total_pagos').text(total_compra);
+		let subtotal_pagos = moneda == "soles" ? "S/. " + subtotalPagos.toFixed(2) : subtotalPagos.toFixed(2) + " $";
+		let vueltos_pagos = moneda == "soles" ? "S/. " + vuelto : vuelto + " $";
+		let total_pagos = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+
+		$('#subtotal_pagos').text(subtotal_pagos);
+		$('#vueltos_pagos').text(vueltos_pagos);
+		$('#total_pagos').text(total_pagos);
 
 		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
 
@@ -2141,12 +2171,14 @@ function agregarDetalle(tipoproducto, idarticulo, nombre, local, stock, precio_c
 	var descuento = '0.00';
 
 	if (idarticulo != "") {
+		var minCantidad = (tipoproducto == "producto") ? "0.1" : "1";
+
 		var fila = '<tr class="filas fila' + cont + ' principal">' +
 			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '">' + codigo + '</td>' +
 			'<td>' + capitalizarTodasLasPalabras(nombre) + '</td>' +
-			'<td><input type="number" step="any" name="precio_compra[]" oninput="modificarSubototales();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></td>' +
+			'<td><input type="number" step="any" name="precio_compra[]" oninput="modificarSubototales();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></td>' +
 			'<td><input type="number" step="any" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
-			'<td><input type="number" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></td>' +
+			'<td><input type="number" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(1, ' + cont + ');"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
 
@@ -2155,9 +2187,9 @@ function agregarDetalle(tipoproducto, idarticulo, nombre, local, stock, precio_c
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td style="text-align: start !important;"><strong>' + capitalizarTodasLasPalabras(local) + '</strong></td>' +
 			'<td style="text-align: start !important;">' + (tipoproducto == "producto" ? stock : "") + '</td>' +
-			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_compra[]" oninput="modificarSubototales2();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></div></td>' +
+			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_compra[]" oninput="modificarSubototales2();" id="precio_compra[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" required value="' + (precio_compra == '' ? parseFloat(0).toFixed(2) : precio_compra) + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></div></td>' +
-			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="1" required value="' + cantidad + '"></div></td>' +
+			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></div></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(2, ' + cont + '); actualizarVuelto();"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
 
