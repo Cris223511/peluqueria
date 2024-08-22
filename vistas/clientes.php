@@ -220,7 +220,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese una descripción."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
@@ -391,7 +391,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label>Comentario interno:</label>
-              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="10000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta" style="font-weight: 600;"></span></h4>
@@ -532,7 +532,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label>Comentario interno:</label>
-              <textarea type="text" class="form-control" id="comentario_interno_detalle2" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle2" maxlength="10000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta2" style="font-weight: 600;"></span></h4>

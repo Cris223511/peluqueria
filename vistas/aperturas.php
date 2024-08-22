@@ -117,7 +117,7 @@ if (!isset($_SESSION["cajas"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <label>Comentario:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese un comentario."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese un comentario."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

@@ -135,7 +135,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-12">
                       <label>Descripción:</label>
-                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" placeholder="Ingrese la descripción del producto." autocomplete="off">
+                      <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" placeholder="Ingrese la descripción del producto." autocomplete="off">
                       <div style="display: flex; justify-content: end;">
                         <div id="camera"></div>
                       </div>
@@ -215,7 +215,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <label>Descripción:</label>
-        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="1000" placeholder="Descripción">
+        <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="10000" placeholder="Descripción">
       </div>
     </form>
     <!-- Fin form categoría -->
@@ -229,7 +229,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form marcas -->
@@ -243,7 +243,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form medidas -->

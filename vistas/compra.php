@@ -586,8 +586,8 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                     </div>
                     <div id="comentarios" style="display: none;">
-                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="1000" rows="4" autocomplete="off"></textarea>
-                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="1000" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_interno_final" name="comentario_interno" maxlength="10000" rows="4" autocomplete="off"></textarea>
+                      <textarea type="text" class="form-control" id="comentario_externo_final" name="comentario_externo" maxlength="10000" rows="4" autocomplete="off"></textarea>
                     </div>
                     <select style="display: none;" id="idlocal_session_final" name="idlocal" class="form-control">
                       <option value="">- Seleccione -</option>
@@ -632,7 +632,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese una descripción."></textarea>
+                <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese una descripción."></textarea>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
@@ -696,9 +696,8 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="1000" placeholder="Ingrese la descripción del proveedor." autocomplete="off" disabled>
+                <textarea type="text" class="form-control" name="descripcion" id="descripcion2" maxlength="10000" rows="4" placeholder="Ingrese la descripción del proveedor." disabled></textarea>
               </div>
-
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
                 <button class="btn btn-warning" type="button" data-dismiss="modal" onclick="limpiarModalProveedor();"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>
                 <button class="btn btn-bcp" type="submit" id="btnGuardarProveedor" disabled><i class="fa fa-save"></i> Guardar</button>
@@ -750,7 +749,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="1000" placeholder="Ingrese la descripción del proveedor." autocomplete="off">
+                <textarea type="text" class="form-control" name="descripcion" id="descripcion3" maxlength="10000" rows="4" placeholder="Ingrese la descripción del proveedor." disabled></textarea>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
@@ -806,7 +805,7 @@ if (!isset($_SESSION["nombre"])) {
               </div>
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <label>Descripción:</label>
-                <input type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="1000" placeholder="Ingrese la descripción del proveedor." autocomplete="off">
+                <textarea type="text" class="form-control" name="descripcion" id="descripcion4" maxlength="10000" rows="4" placeholder="Ingrese la descripción del proveedor." disabled></textarea>
               </div>
 
               <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0 !important; padding: 0 !important;">
@@ -863,11 +862,11 @@ if (!isset($_SESSION["nombre"])) {
                 <?php } ?>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO INTERNO:</h4>
-                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="1000" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off"></textarea>
+                  <textarea type="text" class="form-control" id="comentario_interno" maxlength="10000" rows="4" placeholder="Ingrese un comentario interno." autocomplete="off"></textarea>
                 </div>
                 <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="padding: 0;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">COMENTARIO EXTERNO:</h4>
-                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="1000" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off"></textarea>
+                  <textarea type="text" class="form-control" id="comentario_externo" maxlength="10000" rows="4" placeholder="Ingrese un comentario externo." autocomplete="off"></textarea>
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6" style="display: flex; flex-direction: column;">
@@ -1065,7 +1064,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label>Comentario interno:</label>
-              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="10000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>
@@ -1190,7 +1189,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12">
                     <label>Descripción:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion5" maxlength="1000" rows="4" placeholder="Ingrese la descripción del producto."></textarea>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion5" maxlength="10000" rows="4" placeholder="Ingrese la descripción del producto."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
                     <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>
@@ -1224,11 +1223,11 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Nota 1:</label>
-                      <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="1000" rows="4" placeholder="Ingrese la nota 1."></textarea>
+                      <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="10000" rows="4" placeholder="Ingrese la nota 1."></textarea>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Nota 2:</label>
-                      <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="1000" rows="4" placeholder="Ingrese la nota 2."></textarea>
+                      <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="10000" rows="4" placeholder="Ingrese la nota 2."></textarea>
                     </div>
                     <div class="form-group col-lg-6 col-md-12 col-sm-12">
                       <div>
@@ -1285,7 +1284,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <label>Descripción:</label>
-        <input type="text" class="form-control" name="descripcion" id="descripcion6" maxlength="1000" placeholder="Descripción">
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion6" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form categoría -->
@@ -1299,7 +1298,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion7" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion7" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form marcas -->
@@ -1313,7 +1312,7 @@ if (!isset($_SESSION["nombre"])) {
       </div>
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <label>Descripción:</label>
-        <textarea type="text" class="form-control" name="descripcion" id="descripcion8" maxlength="1000" rows="4" placeholder="Descripción"></textarea>
+        <textarea type="text" class="form-control" name="descripcion" id="descripcion8" maxlength="10000" rows="4" placeholder="Descripción"></textarea>
       </div>
     </form>
     <!-- Fin form medidas -->

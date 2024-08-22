@@ -283,7 +283,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
             <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <label>Comentario interno:</label>
-              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle" maxlength="10000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_compra" style="font-weight: 600;"></span></h4>
