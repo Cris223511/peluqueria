@@ -1982,7 +1982,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		}
 
 		$('#nombre_proveedor').text(nombreCompleto);
-		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "Sin registrar");
+		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "SIN REGISTRAR");
 		$('#tipo_moneda').text(moneda == "soles" ? "SOLES" : "DÓLARES");
 		$('#boleta').text("N° " + num_comprobante);
 
@@ -1996,6 +1996,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 			let descripcion = item.articulo ? item.articulo : item.servicio;
 			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
 			let precio = moneda == "soles" ? "S/. " + item.precio_compra : item.precio_compra + " $";
+			let descuento = moneda == "soles" ? "S/. " + item.descuento : item.descuento + " $";
 			let subtotal = ((item.cantidad * item.precio_compra) - item.descuento).toFixed(2);
 			let subtotalFinal = moneda == "soles" ? "S/. " + subtotal : subtotal + " $";
 
@@ -2004,7 +2005,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${precio}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${descuento}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${subtotalFinal}</td>
                 </tr>`;
 

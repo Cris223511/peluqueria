@@ -2,7 +2,11 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-define('VALOR_DOLAR', 0.27);
+if (strlen(session_id()) < 1) {
+	session_start(); //Validamos si existe o no la sesión
+}
+
+define('VALOR_DOLAR', $_SESSION["cambio"]);
 
 class Venta
 {
@@ -81,12 +85,14 @@ class Venta
 				ejecutarConsulta($sql_detalle) or $sw = false;
 			}
 
-			if ($esArticulo && $id != 0) {
-				$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
-				ejecutarConsulta($actualizar_art) or $sw = false;
-			} elseif ($esServicio && $id != 0) {
-				$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
-				ejecutarConsulta($actualizar_serv) or $sw = false;
+			if ($moneda != "dolares") {
+				if ($esArticulo && $id != 0) {
+					$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
+					ejecutarConsulta($actualizar_art) or $sw = false;
+				} elseif ($esServicio && $id != 0) {
+					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
+					ejecutarConsulta($actualizar_serv) or $sw = false;
+				}
 			}
 		}
 
@@ -99,8 +105,16 @@ class Venta
 			$num_elementos = $num_elementos + 1;
 		}
 
-		$sql_actualizar_monto = "UPDATE cajas SET monto_total = monto_total + '$total_venta', vendido = '1' WHERE idcaja = '$idcaja'";
-		ejecutarConsulta($sql_actualizar_monto);
+		$totalEnDolares = number_format($total_venta / VALOR_DOLAR, 2);
+
+		if ($moneda == "dolares") {
+			$sql_actualizar_monto = "UPDATE cajas SET monto_total = monto_total + '$totalEnDolares', vendido = '1' WHERE idcaja = '$idcaja'";
+			ejecutarConsulta($sql_actualizar_monto);
+		} else {
+			$sql_actualizar_monto = "UPDATE cajas SET monto_total = monto_total + '$total_venta', vendido = '1' WHERE idcaja = '$idcaja'";
+			ejecutarConsulta($sql_actualizar_monto);
+		}
+
 
 		return [$sw, $idventanew];
 	}
@@ -150,9 +164,6 @@ class Venta
 
 	public function validarPrecioCompraPrecioVenta($detalles, $precio_compra, $precio_venta)
 	{
-		// Define el valor de la conversión de soles a dólares
-		$valor_dolar = 0.27;
-
 		if (!is_array($detalles)) {
 			$detalles = json_decode($detalles, true);
 		}
@@ -165,7 +176,7 @@ class Venta
 			$id = str_replace('_producto', '', $idarticulo);
 
 			// Si la moneda es dólares, convertir el precio de venta a soles
-			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] * $valor_dolar : $precio_venta[$indice];
+			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] / VALOR_DOLAR : $precio_venta[$indice];
 
 			if ($precioVentaValidar < $precio_compra[$indice]) {
 				return true;

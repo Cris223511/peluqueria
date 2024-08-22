@@ -174,7 +174,8 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -199,7 +200,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
 							'<a data-toggle="modal" href="#myModal5"><button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
-							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal2"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => '<a target="_blank" href="../reportes/exA4Venta.php?id=' . $reg->idventa . '"> <button class="btn btn-info" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
 						"2" => $reg->fecha,
@@ -208,11 +209,17 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
 						"7" => $reg->total_venta,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -224,10 +231,25 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL EN SOLES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"8" => "",
 						"9" => "",
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL EN DÓLARES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+						"10" => "",
 					);
 				}
 
@@ -266,7 +288,8 @@ if (!isset($_SESSION["nombre"])) {
 				}
 
 				$firstIteration = true;
-				$totalPrecioVenta = 0;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -291,7 +314,7 @@ if (!isset($_SESSION["nombre"])) {
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
 							'<a data-toggle="modal" href="#myModal6"><button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion2(' . $reg->idproforma . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
-							'<a data-toggle="modal" href="#myModal4"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles2(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal4"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles2(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => '<a target="_blank" href="../reportes/exA4Proforma.php?id=' . $reg->idproforma . '"> <button class="btn btn-info" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
 						"2" => $reg->fecha,
@@ -300,11 +323,17 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
 						"7" => $reg->total_venta,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalPrecioVenta += $reg->total_venta;
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -316,10 +345,25 @@ if (!isset($_SESSION["nombre"])) {
 						"3" => "",
 						"4" => "",
 						"5" => "",
-						"6" => "<strong>TOTAL</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVenta, 2) . '</strong>',
+						"6" => "<strong>TOTAL EN SOLES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"8" => "",
 						"9" => "",
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "<strong>TOTAL EN DÓLARES</strong>",
+						"7" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"8" => "",
+						"9" => "",
+						"10" => "",
 					);
 				}
 

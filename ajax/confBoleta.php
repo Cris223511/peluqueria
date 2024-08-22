@@ -11,6 +11,7 @@ $idreporte = isset($_POST["idreporte"]) ? limpiarCadena($_POST["idreporte"]) : "
 $titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 $auspiciado = isset($_POST["auspiciado"]) ? limpiarCadena($_POST["auspiciado"]) : "";
 $moneda = isset($_POST["moneda"]) ? limpiarCadena($_POST["moneda"]) : "";
+$cambio = isset($_POST["cambio"]) ? limpiarCadena($_POST["cambio"]) : "";
 $ruc = isset($_POST["ruc"]) ? limpiarCadena($_POST["ruc"]) : "";
 $direccion = isset($_POST["direccion"]) ? limpiarCadena($_POST["direccion"]) : "";
 $telefono = isset($_POST["telefono"]) ? limpiarCadena($_POST["telefono"]) : "";
@@ -48,8 +49,9 @@ switch ($_GET["op"]) {
 				}
 
 				$_SESSION["moneda"] = $moneda;
+				$_SESSION["cambio"] = $cambio;
 
-				$rspta = $perfil->actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $imagen);
+				$rspta = $perfil->actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio, $imagen);
 				echo $rspta ? "Boleta actualizado correctamente" : "Boleta no se pudo actualizar";
 			} else {
 				require 'noacceso.php';

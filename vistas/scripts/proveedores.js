@@ -244,7 +244,7 @@ function modalComprasProveedor(idproveedor, nombre, tipo_documento, num_document
 		}).DataTable();
 }
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno) {
+function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno, moneda) {
 	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
@@ -258,8 +258,9 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		}
 
 		$('#nombre_proveedor').text(nombreCompleto);
-		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "Sin registrar");
-		$('#boleta_de_compra').text("N° " + num_comprobante);
+		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "SIN REGISTRAR");
+		$('#tipo_moneda').text(moneda == "soles" ? "SOLES" : "DÓLARES");
+		$('#boleta').text("N° " + num_comprobante);
 
 		// Actualizar detalles de la tabla productos
 		let tbody = $('#detallesProductosFinal tbody');
@@ -270,14 +271,18 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		data.articulos.forEach(item => {
 			let descripcion = item.articulo ? item.articulo : item.servicio;
 			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
+			let precio = moneda == "soles" ? "S/. " + item.precio_compra : item.precio_compra + " $";
+			let descuento = moneda == "soles" ? "S/. " + item.descuento : item.descuento + " $";
+			let subtotal = ((item.cantidad * item.precio_compra) - item.descuento).toFixed(2);
+			let subtotalFinal = moneda == "soles" ? "S/. " + subtotal : subtotal + " $";
 
 			let row = `
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.precio_compra}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${item.descuento}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${((item.cantidad * item.precio_compra) - item.descuento).toFixed(2)}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${precio}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${descuento}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${subtotalFinal}</td>
                 </tr>`;
 
 			tbody.append(row);
@@ -288,9 +293,13 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 
 		let igv = subtotal * (impuesto);
 
-		$('#subtotal_detalle').text(subtotal.toFixed(2));
-		$('#igv_detalle').text(igv.toFixed(2));
-		$('#total_detalle').text(total_compra);
+		let subtotal_detalle = moneda == "soles" ? "S/. " + subtotal.toFixed(2) : subtotal.toFixed(2) + " $";
+		let igv_detalle = moneda == "soles" ? "S/. " + igv.toFixed(2) : igv.toFixed(2) + " $";
+		let total_detalle = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+
+		$('#subtotal_detalle').text(subtotal_detalle);
+		$('#igv_detalle').text(igv_detalle);
+		$('#total_detalle').text(total_detalle);
 
 		// Actualizar detalles de la tabla pagos
 		let tbodyPagos = $('#detallesPagosFinal tbody');
@@ -299,10 +308,12 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		let subtotalPagos = 0;
 
 		data.pagos.forEach(item => {
+			let monto = moneda == "soles" ? "S/. " + item.monto : item.monto + " $";
+
 			let row = `
                 <tr>
                     <td width: 80%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(item.metodo_pago)}</td>
-                    <td width: 20%; min-width: 40px; white-space: nowrap;">${item.monto}</td>
+                    <td width: 20%; min-width: 40px; white-space: nowrap;">${monto}</td>
                 </tr>`;
 
 			tbodyPagos.append(row);
@@ -311,9 +322,13 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 			subtotalPagos += parseFloat(item.monto);
 		});
 
-		$('#subtotal_pagos').text(subtotalPagos.toFixed(2));
-		$('#vueltos_pagos').text(vuelto);
-		$('#total_pagos').text(total_compra);
+		let subtotal_pagos = moneda == "soles" ? "S/. " + subtotalPagos.toFixed(2) : subtotalPagos.toFixed(2) + " $";
+		let vueltos_pagos = moneda == "soles" ? "S/. " + vuelto : vuelto + " $";
+		let total_pagos = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+
+		$('#subtotal_pagos').text(subtotal_pagos);
+		$('#vueltos_pagos').text(vueltos_pagos);
+		$('#total_pagos').text(total_pagos);
 
 		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
 

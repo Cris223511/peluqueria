@@ -48,7 +48,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <label>Dirección:</label>
-                      <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="80">
+                      <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="50">
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <label>Teléfono:</label>
@@ -64,13 +64,17 @@ if (!isset($_SESSION["nombre"])) {
                       <input type="hidden" name="imagenactual" id="imagenactual"><br>
                       <img src="" width="150px" id="imagenmuestra" style="display: none;">
                     </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <label>Tipo de cambio:</label>
-                      <select name="moneda" id="moneda" class="form-control" required>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      <label>Tipo de cambio(*):</label>
+                      <select name="moneda" id="moneda" class="form-control" required onchange="manejarTipoCambio()">
                         <option value="">- Seleccione -</option>
                         <option value="soles">Soles</option>
                         <option value="dolares">Dólares</option>
                       </select>
+                    </div>
+                    <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                      <label>Valor de conversión(*):<a href="#" data-toggle="popover" data-placement="top" title="<strong>Valor de conversión</strong>" data-html="true" data-content="Digite el valor de la conversión de soles a dólares, es decir, cuánto vale un sol en un dólar, para que se haga las conversiones de los precios en soles a dólares (el valor de conversión va a dividir el precio que está en soles). Sólo aplicable para el tipo de cambio en dólares." style="color: #002a8e; font-size: 18px; position: absolute; top: -3px;">&nbsp;<i class="fa fa-question-circle"></i></a></label>
+                      <input type="number" class="form-control" name="cambio" id="cambio" step="any" placeholder="Ingrese el valor de conversión." required>
                     </div>
                     <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-bottom: 0;">
                       <button class="btn btn-bcp" type="submit" id="btnGuardar"><i class="fa fa-save"></i> Guardar</button>

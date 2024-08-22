@@ -227,7 +227,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idcompra . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->proveedor . '\', \'' . $reg->proveedor_tipo_documento . '\', \'' . $reg->proveedor_num_documento . '\', \'' . $reg->proveedor_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_compra . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->proveedor_tipo_documento . ": " . $reg->proveedor_num_documento,
@@ -351,7 +351,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
@@ -478,7 +478,7 @@ if (!isset($_SESSION["nombre"])) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
-							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idproforma . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
 							'</div>',
 						"1" => $reg->fecha,
 						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
@@ -583,7 +583,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalMonto = 0;
+				$totalMontoSoles = 0;
+				$totalMontoDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -611,14 +612,20 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->proveedor,
 						"3" => $reg->metodo_pago_titulo,
 						"4" => $reg->metodo_pago_monto,
-						"5" => 'N° ' . $reg->num_comprobante,
-						"6" => $reg->local,
-						"7" => $reg->tipo_comprobante,
-						"8" => $reg->usuario . ' - ' . $cargo_detalle,
-						"9" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"5" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"6" => 'N° ' . $reg->num_comprobante,
+						"7" => $reg->local,
+						"8" => $reg->tipo_comprobante,
+						"9" => $reg->usuario . ' - ' . $cargo_detalle,
+						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalMonto += $reg->metodo_pago_monto;
+					if ($reg->moneda == 'soles') {
+						$totalMontoSoles += $reg->metodo_pago_monto;
+					} else {
+						$totalMontoDolares += $reg->metodo_pago_monto;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -627,13 +634,28 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => "",
 						"1" => "",
 						"2" => "",
-						"3" => "<strong>TOTAL</strong>",
-						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"3" => "<strong>TOTAL EN SOLES</strong>",
+						"4" => '<strong>' . number_format($totalMontoSoles, 2) . '</strong>',
 						"5" => "",
 						"6" => "",
 						"7" => "",
 						"8" => "",
 						"9" => "",
+						"10" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL EN DÓLARES</strong>",
+						"4" => '<strong>' . number_format($totalMontoDolares, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
 					);
 				}
 
@@ -686,7 +708,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalMonto = 0;
+				$totalMontoSoles = 0;
+				$totalMontoDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -714,15 +737,21 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->cliente,
 						"3" => $reg->metodo_pago_titulo,
 						"4" => $reg->metodo_pago_monto,
-						"5" => 'N° ' . $reg->num_comprobante,
-						"6" => $reg->local,
-						"7" => $reg->caja,
-						"8" => $reg->tipo_comprobante,
-						"9" => $reg->usuario . ' - ' . $cargo_detalle,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"5" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"6" => 'N° ' . $reg->num_comprobante,
+						"7" => $reg->local,
+						"8" => $reg->caja,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalMonto += $reg->metodo_pago_monto;
+					if ($reg->moneda == 'soles') {
+						$totalMontoSoles += $reg->metodo_pago_monto;
+					} else {
+						$totalMontoDolares += $reg->metodo_pago_monto;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -731,14 +760,30 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => "",
 						"1" => "",
 						"2" => "",
-						"3" => "<strong>TOTAL</strong>",
-						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"3" => "<strong>TOTAL EN SOLES</strong>",
+						"4" => '<strong>' . number_format($totalMontoSoles, 2) . '</strong>',
 						"5" => "",
 						"6" => "",
 						"7" => "",
 						"8" => "",
 						"9" => "",
 						"10" => "",
+						"11" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL EN DÓLARES</strong>",
+						"4" => '<strong>' . number_format($totalMontoDolares, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 
@@ -791,7 +836,8 @@ if (!isset($_SESSION["nombre"])) {
 				$data = array();
 
 				$firstIteration = true;
-				$totalMonto = 0;
+				$totalMontoSoles = 0;
+				$totalMontoDolares = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -819,15 +865,21 @@ if (!isset($_SESSION["nombre"])) {
 						"2" => $reg->cliente,
 						"3" => $reg->metodo_pago_titulo,
 						"4" => $reg->metodo_pago_monto,
-						"5" => 'N° ' . $reg->num_comprobante,
-						"6" => $reg->local,
-						"7" => $reg->caja,
-						"8" => $reg->tipo_comprobante,
-						"9" => $reg->usuario . ' - ' . $cargo_detalle,
-						"10" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"5" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"6" => 'N° ' . $reg->num_comprobante,
+						"7" => $reg->local,
+						"8" => $reg->caja,
+						"9" => $reg->tipo_comprobante,
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
 					);
 
-					$totalMonto += $reg->metodo_pago_monto;
+					if ($reg->moneda == 'soles') {
+						$totalMontoSoles += $reg->metodo_pago_monto;
+					} else {
+						$totalMontoDolares += $reg->metodo_pago_monto;
+					}
+
 					$firstIteration = false; // Marcar que ya no es la primera iteración
 				}
 
@@ -836,14 +888,30 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => "",
 						"1" => "",
 						"2" => "",
-						"3" => "<strong>TOTAL</strong>",
-						"4" => '<strong>' . number_format($totalMonto, 2) . '</strong>',
+						"3" => "<strong>TOTAL EN SOLES</strong>",
+						"4" => '<strong>' . number_format($totalMontoSoles, 2) . '</strong>',
 						"5" => "",
 						"6" => "",
 						"7" => "",
 						"8" => "",
 						"9" => "",
 						"10" => "",
+						"11" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "<strong>TOTAL EN DÓLARES</strong>",
+						"4" => '<strong>' . number_format($totalMontoDolares, 2) . '</strong>',
+						"5" => "",
+						"6" => "",
+						"7" => "",
+						"8" => "",
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 
@@ -894,6 +962,9 @@ if (!isset($_SESSION["nombre"])) {
 
 				$data = array();
 
+				$firstIteration = true;
+				$totalVenta = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -930,6 +1001,26 @@ if (!isset($_SESSION["nombre"])) {
 						"10" => $cargo_detalle,
 						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
 					);
+
+					$totalVenta += $reg->total_precio_venta;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . (($_GET["param8"] == "soles") ? "S/. " . number_format($totalVenta, 2, '.', ',') : number_format($totalVenta, 2, '.', ',') . " $") . '</strong>',
+						"9" => "",
+						"10" => "",
+						"11" => "",
+					);
 				}
 
 				$results = array(
@@ -963,7 +1054,8 @@ if (!isset($_SESSION["nombre"])) {
 					"param4" => "a.idmarca = '{$_GET["param4"]}'",
 					"param5" => "a.idcategoria = '{$_GET["param5"]}'",
 					"param6" => "a.idusuario = '{$_GET["param6"]}'",
-					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'")
+					"param7" => $estadoSeleccionado == "AGOTANDOSE" ? "a.stock > 0 AND a.stock < a.stock_minimo" : ($estadoSeleccionado == "DISPONIBLE" ? "a.stock != '0'" : "a.stock = '0'"),
+					"param8" => "co.moneda = '{$_GET["param8"]}'",
 				);
 
 				foreach ($filtros as $param => $condicion) {
@@ -977,6 +1069,9 @@ if (!isset($_SESSION["nombre"])) {
 				$rspta = $cargo == "superadmin" ? $reporte->listarArticulosMasComprados($condiciones) : $reporte->listarArticulosMasCompradosLocal($idlocalSession, $condiciones);
 
 				$data = array();
+
+				$firstIteration = true;
+				$totalCompra = 0;
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
@@ -1009,10 +1104,30 @@ if (!isset($_SESSION["nombre"])) {
 						"5" => $reg->marca,
 						"6" => $reg->codigo_producto,
 						"7" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span style="color: #Ea9900; font-weight: bold">' . $reg->stock . '</span>' : (($reg->stock != '0') ? '<span>' . $reg->stock . '</span>' : '<span style="color: red; font-weight: bold">' . $reg->stock . '</span>'),
-						"8" => "S/. " . number_format($reg->precio_compra, 2, '.', ','),
+						"8" => ($_GET["param8"] == "soles") ? "S/. " . number_format($reg->total_precio_compra, 2, '.', ',') : number_format($reg->total_precio_compra, 2, '.', ',') . " $",
 						"9" => $reg->usuario,
 						"10" => $cargo_detalle,
 						"11" => ($reg->stock > 0 && $reg->stock < $reg->stock_minimo) ? '<span class="label bg-orange">agotandose</span>' : (($reg->stock != '0') ? '<span class="label bg-green">Disponible</span>' : '<span class="label bg-red">agotado</span>')
+					);
+
+					$totalCompra += $reg->total_precio_compra;
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL</strong>",
+						"8" => '<strong>' . (($_GET["param8"] == "soles") ? "S/. " . number_format($totalCompra, 2, '.', ',') : number_format($totalCompra, 2, '.', ',') . " $") . '</strong>',
+						"9" => "",
+						"10" => "",
+						"11" => "",
 					);
 				}
 

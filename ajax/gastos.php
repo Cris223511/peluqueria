@@ -46,6 +46,11 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($rspta);
 				break;
 
+			case 'validarCaja':
+				$rspta = $gastos->validarCaja($_POST["idcaja"]);
+				echo json_encode($rspta);
+				break;
+
 			case 'listar':
 				$param1 = $_GET["param1"]; // valor fecha inicio
 				$param2 = $_GET["param2"]; // valor fecha fin

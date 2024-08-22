@@ -56,6 +56,12 @@ class Gasto
 		}
 	}
 
+	public function validarCaja($idcaja)
+	{
+		$sql = "SELECT estado FROM cajas WHERE idcaja = '$idcaja'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
 	public function mostrar($idgasto)
 	{
 		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja, g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE idgasto='$idgasto'";

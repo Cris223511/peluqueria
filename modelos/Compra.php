@@ -2,7 +2,11 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-define('VALOR_DOLAR', 0.27);
+if (strlen(session_id()) < 1) {
+	session_start(); //Validamos si existe o no la sesión
+}
+
+define('VALOR_DOLAR', $_SESSION["cambio"]);
 
 class Compra
 {
@@ -61,12 +65,14 @@ class Compra
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
-			if ($esArticulo && $id != 0) {
-				$actualizar_art = "UPDATE articulo SET precio_compra='$precioCompraItem' WHERE idarticulo='$id'";
-				ejecutarConsulta($actualizar_art) or $sw = false;
-			} elseif ($esServicio && $id != 0) {
-				$actualizar_serv = "UPDATE servicios SET costo='$precioCompraItem' WHERE idservicio='$id'";
-				ejecutarConsulta($actualizar_serv) or $sw = false;
+			if ($moneda != "dolares") {
+				if ($esArticulo && $id != 0) {
+					$actualizar_art = "UPDATE articulo SET precio_compra='$precioCompraItem' WHERE idarticulo='$id'";
+					ejecutarConsulta($actualizar_art) or $sw = false;
+				} elseif ($esServicio && $id != 0) {
+					$actualizar_serv = "UPDATE servicios SET costo='$precioCompraItem' WHERE idservicio='$id'";
+					ejecutarConsulta($actualizar_serv) or $sw = false;
+				}
 			}
 		}
 

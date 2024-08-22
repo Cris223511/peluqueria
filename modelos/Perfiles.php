@@ -11,126 +11,125 @@ class Perfiles
 
 	/* ===================  ESCRITORIO ====================== */
 
-	public function comprasultimos_10dias()
+	public function comprasultimos_10dias($moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
-				FROM compra 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM compra 
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function comprasultimos_10diasUsuario($idlocal)
+	public function comprasultimos_10diasUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
-				FROM compra 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM compra 
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function ventasultimos_10dias()
+	public function ventasultimos_10dias($moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
-				FROM venta 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM venta 
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function ventasultimos_10diasUsuario($idlocal)
+	public function ventasultimos_10diasUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
-				FROM venta 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM venta 
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function proformasultimos_10dias()
+	public function proformasultimos_10dias($moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
-				FROM proforma 
-				WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM proforma 
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function proformasultimos_10diasUsuario($idlocal)
+	public function proformasultimos_10diasUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
-				FROM proforma 
-				WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0'
-				GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
-				ORDER BY fecha_hora ASC";
+                FROM proforma 
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
+                ORDER BY fecha_hora ASC";
 
 		return ejecutarConsulta($sql);
 	}
 
-	public function totalVentas()
+	public function totalVentas($moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-            	FROM venta
-				WHERE eliminado = '0'";
+                FROM venta
+                WHERE eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function totalVentasUsuario($idlocal)
+	public function totalVentasUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-				FROM venta 
-				WHERE idlocal = '$idlocal' AND eliminado = '0'";
+                FROM venta 
+                WHERE idlocal = '$idlocal' AND eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function totalVentasProforma()
+	public function totalVentasProforma($moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-				FROM proforma
-				WHERE eliminado = '0'";
+                FROM proforma
+                WHERE eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function totalVentasProformaUsuario($idlocal)
+	public function totalVentasProformaUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_venta) AS total 
-				FROM proforma 
-				WHERE idlocal = '$idlocal' AND eliminado = '0'";
+                FROM proforma 
+                WHERE idlocal = '$idlocal' AND eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function totalCompras()
+	public function totalCompras($moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_compra) AS total 
-            	FROM compra
-				WHERE eliminado = '0'";
+                FROM compra
+                WHERE eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function totalComprasUsuario($idlocal)
+	public function totalComprasUsuario($idlocal, $moneda = 'soles')
 	{
 		$sql = "SELECT SUM(total_compra) AS total 
-            	FROM compra 
-            	WHERE idlocal = '$idlocal' AND eliminado = '0'";
+                FROM compra 
+                WHERE idlocal = '$idlocal' AND eliminado = '0' AND moneda = '$moneda'";
 
 		return ejecutarConsultaSimpleFila($sql);
 	}
-
 
 	/* ===================  PERFILES DE USUARIO ====================== */
 	public function mostrarUsuario($idusuario)
@@ -165,9 +164,9 @@ class Perfiles
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $imagen)
+	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio, $imagen)
 	{
-		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',imagen='$imagen' WHERE idreporte='$idreporte'";
+		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',cambio='$cambio',imagen='$imagen' WHERE idreporte='$idreporte'";
 		return ejecutarConsulta($sql);
 	}
 }

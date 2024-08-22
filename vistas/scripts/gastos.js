@@ -210,10 +210,28 @@ function buscar() {
 var montoCaja = 0;
 var selectCaja = 0;
 
-function changeCaja() {
-	selectCaja = document.getElementById("idcaja");
-	montoCaja = selectCaja.options[selectCaja.selectedIndex].getAttribute("data-monto");
-	document.getElementById("monto_caja").value = montoCaja;
+function changeCaja(e) {
+	let idcaja = e.value;
+
+	if (e.value != "") {
+		$.post("../ajax/gastos.php?op=validarCaja", { idcaja: idcaja }, function (e) {
+			e = limpiarCadena(e);
+			console.log(e);
+			const obj = JSON.parse(e);
+			console.log(obj);
+
+			if (obj.estado != "aperturado") {
+				bootbox.alert("La caja que ha seleccionado se encuentra cerrada.");
+				$("#idcaja").val("");
+				$("#idcaja").selectpicker("refresh");
+				return;
+			} else {
+				selectCaja = document.getElementById("idcaja");
+				montoCaja = selectCaja.options[selectCaja.selectedIndex].getAttribute("data-monto");
+				document.getElementById("monto_caja").value = montoCaja;
+			}
+		});
+	}
 }
 
 function guardaryeditar(e) {

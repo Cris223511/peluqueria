@@ -189,6 +189,12 @@ $local_login = $_SESSION['local'];
       margin-bottom: 0 !important;
     }
   }
+
+  #formularioregistros textarea.form-control {
+    height: fit-content !important;
+    font-size: 16px !important;
+    align-content: start !important;
+  }
 </style>
 
 <!DOCTYPE html>

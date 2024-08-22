@@ -345,6 +345,7 @@ class Reporte
 					co.tipo_comprobante,
 					co.num_comprobante,
 					co.vuelto,
+					co.moneda,
 					co.impuesto,
 					co.total_compra,
 					co.estado
@@ -381,6 +382,7 @@ class Reporte
 					co.tipo_comprobante,
 					co.num_comprobante,
 					co.vuelto,
+					co.moneda,
 					co.impuesto,
 					co.total_compra,
 					co.estado
@@ -422,6 +424,7 @@ class Reporte
 					v.tipo_comprobante,
 					v.num_comprobante,
 					v.vuelto,
+					v.moneda,
 					v.impuesto,
 					v.total_venta,
 					v.estado
@@ -461,6 +464,7 @@ class Reporte
 					v.tipo_comprobante,
 					v.num_comprobante,
 					v.vuelto,
+					v.moneda,
 					v.impuesto,
 					v.total_venta,
 					v.estado
@@ -503,6 +507,7 @@ class Reporte
 					p.tipo_comprobante,
 					p.num_comprobante,
 					p.vuelto,
+					p.moneda,
 					p.impuesto,
 					p.total_venta,
 					p.estado
@@ -542,6 +547,7 @@ class Reporte
 					p.tipo_comprobante,
 					p.num_comprobante,
 					p.vuelto,
+					p.moneda,
 					p.impuesto,
 					p.total_venta,
 					p.estado
@@ -621,7 +627,7 @@ class Reporte
 				  a.descripcion,
 				  a.imagen,
 				  a.precio_compra,
-				  a.precio_venta,
+				  SUM(dv.precio_venta) as total_precio_venta,
 				  a.estado
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo
@@ -633,7 +639,7 @@ class Reporte
 				WHERE a.idlocal = '$idlocal'
 				AND $condiciones
 				GROUP BY dv.idarticulo
-				ORDER BY cantidad DESC";
+				ORDER BY total_cantidad DESC, total_precio_venta DESC";
 
 		return ejecutarConsulta($sql);
 	}
@@ -661,8 +667,7 @@ class Reporte
 				  a.stock_minimo,
 				  a.descripcion,
 				  a.imagen,
-				  a.precio_compra,
-				  a.precio_compra,
+				  SUM(dc.precio_compra) as total_precio_compra,
 				  a.estado
 				FROM detalle_compra dc
 				LEFT JOIN articulo a ON dc.idarticulo = a.idarticulo
@@ -673,7 +678,7 @@ class Reporte
 				LEFT JOIN compra co ON dc.idcompra = co.idcompra
 				WHERE $condiciones
 				GROUP BY dc.idarticulo
-				ORDER BY cantidad DESC";
+				ORDER BY total_cantidad DESC, total_precio_compra DESC";
 
 		return ejecutarConsulta($sql);
 	}
@@ -699,8 +704,7 @@ class Reporte
 				  a.stock_minimo,
 				  a.descripcion,
 				  a.imagen,
-				  a.precio_compra,
-				  a.precio_compra,
+				  SUM(dc.precio_compra) as total_precio_compra,
 				  a.estado
 				FROM detalle_compra dc
 				LEFT JOIN articulo a ON dc.idarticulo = a.idarticulo
@@ -712,7 +716,7 @@ class Reporte
 				WHERE a.idlocal = '$idlocal'
 				AND $condiciones
 				GROUP BY dc.idarticulo
-				ORDER BY cantidad DESC";
+				ORDER BY total_cantidad DESC, total_precio_compra DESC";
 
 		return ejecutarConsulta($sql);
 	}

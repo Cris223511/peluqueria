@@ -87,6 +87,7 @@ class Proveedor
 				  c.tipo_comprobante,
 				  c.num_comprobante,
 				  c.vuelto,
+				  c.moneda,
 				  c.impuesto,
 				  c.total_compra,
 				  c.comentario_interno,
@@ -120,6 +121,7 @@ class Proveedor
 				  c.tipo_comprobante,
 				  c.num_comprobante,
 				  c.vuelto,
+				  c.moneda,
 				  c.impuesto,
 				  c.total_compra,
 				  c.estado

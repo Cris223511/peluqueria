@@ -56,6 +56,12 @@ class Retiro
 		}
 	}
 
+	public function validarCaja($idcaja)
+	{
+		$sql = "SELECT estado FROM cajas WHERE idcaja = '$idcaja'";
+		return ejecutarConsultaSimpleFila($sql);
+	}
+
 	public function mostrar($idretiro)
 	{
 		$sql = "SELECT r.idretiro, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja, r.monto, r.monto_caja, r.monto_total, r.descripcion, DATE_FORMAT(r.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM retiros r LEFT JOIN usuario u ON r.idusuario = u.idusuario LEFT JOIN locales l ON r.idlocal=l.idlocal LEFT JOIN cajas c ON r.idcaja = c.idcaja WHERE idretiro='$idretiro'";

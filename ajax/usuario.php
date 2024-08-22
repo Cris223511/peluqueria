@@ -324,7 +324,9 @@ switch ($_GET["op"]) {
 			require('../modelos/Perfiles.php');
 			$perfil = new Perfiles();
 			$rspta = $perfil->mostrarReporte();
+
 			$_SESSION['moneda'] = $rspta["moneda"];
+			$_SESSION['cambio'] = $rspta["cambio"];
 
 			switch ($_SESSION['cargo']) {
 				case 'superadmin':

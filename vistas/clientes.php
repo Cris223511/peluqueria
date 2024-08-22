@@ -11,55 +11,107 @@ if (!isset($_SESSION["nombre"])) {
   if ($_SESSION['ventas'] == 1) {
 ?>
     <style>
-      .detallesProductosFinal thead,
-      .detallesProductosFinal thead tr,
-      .detallesProductosFinal thead th,
-      .detallesProductosFinal tbody,
-      .detallesProductosFinal tbody tr,
-      .detallesProductosFinal tbody th {
+      #detallesProductosFinal thead,
+      #detallesProductosFinal thead tr,
+      #detallesProductosFinal thead th,
+      #detallesProductosFinal tbody,
+      #detallesProductosFinal tbody tr,
+      #detallesProductosFinal tbody th {
         border: none !important;
         background-color: white;
         font-size: 16px;
         text-align: center;
       }
 
-      .detallesProductosFinal thead {
+      #detallesProductosFinal thead {
         border-bottom: 1.5px black solid !important;
       }
 
-      .detallesProductosFinal tbody,
-      .detallesProductosFinal tfoot {
+      #detallesProductosFinal tbody,
+      #detallesProductosFinal tfoot {
         border-top: 1.5px black solid !important;
       }
 
-      .detallesProductosFinal tbody tr td,
-      .detallesProductosFinal tfoot tr td {
+      #detallesProductosFinal tbody tr td,
+      #detallesProductosFinal tfoot tr td {
         border: none !important;
       }
 
-      .detallesPagosFinal thead,
-      .detallesPagosFinal thead tr,
-      .detallesPagosFinal thead th,
-      .detallesPagosFinal tbody,
-      .detallesPagosFinal tbody tr,
-      .detallesPagosFinal tbody th {
+      #detallesPagosFinal thead,
+      #detallesPagosFinal thead tr,
+      #detallesPagosFinal thead th,
+      #detallesPagosFinal tbody,
+      #detallesPagosFinal tbody tr,
+      #detallesPagosFinal tbody th {
         border: none !important;
         background-color: white;
         font-size: 16px;
         text-align: center;
       }
 
-      .detallesPagosFinal thead {
+      #detallesPagosFinal thead {
         border-bottom: 1.5px black solid !important;
       }
 
-      .detallesPagosFinal tbody,
-      .detallesPagosFinal tfoot {
+      #detallesPagosFinal tbody,
+      #detallesPagosFinal tfoot {
         border-top: 1.5px black solid !important;
       }
 
-      .detallesPagosFinal tbody tr td,
-      .detallesPagosFinal tfoot tr td {
+      #detallesPagosFinal tbody tr td,
+      #detallesPagosFinal tfoot tr td {
+        border: none !important;
+      }
+
+      #detallesProductosFinal2 thead,
+      #detallesProductosFinal2 thead tr,
+      #detallesProductosFinal2 thead th,
+      #detallesProductosFinal2 tbody,
+      #detallesProductosFinal2 tbody tr,
+      #detallesProductosFinal2 tbody th {
+        border: none !important;
+        background-color: white;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #detallesProductosFinal2 thead {
+        border-bottom: 1.5px black solid !important;
+      }
+
+      #detallesProductosFinal2 tbody,
+      #detallesProductosFinal2 tfoot {
+        border-top: 1.5px black solid !important;
+      }
+
+      #detallesProductosFinal2 tbody tr td,
+      #detallesProductosFinal2 tfoot tr td {
+        border: none !important;
+      }
+
+      #detallesPagosFinal2 thead,
+      #detallesPagosFinal2 thead tr,
+      #detallesPagosFinal2 thead th,
+      #detallesPagosFinal2 tbody,
+      #detallesPagosFinal2 tbody tr,
+      #detallesPagosFinal2 tbody th {
+        border: none !important;
+        background-color: white;
+        font-size: 16px;
+        text-align: center;
+      }
+
+      #detallesPagosFinal2 thead {
+        border-bottom: 1.5px black solid !important;
+      }
+
+      #detallesPagosFinal2 tbody,
+      #detallesPagosFinal2 tfoot {
+        border-top: 1.5px black solid !important;
+      }
+
+      #detallesPagosFinal2 tbody tr td,
+      #detallesPagosFinal2 tfoot tr td {
         border: none !important;
       }
     </style>
@@ -231,7 +283,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Venta (S/.)</th>
+                  <th>Total Venta</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </thead>
@@ -245,7 +298,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Venta (S/.)</th>
+                  <th>Total Venta</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </tfoot>
@@ -270,11 +324,12 @@ if (!isset($_SESSION["nombre"])) {
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">NOTA DE VENTA: <span id="nota_de_venta" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">CLIENTE: <span id="nombre_cliente" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN CLIENTE: <span id="direccion_cliente" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">TIPO DE MONEDA: <span id="tipo_moneda" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
-              <table class="detallesProductosFinal table w-100" style="width: 100% !important; margin-bottom: 0px;">
+              <table class="table w-100" id="detallesProductosFinal" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
                   <th>DESCRIPCIÓN DEL PRODUCTO</th>
                   <th>CANTIDAD</th>
@@ -311,7 +366,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
-              <table class="detallesPagosFinal table w-100" style="width: 100% !important; margin-bottom: 0px;">
+              <table class="table w-100" id="detallesPagosFinal" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
                   <th>DESCRIPCIÓN DE PAGOS</th>
                   <th>MONTO</th>
@@ -369,7 +424,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Venta (S/.)</th>
+                  <th>Total Venta</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </thead>
@@ -383,7 +439,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Venta (S/.)</th>
+                  <th>Total Venta</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </tfoot>
@@ -408,11 +465,12 @@ if (!isset($_SESSION["nombre"])) {
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">COTIZACIÓN: <span id="nota_de_venta2" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">CLIENTE: <span id="nombre_cliente2" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN CLIENTE: <span id="direccion_cliente2" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">TIPO DE MONEDA: <span id="tipo_moneda2" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
-              <table class="detallesProductosFinal table w-100" style="width: 100% !important; margin-bottom: 0px;">
+              <table class="table w-100" id="detallesProductosFinal2" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
                   <th>DESCRIPCIÓN DEL PRODUCTO</th>
                   <th>CANTIDAD</th>
@@ -449,7 +507,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
 
             <div class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 15px; padding-top: 0px; background-color: white; overflow: auto;">
-              <table class="table w-100 detallesPagosFinal" style="width: 100% !important; margin-bottom: 0px;">
+              <table class="table w-100" id="detallesPagosFinal2" style="width: 100% !important; margin-bottom: 0px;">
                 <thead style="border-bottom: 1.5px solid black !important;">
                   <th>DESCRIPCIÓN DE PAGOS</th>
                   <th>MONTO</th>
@@ -471,6 +529,10 @@ if (!isset($_SESSION["nombre"])) {
                 <tbody>
                 </tbody>
               </table>
+            </div>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              <label>Comentario interno:</label>
+              <textarea type="text" class="form-control" id="comentario_interno_detalle2" maxlength="1000" rows="4" autocomplete="off" disabled></textarea>
             </div>
             <div class="col-lg-12 col-md-12 col-sm-12" style="text-align: center;">
               <h4 style="font-weight: bold;">ATENDIDO POR: <span id="atendido_venta2" style="font-weight: 600;"></span></h4>

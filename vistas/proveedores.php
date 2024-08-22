@@ -191,7 +191,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th style="width: 15%; min-width: 200px;">Almacén</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Compra (S/.)</th>
+                  <th>Total Compra</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </thead>
@@ -204,7 +205,8 @@ if (!isset($_SESSION["nombre"])) {
                   <th style="width: 15%; min-width: 200px;">Almacén</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
-                  <th>Total Compra (S/.)</th>
+                  <th>Total Compra</th>
+                  <th>Moneda</th>
                   <th>Agregado por</th>
                   <th>Estado</th>
                 </tfoot>
@@ -229,6 +231,7 @@ if (!isset($_SESSION["nombre"])) {
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">ORDEN DE COMPRA: <span id="boleta_de_compra" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">PROVEEDOR: <span id="nombre_proveedor" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN PROVEEDOR: <span id="direccion_proveedor" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">TIPO DE MONEDA: <span id="tipo_moneda" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">

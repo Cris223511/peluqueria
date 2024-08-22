@@ -140,7 +140,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Imagen</th>
                       <th style="width: 20%; min-width: 260px;">Nombre</th>
                       <th style="white-space: nowrap;">U. medida</th>
-                      <th style="width: 20%; min-width: 400px;">Descripción</th>
+                      <th style="width: 20%; min-width: 300px;">Descripción</th>
                       <th>Categoría</th>
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Stock normal</th>
@@ -266,7 +266,7 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-12 col-md-12 col-sm-12">
                         <label>Descripción:</label>
-                        <input type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" placeholder="Ingrese la descripción del producto." autocomplete="off">
+                        <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="1000" rows="4" placeholder="Ingrese la descripción del producto."></textarea>
                       </div>
                       <div class="form-group col-lg-12 col-md-12" style="display: flex; justify-content: center;">
                         <button class="btn btn-success" type="button" id="btnDetalles1" onclick="frmDetalles(true)"><i class="fa fa-plus"></i> Más detalles</button>

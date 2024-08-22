@@ -89,7 +89,7 @@ if (!isset($_SESSION["cajas"])) {
                 <form name="formulario" id="formulario" method="POST">
                   <div class="form-group col-lg-6 col-md-6 col-sm-">
                     <label>Caja(*):</label>
-                    <select id="idcaja" name="idcaja" class="form-control selectpicker" onchange="changeCaja();" data-live-search="true" data-size="5" required>
+                    <select id="idcaja" name="idcaja" class="form-control selectpicker" onchange="changeCaja(this);" data-live-search="true" data-size="5" required>
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>

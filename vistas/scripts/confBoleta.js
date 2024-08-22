@@ -11,10 +11,32 @@ function init() {
 	mostrar();
 }
 
+function manejarTipoCambio() {
+	var tipoCambio = document.getElementById('moneda').value;
+	var cambioInput = document.getElementById('cambio');
+
+	if (tipoCambio === 'soles' || tipoCambio == '') {
+		cambioInput.disabled = true;
+	} else {
+		cambioInput.disabled = false;
+	}
+}
+
 function guardaryeditar(e) {
-	e.preventDefault(); //No se activará la acción predeterminada del evento
+	e.preventDefault(); // No se activará la acción predeterminada del evento
 	$("#btnGuardar").prop("disabled", true);
-	var formData = new FormData($("#formulario")[0]);
+
+	var tipoCambio = document.getElementById('moneda').value;
+	var cambioInput = document.getElementById('cambio');
+	var formData;
+
+	if (tipoCambio === 'soles' || tipoCambio == '') {
+		cambioInput.disabled = false;
+		formData = new FormData($("#formulario")[0]);
+		cambioInput.disabled = true;
+	} else {
+		formData = new FormData($("#formulario")[0]);
+	}
 
 	$.ajax({
 		url: "../ajax/confBoleta.php?op=guardaryeditar",
@@ -45,6 +67,8 @@ function mostrar() {
 		$("#titulo").val(data.titulo);
 		$("#auspiciado").val(data.auspiciado);
 		$("#moneda").val(data.moneda);
+		$("#moneda").trigger("onchange");
+		$("#cambio").val(data.cambio);
 		$("#ruc").val(data.ruc);
 		$("#direccion").val(data.direccion);
 		$("#telefono").val(data.telefono);

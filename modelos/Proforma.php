@@ -2,7 +2,11 @@
 //Incluímos inicialmente la conexión a la base de datos
 require "../config/Conexion.php";
 
-define('VALOR_DOLAR', 0.27);
+if (strlen(session_id()) < 1) {
+	session_start(); //Validamos si existe o no la sesión
+}
+
+define('VALOR_DOLAR', $_SESSION["cambio"]);
 
 class Proforma
 {
@@ -80,12 +84,14 @@ class Proforma
 				ejecutarConsulta($sql_detalle) or $sw = false;
 			}
 
-			if ($esArticulo && $id != 0) {
-				$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
-				ejecutarConsulta($actualizar_art) or $sw = false;
-			} elseif ($esServicio && $id != 0) {
-				$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
-				ejecutarConsulta($actualizar_serv) or $sw = false;
+			if ($moneda != "dolares") {
+				if ($esArticulo && $id != 0) {
+					$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
+					ejecutarConsulta($actualizar_art) or $sw = false;
+				} elseif ($esServicio && $id != 0) {
+					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
+					ejecutarConsulta($actualizar_serv) or $sw = false;
+				}
 			}
 		}
 
@@ -149,23 +155,20 @@ class Proforma
 
 	public function validarPrecioCompraPrecioVenta($detalles, $precio_compra, $precio_venta)
 	{
-		// Define el valor de la conversión de soles a dólares
-		$valor_dolar = 0.27;
-	
 		if (!is_array($detalles)) {
 			$detalles = json_decode($detalles, true);
 		}
-	
+
 		$idarticulos = array_filter($detalles, function ($detalle) {
 			return strpos($detalle, '_producto') !== false;
 		});
-	
+
 		foreach ($idarticulos as $indice => $idarticulo) {
 			$id = str_replace('_producto', '', $idarticulo);
-	
+
 			// Si la moneda es dólares, convertir el precio de venta a soles
-			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] * $valor_dolar : $precio_venta[$indice];
-	
+			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] / VALOR_DOLAR : $precio_venta[$indice];
+
 			if ($precioVentaValidar < $precio_compra[$indice]) {
 				return true;
 			}
@@ -363,7 +366,7 @@ class Proforma
 	{
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
-	
+
 		$sql = "SELECT 'metodo_pago' AS tabla, m.idmetodopago AS id, m.titulo AS nombre, NULL AS local_ruc, m.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM metodo_pago m WHERE m.eliminado='0' AND m.estado='activado'
 				UNION
 				SELECT 'clientes' AS tabla, c.idcliente AS id, c.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, c.tipo_documento AS tipo_documento, c.num_documento AS num_documento, NULL AS cantidad, NULL AS marca, l.titulo AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM clientes c LEFT JOIN locales l ON c.idlocal = l.idlocal WHERE (c.idlocal = '$idlocal' OR c.idlocal = 0) AND c.eliminado='0' AND c.estado='activado'
@@ -384,7 +387,7 @@ class Proforma
 	{
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
-	
+
 		$sql = "SELECT 'metodo_pago' AS tabla, m.idmetodopago AS id, m.titulo AS nombre, NULL AS local_ruc, m.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM metodo_pago m WHERE m.eliminado='0' AND m.estado='activado'
 				UNION
 				SELECT 'clientes' AS tabla, c.idcliente AS id, c.nombre AS nombre, NULL AS local_ruc, NULL AS imagen, c.tipo_documento AS tipo_documento, c.num_documento AS num_documento, NULL AS cantidad, NULL AS marca, l.titulo AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM clientes c LEFT JOIN locales l ON c.idlocal = l.idlocal WHERE c.eliminado='0' AND c.estado='activado'
@@ -405,16 +408,16 @@ class Proforma
 	{
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
-	
+
 		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
-	
+
 	public function listarArticulosPorCategoriaLocal($idcategoria, $idlocal)
 	{
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
-	
+
 		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}

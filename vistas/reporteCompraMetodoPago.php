@@ -88,6 +88,7 @@ if (!isset($_SESSION["nombre"])) {
 
       .borrar_pago:before {
         content: "𝗑";
+        margin-top: -4.5px;
       }
     </style>
     <div class="content-wrapper">
@@ -133,6 +134,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 20%; min-width: 260px;">Proveedor</th>
                       <th>Método de pago</th>
                       <th>Monto</th>
+                      <th>Moneda</th>
                       <th>Número Ticket</th>
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Documento</th>
@@ -147,6 +149,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Proveedor</th>
                       <th>Método de pago</th>
                       <th>Monto</th>
+                      <th>Moneda</th>
                       <th>Número Ticket</th>
                       <th>Almacén</th>
                       <th>Documento</th>

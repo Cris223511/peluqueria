@@ -218,6 +218,7 @@ if (!isset($_SESSION["nombre"])) {
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">NOTA DE VENTA: <span id="nota_de_venta" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">CLIENTE: <span id="nombre_cliente" style="font-weight: 600;"></span></h4>
               <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">DIRECCIÓN CLIENTE: <span id="direccion_cliente" style="font-weight: 600;"></span></h4>
+              <h4 class="modal-title infotitulo" style="margin: 0; padding: 0; font-weight: bold; text-align: start;">TIPO DE MONEDA: <span id="tipo_moneda" style="font-weight: 600;"></span></h4>
             </div>
           </div>
           <div class="panel-body">

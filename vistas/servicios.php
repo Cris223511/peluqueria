@@ -17,10 +17,6 @@ if (!isset($_SESSION["nombre"])) {
         font-size: 16px !important;
         align-content: center;
       }
-
-      textarea {
-        align-content: center;
-      }
     </style>
 
     <div class="content-wrapper">

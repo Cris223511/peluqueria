@@ -108,13 +108,13 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Fecha Inicial:</label>
                     <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
                   </div>
-                  <div class="form-group col-lg-3 col-md-6 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-6 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Final:</label>
                     <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
                   </div>
-                  <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin: 0px;">
+                  <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" style="padding: 0px; margin: 0px; display: flex; align-items: center;">
                     <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
-                      <label>Tipo de moneda: <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Tipo de moneda</strong>" data-html="true" data-content="Filtra las ventas de los artículos que se vendieron en soles o en dólares." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a></label>
+                      <label>Tipo de moneda: <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Tipo de moneda</strong>" data-html="true" data-content="Filtra los artículos que más se vendieron en soles o en dólares en las ventas." style="color: #002a8e; font-size: 18px; position: absolute; top: 2.5px;">&nbsp;<i class="fa fa-question-circle"></i></a></label>
                       <select id="monedaBuscar" name="monedaBuscar" class="form-control selectpicker" data-size="5">
                         <option value="soles">Soles</option>
                         <option value="dolares">Dólares</option>
