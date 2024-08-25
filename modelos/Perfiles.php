@@ -15,7 +15,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
                 FROM compra 
-                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 
@@ -26,7 +26,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_compra) AS total 
                 FROM compra 
-                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 
@@ -37,7 +37,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
                 FROM venta 
-                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 
@@ -48,7 +48,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
                 FROM venta 
-                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 
@@ -59,7 +59,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
                 FROM proforma 
-                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 
@@ -70,7 +70,7 @@ class Perfiles
 	{
 		$sql = "SELECT CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora)) AS fecha, SUM(total_venta) AS total 
                 FROM proforma 
-                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 10 DAY) AND eliminado = '0' AND moneda = '$moneda'
+                WHERE idlocal = '$idlocal' AND fecha_hora >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) AND eliminado = '0' AND moneda = '$moneda'
                 GROUP BY CONCAT(DAY(fecha_hora), '-', MONTH(fecha_hora))
                 ORDER BY fecha_hora ASC";
 

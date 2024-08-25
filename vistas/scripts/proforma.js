@@ -1771,7 +1771,7 @@ function actualizarTablaDetallesProductosVenta() {
 	$('#detallesProductosPrecuenta .filas').each(function (index, fila) {
 		let id1 = $(fila).find('input[name="idarticulo[]"]').val();
 		let id2 = $(fila).find('input[name="idservicio[]"]').val();
-		let preciogVenta = $(fila).find('input[name="precio_venta[]"]').val();
+		let precioVenta = $(fila).find('input[name="precio_venta[]"]').val();
 		let descuento = $(fila).find('input[name="descuento[]"]').val();
 		let cantidad = $(fila).find('input[name="cantidad[]"]').val();
 

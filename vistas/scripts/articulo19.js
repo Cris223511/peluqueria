@@ -477,7 +477,7 @@ function obtenerDetalles() {
 		fecha_vencimiento: $("#fecha_vencimiento").val(),
 		nota_1: $("#nota_1").val(),
 		nota_2: $("#nota_2").val(),
-		codigo: $("#codigo").val()
+		codigo: $("#codigo_barra").val()
 	};
 
 	if (!detalles.comision) detalles.comision = '0.00';

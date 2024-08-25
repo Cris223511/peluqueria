@@ -330,7 +330,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasc; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Compras en S/ de los últimos 10 días',
+            label: 'Compras en S/ de los últimos 30 días',
             data: [<?php echo $totalesc; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
@@ -372,7 +372,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasv; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Ventas en S/ de los últimos 10 días',
+            label: 'Ventas en S/ de los últimos 30 días',
             data: [<?php echo $totalesv; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
@@ -414,7 +414,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasp; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Proformas en S/ de los últimos 10 días',
+            label: 'Proformas en S/ de los últimos 30 días',
             data: [<?php echo $totalesp; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
@@ -465,7 +465,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasc_usd; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Compras en $ de los últimos 10 días',
+            label: 'Compras en $ de los últimos 30 días',
             data: [<?php echo $totalesc_usd; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
@@ -507,7 +507,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasv_usd; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Ventas en $ de los últimos 10 días',
+            label: 'Ventas en $ de los últimos 30 días',
             data: [<?php echo $totalesv_usd; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
@@ -549,7 +549,7 @@ if (!isset($_SESSION["nombre"])) {
           labels: [<?php echo $fechasp_usd; ?>],
           datasets: [{
             barPercentage: 0.5,
-            label: 'Proformas en $ de los últimos 10 días',
+            label: 'Proformas en $ de los últimos 30 días',
             data: [<?php echo $totalesp_usd; ?>],
             backgroundColor: 'rgba(0,166,149,255)',
             borderColor: 'rgba(0,166,149,255)',
