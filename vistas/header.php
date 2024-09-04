@@ -192,7 +192,6 @@ $local_login = $_SESSION['local'];
 
   #formularioregistros textarea.form-control {
     height: fit-content !important;
-    font-size: 16px !important;
     align-content: start !important;
   }
 </style>

@@ -387,6 +387,9 @@ function listar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11, td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+			},
+			"drawCallback": function (settings) {
+				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
 			}
 		}).DataTable();
 }
@@ -436,7 +439,7 @@ function guardaryeditar(e) {
 
 	$("#ganancia").prop("disabled", true);
 
-	let detalles = frmDetallesVisible() ? obtenerDetalles() : { comision: '0.00', talla: '', color: '', peso: '0.00', codigo: '' };
+	let detalles = frmDetallesVisible() ? obtenerDetalles() : { comision: '0.00', talla: '', color: '', peso: '0.00', fecha_emision: '', fecha_vencimiento: '', nota_1: '', nota_2: '', codigo: '' };
 
 	for (let key in detalles) {
 		formData.append(key, detalles[key]);
@@ -706,6 +709,9 @@ function buscar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10), td:eq(11), td:eq(12), td:eq(13), td:eq(14), td:eq(15)').addClass('nowrap-cell');
+			},
+			"drawCallback": function (settings) {
+				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
 			}
 		}).DataTable();
 }

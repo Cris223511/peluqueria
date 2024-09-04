@@ -457,15 +457,7 @@
     </script>
 
     <?php
-    if ($_SESSION["cargo"] == "cajero") {
-      // echo '<script>
-      //         $(document).ajaxSuccess(function(event, xhr, settings) {
-      //           if (!$("#lCierres").hasClass("active")) {
-      //             $(".dt-buttons").hide();
-      //           }
-      //         });
-      //       </script>';
-    } elseif ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin_total" && $_SESSION["cargo"] != "admin") {
+    if ($_SESSION["cargo"] != "superadmin" && $_SESSION["cargo"] != "admin_total" && $_SESSION["cargo"] != "admin") {
       echo '<script>
               $(document).ajaxSuccess(function(event, xhr, settings) {
                 $(".dt-buttons").hide();
@@ -525,6 +517,39 @@
         }
 
         echo $script;
+        ?>
+      }
+    </script>
+
+    <script>
+      var columnasAocultar = [
+        "P. compra",
+        "Ganancia"
+      ];
+
+      function ocultarColumnasPorNombre(tablaId, nombresColumnas) {
+        <?php
+        $mostrarColumna = ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total");
+
+        if (!$mostrarColumna) {
+          echo '
+            // Iteramos sobre cada nombre de columna que queremos ocultar
+            nombresColumnas.forEach(function(nombreColumna) {
+                // Buscar el índice de la columna en el thead
+                $("#" + tablaId + " th").each(function(index) {
+                    if ($(this).text().trim().toLowerCase() === nombreColumna.toLowerCase()) {
+                        // Si el texto del encabezado coincide, obtenemos el índice
+                        var columnIndex = index + 1; // +1 porque :nth-child es 1-based
+
+                        // Ocultamos la columna en thead, tbody y tfoot usando el índice
+                        $("#" + tablaId + " th:nth-child(" + columnIndex + ")").css("display", "none");
+                        $("#" + tablaId + " td:nth-child(" + columnIndex + ")").css("display", "none");
+                        $("#" + tablaId + " tfoot th:nth-child(" + columnIndex + ")").css("display", "none");
+                    }
+                });
+            });
+        ';
+        }
         ?>
       }
     </script>

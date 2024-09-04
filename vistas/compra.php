@@ -427,9 +427,11 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box caja">
               <div class="box-header with-border">
                 <h1 class="box-title">Compras
-                  <button class="btn btn-bcp" id="btnagregar" onclick="agregar();">
-                    <i class="fa fa-plus-circle"></i> Nueva compra
-                  </button>
+                  <?php if ($_SESSION["cargo"] != "cajero") { ?>
+                    <button class="btn btn-bcp" id="btnagregar" onclick="agregar();">
+                      <i class="fa fa-plus-circle"></i> Nueva compra
+                    </button>
+                  <?php } ?>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptcompras.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -437,7 +439,9 @@ if (!isset($_SESSION["nombre"])) {
                       </button>
                     </a>
                   <?php } ?>
-                  <a data-toggle="modal" href="#myModal12" onclick="limpiarModalArticulos();"><button type="button" class="btn btn-warning"><i class="fa fa-cart-plus"></i> Agregar productos</button></a>
+                  <?php if ($_SESSION["cargo"] != "cajero") { ?>
+                    <a data-toggle="modal" href="#myModal12" onclick="limpiarModalArticulos();"><button type="button" class="btn btn-warning"><i class="fa fa-cart-plus"></i> Agregar productos</button></a>
+                  <?php } ?>
                   <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Compras</strong>" data-html="true" data-content="Módulo para registrar las compras de los productos, no es necesario que su caja esté abierta para que pueda comprar.<br><br><strong>Nota:</strong> Al hacer la compra, el monto total de la compra no aumentará a su caja. También, el stock del producto comprado se aumenta al almacén (no importa si el stock del artículo esté en 0)." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right">
@@ -578,7 +582,9 @@ if (!isset($_SESSION["nombre"])) {
                       <div class="caja-compras">
                         <!-- <a href="#"><button type="button" class="btn btn-default" style="padding-top: 4px;"><strong>%</strong></button></a> -->
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-money"></i></button></a> -->
-                        <a data-toggle="modal" href="#myModal12" onclick="limpiarModalArticulos();"><button type="button" class="btn btn-bcp"><i class="fa fa-shopping-cart"></i></button></a>
+                        <?php if ($_SESSION["cargo"] != "cajero") { ?>
+                          <a data-toggle="modal" href="#myModal12" onclick="limpiarModalArticulos();"><button type="button" class="btn btn-bcp"><i class="fa fa-shopping-cart"></i></button></a>
+                        <?php } ?>
                         <a onclick="verificarModalPrecuenta();"><button type="button" class="btn btn-warning"><i class="fa fa-book"></i></button></a>
                         <a onclick="limpiarTodo();"><button type="button" class="btn btn-default"><i class="fa fa-trash"></i></button></a>
                         <!-- <a href="#"><button type="button" class="btn btn-default"><i class="fa fa-usd"></i></button></a> -->
@@ -1198,16 +1204,16 @@ if (!isset($_SESSION["nombre"])) {
                   <!-- form detalles -->
                   <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
                     <div class="form-group col-lg-6 col-md-12">
-                      <label>Comisión:</label>
-                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
-                    </div>
-                    <div class="form-group col-lg-6 col-md-12">
                       <label>Talla:</label>
-                      <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
+                      <textarea type="text" class="form-control" name="talla" id="talla" maxlength="10000" rows="4" placeholder="Ingrese la talla del producto."></textarea>
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Color:</label>
-                      <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
+                      <textarea type="text" class="form-control" name="color" id="color" maxlength="10000" rows="4" placeholder="Ingrese el color del producto."></textarea>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-12">
+                      <label>Comisión:</label>
+                      <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
                     </div>
                     <div class="form-group col-lg-6 col-md-12">
                       <label>Peso:</label>

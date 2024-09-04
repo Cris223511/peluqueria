@@ -435,7 +435,7 @@ function guardaryeditar8(e) {
 
 	$("#ganancia").prop("disabled", true);
 
-	let detalles = frmDetallesVisible() ? obtenerDetalles() : { comision: '0.00', talla: '', color: '', peso: '0.00', codigo: '' };
+	let detalles = frmDetallesVisible() ? obtenerDetalles() : { comision: '0.00', talla: '', color: '', peso: '0.00', fecha_emision: '', fecha_vencimiento: '', nota_1: '', nota_2: '', codigo: '' };
 
 	for (let key in detalles) {
 		formData.append(key, detalles[key]);

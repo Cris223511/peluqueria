@@ -85,7 +85,9 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Productos Externos
-                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
+                  <?php if ($_SESSION["cargo"] != "cajero") { ?>
+                    <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
+                  <?php } ?>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -152,8 +154,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
-                      <th>Color</th>
-                      <th>Talla</th>
+                      <th style="width: 20%; min-width: 200px;">Talla</th>
+                      <th style="width: 20%; min-width: 200px;">Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
@@ -182,8 +184,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>P. venta</th>
                       <th>Ganancia</th>
                       <th>Comisión</th>
-                      <th>Color</th>
                       <th>Talla</th>
+                      <th>Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
@@ -275,20 +277,36 @@ if (!isset($_SESSION["nombre"])) {
                       <!-- form detalles -->
                       <div id="frmDetalles" class="col-lg-12 col-md-12" style="margin: 0 !important; padding: 0 !important;">
                         <div class="form-group col-lg-6 col-md-12">
+                          <label>Talla:</label>
+                          <textarea type="text" class="form-control" name="talla" id="talla" maxlength="10000" rows="4" placeholder="Ingrese la talla del producto."></textarea>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Color:</label>
+                          <textarea type="text" class="form-control" name="color" id="color" maxlength="10000" rows="4" placeholder="Ingrese el color del producto."></textarea>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
                           <label>Comisión:</label>
                           <input type="number" class="form-control" name="comision" id="comision" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese la comisión del producto.">
                         </div>
                         <div class="form-group col-lg-6 col-md-12">
-                          <label>Talla:</label>
-                          <input type="text" class="form-control" name="talla" id="talla" maxlength="15" placeholder="Ingrese la talla del producto." autocomplete="off">
-                        </div>
-                        <div class="form-group col-lg-6 col-md-12">
-                          <label>Color:</label>
-                          <input type="text" class="form-control" name="color" id="color" maxlength="30" placeholder="Ingrese el color del producto." autocomplete="off">
-                        </div>
-                        <div class="form-group col-lg-6 col-md-12">
                           <label>Peso:</label>
                           <input type="number" class="form-control" name="peso" id="peso" step="any" onkeydown="evitarNegativo(event)" oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" min="0" placeholder="Ingrese el peso.">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Fecha Emisión:</label>
+                          <input type="date" class="form-control" name="fecha_emision" id="fecha_emision">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Fecha Vencimiento:</label>
+                          <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Nota 1:</label>
+                          <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="10000" rows="4" placeholder="Ingrese la nota 1."></textarea>
+                        </div>
+                        <div class="form-group col-lg-6 col-md-12">
+                          <label>Nota 2:</label>
+                          <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="10000" rows="4" placeholder="Ingrese la nota 2."></textarea>
                         </div>
                         <div class="form-group col-lg-6 col-md-12 col-sm-12">
                           <div>
