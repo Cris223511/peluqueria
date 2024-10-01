@@ -11,9 +11,7 @@ define('VALOR_DOLAR', $_SESSION["cambio"]);
 class Venta
 {
 	//Implementamos nuestro constructor
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	public function insertar($idusuario, $idlocal, $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $detalles, $idpersonal, $cantidad, $precio_compra, $precio_venta, $comision, $descuento, $metodo_pago, $monto)
 	{
@@ -334,7 +332,17 @@ class Venta
 				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.idlocal = '$idlocal' AND a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION
-				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.eliminado = '0'
+				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, 
+				CASE 
+					WHEN me.titulo = 'Paquetes' THEN ROUND(a.precio_venta_mayor * $conversion, 2)
+					ELSE ROUND(a.precio_venta * $conversion, 2)
+				END AS precio_venta, 
+				a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo 
+				FROM articulo a 
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca 
+				LEFT JOIN locales l ON a.idlocal = l.idlocal 
+				LEFT JOIN medidas me ON a.idmedida = me.idmedida 
+				WHERE a.idlocal = '$idlocal' AND a.eliminado = '0'
 				UNION
 				SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo AS nombre, NULL AS local_ruc, 'servicios.jpg' AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, 'Servicio' AS marca, NULL AS local, s.codigo AS codigo, NULL AS codigo_producto, '0.00' AS precio_compra, ROUND(s.costo * $conversion, 2) AS precio_venta, '0' AS comision, '1' AS stock, '1' AS stock_minimo FROM servicios s WHERE s.eliminado = '0'";
 		return ejecutarConsulta($sql);
@@ -355,7 +363,17 @@ class Venta
 				UNION
 				SELECT 'categoria' AS tabla, ca.idcategoria AS id, ca.titulo AS nombre, NULL AS local_ruc, NULL AS imagen, NULL AS tipo_documento, NULL AS num_documento, COUNT(CASE WHEN a.eliminado = '0' THEN a.idcategoria END) AS cantidad, NULL AS marca, NULL AS local, NULL AS codigo, NULL AS codigo_producto, NULL AS precio_compra, NULL AS precio_venta, NULL AS comision, NULL AS stock, NULL AS stock_minimo FROM categoria ca LEFT JOIN articulo a ON ca.idcategoria = a.idcategoria WHERE ca.eliminado = '0' AND ca.estado='activado' GROUP BY ca.idcategoria, ca.titulo
 				UNION
-				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.eliminado = '0'
+				SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, 
+				CASE 
+					WHEN me.titulo = 'Paquetes' THEN ROUND(a.precio_venta_mayor * $conversion, 2)
+					ELSE ROUND(a.precio_venta * $conversion, 2)
+				END AS precio_venta, 
+				a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo 
+				FROM articulo a 
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca 
+				LEFT JOIN locales l ON a.idlocal = l.idlocal 
+				LEFT JOIN medidas me ON a.idmedida = me.idmedida 
+				WHERE a.eliminado = '0'
 				UNION
 				SELECT 'servicio' AS tabla, s.idservicio AS id, s.titulo AS nombre, NULL AS local_ruc, 'servicios.jpg' AS imagen, NULL AS tipo_documento, NULL AS num_documento, NULL AS cantidad, 'Servicio' AS marca, NULL AS local, s.codigo AS codigo, NULL AS codigo_producto, '0.00' AS precio_compra, ROUND(s.costo * $conversion, 2) AS precio_venta, '0' AS comision, '1' AS stock, '1' AS stock_minimo FROM servicios s WHERE s.eliminado = '0'";
 		return ejecutarConsulta($sql);
@@ -366,7 +384,17 @@ class Venta
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
 
-		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
+		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, 
+				CASE 
+					WHEN me.titulo = 'Paquetes' THEN ROUND(a.precio_venta_mayor * $conversion, 2)
+					ELSE ROUND(a.precio_venta * $conversion, 2)
+				END AS precio_venta, 
+				a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo 
+				FROM articulo a 
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca 
+				LEFT JOIN locales l ON a.idlocal = l.idlocal 
+				LEFT JOIN medidas me ON a.idmedida = me.idmedida 
+				WHERE a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -375,9 +403,20 @@ class Venta
 		$moneda = $_SESSION["moneda"];
 		$conversion = ($moneda === 'dolares') ? VALOR_DOLAR : 1;
 
-		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, ROUND(a.precio_venta * $conversion, 2) AS precio_venta, a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo FROM articulo a LEFT JOIN marcas m ON a.idmarca = m.idmarca LEFT JOIN locales l ON a.idlocal = l.idlocal WHERE a.idlocal = '$idlocal' AND a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
+		$sql = "SELECT 'articulo' AS tabla, a.idarticulo AS id, a.nombre AS nombre, NULL AS local_ruc, a.imagen AS imagen, NULL AS cantidad, m.titulo AS marca, l.titulo AS local, a.codigo AS codigo, a.codigo_producto AS codigo_producto, ROUND(a.precio_compra * $conversion, 2) AS precio_compra, 
+				CASE 
+					WHEN me.titulo = 'Paquetes' THEN ROUND(a.precio_venta_mayor * $conversion, 2)
+					ELSE ROUND(a.precio_venta * $conversion, 2)
+				END AS precio_venta, 
+				a.comision AS comision, a.stock AS stock, a.stock_minimo AS stock_minimo 
+				FROM articulo a 
+				LEFT JOIN marcas m ON a.idmarca = m.idmarca 
+				LEFT JOIN locales l ON a.idlocal = l.idlocal 
+				LEFT JOIN medidas me ON a.idmedida = me.idmedida 
+				WHERE a.idlocal = '$idlocal' AND a.idcategoria = '$idcategoria' AND a.eliminado = '0'";
 		return ejecutarConsulta($sql);
 	}
+
 
 	public function listarMetodosDePago()
 	{

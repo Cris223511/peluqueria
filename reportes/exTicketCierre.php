@@ -63,7 +63,7 @@ if (!isset($_SESSION["nombre"])) {
 
         # Modificando el ancho y alto del ticket #
         $pdf = new PDF_Code128('P', 'mm', array(70, 440));
-        $pdf->SetAutoPageBreak(false);
+        $pdf->SetAutoPageBreak(true);
         $pdf->SetMargins(4, 10, 4);
         $pdf->AddPage();
 
@@ -1049,7 +1049,7 @@ if (!isset($_SESSION["nombre"])) {
         $pdf->SetX(1.5);
         $pdf->Cell(0, -2, utf8_decode("- - - - - - - - - - - - - - - - - - - - - - - - - - - - - -"), 0, 0, 'L');
 
-        $y += 17;
+        $y += 20;
 
         # Pie del ticket #
         $y = $pdf->pieCierre(

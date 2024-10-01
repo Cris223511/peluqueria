@@ -1283,45 +1283,49 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Unidad de medida(*):</label>
                     <select id="idmedida" name="idmedida" class="form-control selectpicker" data-live-search="true" required></select>
                   </div>
-                  <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <label>Categoría(*):</label>
-                    <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
+                  <div class="form-group col-lg-6 col-md-12 col-sm-12" style="padding: 0; margin: 0;">
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                      <label>Categoría:</label>
+                      <select id="idcategoria" name="idcategoria" class="form-control selectpicker" data-live-search="true" data-size="5"></select>
+                    </div>
+                    <div class="form-group col-lg-6 col-md-6 col-sm-12">
+                      <label>Marca:</label>
+                      <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" data-size="5"></select>
+                    </div>
                   </div>
-                  <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <label>Marca(*):</label>
-                    <select id="idmarca" name="idmarca" class="form-control selectpicker" data-live-search="true" data-size="5" required></select>
-                  </div>
-                  <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label>Local(*):</label>
                     <select id="idlocal5" name="idlocal" class="form-control selectpicker idlocal" data-local="0" data-live-search="true" data-size="5" onchange="actualizarRUC5()" required>
                       <option value="">- Seleccione -</option>
                     </select>
                   </div>
-                  <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
                     <label>RUC local(*):</label>
                     <input type="number" class="form-control" id="local_ruc5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                   </div>
-                  <div class="form-group col-lg-8 col-md-12 col-sm-12" style="padding: 0; margin: 0;">
-                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                      <label>Precio compra(*):</label>
-                      <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de compra." required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                      <label>Precio venta(*):</label>
-                      <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el precio de venta." required>
-                    </div>
-                    <div class="form-group col-lg-4 col-md-4 col-sm-12">
-                      <label>Ganancia(*):</label>
-                      <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" value="0.00" disabled>
-                    </div>
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label>Precio compra:</label>
+                    <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el precio de compra.">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label>Precio venta:</label>
+                    <input type="number" class="form-control" name="precio_venta" id="precio_venta" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el precio de venta.">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label>Precio por mayor:</label>
+                    <input type="number" class="form-control" name="precio_venta_mayor" id="precio_venta_mayor" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el precio de venta por mayor.">
+                  </div>
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                    <label>Ganancia:</label>
+                    <input type="number" class="form-control" name="ganancia" id="ganancia" step="any" value="0.00" disabled>
                   </div>
                   <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <label>Stock(*):</label>
-                    <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock." required>
+                    <label>Stock:</label>
+                    <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock.">
                   </div>
                   <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                    <label>Stock mínimo(*):</label>
-                    <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock mínimo." required>
+                    <label>Stock mínimo:</label>
+                    <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock mínimo.">
                   </div>
                   <div class="form-group col-lg-4 col-md-12 col-sm-12">
                     <label>Imagen:</label>
@@ -1433,7 +1437,7 @@ if (!isset($_SESSION["nombre"])) {
     <!-- Form marcas -->
     <form name="formularioMarcas" id="formularioMarcas" method="POST" style="display: none;">
       <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <label>Marca(*):</label>
+        <label>Marca:</label>
         <input type="hidden" name="idmarca" id="idmarca3">
         <input type="text" class="form-control" name="titulo" id="titulo3" maxlength="50" placeholder="Nombre de la marca" required>
       </div>
