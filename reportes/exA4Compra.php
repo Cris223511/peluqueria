@@ -6,8 +6,6 @@ $perfil = new Perfiles();
 $rspta = $perfil->mostrarReporte();
 
 # Datos de la empresa #
-$logo = $rspta["imagen"];
-$ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
 $auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
@@ -26,6 +24,9 @@ $reg1 = $rspta1->fetch_object();
 
 require('A4/Compra.php');
 
+$logo = $_SESSION["local_imagen"];
+$ext_logo = strtolower(pathinfo($_SESSION["local_imagen"], PATHINFO_EXTENSION));
+
 # Modificando la hoja del reporte #
 $pdf = new PDF_Invoice('P', 'mm', 'A4');
 $pdf->AddPage();
@@ -36,7 +37,7 @@ $size = 0; // inicialización de variable de tamaño.
 # Encabezado y datos del reporte #
 $pdf->encabezado(
   $y,
-  $logo,
+  '../files/locales/' . $logo,
   $ext_logo,
   $reg1->num_comprobante ?? '',
   $reg1->tipo_comprobante ?? '',

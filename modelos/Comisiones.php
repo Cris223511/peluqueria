@@ -214,7 +214,7 @@ class Comision
 
 	public function verDatosEmpleado($idpersonal)
 	{
-		$sql = "SELECT p.idpersonal, p.nombre, l.idlocal, l.titulo AS local, l.local_ruc AS local_ruc, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
+		$sql = "SELECT p.idpersonal, p.nombre, l.idlocal, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, p.cargo AS cargo_personal, p.tipo_documento, p.num_documento, p.direccion, p.telefono, p.email, u.idusuario, u.nombre as usuario, u.cargo as cargo,
 				DATE_FORMAT(p.fecha_hora_comision, '%d-%m-%Y %H:%i:%s') as fecha, p.estado
 				FROM personales p
 				LEFT JOIN usuario u ON p.idusuario = u.idusuario

@@ -657,7 +657,7 @@ class PDF_Invoice extends FPDF
 	function encabezado($y, $logo, $ext_logo, $num_comprobante, $tipo_comprobante, $local, $local_ruc, $estado, $usuario, $content1, $empresa, $content2)
 	{
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 15, 10, 30, 30, $ext_logo);
+		$this->Image($logo, 15, 10, 28, 28, $ext_logo);
 
 		# EMPRESA #
 		$this->SetXY(13.5, $y + 41);
@@ -826,7 +826,12 @@ class PDF_Invoice extends FPDF
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper(($impuesto == '0.00' || $impuesto == '') ? ('0.00%') : ('0.18%')), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# COMENTARIO EXTERNO #
-		$anchoCaja = 100;
+		$anchoCaja = 187;
+
+		// Reemplazamos los saltos de línea (tanto \r\n como \n y \r) por espacios
+		$comentario_externo = str_replace(array("\r\n", "\n", "\r"), ' ', $comentario_externo);
+
+		// Dividimos el comentario en palabras
 		$palabras = explode(' ', $comentario_externo);
 
 		$anchoAcumulado = 0;
@@ -846,7 +851,7 @@ class PDF_Invoice extends FPDF
 
 			$this->SetXY(13.5, $y + 7);
 			$this->SetFont('Arial', '', 10);
-			$this->MultiCell(100, 5, mb_convert_encoding($comentario_externo, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+			$this->MultiCell(187, 5, mb_convert_encoding($comentario_externo, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 			$y += ($lineas * 5) + 10;
 		} else {

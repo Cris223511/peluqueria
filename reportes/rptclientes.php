@@ -39,13 +39,13 @@ if (!isset($_SESSION["nombre"])) {
     $clientes = new Cliente();
 
     $idusuario = $_SESSION["idusuario"];
-    $idlocal_session = $_SESSION["idlocal"];
+    $idlocalSession = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
     if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $clientes->listarClientes();
     } else {
-      $rspta = $clientes->listarClientesPorUsuario($idlocal_session);
+      $rspta = $clientes->listarClientesPorUsuario($idlocalSession);
     }
 
     $pdf->SetWidths(array(45, 55, 26, 33, 22, 54, 40));

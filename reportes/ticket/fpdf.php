@@ -1000,7 +1000,7 @@ class FPDF
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("Estado: $estado"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, 12, 20, 20, $ext_logo);
+		$this->Image($logo, 25, 12, 20, 20, $ext_logo);
 
 		# EMPRESA #
 		$this->SetY($y += 27.5);
@@ -1241,7 +1241,7 @@ class FPDF
 	function encabezadoCierre($y, $logo, $ext_logo, $fecha_hora, $fecha_cierre, $titulo, $local, $local_ruc, $anulados, $emitidos, $validos)
 	{
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, 3, 20, 20, $ext_logo);
+		$this->Image($logo, 25, 3, 20, 20, $ext_logo);
 
 		# TÍTULO #
 		$this->SetY($y += 23);
@@ -1322,7 +1322,7 @@ class FPDF
 	function cuerpoCaja($y, $titulo, $logo, $ext_logo, $fecha_hora, $local, $local_ruc, $usuario, $caja, $monto, $monto_total, $descripcion)
 	{
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
+		$this->Image($logo, 25, $y, 20, 20, $ext_logo);
 
 		# TÍTULO #
 		$this->SetY($y += 23.5);
@@ -1409,7 +1409,7 @@ class FPDF
 	function cuerpoComisiones($y, $titulo, $logo, $ext_logo, $local, $local_ruc, $nombre, $tipo_documento, $num_documento, $cargo)
 	{
 		# LOGO #
-		$this->Image('../files/logo_reportes/' . $logo, 25, $y, 20, 20, $ext_logo);
+		$this->Image($logo, 25, $y, 20, 20, $ext_logo);
 
 		# TÍTULO #
 		$this->SetY($y += 23.5);

@@ -1,14 +1,6 @@
 var tabla1;
 var tabla2;
 
-function bloquearCampos() {
-	$("input, select, textarea").prop("disabled", true);
-}
-
-function desbloquearCampos() {
-	$("input, select, textarea").prop("disabled", false);
-}
-
 function init() {
 	mostrarform(false);
 	listar();
@@ -21,24 +13,26 @@ function init() {
 }
 
 function limpiar() {
-	desbloquearCampos();
-
 	$("#idlocal").val("");
 	$("#titulo").val("");
 	$("#local_ruc").val("");
+	$("#imagenmuestra").attr("src", "");
+	$("#imagenmuestra").hide();
+	$("#imagenactual").val("");
+	$("#imagen").val("");
 	$("#descripcion").val("");
 }
 
 function mostrarform(flag) {
 	limpiar();
 	if (flag) {
-		$("#listadoregistros").hide();
+		$(".listadoregistros").hide();
 		$("#formularioregistros").show();
 		$("#btnGuardar").prop("disabled", false);
 		$("#btnagregar").hide();
 	}
 	else {
-		$("#listadoregistros").show();
+		$(".listadoregistros").show();
 		$("#formularioregistros").hide();
 		$("#btnagregar").show();
 	}
@@ -50,6 +44,12 @@ function cancelarform() {
 }
 
 function listar() {
+	$("#fecha_inicio").val("");
+	$("#fecha_fin").val("");
+
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+
 	tabla1 = $('#tbllistado').dataTable(
 		{
 			"lengthMenu": [5, 10, 25, 75, 100],
@@ -72,9 +72,11 @@ function listar() {
 					},
 				},
 			],
+
 			"ajax":
 			{
-				url: '../ajax/localesExternos.php?op=listar&param=1',
+				url: '../ajax/localesExternos.php?op=listar',
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
 				type: "get",
 				dataType: "json",
 				error: function (e) {
@@ -95,7 +97,71 @@ function listar() {
 			"iDisplayLength": 5,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
+			}
+		}).DataTable();
+}
+
+function buscar() {
+	var fecha_inicio = $("#fecha_inicio").val();
+	var fecha_fin = $("#fecha_fin").val();
+
+	if (fecha_inicio == "" || fecha_fin == "") {
+		alert("Los campos de fecha inicial y fecha final son obligatorios.");
+		return;
+	} else if (fecha_inicio > fecha_fin) {
+		alert("La fecha inicial no puede ser mayor que la fecha final.");
+		return;
+	}
+
+	tabla1 = $('#tbllistado').dataTable(
+		{
+			"lengthMenu": [5, 10, 25, 75, 100],
+			"aProcessing": true,
+			"aServerSide": true,
+			dom: '<Bl<f>rtip>',
+			buttons: [
+				'copyHtml5',
+				'excelHtml5',
+				'csvHtml5',
+				{
+					'extend': 'pdfHtml5',
+					// 'orientation': 'landscape',
+					'exportOptions': {
+						'columns': ':not(:first-child)'
+					},
+					'customize': function (doc) {
+						doc.defaultStyle.fontSize = 8;
+						doc.styles.tableHeader.fontSize = 8;
+					},
+				},
+			],
+
+			"ajax":
+			{
+				url: '../ajax/localesExternos.php?op=listar',
+				data: { fecha_inicio: fecha_inicio, fecha_fin: fecha_fin },
+				type: "get",
+				dataType: "json",
+				error: function (e) {
+					console.log(e.responseText);
+				}
+			},
+			"language": {
+				"lengthMenu": "Mostrar : _MENU_ registros",
+				"buttons": {
+					"copyTitle": "Tabla Copiada",
+					"copySuccess": {
+						_: '%d líneas copiadas',
+						1: '1 línea copiada'
+					}
+				}
+			},
+			"bDestroy": true,
+			"iDisplayLength": 5,
+			"order": [],
+			"createdRow": function (row, data, dataIndex) {
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
@@ -125,6 +191,7 @@ function guardaryeditar(e) {
 				$("#btnGuardar").prop("disabled", false);
 				return;
 			}
+
 			limpiar();
 			bootbox.alert(datos);
 			mostrarform(false);
@@ -145,23 +212,9 @@ function mostrar(idlocal) {
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idlocal").val(data.idlocal);
-	})
-}
-
-function mostrar2(idlocal) {
-	$.post("../ajax/localesExternos.php?op=mostrar", { idlocal: idlocal }, function (data, status) {
-		// console.log(data);
-		data = JSON.parse(data);
-		mostrarform(true);
-		bloquearCampos();
-		$("#btnGuardar").hide();
-
-		console.log(data);
-
-		$("#titulo").val(data.titulo);
-		$("#local_ruc").val(data.local_ruc);
-		$("#descripcion").val(data.descripcion);
-		$("#idlocal").val(data.idlocal);
+		$("#imagenmuestra").show();
+		$("#imagenmuestra").attr("src", "../files/locales/" + data.imagen);
+		$("#imagenactual").val(data.imagen);
 	})
 }
 
@@ -173,7 +226,7 @@ function trabajadores(idlocal, titulo) {
 		"dom": 'Bfrtip',
 		"buttons": [],
 		"ajax": {
-			url: '../ajax/localesExternos.php?op=listarTrabajadores&idlocal=' + idlocal,
+			url: '../ajax/localesExternos.php?op=listarUsuariosLocal&idlocal=' + idlocal,
 			type: "GET",
 			dataType: "json",
 			error: function (e) {
@@ -184,7 +237,7 @@ function trabajadores(idlocal, titulo) {
 		"iDisplayLength": 5,
 		"order": [],
 		"createdRow": function (row, data, dataIndex) {
-			// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5)').addClass('nowrap-cell');
+			// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('nowrap-cell');
 		}
 	});
 }

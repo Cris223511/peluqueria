@@ -14,7 +14,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
-		$idlocal_session = $_SESSION["idlocal"];
+		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
 		$idcliente = isset($_POST["idcliente"]) ? limpiarCadena($_POST["idcliente"]) : "";
@@ -76,7 +76,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $clientes->listarClientes();
 				} else {
-					$rspta = $clientes->listarClientesPorUsuario($idlocal_session);
+					$rspta = $clientes->listarClientesPorUsuario($idlocalSession);
 				}
 
 				$data = array();
@@ -155,7 +155,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $clientes->listarVentasCliente($idcliente);
 				} else {
-					$rspta = $clientes->listarVentasClienteLocal($idcliente, $idlocal_session);
+					$rspta = $clientes->listarVentasClienteLocal($idcliente, $idlocalSession);
 				}
 
 				$data = array();
@@ -269,7 +269,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $clientes->listarProformasCliente($idcliente);
 				} else {
-					$rspta = $clientes->listarProformasClienteLocal($idcliente, $idlocal_session);
+					$rspta = $clientes->listarProformasClienteLocal($idcliente, $idlocalSession);
 				}
 
 				$data = array();
@@ -381,7 +381,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $clientes->listarClientesGeneral();
 				} else {
-					$rspta = $clientes->listarClientesGeneralPorUsuario($idlocal_session);
+					$rspta = $clientes->listarClientesGeneralPorUsuario($idlocalSession);
 				}
 
 				echo '<option value="">- Seleccione -</option>';

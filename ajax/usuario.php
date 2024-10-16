@@ -315,6 +315,7 @@ switch ($_GET["op"]) {
 			$_SESSION['idusuario'] = $fetch->idusuario;
 			$_SESSION['idlocal'] = $fetch->idlocal;
 			$_SESSION['local'] = $fetch->local;
+			$_SESSION['local_imagen'] = $fetch->local_imagen;
 			$_SESSION['nombre'] = $fetch->nombre;
 			$_SESSION['imagen'] = $fetch->imagen;
 			$_SESSION['login'] = $fetch->login;

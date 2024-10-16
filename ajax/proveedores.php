@@ -138,7 +138,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $proveedores->listarComprasProveedor($idproveedor);
 				} else {
-					$rspta = $proveedores->listarComprasProveedorhaLocal($idproveedor, $idlocal_session);
+					$rspta = $proveedores->listarComprasProveedorhaLocal($idproveedor, $idlocalSession);
 				}
 
 				$data = array();

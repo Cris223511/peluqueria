@@ -14,7 +14,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
-		$idlocal_session = $_SESSION["idlocal"];
+		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
 		$idpersonal = isset($_POST["idpersonal"]) ? limpiarCadena($_POST["idpersonal"]) : "";
@@ -73,7 +73,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $personales->listarPersonales();
 				} else {
-					$rspta = $personales->listarPersonalesPorUsuario($idlocal_session);
+					$rspta = $personales->listarPersonalesPorUsuario($idlocalSession);
 				}
 
 				$data = array();
@@ -150,7 +150,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $personales->listarPersonales();
 				} else {
-					$rspta = $personales->listarPersonalesPorUsuario($idlocal_session);
+					$rspta = $personales->listarPersonalesPorUsuario($idlocalSession);
 				}
 
 				echo '<option value="">- Seleccione -</option>';

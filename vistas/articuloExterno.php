@@ -160,8 +160,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
-                      <th style="width: 20%; min-width: 200px;">Nota 1</th>
-                      <th style="width: 20%; min-width: 200px;">Nota 2</th>
+                      <th style="width: 20%; min-width: 200px;">Item 1</th>
+                      <th style="width: 20%; min-width: 200px;">Item 2</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -191,8 +191,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
-                      <th>Nota 1</th>
-                      <th>Nota 2</th>
+                      <th>Item 1</th>
+                      <th>Item 2</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -261,11 +261,11 @@ if (!isset($_SESSION["nombre"])) {
                       </div>
                       <div class="form-group col-lg-4 col-md-6 col-sm-12">
                         <label>Stock:</label>
-                        <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock.">
+                        <input type="number" class="form-control" name="stock" id="stock" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el stock.">
                       </div>
                       <div class="form-group col-lg-4 col-md-6 col-sm-12">
                         <label>Stock mínimo:</label>
-                        <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el stock mínimo.">
+                        <input type="number" class="form-control" name="stock_minimo" id="stock_minimo" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el stock mínimo.">
                       </div>
                       <div class="form-group col-lg-4 col-md-12 col-sm-12">
                         <label>Imagen:</label>
@@ -307,12 +307,12 @@ if (!isset($_SESSION["nombre"])) {
                           <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento">
                         </div>
                         <div class="form-group col-lg-6 col-md-12">
-                          <label>Nota 1:</label>
-                          <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="10000" rows="4" placeholder="Ingrese la nota 1."></textarea>
+                          <label>Item 1:</label>
+                          <textarea type="text" class="form-control" name="nota_1" id="nota_1" maxlength="10000" rows="4" placeholder="Ingrese el item 1."></textarea>
                         </div>
                         <div class="form-group col-lg-6 col-md-12">
-                          <label>Nota 2:</label>
-                          <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="10000" rows="4" placeholder="Ingrese la nota 2."></textarea>
+                          <label>Item 2:</label>
+                          <textarea type="text" class="form-control" name="nota_2" id="nota_2" maxlength="10000" rows="4" placeholder="Ingrese el item 2."></textarea>
                         </div>
                         <div class="form-group col-lg-6 col-md-12 col-sm-12">
                           <div>

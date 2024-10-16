@@ -6,8 +6,6 @@ $perfil = new Perfiles();
 $rspta = $perfil->mostrarReporte();
 
 # Datos de la empresa #
-$logo = $rspta["imagen"];
-$ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
 $auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
@@ -35,10 +33,13 @@ $pdf->AddPage();
 $y = 2; // inicialización de variable de posición Y.
 $size = 0; // inicialización de variable de tamaño.
 
+$logo = $_SESSION["local_imagen"];
+$ext_logo = strtolower(pathinfo($_SESSION["local_imagen"], PATHINFO_EXTENSION));
+
 # Encabezado y datos del ticket #
 $y = $pdf->encabezado1(
     $y,
-    $logo,
+    '../files/locales/' . $logo,
     $ext_logo,
     $empresa,
     $reg1->num_comprobante ?? '',

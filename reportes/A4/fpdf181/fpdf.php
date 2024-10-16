@@ -126,8 +126,11 @@ class FPDF
 			$this->Error('Incorrect unit: ' . $unit);
 		// Page sizes
 		$this->StdPageSizes = array(
-			'a3' => array(841.89, 1190.55), 'a4' => array(595.28, 841.89), 'a5' => array(420.94, 595.28),
-			'letter' => array(612, 792), 'legal' => array(612, 1008)
+			'a3' => array(841.89, 1190.55),
+			'a4' => array(595.28, 841.89),
+			'a5' => array(420.94, 595.28),
+			'letter' => array(612, 792),
+			'legal' => array(612, 1008)
 		);
 		$size = $this->_getpagesize($size);
 		$this->DefPageSize = $size;
@@ -814,61 +817,56 @@ class FPDF
 			$this->y += $h;
 	}
 
+	protected $image_counter = 0;
+
+	protected function _parseimage($file)
+	{
+		$info = getimagesize($file);
+		if (!$info) {
+			$this->Error('Missing or incorrect image file: ' . $file);
+		}
+
+		switch ($info[2]) {
+			case IMAGETYPE_JPEG:
+				return $this->_parsejpg($file);
+			case IMAGETYPE_PNG:
+				return $this->_parsepng($file);
+			case IMAGETYPE_BMP:
+				return $this->_parsebmp($file);
+			default:
+				$this->Error('Unsupported image type: ' . $file);
+		}
+	}
+
 	function Image($file, $x = null, $y = null, $w = 0, $h = 0, $type = '', $link = '')
 	{
-		// Put an image on the page
-		if ($file == '')
-			$this->Error('Image file name is empty');
-		if (!isset($this->images[$file])) {
-			// First use of this image, get info
-			if ($type == '') {
-				$pos = strrpos($file, '.');
-				if (!$pos)
-					$this->Error('Image file has no extension and no type was specified: ' . $file);
-				$type = substr($file, $pos + 1);
-			}
-			$type = strtolower($type);
-			if ($type == 'jpeg')
-				$type = 'jpg';
-			$mtd = '_parse' . $type;
-			if (!method_exists($this, $mtd))
-				$this->Error('Unsupported image type: ' . $type);
-			$info = $this->$mtd($file);
-			$info['i'] = count($this->images) + 1;
-			$this->images[$file] = $info;
-		} else
-			$info = $this->images[$file];
+		// Procesar la imagen y obtener su información
+		$info = $this->_parseimage($file);
 
-		// Automatic width and height calculation if needed
-		if ($w == 0 && $h == 0) {
-			// Put image at 96 dpi
-			$w = -96;
-			$h = -96;
-		}
-		if ($w < 0)
-			$w = -$info['w'] * 72 / $w / $this->k;
-		if ($h < 0)
-			$h = -$info['h'] * 72 / $h / $this->k;
-		if ($w == 0)
-			$w = $h * $info['w'] / $info['h'];
-		if ($h == 0)
-			$h = $w * $info['h'] / $info['w'];
+		// Asignar un índice único a la imagen
+		$this->image_counter++;
+		$index = $this->image_counter;
 
-		// Flowing mode
-		if ($y === null) {
-			if ($this->y + $h > $this->PageBreakTrigger && !$this->InHeader && !$this->InFooter && $this->AcceptPageBreak()) {
-				// Automatic page break
-				$x2 = $this->x;
-				$this->AddPage($this->CurOrientation, $this->CurPageSize, $this->CurRotation);
-				$this->x = $x2;
-			}
-			$y = $this->y;
-			$this->y += $h;
-		}
+		// Guardar la información de la imagen
+		$this->images[$file] = array('w' => $info['w'], 'h' => $info['h'], 'cs' => $info['cs'], 'bpc' => $info['bpc'], 'f' => $info['f'], 'data' => $info['data'], 'i' => $index, 'n' => $index);
 
+		// Establecer las coordenadas y dimensiones de la imagen en el PDF
 		if ($x === null)
 			$x = $this->x;
-		$this->_out(sprintf('q %.2F 0 0 %.2F %.2F %.2F cm /I%d Do Q', $w * $this->k, $h * $this->k, $x * $this->k, ($this->h - ($y + $h)) * $this->k, $info['i']));
+		if ($y === null)
+			$y = $this->y;
+		if ($w == 0 && $h == 0) {
+			// Colocar la imagen a 72 dpi
+			$w = $info['w'] / $this->k;
+			$h = $info['h'] / $this->k;
+		} elseif ($w == 0)
+			$w = $h * $info['w'] / $info['h'];
+		elseif ($h == 0)
+			$h = $w * $info['h'] / $info['w'];
+
+		// Salida de la imagen en el PDF
+		$this->_out(sprintf('q %.2F %.2F %.2F %.2F %.2F %.2F cm /I%d Do Q', $w * $this->k, 0, 0, $h * $this->k, $x * $this->k, ($this->h - ($y + $h)) * $this->k, $index));
+
 		if ($link)
 			$this->Link($x, $y, $w, $h, $link);
 	}
@@ -1161,18 +1159,17 @@ class FPDF
 
 	protected function _parsejpg($file)
 	{
-		// Extract info from a JPEG file
 		$a = getimagesize($file);
-		if (!$a)
-			$this->Error('Missing or incorrect image file: ' . $file);
-		if ($a[2] != 2)
+		if ($a[2] != IMAGETYPE_JPEG) {
 			$this->Error('Not a JPEG file: ' . $file);
-		if (!isset($a['channels']) || $a['channels'] == 3)
+		}
+		if (!isset($a['channels']) || $a['channels'] == 3) {
 			$colspace = 'DeviceRGB';
-		elseif ($a['channels'] == 4)
+		} elseif ($a['channels'] == 4) {
 			$colspace = 'DeviceCMYK';
-		else
+		} else {
 			$colspace = 'DeviceGray';
+		}
 		$bpc = isset($a['bits']) ? $a['bits'] : 8;
 		$data = file_get_contents($file);
 		return array('w' => $a[0], 'h' => $a[1], 'cs' => $colspace, 'bpc' => $bpc, 'f' => 'DCTDecode', 'data' => $data);
@@ -1180,13 +1177,71 @@ class FPDF
 
 	protected function _parsepng($file)
 	{
-		// Extract info from a PNG file
-		$f = fopen($file, 'rb');
-		if (!$f)
-			$this->Error('Can\'t open image file: ' . $file);
-		$info = $this->_parsepngstream($f, $file);
-		fclose($f);
-		return $info;
+		// Abrir la imagen PNG
+		$im = imagecreatefrompng($file);
+		imagealphablending($im, false);
+		imagesavealpha($im, true);
+
+		// Crear una nueva imagen en blanco (JPEG no soporta transparencia, por lo que utilizamos blanco como fondo)
+		$width = imagesx($im);
+		$height = imagesy($im);
+		$background = imagecreatetruecolor($width, $height);
+
+		// Rellenar con blanco (puedes cambiar a otro color si es necesario)
+		$white = imagecolorallocate($background, 255, 255, 255);
+		imagefilledrectangle($background, 0, 0, $width, $height, $white);
+
+		// Copiar el PNG sobre el fondo blanco manteniendo la transparencia
+		imagecopy($background, $im, 0, 0, 0, 0, $width, $height);
+
+		// Guardar la imagen como JPEG en memoria
+		ob_start();
+		imagejpeg($background);
+		$data = ob_get_clean();
+
+		// Liberar la memoria
+		imagedestroy($im);
+		imagedestroy($background);
+
+		// Obtener información de la imagen convertida
+		$a = getimagesizefromstring($data);
+		if ($a[2] != IMAGETYPE_JPEG) {
+			$this->Error('PNG conversion failed for: ' . $file);
+		}
+		if (!isset($a['channels']) || $a['channels'] == 3) {
+			$colspace = 'DeviceRGB';
+		} elseif ($a['channels'] == 4) {
+			$colspace = 'DeviceCMYK';
+		} else {
+			$colspace = 'DeviceGray';
+		}
+		$bpc = isset($a['bits']) ? $a['bits'] : 8;
+		return array('w' => $a[0], 'h' => $a[1], 'cs' => $colspace, 'bpc' => $bpc, 'f' => 'DCTDecode', 'data' => $data);
+	}
+
+	protected function _parsebmp($file)
+	{
+		// Abrir la imagen BMP y convertir a JPEG en memoria
+		$im = imagecreatefrombmp($file);
+		ob_start();
+		imagejpeg($im);
+		$data = ob_get_clean();
+		imagedestroy($im);
+
+		// Obtener información de la imagen convertida
+		$a = getimagesizefromstring($data);
+		if ($a[2] != IMAGETYPE_JPEG) {
+			$this->Error('BMP conversion failed for: ' . $file);
+		}
+		if (!isset($a['channels']) || $a['channels'] == 3) {
+			$colspace = 'DeviceRGB';
+		} elseif ($a['channels'] == 4) {
+			$colspace = 'DeviceCMYK';
+		} else {
+			$colspace = 'DeviceGray';
+		}
+		$bpc = isset($a['bits']) ? $a['bits'] : 8;
+		return array('w' => $a[0], 'h' => $a[1], 'cs' => $colspace, 'bpc' => $bpc, 'f' => 'DCTDecode', 'data' => $data);
 	}
 
 	protected function _parsepngstream($f, $file)

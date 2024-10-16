@@ -5,9 +5,7 @@ require "../config/Conexion.php";
 class Perfiles
 {
 	//Implementamos nuestro constructor
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	/* ===================  ESCRITORIO ====================== */
 
@@ -164,9 +162,9 @@ class Perfiles
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio, $imagen)
+	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio)
 	{
-		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',cambio='$cambio',imagen='$imagen' WHERE idreporte='$idreporte'";
+		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',cambio='$cambio' WHERE idreporte='$idreporte'";
 		return ejecutarConsulta($sql);
 	}
 }

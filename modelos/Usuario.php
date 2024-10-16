@@ -4,9 +4,7 @@ require "../config/Conexion.php";
 
 class Usuario
 {
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	//Implementamos un método para insertar registros
 	public function insertar($idlocal, $nombre, $tipo_documento, $num_documento, $direccion, $telefono, $email, $cargo, $login, $clave, $imagen, $permisos)
@@ -355,7 +353,7 @@ class Usuario
 	//Función para verificar el acceso al sistema
 	public function verificar($login, $clave)
 	{
-		$sql = "SELECT u.idusuario,u.idlocal,l.titulo AS local,l.estado AS estadoLocal,u.nombre,u.tipo_documento,u.num_documento,u.telefono,u.email,u.cargo,u.imagen,u.login,u.clave,u.estado,u.eliminado FROM usuario u LEFT JOIN locales l ON u.idlocal = l.idlocal WHERE login='$login' AND clave='$clave' AND u.eliminado = '0'";
+		$sql = "SELECT u.idusuario,u.idlocal,l.titulo AS local,l.imagen AS local_imagen,l.estado AS estadoLocal,u.nombre,u.tipo_documento,u.num_documento,u.telefono,u.email,u.cargo,u.imagen,u.login,u.clave,u.estado,u.eliminado FROM usuario u LEFT JOIN locales l ON u.idlocal = l.idlocal WHERE login='$login' AND clave='$clave'";
 		return ejecutarConsulta($sql);
 	}
 

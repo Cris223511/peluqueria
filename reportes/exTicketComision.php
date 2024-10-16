@@ -12,8 +12,6 @@ if (!isset($_SESSION["nombre"])) {
         $rspta = $perfil->mostrarReporte();
 
         # Datos de la empresa #
-        $logo = $rspta["imagen"];
-        $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
         $empresa = $rspta["titulo"];
         $auspiciado = $rspta["auspiciado"];
         $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
@@ -30,6 +28,9 @@ if (!isset($_SESSION["nombre"])) {
         $reg1 = $rspta1->fetch_object();
         $reg2 = (object) $rspta2;
 
+        $logo = $_SESSION["local_imagen"];
+        $ext_logo = strtolower(pathinfo($_SESSION["local_imagen"], PATHINFO_EXTENSION));
+
         require('ticket/code128.php');
 
         # Modificando el ancho y alto del ticket #
@@ -45,7 +46,7 @@ if (!isset($_SESSION["nombre"])) {
         $y = $pdf->cuerpoComisiones(
             $y,
             "COMISIÓN",
-            $logo,
+            '../files/locales/' . $logo,
             $ext_logo,
             $reg2->local ?? '',
             $reg2->local_ruc ?? '',

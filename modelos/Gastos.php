@@ -64,31 +64,31 @@ class Gasto
 
 	public function mostrar($idgasto)
 	{
-		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja, g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE idgasto='$idgasto'";
+		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, c.titulo as caja, g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE idgasto='$idgasto'";
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
 	public function listar()
 	{
-		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja ORDER BY g.idgasto DESC";
+		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja ORDER BY g.idgasto DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorParametro($param)
 	{
-		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE $param ORDER BY g.idgasto DESC";
+		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE $param ORDER BY g.idgasto DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuario($idlocalSession)
 	{
-		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE g.idlocal = '$idlocalSession' ORDER BY g.idgasto DESC";
+		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE g.idlocal = '$idlocalSession' ORDER BY g.idgasto DESC";
 		return ejecutarConsulta($sql);
 	}
 
 	public function listarPorUsuarioParametro($idlocalSession, $param)
 	{
-		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo as local, l.local_ruc as local_ruc, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE $param AND g.idlocal = '$idlocalSession' ORDER BY g.idgasto DESC";
+		$sql = "SELECT g.idgasto, u.idusuario, c.idcaja, l.idlocal, c.titulo as caja, u.nombre as nombre, u.cargo as cargo, l.titulo AS local, l.local_ruc AS local_ruc, l.imagen as local_imagen, c.titulo as caja,  g.monto, g.monto_caja, g.monto_total, g.descripcion, DATE_FORMAT(g.fecha_hora, '%d-%m-%Y %H:%i:%s') as fecha FROM gastos g LEFT JOIN usuario u ON g.idusuario = u.idusuario LEFT JOIN locales l ON g.idlocal=l.idlocal LEFT JOIN cajas c ON g.idcaja = c.idcaja WHERE $param AND g.idlocal = '$idlocalSession' ORDER BY g.idgasto DESC";
 		return ejecutarConsulta($sql);
 	}
 

@@ -13,8 +13,6 @@ if (!isset($_SESSION["nombre"])) {
         $rspta = $perfil->mostrarReporte();
 
         # Datos de la empresa #
-        $logo = $rspta["imagen"];
-        $ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
         $empresa = $rspta["titulo"];
         $auspiciado = $rspta["auspiciado"];
         $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
@@ -31,6 +29,9 @@ if (!isset($_SESSION["nombre"])) {
 
         require('ticket/code128.php');
 
+        $logo = $_SESSION["local_imagen"];
+        $ext_logo = strtolower(pathinfo($_SESSION["local_imagen"], PATHINFO_EXTENSION));
+
         # Modificando el ancho y alto del ticket #
         $pdf = new PDF_Code128('P', 'mm', array(70, 150));
         $pdf->SetAutoPageBreak(false);
@@ -44,7 +45,7 @@ if (!isset($_SESSION["nombre"])) {
         $y = $pdf->cuerpoCaja(
             $y,
             "GASTOS DE CAJA",
-            $logo,
+            '../files/locales/' . $logo,
             $ext_logo,
             $reg->fecha ?? '',
             $reg->local ?? '',

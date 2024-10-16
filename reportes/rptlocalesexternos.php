@@ -34,10 +34,10 @@ if (!isset($_SESSION["nombre"])) {
     $locales = new LocalExterno();
 
     $idusuario = $_SESSION["idusuario"];
-    $idlocal_session = $_SESSION["idlocal"];
+    $idlocalSession = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    $rspta = $locales->listar($idlocal_session);
+    $rspta = $locales->listar($idlocalSession);
 
     $pdf->SetWidths(array(40, 110, 40));
 

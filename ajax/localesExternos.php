@@ -22,7 +22,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
-		$idlocal_session = $_SESSION['idlocal'];
+		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
@@ -30,15 +30,39 @@ if (!isset($_SESSION["nombre"])) {
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 		$local_ruc = isset($_POST["local_ruc"]) ? limpiarCadena($_POST["local_ruc"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
+		$imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
 
 		switch ($_GET["op"]) {
 			case 'guardaryeditar':
+				if (!empty($_FILES['imagen']['name'])) {
+					$uploadDirectory = "../files/locales/";
+
+					$tempFile = $_FILES['imagen']['tmp_name'];
+					$fileExtension = strtolower(pathinfo($_FILES['imagen']['name'], PATHINFO_EXTENSION));
+					$newFileName = sprintf("%09d", rand(0, 999999999)) . '.' . $fileExtension;
+					$targetFile = $uploadDirectory . $newFileName;
+
+					// Verificar si es una imagen y mover el archivo
+					$allowedExtensions = array('jpg', 'jpeg', 'png');
+					if (in_array($fileExtension, $allowedExtensions) && move_uploaded_file($tempFile, $targetFile)) {
+						// El archivo se ha movido correctamente, ahora $newFileName contiene el nombre del archivo
+						$imagen = $newFileName;
+					} else {
+						// Error en la subida del archivo
+						echo "Error al subir la imagen.";
+						exit;
+					}
+				} else {
+					// No se ha seleccionado ninguna imagen
+					$imagen = $_POST["imagenactual"];
+				}
+
 				if (empty($idlocal)) {
 					$nombreExiste = $locales->verificarNombreExiste($titulo);
 					if ($nombreExiste) {
 						echo "El nombre del local ya existe.";
 					} else {
-						$rspta = $locales->agregar($idusuario, $titulo, $local_ruc, $descripcion);
+						$rspta = $locales->agregar($idusuario, $titulo, $local_ruc, $descripcion, $imagen);
 						echo $rspta ? "Local registrado" : "El local no se pudo registrar";
 					}
 				} else {
@@ -46,7 +70,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El nombre del local ya existe.";
 					} else {
-						$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion);
+						$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion, $imagen);
 						echo $rspta ? "Local actualizado" : "El local no se pudo actualizar";
 					}
 				}
@@ -73,14 +97,20 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'listar':
+				$fecha_inicio = $_GET["fecha_inicio"];
+				$fecha_fin = $_GET["fecha_fin"];
 
-				$rspta = $locales->listar($idlocal_session);
+				if ($fecha_inicio == "" && $fecha_fin == "") {
+					$rspta = $locales->listar($idlocalSession);
+				} else {
+					$rspta = $locales->listarPorFecha($idlocalSession, $fecha_inicio, $fecha_fin);
+				}
 
 				$data = array();
 
-				function mostrarBoton($cargo, $buttonType)
+				function mostrarBoton($cargo, $idusuario, $buttonType)
 				{
-					if ($cargo == "superadmin" || $cargo == "admin" || $cargo == "admin_total") {
+					if ($cargo == "superadmin" || $cargo == "admin") {
 						return $buttonType;
 					} else {
 						return '';
@@ -108,18 +138,20 @@ if (!isset($_SESSION["nombre"])) {
 					}
 
 					$data[] = array(
-						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px;">' .
-							mostrarBoton($cargo, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
-							mostrarBoton($cargo, '<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>') .
-							'<button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="mostrar2(' . $reg->idlocal . ')"><i class="fa fa-eye"></i></button>' .
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
+							mostrarBoton($cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idlocal . ')"><i class="fa fa-pencil"></i></button>') .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="trabajadores(' . $reg->idlocal . ',\'' . $reg->titulo . '\')"><i class="fa fa-user"></i></button></a>' .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($cargo, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($cargo, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idlocal . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idlocal . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							'</div>',
-						"1" => $reg->titulo,
-						"2" => "N° " . $reg->local_ruc,
-						"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
-						"4" => $reg->fecha,
-						"5" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"1" => '<a href="../files/locales/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
+									<img src="../files/locales/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
+								</a>',
+						"2" => $reg->titulo,
+						"3" => "N° " . $reg->local_ruc,
+						"4" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"5" => $reg->fecha,
+						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -133,7 +165,7 @@ if (!isset($_SESSION["nombre"])) {
 				echo json_encode($results);
 				break;
 
-			case 'listarTrabajadores':
+			case 'listarUsuariosLocal':
 
 				$idlocal2 = isset($_GET["idlocal"]) ? limpiarCadena($_GET["idlocal"]) : "";
 
@@ -143,6 +175,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
+
 					switch ($reg->cargo) {
 						case 'superadmin':
 							$cargo_detalle = "Superadministrador";
@@ -160,7 +193,7 @@ if (!isset($_SESSION["nombre"])) {
 							break;
 					}
 
-					$telefono = ($reg->telefono == '') ? 'Sin registrar' : number_format($reg->telefono, 0, '', ' ');
+					$telefono = ($reg->telefono == '') ? 'Sin registrar.' : number_format($reg->telefono, 0, '', ' ');
 
 					$data[] = array(
 						"0" => $reg->login,
@@ -170,9 +203,7 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->num_documento,
 						"5" => $telefono,
 						"6" => $reg->email,
-						"7" => '<a href="../files/usuarios/' . $reg->imagen . '" class="galleria-lightbox" style="z-index: 10000 !important;">
-									<img src="../files/usuarios/' . $reg->imagen . '" height="50px" width="50px" class="img-fluid">
-								</a>',
+						"7" => "<img src='../files/usuarios/" . $reg->imagen . "' height='50px' width='50px' >",
 						"8" => ($reg->estado) ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
@@ -185,68 +216,6 @@ if (!isset($_SESSION["nombre"])) {
 				);
 
 				echo json_encode($results);
-				break;
-
-			case 'selectLocal':
-				$rspta = $locales->listarPorUsuarioActivos($idlocal_session);
-				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
-
-				$data = [];
-				foreach ($result as $row) {
-					$data["locales"][] = $row;
-				}
-
-				echo json_encode($data);
-				break;
-
-			case 'selectLocalASC':
-				$rspta = $locales->listarPorUsuarioActivosASC($idlocal_session);
-				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
-
-				$data = [];
-				foreach ($result as $row) {
-					$data["locales"][] = $row;
-				}
-
-				echo json_encode($data);
-				break;
-
-			case 'selectLocales':
-				$rspta = $locales->listarActivos($idlocal_session);
-
-				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
-				}
-				break;
-
-			case 'selectLocalesUsuario':
-
-				$rspta = $locales->listarActivosASC($idlocal_session);
-
-				echo '<option value="">- Seleccione -</option>';
-				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idlocal . '"> ' . $reg->titulo . '</option>';
-				}
-				break;
-
-			case 'selectLocalUsuario':
-				$rspta = $locales->listarPorUsuarioActivos($idusuariolocal);
-
-				while ($reg = $rspta->fetch_object()) {
-					echo '<option value="' . $reg->idlocal . '" data-local-ruc="' . $reg->local_ruc . '"> ' . $reg->titulo . '</option>';
-				}
-				break;
-
-			case 'selectLocalDisponible':
-				$rspta = $locales->listarLocalesDisponiblesActivos($idlocal_session);
-				$result = mysqli_fetch_all($rspta, MYSQLI_ASSOC);
-
-				$data = [];
-				foreach ($result as $row) {
-					$data["locales"][] = $row;
-				}
-
-				echo json_encode($data);
 				break;
 		}
 	} else {

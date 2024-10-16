@@ -14,7 +14,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		// Variables de sesión a utilizar.
 		$idusuario = $_SESSION["idusuario"];
-		$idlocal_session = $_SESSION["idlocal"];
+		$idlocalSession = $_SESSION["idlocal"];
 		$cargo = $_SESSION["cargo"];
 
 		$idpersonalUniq = isset($_POST["idpersonalUniq"]) ? limpiarCadena($_POST["idpersonalUniq"]) : "";
@@ -30,7 +30,7 @@ if (!isset($_SESSION["nombre"])) {
 				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $comisiones->listarPersonales();
 				} else {
-					$rspta = $comisiones->listarPersonalesPorUsuario($idlocal_session);
+					$rspta = $comisiones->listarPersonalesPorUsuario($idlocalSession);
 				}
 
 				$data = array();

@@ -6,8 +6,6 @@ $perfil = new Perfiles();
 $rspta = $perfil->mostrarReporte();
 
 # Datos de la empresa #
-$logo = $rspta["imagen"];
-$ext_logo = strtolower(pathinfo($rspta["imagen"], PATHINFO_EXTENSION));
 $empresa = $rspta["titulo"];
 $auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
@@ -26,6 +24,9 @@ $reg1 = $rspta1->fetch_object();
 
 require('ticket/code128.php');
 
+$logo = $_SESSION["local_imagen"];
+$ext_logo = strtolower(pathinfo($_SESSION["local_imagen"], PATHINFO_EXTENSION));
+
 # Modificando el ancho y alto del ticket #
 $pdf = new PDF_Code128('P', 'mm', array(71, 300));
 $pdf->SetAutoPageBreak(false);
@@ -38,7 +39,7 @@ $size = 0; // inicialización de variable de tamaño.
 # Encabezado y datos del ticket #
 $y = $pdf->encabezado1(
     $y,
-    $logo,
+    '../files/locales/' . $logo,
     $ext_logo,
     $empresa,
     $reg1->num_comprobante ?? '',

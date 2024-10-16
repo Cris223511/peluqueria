@@ -20,7 +20,7 @@ if (!isset($_SESSION["nombre"])) {
     $pdf->SetFont('Arial', 'B', 12);
 
     $pdf->Cell(45, 6, '', 0, 0, 'C');
-    $pdf->Cell(100, 6, 'LISTA DE LOCALES', 1, 0, 'C');
+    $pdf->Cell(100, 6, 'LOCALES', 1, 0, 'C');
     $pdf->Ln(10);
 
     $pdf->SetFillColor(232, 232, 232);
@@ -36,12 +36,10 @@ if (!isset($_SESSION["nombre"])) {
     $idusuario = $_SESSION["idusuario"];
     $cargo = $_SESSION["cargo"];
 
-    $rspta = $locales->listarPorUsuario($idusuario);
-
     // if ($cargo == "superadmin" || $cargo == "admin_total") {
     //   $rspta = $locales->listar();
     // } else {
-    //   $rspta = $locales->listarPorUsuario($idusuario);
+    $rspta = $locales->listarPorUsuario($idusuario);
     // }
 
     $pdf->SetWidths(array(40, 110, 40));

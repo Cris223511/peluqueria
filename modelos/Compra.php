@@ -314,6 +314,7 @@ class Compra
 				  u.telefono AS telefono_usuario,
 				  u.email AS email_usuario,
 				  l.titulo AS local,
+				  l.imagen as local_imagen,
 				  l.local_ruc AS local_ruc,
 				  p.nombre AS proveedor,
 				  p.telefono AS telefono,

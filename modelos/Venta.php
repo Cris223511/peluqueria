@@ -471,6 +471,7 @@ class Venta
 				  u.telefono AS telefono_usuario,
 				  u.email AS email_usuario,
 				  l.titulo AS local,
+				  l.imagen as local_imagen,
 				  l.local_ruc AS local_ruc,
 				  c.nombre AS cliente,
 				  c.telefono AS telefono,
