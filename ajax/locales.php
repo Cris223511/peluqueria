@@ -262,7 +262,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'selectLocal':
-				if ($cargo == "superadmin") {
+				if ($cargo == "superadmin" || $cargo == "admin_total") {
 					$rspta = $locales->listarActivosASC();
 				} else {
 					$rspta = $locales->listarPorUsuario($idlocalSession);
