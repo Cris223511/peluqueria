@@ -39,7 +39,7 @@ if (!isset($_SESSION["nombre"])) {
     $idlocalSession = $_SESSION["idlocal"];
     $cargo = $_SESSION["cargo"];
 
-    if ($cargo == "superadmin") {
+    if ($cargo == "superadmin" || $cargo == "admin_total") {
       $rspta = $transferencia->listar();
     } else {
       $rspta = $transferencia->listarPorUsuario($idlocalSession);
