@@ -85,9 +85,7 @@ if (!isset($_SESSION["nombre"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Productos Externos
-                  <?php if ($_SESSION["cargo"] != "cajero") { ?>
-                    <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
-                  <?php } ?>
+                  <button class="btn btn-bcp" id="btnagregar" onclick="mostrarform(true)"><i class="fa fa-plus-circle"></i> Agregar</button>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptarticulosExternos.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">
@@ -243,7 +241,7 @@ if (!isset($_SESSION["nombre"])) {
                         <label>RUC local(*):</label>
                         <input type="number" class="form-control" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                       </div>
-                      <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                      <div class="form-group col-lg-3 col-md-6 col-sm-12" id="precio_compra_campo">
                         <label>Precio compra:</label>
                         <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el precio de compra.">
                       </div>

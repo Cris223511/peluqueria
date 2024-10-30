@@ -477,7 +477,7 @@ function guardaryeditar8(e) {
 	var precio_venta_mayor = parseFloat($("#precio_venta_mayor").val());
 
 
-	if ((precio_venta > 0 || precio_venta_mayor > 0) && (precio_compra > precio_venta || precio_compra > precio_venta_mayor)) {
+	if ((precio_venta > 0 && precio_venta < precio_compra) || (precio_venta_mayor > 0 && precio_venta_mayor < precio_compra)) {
 		bootbox.alert("El precio de venta no puede ser menor que el precio de compra.");
 		return;
 	}
@@ -2015,6 +2015,9 @@ function listar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+			},
+			"drawCallback": function (settings) {
+				mostrarOcultarPrecioCompraCampo();
 			}
 		}).DataTable();
 }
@@ -2081,6 +2084,9 @@ function buscar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
+			},
+			"drawCallback": function (settings) {
+				mostrarOcultarPrecioCompraCampo();
 			}
 		}).DataTable();
 }

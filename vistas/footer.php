@@ -238,7 +238,7 @@
         if (!table) return;
 
         var columnIndices = Array.from(table.querySelectorAll("th")).reduce((indices, th, index) => {
-          if (["CLIENTE", "PROVEEDOR", "NOMBRE", "NOMBRES", "DESCRIPCIÓN", "DESCRIPCIÓN DEL LOCAL", "ALMACÉN"].includes(th.innerText.trim())) {
+          if (["CLIENTE", "PROVEEDOR", "NOMBRE", "NOMBRES", "CONCEPTO", "DESCRIPCIÓN", "DESCRIPCIÓN DEL LOCAL", "ALMACÉN"].includes(th.innerText.trim())) {
             indices.push(index);
           }
           return indices;
@@ -495,6 +495,33 @@
         }
       });
     </script>
+
+    <script>
+      function mostrarOcultarPrecioCompraCampo() {
+        <?php
+        $mostrarColumna = ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total");
+
+        if (!$mostrarColumna) {
+          echo '
+            // Si no es superadmin, ocultar el campo y ajustar el tamaño de las columnas
+            $("#precio_compra_campo").hide();
+            $("#precio_venta").closest(".form-group").removeClass("col-lg-3").addClass("col-lg-4");
+            $("#precio_venta_mayor").closest(".form-group").removeClass("col-lg-3").addClass("col-lg-4");
+            $("#ganancia").closest(".form-group").removeClass("col-lg-3").addClass("col-lg-4");
+          ';
+        } else {
+          echo '
+            // Si es superadmin, mostrar el campo y restaurar el tamaño de las columnas
+            $("#precio_compra_campo").show();
+            $("#precio_venta").closest(".form-group").removeClass("col-lg-4").addClass("col-lg-3");
+            $("#precio_venta_mayor").closest(".form-group").removeClass("col-lg-4").addClass("col-lg-3");
+            $("#ganancia").closest(".form-group").removeClass("col-lg-4").addClass("col-lg-3");
+          ';
+        }
+        ?>
+      }
+    </script>
+
 
     <script>
       function mostrarOcultarColumnaAlmacen() {

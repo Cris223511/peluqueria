@@ -8,7 +8,7 @@ if (!isset($_SESSION["nombre"])) {
 	header("Location: ../vistas/login.html"); //Validamos el acceso solo a los usuarios logueados al sistema.
 } else {
 	//Validamos el acceso solo al usuario logueado y autorizado.
-	if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
+	if ($_SESSION['almacen'] == 1 && ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total")) {
 		require_once "../modelos/ArticuloExterno.php";
 
 		$articulo = new ArticuloExterno();

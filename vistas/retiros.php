@@ -62,6 +62,7 @@ if (!isset($_SESSION["cajas"])) {
                       <th style="width: 1%;">Opciones</th>
                       <th>Caja</th>
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
+                      <th style="width: 20%; min-width: 200px;">Concepto</th>
                       <th>Monto caja</th>
                       <th>Monto retirado</th>
                       <th>Monto total</th>
@@ -75,6 +76,7 @@ if (!isset($_SESSION["cajas"])) {
                       <th>Opciones</th>
                       <th>Caja</th>
                       <th>Almacén</th>
+                      <th>Concepto</th>
                       <th>Monto caja</th>
                       <th>Monto retirado</th>
                       <th>Monto total</th>
@@ -102,8 +104,8 @@ if (!isset($_SESSION["cajas"])) {
                     <input type="number" class="form-control" name="monto" id="monto" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" placeholder="Ingrese el monto a retirar de la caja." required>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <label>Comentario:</label>
-                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese un comentario."></textarea>
+                    <label>Concepto:</label>
+                    <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese el concepto del retiro."></textarea>
                   </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <button class="btn btn-warning" onclick="cancelarform()" type="button"><i class="fa fa-arrow-circle-left"></i> Cancelar</button>

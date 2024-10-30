@@ -121,12 +121,13 @@ if (!isset($_SESSION["nombre"])) {
 							'</div>',
 						"1" => $reg->caja,
 						"2" => $reg->local,
-						"3" => 'S/. ' . number_format($reg->monto_caja, 2, '.', ','),
-						"4" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
-						"5" => 'S/. ' . number_format($reg->monto_total, 2, '.', ','),
-						"6" => ucwords($reg->nombre),
-						"7" => ucwords($cargo_detalle),
-						"8" => $reg->fecha
+						"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;' readonly>" . (($reg->descripcion == "") ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"4" => 'S/. ' . number_format($reg->monto_caja, 2, '.', ','),
+						"5" => 'S/. ' . number_format($reg->monto, 2, '.', ','),
+						"6" => 'S/. ' . number_format($reg->monto_total, 2, '.', ','),
+						"7" => ucwords($reg->nombre),
+						"8" => ucwords($cargo_detalle),
+						"9" => $reg->fecha
 					);
 				}
 

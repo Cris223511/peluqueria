@@ -1303,7 +1303,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>RUC local(*):</label>
                     <input type="number" class="form-control" id="local_ruc5" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="RUC del local" disabled>
                   </div>
-                  <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                  <div class="form-group col-lg-3 col-md-6 col-sm-12" id="precio_compra_campo">
                     <label>Precio compra:</label>
                     <input type="number" class="form-control" name="precio_compra" id="precio_compra" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength); changeGanancia();" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" placeholder="Ingrese el precio de compra.">
                   </div>

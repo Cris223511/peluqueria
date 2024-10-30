@@ -827,7 +827,7 @@ class PDF_Invoice extends FPDF
 		$anchoCaja = 187;
 
 		// Reemplazamos los saltos de línea (tanto \r\n como \n y \r) por espacios
-		$comentario_externo = str_replace(array("\r\n", "\n", "\r"), ' ', $comentario_externo . "adjhasjdh asdh asdksadkjd hddkdh asjdhasjdhaskjd haskdjhdkjasdhaskjdh askjaskjdh asjkd hasjdh askjdhas kjh askjdhaskjdh askjaskjdhasjk dhaskjd hasjd haskjdh asjdhaskjdh kjasd haskjdhaskjdhaskjd hasdkj haskjdh askjas kjdh asjkdhkjashdj askhd jashdaskjdhsajdk haskjd haskjdh askjdh asjkdhasjk dhasjkd haskjd haskjdh askjdh");
+		$comentario_externo = str_replace(array("\r\n", "\n", "\r"), ' ', $comentario_externo);
 
 		// Dividimos el comentario en palabras
 		$palabras = explode(' ', $comentario_externo);

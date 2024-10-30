@@ -102,7 +102,7 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/confUsuario22.js"></script>
+  <script type="text/javascript" src="scripts/confUsuario17.js"></script>
 <?php
 }
 ob_end_flush();

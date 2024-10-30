@@ -934,7 +934,7 @@ if (!isset($_SESSION["nombre"])) {
 					"v.estado <> 'Anulado'",
 				);
 
-				if ($cargo != "superadmin") {
+				if ($cargo != "superadmin" && $cargo != "admin_total") {
 					$parametros[] = "a.idlocal = '$idlocalSession'";
 				}
 
@@ -958,7 +958,7 @@ if (!isset($_SESSION["nombre"])) {
 
 				$condiciones = implode(" AND ", $parametros);
 
-				$rspta = $cargo == "superadmin" ? $reporte->listarArticulosMasVendidos($condiciones) : $reporte->listarArticulosMasVendidosLocal($idlocalSession, $condiciones);
+				$rspta = ($cargo == "superadmin" || $cargo == "admin_total") ? $reporte->listarArticulosMasVendidos($condiciones) : $reporte->listarArticulosMasVendidosLocal($idlocalSession, $condiciones);
 
 				$data = array();
 

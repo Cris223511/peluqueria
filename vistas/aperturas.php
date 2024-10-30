@@ -17,13 +17,9 @@ if (!isset($_SESSION["cajas"])) {
             <div class="box">
               <div class="box-header with-border">
                 <h1 class="box-title">Aperturas de caja
-                  <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin") { 
-                  ?>
                   <button class="btn btn-bcp" id="btnagregar" onclick="validarCaja();">
                     <i class="fa fa-plus-circle"></i> Crear nueva caja
                   </button>
-                  <?php // } 
-                  ?>
                   <?php if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { ?>
                     <a href="../reportes/rptcajas.php" target="_blank">
                       <button class="btn btn-secondary" style="color: black !important;">

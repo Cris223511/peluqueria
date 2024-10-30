@@ -7,7 +7,7 @@ if (strlen(session_id()) < 1)
 if (!isset($_SESSION["nombre"])) {
   echo 'Debe ingresar al sistema correctamente para visualizar el reporte';
 } else {
-  if ($_SESSION['almacen'] == 1 && $_SESSION["cargo"] == "superadmin") {
+  if ($_SESSION['almacen'] == 1 && ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total")) {
 
     //Inlcuímos a la clase PDF_MC_Table
     require('PDF_MC_Table.php');

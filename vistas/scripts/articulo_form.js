@@ -336,7 +336,7 @@ function guardaryeditar(e) {
 	var precio_venta_mayor = parseFloat($("#precio_venta_mayor").val());
 
 
-	if ((precio_venta > 0 || precio_venta_mayor > 0) && (precio_compra > precio_venta || precio_compra > precio_venta_mayor)) {
+	if ((precio_venta > 0 && precio_venta < precio_compra) || (precio_venta_mayor > 0 && precio_venta_mayor < precio_compra)) {
 		bootbox.alert("El precio de venta no puede ser menor que el precio de compra.");
 		return;
 	}
