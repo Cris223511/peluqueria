@@ -7,6 +7,9 @@ class LocalDisponible
 
 	public function agregar($titulo, $local_ruc, $descripcion, $imagen)
 	{
+		if (empty($imagen))
+			$imagen = "default.jpg";
+
 		date_default_timezone_set("America/Lima");
 		$sql = "INSERT INTO locales (idusuario, titulo, local_ruc, descripcion, imagen, fecha_hora, estado, eliminado)
             VALUES (0,'$titulo','$local_ruc','$descripcion','$imagen', SYSDATE(), 'activado', '0')";
@@ -88,10 +91,9 @@ class LocalDisponible
 				  l.imagen,
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
-				FROM locales l 
-				LEFT JOIN usuario u ON l.idusuario = u.idusuario 
-				WHERE ((NOT EXISTS (SELECT 1 FROM usuario WHERE idlocal = l.idlocal)) AND l.eliminado = '0')
-				OR l.idusuario = '0' AND l.eliminado = '0'
+				FROM locales l
+				LEFT JOIN usuario u ON l.idlocal = u.idlocal
+				WHERE u.idusuario IS NULL AND l.eliminado = '0'
 				ORDER BY l.idlocal DESC";
 
 		return ejecutarConsulta($sql);
@@ -110,11 +112,9 @@ class LocalDisponible
 				  l.imagen,
 				  DATE_FORMAT(l.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
 				  l.estado
-				FROM locales l 
-				LEFT JOIN usuario u ON l.idusuario = u.idusuario 
-				WHERE ((NOT EXISTS (SELECT 1 FROM usuario WHERE idlocal = l.idlocal)) AND l.eliminado = '0')
-				OR l.idusuario = '0' AND l.eliminado = '0'
-				AND l.estado = 'activado'
+				FROM locales l
+				LEFT JOIN usuario u ON l.idlocal = u.idlocal
+				WHERE u.idusuario IS NULL AND l.eliminado = '0' AND l.estado = 'activado'
 				ORDER BY l.idlocal DESC";
 
 		return ejecutarConsulta($sql);
