@@ -402,7 +402,10 @@ function listar() {
 			"drawCallback": function (settings) {
 				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
 				mostrarOcultarPrecioCompraCampo();
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 10, "Buscar por código.");
+			},
 		}).DataTable();
 }
 
@@ -729,7 +732,10 @@ function buscar() {
 			"drawCallback": function (settings) {
 				ocultarColumnasPorNombre("tbllistado", columnasAocultar);
 				mostrarOcultarPrecioCompraCampo();
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 10, "Buscar por código.");
+			},
 		}).DataTable();
 }
 

@@ -2018,7 +2018,10 @@ function listar() {
 			},
 			"drawCallback": function (settings) {
 				mostrarOcultarPrecioCompraCampo();
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 6, "Buscar por N° ticket.");
+			},
 		}).DataTable();
 }
 
@@ -2087,7 +2090,10 @@ function buscar() {
 			},
 			"drawCallback": function (settings) {
 				mostrarOcultarPrecioCompraCampo();
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 6, "Buscar por N° ticket.");
+			},
 		}).DataTable();
 }
 

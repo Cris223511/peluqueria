@@ -1805,7 +1805,10 @@ function listar() {
 			},
 			"drawCallback": function (settings) {
 				mostrarOcultarPrecioCompraCampo();
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 5, "Buscar por N° ticket.");
+			},
 		}).DataTable();
 }
 
@@ -1871,7 +1874,10 @@ function buscar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 5, "Buscar por N° ticket.");
+			},
 		}).DataTable();
 }
 

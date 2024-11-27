@@ -96,7 +96,10 @@ function listar() {
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
 				// $(row).find('td:eq(0), td:eq(2), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8)').addClass('nowrap-cell');
-			}
+			},
+			"initComplete": function () {
+				agregarBuscadorColumna(tabla, 2, "Buscar por código.");
+			},
 		}).DataTable();
 }
 
