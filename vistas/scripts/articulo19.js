@@ -404,7 +404,7 @@ function listar() {
 				mostrarOcultarPrecioCompraCampo();
 			},
 			"initComplete": function () {
-				agregarBuscadorColumna(tabla, 10, "Buscar por código.");
+				agregarBuscadorColumna(this.api(), 10, "Buscar por código.");
 			},
 		}).DataTable();
 }
@@ -734,7 +734,7 @@ function buscar() {
 				mostrarOcultarPrecioCompraCampo();
 			},
 			"initComplete": function () {
-				agregarBuscadorColumna(tabla, 10, "Buscar por código.");
+				agregarBuscadorColumna(this.api(), 10, "Buscar por código.");
 			},
 		}).DataTable();
 }

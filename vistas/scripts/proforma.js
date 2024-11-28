@@ -2020,7 +2020,7 @@ function listar() {
 				mostrarOcultarPrecioCompraCampo();
 			},
 			"initComplete": function () {
-				agregarBuscadorColumna(tabla, 6, "Buscar por N° ticket.");
+				agregarBuscadorColumna(this.api(), 6, "Buscar por N° ticket.");
 			},
 		}).DataTable();
 }
@@ -2092,7 +2092,7 @@ function buscar() {
 				mostrarOcultarPrecioCompraCampo();
 			},
 			"initComplete": function () {
-				agregarBuscadorColumna(tabla, 6, "Buscar por N° ticket.");
+				agregarBuscadorColumna(this.api(), 6, "Buscar por N° ticket.");
 			},
 		}).DataTable();
 }
