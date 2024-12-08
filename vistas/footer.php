@@ -143,7 +143,7 @@
       }
 
       function capitalizarTodasLasPalabras(palabra) {
-        return palabra.toUpperCase();
+        return palabra ? palabra.toUpperCase() : palabra;
       }
 
       function minusTodasLasPalabras(palabra) {

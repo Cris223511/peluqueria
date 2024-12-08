@@ -1730,8 +1730,8 @@ function verificarModalPrecuenta() {
 
 	let totalVenta = parseFloat($("#total_venta_valor").text().replace(moneda === 'dolares' ? ' $' : 'S/. ', '').replace(',', ''));
 
-	if (totalVenta <= 0) {
-		bootbox.alert("El total de venta no puede ser negativo o igual a cero.");
+	if (totalVenta < 0) {
+		bootbox.alert("El total de venta no puede ser negativo.");
 		return;
 	}
 
@@ -1896,15 +1896,18 @@ function guardaryeditar7(e) {
 	let idlocalSession = $("#idlocal_session").length ? $("#idlocal_session").val() : '';
 	let comentarioInterno = $("#comentario_interno").val();
 	let comentarioExterno = $("#comentario_externo").val();
+	let fechaVencimiento = $("#fecha_vencimiento2").val();
 	let impuesto = $("#igv").val();
 	let totalVentaFinal = $(".totalFinal1").text().match(/\d+\.\d+/)[0];
 	let vueltoFinal = $("#vuelto").val();
 
 	console.log(impuesto);
+	console.log(fechaVencimiento);
 
 	$("#idlocal_session_final").val(idlocalSession);
 	$("#comentario_interno_final").val(comentarioInterno);
 	$("#comentario_externo_final").val(comentarioExterno);
+	$("#fecha_vencimiento_final").val(fechaVencimiento);
 	$("#igvFinal").val(impuesto);
 	$("#total_venta_final").val(totalVentaFinal);
 	$("#vuelto_final").val(vueltoFinal);
@@ -1931,6 +1934,7 @@ function limpiarModalPrecuenta() {
 	$("#idlocal_session").selectpicker('refresh');
 	$("#comentario_interno").val("");
 	$("#comentario_externo").val("");
+	$("#fecha_vencimiento2").val("");
 }
 
 function mostrarform(flag) {
@@ -2438,7 +2442,7 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, sto
 		var fila = '<tr class="filas fila' + cont + ' principal">' +
 			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '"><input type="hidden" name="idpersonal[]" value="' + idpersonal + '"><input type="hidden" name="comision[]" value="' + comision + '">' + codigo + '</td>' +
 			'<td>' + capitalizarTodasLasPalabras(nombre) + '</td>' +
-			'<td><input type="number" step="any" name="precio_venta[]" oninput="modificarSubototales();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
+			'<td><input type="number" step="any" name="precio_venta[]" oninput="modificarSubototales();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
 			'<td><input type="number" step="any" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></td>' +
 			'<td><input type="number" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(1, ' + cont + ');"><i class="fa fa-trash"></i></button></td>' +
@@ -2449,7 +2453,7 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, sto
 			'<td style="text-align: start !important;">' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td style="text-align: start !important;"><strong>' + capitalizarTodasLasPalabras(local) + '</strong></td>' +
 			'<td style="text-align: start !important;">' + (tipoproducto == "producto" ? stock : "") + '</td>' +
-			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0.1" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
+			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" step="any" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" required value="' + descuento + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></div></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(2, ' + cont + '); actualizarVuelto();"><i class="fa fa-trash"></i></button></td>' +

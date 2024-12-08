@@ -23,7 +23,7 @@ class Articulo
 		if (empty($imagen))
 			$imagen = "product.jpg";
 
-		$sql = "INSERT INTO articulo (idusuario,idcategoria,idlocal,idmarca,idmedida,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,talla,color,peso,fecha_emision,fecha_vencimiento,nota_1,nota_2,imagen,precio_compra,precio_venta,ganancia,comision,estado,eliminado)
+		$sql = "INSERT INTO articulo (idusuario,idcategoria,idlocal,idmarca,idmedida,codigo,codigo_producto,nombre,stock,stock_minimo,descripcion,talla,color,peso,fecha_emision,fecha_vencimiento,nota_1,nota_2,imagen,precio_compra,precio_venta,precio_venta_mayor,ganancia,comision,estado,eliminado)
 		VALUES ('$idusuario','$idcategoria','$idlocal','$idmarca','$idmedida','$codigo','$codigo_producto','$nombre','$stock', '$stock_minimo','$descripcion','$talla','$color','$peso','$fecha_emision','$fecha_vencimiento','$nota_1','$nota_2','$imagen','$precio_compra','$precio_venta','$precio_venta_mayor','$ganancia','$comision','1','0')";
 
 		$idarticulo = ejecutarConsulta_retornarID($sql);
@@ -205,7 +205,11 @@ class Articulo
 
 	public function getLastCodigo($idlocal)
 	{
-		$sql = "SELECT MAX(codigo_producto) AS last_codigo FROM articulo WHERE idlocal = '$idlocal' AND eliminado = '0'";
+		$sql = "SELECT codigo_producto AS last_codigo 
+				FROM articulo 
+				WHERE idlocal = '$idlocal' AND eliminado = '0' 
+				ORDER BY idarticulo DESC 
+				LIMIT 1";
 		return ejecutarConsulta($sql);
 	}
 

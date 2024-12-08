@@ -405,6 +405,7 @@ function listar() {
 			},
 			"initComplete": function () {
 				agregarBuscadorColumna(this.api(), 10, "Buscar por código.");
+				agregarBuscadorColumna(this.api(), 5, "Buscar por categoría.");
 			},
 		}).DataTable();
 }
@@ -735,6 +736,7 @@ function buscar() {
 			},
 			"initComplete": function () {
 				agregarBuscadorColumna(this.api(), 10, "Buscar por código.");
+				agregarBuscadorColumna(this.api(), 5, "Buscar por categoría.");
 			},
 		}).DataTable();
 }

@@ -29,6 +29,7 @@ if (!isset($_SESSION["nombre"])) {
 		$vuelto = isset($_POST["vuelto"]) ? limpiarCadena($_POST["vuelto"]) : "";
 		$comentario_interno = isset($_POST["comentario_interno"]) ? limpiarCadena($_POST["comentario_interno"]) : "";
 		$comentario_externo = isset($_POST["comentario_externo"]) ? limpiarCadena($_POST["comentario_externo"]) : "";
+		$fecha_vencimiento = isset($_POST["fecha_vencimiento"]) ? limpiarCadena($_POST["fecha_vencimiento"]) : "";
 
 		$estado = isset($_POST["estado"]) ? limpiarCadena($_POST["estado"]) : "";
 
@@ -41,7 +42,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $proforma->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $fecha_vencimiento, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -177,7 +178,8 @@ if (!isset($_SESSION["nombre"])) {
 						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
 						"9" => $reg->usuario . ' - ' . $cargo_detalle,
 						"10" => $reg->fecha,
-						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"11" => $reg->fecha_vencimiento,
+						"12" => (strtotime(date('Y-m-d H:i:s')) > strtotime($reg->fecha_vencimiento)) ? '<span class="label bg-red">Vencido</span>' : (($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? '<span class="label bg-green">Finalizado</span>' : '<span class="label bg-red">Anulado</span>')))))
 					);
 
 					if ($reg->moneda == 'soles') {
@@ -203,6 +205,7 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => "",
 						"10" => "",
 						"11" => "",
+						"12" => "",
 					);
 
 					$data[] = array(
@@ -218,6 +221,7 @@ if (!isset($_SESSION["nombre"])) {
 						"9" => "",
 						"10" => "",
 						"11" => "",
+						"12" => "",
 					);
 				}
 

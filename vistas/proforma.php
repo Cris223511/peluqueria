@@ -498,6 +498,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
+                      <th>Fecha vencimiento</th>
                       <th>Estado</th>
                     </thead>
                     <tbody>
@@ -514,6 +515,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
+                      <th>Fecha vencimiento</th>
                       <th>Estado</th>
                     </tfoot>
                   </table>
@@ -619,6 +621,7 @@ if (!isset($_SESSION["nombre"])) {
                       <option value="0.00">0.00</option>
                       <option value="0.18">0.18</option>
                     </select>
+                    <input type="hidden" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento_final">
                     <input type="hidden" id="total_venta_final" name="total_venta" value="">
                     <input type="hidden" id="vuelto_final" name="vuelto" value="">
                   </div>
@@ -1027,7 +1030,7 @@ if (!isset($_SESSION["nombre"])) {
                 </div>
               </div>
               <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; padding-top: 15px;">
-                <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 15px;">
+                <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 5px 10px; font-weight: bold; text-align: center; display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center;">
                     <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">IGV: <?php echo ($_SESSION["moneda"] === 'dolares') ? '$' : 'S/'; ?></h5>
                     <select id="igv" style="height: 28px; padding: 4px 10px; width: 100px;" class="form-control" data-size="2" onchange="actualizarIGV(this);">
@@ -1036,12 +1039,18 @@ if (!isset($_SESSION["nombre"])) {
                     </select>
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 15px;">
+                <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">
+                  <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 5px 10px; font-weight: bold; text-align: center; display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center;">
+                    <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">FECHA VEN:</h5>
+                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento2" style="height: 28px; padding: 4px 10px; width: 130px;" required>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 10px; font-weight: bold; text-align: center;">
                     <h5 class="infotitulo descuentoFinal" style="margin: 0; padding: 0; font-weight: bold;"></h5>
                   </div>
                 </div>
-                <div class="col-lg-4 col-md-4 col-sm-12" style="margin-bottom: 15px;">
+                <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 10px; font-weight: bold; text-align: center;">
                     <h5 class="infotitulo totalFinal2" style="margin: 0; padding: 0; font-weight: bold;"></h5>
                   </div>

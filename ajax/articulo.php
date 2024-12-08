@@ -73,18 +73,23 @@ switch ($_GET["op"]) {
 		}
 
 		if (empty($idarticulo)) {
-			$codigoExiste = $articulo->verificarCodigoExiste($codigo);
-			$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto, $idlocal);
-			if ($codigoProductoExiste) {
-				echo "El código del producto que ha ingresado ya existe en el local seleccionado.";
-			} else if ($codigoExiste && $codigo != "") {
-				echo "El código de barra del producto que ha ingresado ya existe.";
-			} else {
-				if ($_POST['param'] == '0') {
-					$rspta = $articulo->insertar2($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia,  $comision);
-					echo json_encode($rspta);
+			if ($_POST['param'] == '0') {
+				$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto, $idlocal);
+
+				if ($codigoProductoExiste) {
+					$rspta = array(0, "El código del producto que ha ingresado ya existe en el local seleccionado.");
 				} else {
-					$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia,  $comision);
+					$rspta = $articulo->insertar2($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia, $comision);
+				}
+				echo json_encode($rspta);
+			} else {
+				$codigoExiste = $articulo->verificarCodigoExiste($codigo);
+
+				if ($codigoExiste && $codigo != "") {
+					echo "El código de barra del producto que ha ingresado ya existe.";
+				} else {
+					$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia, $comision);
+
 					echo $rspta ? "Producto registrado" : "El producto no se pudo registrar";
 				}
 			}
@@ -93,7 +98,7 @@ switch ($_GET["op"]) {
 			if ($nombreExiste) {
 				echo "El código del producto que ha ingresado ya existe en el local seleccionado.";
 			} else {
-				$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia,  $comision);
+				$rspta = $articulo->editar($idarticulo, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia, $comision);
 				echo $rspta ? "Producto actualizado" : "El producto no se pudo actualizar";
 			}
 		}

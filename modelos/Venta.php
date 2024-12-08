@@ -174,7 +174,7 @@ class Venta
 			$id = str_replace('_producto', '', $idarticulo);
 
 			// Si la moneda es dólares, convertir el precio de venta a soles
-			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] / VALOR_DOLAR : $precio_venta[$indice];
+			$precioVentaValidar = ($_SESSION["moneda"] === 'dolares') ? $precio_venta[$indice] : $precio_venta[$indice];
 
 			if ($precioVentaValidar < $precio_compra[$indice]) {
 				return true;
