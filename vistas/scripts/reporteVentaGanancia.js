@@ -22,14 +22,14 @@ function init() {
 		$('#metodopagoBuscar').selectpicker('refresh');
 	})
 
-	$.post("../ajax/proveedores.php?op=selectProveedores", function (r) {
+	$.post("../ajax/clientes.php?op=selectClientes", function (r) {
 		console.log(r);
-		$("#proveedorBuscar").html(r);
-		$('#proveedorBuscar').selectpicker('refresh');
+		$("#clienteBuscar").html(r);
+		$('#clienteBuscar').selectpicker('refresh');
 	})
 
-	$('#mReportes').addClass("treeview active");
-	$('#lReporteCompra').addClass("active");
+	$('#mReportesG').addClass("treeview active");
+	$('#lReporteVentaGanancia').addClass("active");
 }
 
 function listar() {
@@ -68,7 +68,7 @@ function listar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/reporte.php?op=listarCompras',
+				url: '../ajax/reporte.php?op=listarVentasGanancia',
 				type: "get",
 				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
@@ -90,13 +90,13 @@ function listar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
 function resetear() {
-	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "proveedorBuscar", "numDocBuscar", "numTicketBuscar", "usuarioBuscar", "metodopagoBuscar"];
+	const selects = ["fecha_inicio", "fecha_fin", "tipoDocBuscar", "localBuscar", "estadoBuscar", "clienteBuscar", "numDocBuscar", "numTicketBuscar", "usuarioBuscar", "metodopagoBuscar"];
 
 	for (const selectId of selects) {
 		$("#" + selectId).val("");
@@ -126,11 +126,11 @@ function buscar() {
 	const usuarioBuscar = document.getElementById("usuarioBuscar");
 	const estadoBuscar = document.getElementById("estadoBuscar");
 	const metodopagoBuscar = document.getElementById("metodopagoBuscar");
-	const proveedorBuscar = document.getElementById("proveedorBuscar");
+	const clienteBuscar = document.getElementById("clienteBuscar");
 	const numDocBuscar = document.getElementById("numDocBuscar");
 	const numTicketBuscar = document.getElementById("numTicketBuscar");
 
-	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && proveedorBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
+	if (fecha_inicio.value == "" && fecha_fin.value == "" && tipoDocBuscar.value == "" && localBuscar.value == "" && usuarioBuscar.value == "" && estadoBuscar.value == "" && metodopagoBuscar.value == "" && clienteBuscar.value == "" && numDocBuscar.value == "" && numTicketBuscar.value == "") {
 		bootbox.alert("Debe seleccionar al menos un campo para realizar la búsqueda.");
 		return;
 	}
@@ -147,7 +147,7 @@ function buscar() {
 	param5 = usuarioBuscar.value;
 	param6 = estadoBuscar.value;
 	param7 = metodopagoBuscar.value;
-	param8 = proveedorBuscar.value;
+	param8 = clienteBuscar.value;
 	param9 = numDocBuscar.value;
 	param10 = numTicketBuscar.value;
 
@@ -175,7 +175,7 @@ function buscar() {
 			],
 			"ajax":
 			{
-				url: '../ajax/reporte.php?op=listarCompras',
+				url: '../ajax/reporte.php?op=listarVentasGanancia',
 				type: "get",
 				data: { param1: param1, param2: param2, param3: param3, param4: param4, param5: param5, param6: param6, param7: param7, param8: param8, param9: param9, param10: param10 },
 				dataType: "json",
@@ -197,28 +197,28 @@ function buscar() {
 			"iDisplayLength": 10,
 			"order": [],
 			"createdRow": function (row, data, dataIndex) {
-				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('nowrap-cell');
+				// $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7), td:eq(8), td:eq(9), td:eq(10)').addClass('nowrap-cell');
 			}
 		}).DataTable();
 }
 
-function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_tipo_documento, proveedor_num_documento, proveedor_direccion, impuesto, total_compra, vuelto, comentario_interno, moneda) {
-	$.post("../ajax/compra.php?op=listarDetallesProductoCompra", { idcompra: idcompra }, function (data, status) {
+function modalDetalles(idventa, usuario, num_comprobante, cliente, cliente_tipo_documento, cliente_num_documento, cliente_direccion, impuesto, total_venta, vuelto, comentario_interno, moneda) {
+	$.post("../ajax/venta.php?op=listarDetallesProductoVenta", { idventa: idventa }, function (data, status) {
 		console.log(data);
 		data = JSON.parse(data);
 		console.log(data);
 
-		// Actualizar datos del proveedor
-		let nombreCompleto = proveedor;
+		// Actualizar datos del cliente
+		let nombreCompleto = cliente;
 
-		if (proveedor_tipo_documento && proveedor_num_documento) {
-			nombreCompleto += ' - ' + proveedor_tipo_documento + ': ' + proveedor_num_documento;
+		if (cliente_tipo_documento && cliente_num_documento) {
+			nombreCompleto += ' - ' + cliente_tipo_documento + ': ' + cliente_num_documento;
 		}
 
-		$('#nombre_proveedor').text(nombreCompleto);
-		$('#direccion_proveedor').text((proveedor_direccion != "") ? proveedor_direccion : "SIN REGISTRAR");
+		$('#nombre_cliente').text(nombreCompleto);
+		$('#direccion_cliente').text((cliente_direccion != "") ? cliente_direccion : "SIN REGISTRAR");
 		$('#tipo_moneda').text(moneda == "soles" ? "SOLES" : "DÓLARES");
-		$('#boleta').text("N° " + num_comprobante);
+		$('#nota_de_venta').text("N° " + num_comprobante);
 
 		// Actualizar detalles de la tabla productos
 		let tbody = $('#detallesProductosFinal tbody');
@@ -226,20 +226,25 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 
 		let subtotal = 0;
 		let cantidadTotal = 0;
+		let gananciaTotal = 0;
 
 		data.articulos.forEach(item => {
 			let descripcion = item.articulo ? item.articulo : item.servicio;
 			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
-			let precio = moneda == "soles" ? "S/. " + item.precio_compra : item.precio_compra + " $";
+			let precio_venta = moneda == "soles" ? "S/. " + item.precio_venta : item.precio_venta + " $";
+			let precio_compra = moneda == "soles" ? "S/. " + item.precio_compra : item.precio_compra + " $";
+			let ganancia = moneda == "soles" ? "S/. " + (item.precio_venta - item.precio_compra).toFixed(2) : (item.precio_venta - item.precio_compra).toFixed(2) + " $";
 			let descuento = moneda == "soles" ? "S/. " + item.descuento : item.descuento + " $";
-			let subtotalFila = ((item.cantidad * item.precio_compra) - item.descuento).toFixed(2);
+			let subtotalFila = ((item.cantidad * item.precio_venta) - item.descuento).toFixed(2);
 			let subtotalFinal = moneda == "soles" ? "S/. " + subtotalFila : subtotalFila + " $";
 
 			let row = `
                 <tr>
                     <td width: 44%; min-width: 180px; white-space: nowrap;">${capitalizarTodasLasPalabras(descripcion)}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${item.cantidad}</td>
-                    <td width: 14%; min-width: 40px; white-space: nowrap;">${precio}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${precio_venta}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${precio_compra}</td>
+                    <td width: 14%; min-width: 40px; white-space: nowrap;">${ganancia}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${descuento}</td>
                     <td width: 14%; min-width: 40px; white-space: nowrap;">${subtotalFinal}</td>
                 </tr>`;
@@ -247,21 +252,25 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 			tbody.append(row);
 
 			// Calcular subtotal
-			subtotal += item.cantidad * item.precio_compra;
+			subtotal += item.cantidad * item.precio_venta;
 			// Calcular cantidad
 			cantidadTotal += Number(item.cantidad);
+			// Calcular ganancia
+			gananciaTotal += Number((item.precio_venta - item.precio_compra).toFixed(2));
 		});
 
 		let igv = subtotal * (impuesto);
 
 		let subtotal_detalle = moneda == "soles" ? "S/. " + subtotal.toFixed(2) : subtotal.toFixed(2) + " $";
 		let igv_detalle = moneda == "soles" ? "S/. " + igv.toFixed(2) : igv.toFixed(2) + " $";
-		let total_detalle = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+		let total_detalle = moneda == "soles" ? "S/. " + total_venta : total_venta + " $";
+		let subtotal_ganancia = moneda == "soles" ? "S/. " + gananciaTotal.toFixed(2) : gananciaTotal.toFixed(2) + " $";
 
 		$('#subtotal_detalle').text(subtotal_detalle);
 		$('#igv_detalle').text(igv_detalle);
 		$('#total_detalle').text(total_detalle);
 		$('#total_cantidad').text(cantidadTotal.toFixed(2));
+		$('#subtotal_ganancia').text(subtotal_ganancia);
 
 		// Actualizar detalles de la tabla pagos
 		let tbodyPagos = $('#detallesPagosFinal tbody');
@@ -286,7 +295,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 
 		let subtotal_pagos = moneda == "soles" ? "S/. " + subtotalPagos.toFixed(2) : subtotalPagos.toFixed(2) + " $";
 		let vueltos_pagos = moneda == "soles" ? "S/. " + vuelto : vuelto + " $";
-		let total_pagos = moneda == "soles" ? "S/. " + total_compra : total_compra + " $";
+		let total_pagos = moneda == "soles" ? "S/. " + total_venta : total_venta + " $";
 
 		$('#subtotal_pagos').text(subtotal_pagos);
 		$('#vueltos_pagos').text(vueltos_pagos);
@@ -295,7 +304,7 @@ function modalDetalles(idcompra, usuario, num_comprobante, proveedor, proveedor_
 		let comentario_val = comentario_interno == "" ? "Sin registrar." : comentario_interno;
 
 		$('#comentario_interno_detalle').text(comentario_val);
-		$('#atendido_compra').text(capitalizarTodasLasPalabras(usuario));
+		$('#atendido_venta').text(capitalizarTodasLasPalabras(usuario));
 	});
 }
 

@@ -63,13 +63,14 @@ class Venta
 			$cantidadItem = $cantidad[$i];
 			$idPersonalItem = $idpersonal[$i];
 			$precioVentaItem = $precio_venta[$i];
+			$precioCompraItem = $precio_compra[$i];
 			$comisionItem = $comision[$i];
 			$descuentoItem = $descuento[$i];
 
 			$idArticulo = $esArticulo ? $id : 0;
 			$idServicio = $esServicio ? $id : 0;
 
-			$sql_detalle = "INSERT INTO detalle_venta(idventa,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idventanew','$idcaja','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
+			$sql_detalle = "INSERT INTO detalle_venta(idventa,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,precio_compra,descuento,impuesto,fecha_hora) VALUES ('$idventanew','$idcaja','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$precioCompraItem','$descuentoItem','$impuesto',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
@@ -510,6 +511,7 @@ class Venta
 				  s.codigo AS cod_servicio,
 				  dv.cantidad,
 				  dv.precio_venta,
+				  dv.precio_compra,
 				  dv.descuento
 				FROM detalle_venta dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo

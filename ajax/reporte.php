@@ -544,6 +544,140 @@ if (!isset($_SESSION["nombre"])) {
 
 				break;
 
+				/* ======================= REPORTE DE GANANCIAS DE VENTAS ======================= */
+
+			case 'listarVentasGanancia':
+				$parametros = array(
+					"v.eliminado = '0'",
+				);
+
+				if ($cargo != "superadmin") {
+					$parametros[] = "v.idlocal = '$idlocalSession'";
+				}
+
+				$filtros = array(
+					"param1" => "DATE(v.fecha_hora) BETWEEN '{$_GET["param1"]}' AND '{$_GET["param2"]}'",
+					"param3" => "v.tipo_comprobante = '{$_GET["param3"]}'",
+					"param4" => "v.idlocal = '{$_GET["param4"]}'",
+					"param5" => "u.idusuario = '{$_GET["param5"]}'",
+					"param6" => "v.estado = '{$_GET["param6"]}'",
+					"param7" => "dvp.idmetodopago = '{$_GET["param7"]}'",
+					"param8" => "c.nombre LIKE '%{$_GET["param8"]}%'",
+					"param9" => "c.num_documento = '{$_GET["param9"]}'",
+					"param10" => "v.num_comprobante = '{$_GET["param10"]}'"
+				);
+
+				foreach ($filtros as $param => $condicion) {
+					if (!empty($_GET[$param])) {
+						$parametros[] = $condicion;
+					}
+				}
+
+				$condiciones = implode(" AND ", $parametros);
+
+				$rspta = $cargo == "superadmin" ? $reporte->listarVentasGanancia($condiciones) : $reporte->listarVentasGananciaLocal($idlocalSession, $condiciones);
+
+				$data = array();
+
+				$firstIteration = true;
+				$totalPrecioVentaSoles = 0;
+				$totalPrecioVentaDolares = 0;
+				$totalGananciaSoles = 0;
+				$totalGananciaDolares = 0;
+
+				while ($reg = $rspta->fetch_object()) {
+					$cargo_detalle = "";
+
+					switch ($reg->cargo) {
+						case 'superadmin':
+							$cargo_detalle = "Superadministrador";
+							break;
+						case 'admin_total':
+							$cargo_detalle = "Admin Total";
+							break;
+						case 'admin':
+							$cargo_detalle = "Administrador";
+							break;
+						case 'cajero':
+							$cargo_detalle = "Cajero";
+							break;
+						default:
+							break;
+					}
+
+					$data[] = array(
+						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px; justify-content: center;">' .
+							'<a data-toggle="modal" href="#myModal"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
+							'</div>',
+						"1" => $reg->fecha,
+						"2" => $reg->cliente_tipo_documento . ": " . $reg->cliente_num_documento,
+						"3" => $reg->cliente,
+						"4" => $reg->local,
+						"5" => $reg->caja,
+						"6" => $reg->tipo_comprobante,
+						"7" => 'N° ' . $reg->num_comprobante,
+						"8" => $reg->total_venta,
+						"9" => $reg->total_ganancia,
+						"10" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"11" => $reg->usuario . ' - ' . $cargo_detalle,
+						"12" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+					);
+
+					if ($reg->moneda == 'soles') {
+						$totalPrecioVentaSoles += $reg->total_venta;
+						$totalGananciaSoles += $reg->total_ganancia;
+					} else {
+						$totalPrecioVentaDolares += $reg->total_venta;
+						$totalGananciaDolares += $reg->total_ganancia;
+					}
+
+					$firstIteration = false; // Marcar que ya no es la primera iteración
+				}
+
+				if (!$firstIteration) {
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL EN SOLES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalGananciaSoles, 2) . '</strong>',
+						"10" => "",
+						"11" => "",
+						"12" => "",
+					);
+
+					$data[] = array(
+						"0" => "",
+						"1" => "",
+						"2" => "",
+						"3" => "",
+						"4" => "",
+						"5" => "",
+						"6" => "",
+						"7" => "<strong>TOTAL EN DÓLARES</strong>",
+						"8" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
+						"9" => '<strong>' . number_format($totalGananciaDolares, 2) . '</strong>',
+						"10" => "",
+						"11" => "",
+						"12" => "",
+					);
+				}
+
+				$results = array(
+					"sEcho" => 1, //Información para el datatables
+					"iTotalRecords" => count($data), //enviamos el total registros al datatable
+					"iTotalDisplayRecords" => count($data), //enviamos el total registros a visualizar
+					"aaData" => $data
+				);
+				echo json_encode($results);
+
+				break;
+
 				/* ======================= MÉTODOS DE PAGO POR COMPRAS ======================= */
 
 			case 'listarComprasMetodosPago':

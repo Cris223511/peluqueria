@@ -322,6 +322,86 @@ class Reporte
 		return ejecutarConsulta($sql);
 	}
 
+	/* ======================= REPORTE DE GANANCIA DE VENTAS ======================= */
+
+	public function listarVentasGanancia($condiciones = "")
+	{
+		$sql = "SELECT DISTINCT
+					  v.idventa,
+					  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					  v.idcliente,
+					  c.nombre AS cliente,
+					  c.tipo_documento AS cliente_tipo_documento,
+					  c.num_documento AS cliente_num_documento,
+					  c.direccion AS cliente_direccion,
+					  v.idcaja,
+					  ca.titulo AS caja,
+					  al.idlocal,
+					  al.titulo AS local,
+					  u.idusuario,
+					  u.nombre AS usuario,
+					  u.cargo AS cargo,
+					  v.tipo_comprobante,
+					  v.num_comprobante,
+					  v.moneda,
+					  v.vuelto,
+					  v.impuesto,
+					  v.total_venta,
+					  SUM(dv.precio_venta - dv.precio_compra) AS total_ganancia,
+					  v.comentario_interno,
+					  v.estado
+					FROM venta v
+					LEFT JOIN clientes c ON v.idcliente = c.idcliente
+					LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+					LEFT JOIN locales al ON v.idlocal = al.idlocal
+					LEFT JOIN usuario u ON v.idusuario = u.idusuario
+					LEFT JOIN detalle_venta dv ON v.idventa = dv.idventa
+					LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
+					WHERE $condiciones
+					GROUP BY v.idventa
+					ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
+	public function listarVentasGananciaLocal($idlocal, $condiciones = "")
+	{
+		$sql = "SELECT DISTINCT
+					  v.idventa,
+					  DATE_FORMAT(v.fecha_hora, '%d-%m-%Y %H:%i:%s') AS fecha,
+					  v.idcliente,
+					  c.nombre AS cliente,
+					  c.tipo_documento AS cliente_tipo_documento,
+					  c.num_documento AS cliente_num_documento,
+					  c.direccion AS cliente_direccion,
+					  v.idcaja,
+					  ca.titulo AS caja,
+					  al.idlocal,
+					  al.titulo AS local,
+					  u.idusuario,
+					  u.nombre AS usuario,
+					  u.cargo AS cargo,
+					  v.tipo_comprobante,
+					  v.num_comprobante,
+					  v.moneda,
+					  v.vuelto,
+					  v.impuesto,
+					  v.total_venta,
+					  v.comentario_interno,
+					  v.estado
+					FROM venta v
+					LEFT JOIN clientes c ON v.idcliente = c.idcliente
+					LEFT JOIN cajas ca ON v.idcaja = ca.idcaja
+					LEFT JOIN locales al ON v.idlocal = al.idlocal
+					LEFT JOIN usuario u ON v.idusuario = u.idusuario
+					LEFT JOIN detalle_venta_pagos dvp ON v.idventa = dvp.idventa
+					WHERE v.idlocal = '$idlocal'
+					AND $condiciones
+					ORDER by v.idventa DESC";
+
+		return ejecutarConsulta($sql);
+	}
+
 	/* ======================= MÉTODOS DE PAGO POR COMPRA ======================= */
 
 	public function listarComprasMetodosPago($condiciones = "")

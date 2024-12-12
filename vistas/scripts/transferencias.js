@@ -58,7 +58,7 @@ function init() {
 		$.post("../ajax/usuario.php?op=getSessionId", function (r) {
 			console.log(r);
 			data = JSON.parse(r);
-			idSession = data.idusuario;
+			idSession = data.idlocal;
 		})
 	});
 }

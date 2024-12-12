@@ -170,7 +170,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Marca</th>
                       <th>C. producto</th>
-                      <th>Stock normal</th>
+                      <th>Stock</th>
                       <th>P. total compra</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
@@ -186,7 +186,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Almacén</th>
                       <th>Marca</th>
                       <th>C. producto</th>
-                      <th>Stock normal</th>
+                      <th>Stock</th>
                       <th>P. total compra</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>

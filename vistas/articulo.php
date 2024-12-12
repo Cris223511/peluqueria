@@ -140,26 +140,26 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Imagen</th>
                       <th style="width: 20%; min-width: 260px;">Nombre</th>
                       <th style="white-space: nowrap;">U. medida</th>
-                      <th style="width: 20%; min-width: 300px;">Descripción</th>
                       <th>Categoría</th>
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
                       <th>Marca</th>
                       <th>C. producto</th>
-                      <th>C. de barra</th>
-                      <th>P. compra</th>
+                      <th>Stock</th>
+                      <th>Stock min.</th>
                       <th>P. venta</th>
-                      <th>P. venta por mayor</th>
+                      <th>P. compra</th>
                       <th>Ganancia</th>
+                      <th>P. venta por mayor</th>
                       <th>Comisión</th>
-                      <th style="width: 20%; min-width: 200px;">Talla</th>
-                      <th style="width: 20%; min-width: 200px;">Color</th>
+                      <th>C. de barra</th>
+                      <th style="width: 20%; min-width: 280px;">Descripción</th>
+                      <th style="width: 20%; min-width: 180px;">Talla</th>
+                      <th style="width: 20%; min-width: 180px;">Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
-                      <th style="width: 20%; min-width: 200px;">Item 1</th>
-                      <th style="width: 20%; min-width: 200px;">Item 2</th>
+                      <th style="width: 20%; min-width: 180px;">Item 1</th>
+                      <th style="width: 20%; min-width: 180px;">Item 2</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>
@@ -171,19 +171,19 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Imagen</th>
                       <th>Nombre</th>
                       <th>U. medida</th>
-                      <th>Descripción</th>
                       <th>Categoría</th>
                       <th>Almacén</th>
-                      <th>Stock normal</th>
-                      <th>Stock mínimo</th>
                       <th>Marca</th>
                       <th>C. producto</th>
-                      <th>C. de barra</th>
-                      <th>P. compra</th>
+                      <th>Stock</th>
+                      <th>Stock min.</th>
                       <th>P. venta</th>
-                      <th>P. venta por mayor</th>
+                      <th>P. compra</th>
                       <th>Ganancia</th>
+                      <th>P. venta por mayor</th>
                       <th>Comisión</th>
+                      <th>C. de barra</th>
+                      <th>Descripción</th>
                       <th>Talla</th>
                       <th>Color</th>
                       <th>Peso</th>

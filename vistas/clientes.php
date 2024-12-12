@@ -339,8 +339,8 @@ if (!isset($_SESSION["nombre"])) {
                 </thead>
                 <tfoot>
                   <tr>
-                    <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
-                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 44%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL CANTIDAD</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="total_cantidad"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">SUBTOTAL</td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_detalle"></td>
@@ -480,8 +480,8 @@ if (!isset($_SESSION["nombre"])) {
                 </thead>
                 <tfoot>
                   <tr>
-                    <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
-                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 44%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL CANTIDAD</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="total_cantidad2"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">SUBTOTAL</td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_detalle2"></td>

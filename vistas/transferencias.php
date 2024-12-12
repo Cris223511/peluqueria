@@ -200,30 +200,30 @@ if (!isset($_SESSION["nombre"])) {
           <div class="modal-body table-responsive">
             <table id="tblarticulos" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
               <thead>
-                <th>Opciones</th>
+                <th style="width: 1%;">Opciones</th>
                 <th>Imagen</th>
                 <th style="width: 20%; min-width: 260px;">Nombre</th>
                 <th style="white-space: nowrap;">U. medida</th>
-                <th style="width: 20%; min-width: 300px;">Descripción</th>
                 <th>Categoría</th>
                 <th style="width: 15%; min-width: 200px;">Almacén</th>
-                <th>Stock normal</th>
-                <th>Stock mínimo</th>
                 <th>Marca</th>
                 <th>C. producto</th>
-                <th>C. de barra</th>
-                <th>P. compra</th>
+                <th>Stock</th>
+                <th>Stock min.</th>
                 <th>P. venta</th>
-                <th>P. venta por mayor</th>
+                <th>P. compra</th>
                 <th>Ganancia</th>
+                <th>P. venta por mayor</th>
                 <th>Comisión</th>
-                <th style="width: 20%; min-width: 200px;">Talla</th>
-                <th style="width: 20%; min-width: 200px;">Color</th>
+                <th>C. de barra</th>
+                <th style="width: 20%; min-width: 280px;">Descripción</th>
+                <th style="width: 20%; min-width: 180px;">Talla</th>
+                <th style="width: 20%; min-width: 180px;">Color</th>
                 <th>Peso</th>
                 <th>Fecha emisión</th>
                 <th>Fecha vencimiento</th>
-                <th style="width: 20%; min-width: 200px;">Item 1</th>
-                <th style="width: 20%; min-width: 200px;">Item 2</th>
+                <th style="width: 20%; min-width: 180px;">Item 1</th>
+                <th style="width: 20%; min-width: 180px;">Item 2</th>
                 <th>Agregado por</th>
                 <th>Cargo</th>
                 <th>Estado</th>
@@ -235,28 +235,28 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Imagen</th>
                 <th>Nombre</th>
                 <th>U. medida</th>
-                <th>Descripción</th>
                 <th>Categoría</th>
+                <th>Almacén</th>
                 <th>Marca</th>
-                <th>Ubicación del local</th>
-                <th>Stock normal</th>
-                <th>Stock mínimo</th>
-                <th>P. Compra</th>
-                <th>P. Compra Mayor</th>
                 <th>C. producto</th>
+                <th>Stock</th>
+                <th>Stock min.</th>
+                <th>P. venta</th>
+                <th>P. compra</th>
+                <th>Ganancia</th>
+                <th>P. venta por mayor</th>
+                <th>Comisión</th>
                 <th>C. de barra</th>
+                <th>Descripción</th>
                 <th>Talla</th>
                 <th>Color</th>
                 <th>Peso</th>
                 <th>Fecha emisión</th>
                 <th>Fecha vencimiento</th>
-                <th>Nota 1</th>
-                <th>Nota 2</th>
-                <th>Nota 3 (IMEI)</th>
-                <th>Nota 4 (Serial)</th>
+                <th>Item 1</th>
+                <th>Item 2</th>
                 <th>Agregado por</th>
                 <th>Cargo</th>
-                <th>Fecha y hora</th>
                 <th>Estado</th>
               </tfoot>
             </table>

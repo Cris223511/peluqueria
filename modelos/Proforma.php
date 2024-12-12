@@ -64,13 +64,14 @@ class Proforma
 			$cantidadItem = $cantidad[$i];
 			$idPersonalItem = $idpersonal[$i];
 			$precioVentaItem = $precio_venta[$i];
+			$precioCompraItem = $precio_compra[$i];
 			$comisionItem = $comision[$i];
 			$descuentoItem = $descuento[$i];
 
 			$idArticulo = $esArticulo ? $id : 0;
 			$idServicio = $esServicio ? $id : 0;
 
-			$sql_detalle = "INSERT INTO detalle_proforma(idproforma,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,descuento,impuesto,fecha_hora) VALUES ('$idproformanew','$idcaja','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$descuentoItem','$impuesto',SYSDATE())";
+			$sql_detalle = "INSERT INTO detalle_proforma(idproforma,idcaja,idarticulo,idservicio,idpersonal,cantidad,precio_venta,precio_compra,descuento,impuesto,fecha_hora) VALUES ('$idproformanew','$idcaja','$idArticulo','$idServicio','$idPersonalItem','$cantidadItem','$precioVentaItem','$precioCompraItem','$descuentoItem','$impuesto',SYSDATE())";
 
 			ejecutarConsulta($sql_detalle) or $sw = false;
 
@@ -275,8 +276,8 @@ class Proforma
 			$resultado_detalle_proforma = ejecutarConsulta($sql_detalle_proforma);
 
 			while ($detalle_proforma = $resultado_detalle_proforma->fetch_assoc()) {
-				$sql_insert_detalle_venta = "INSERT INTO detalle_venta (idventa, idcaja, idarticulo, idservicio, idpersonal, cantidad, precio_venta, descuento, impuesto, fecha_hora)
-                VALUES ('$idventa', '{$detalle_proforma['idcaja']}', '{$detalle_proforma['idarticulo']}', '{$detalle_proforma['idservicio']}', '{$detalle_proforma['idpersonal']}', '{$detalle_proforma['cantidad']}', '{$detalle_proforma['precio_venta']}', '{$detalle_proforma['descuento']}', '{$detalle_proforma['impuesto']}', '{$detalle_proforma['fecha_hora']}')";
+				$sql_insert_detalle_venta = "INSERT INTO detalle_venta (idventa, idcaja, idarticulo, idservicio, idpersonal, cantidad, precio_venta, precio_compra, descuento, impuesto, fecha_hora)
+                VALUES ('$idventa', '{$detalle_proforma['idcaja']}', '{$detalle_proforma['idarticulo']}', '{$detalle_proforma['idservicio']}', '{$detalle_proforma['idpersonal']}', '{$detalle_proforma['cantidad']}', '{$detalle_proforma['precio_venta']}', '{$detalle_proforma['precio_compra']}', '{$detalle_proforma['descuento']}', '{$detalle_proforma['impuesto']}', '{$detalle_proforma['fecha_hora']}')";
 				ejecutarConsulta($sql_insert_detalle_venta);
 			}
 
@@ -553,6 +554,7 @@ class Proforma
 				  s.codigo AS cod_servicio,
 				  dv.cantidad,
 				  dv.precio_venta,
+				  dv.precio_compra,
 				  dv.descuento
 				FROM detalle_proforma dv
 				LEFT JOIN articulo a ON dv.idarticulo = a.idarticulo

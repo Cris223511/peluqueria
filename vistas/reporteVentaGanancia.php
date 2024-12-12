@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html");
 } else {
   require 'header.php';
-  if ($_SESSION['reportes'] == 1) {
+  if ($_SESSION['reportesG'] == 1) {
 ?>
     <style>
       @media (max-width: 991px) {
@@ -100,19 +100,19 @@ if (!isset($_SESSION["nombre"])) {
           <div class="col-md-12">
             <div class="box">
               <div class="box-header with-border">
-                <h1 class="box-title">Reporte de ventas generales</h1>
+                <h1 class="box-title">Reporte de ganancias de ventas generales</h1>
                 <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Reporte de ventas generales</strong>" data-html="true" data-content="Módulo para ver todas las ventas realizadas en <strong>su local</strong> y los detalles de los productos." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 <div class="box-tools pull-right"></div>
                 <div class="panel-body table-responsive listadoregistros" style="overflow: visible; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Inicial:</label>
                     <input type="date" class="form-control" name="fecha_inicio" id="fecha_inicio">
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px;">
                     <label>Fecha Final:</label>
                     <input type="date" class="form-control" name="fecha_fin" id="fecha_fin">
                   </div>
-                  <div class="form-group col-lg-4 col-md-4 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-3 col-xs-12" style="padding: 5px; margin: 0px; display: none !important;">
                     <label>Tipo documento:</label>
                     <select id="tipoDocBuscar" name="tipoDocBuscar" class="form-control selectpicker" data-size="5">
                       <option value="">- Seleccione -</option>
@@ -130,7 +130,7 @@ if (!isset($_SESSION["nombre"])) {
                     <select id="usuarioBuscar" name="usuarioBuscar" class="form-control selectpicker" data-live-search="true" data-size="5">
                     </select>
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px; display: none !important;">
                     <label>Estado:</label>
                     <select id="estadoBuscar" name="estadoBuscar" class="form-control selectpicker" data-size="5">
                       <option value="">- Seleccione -</option>
@@ -153,7 +153,7 @@ if (!isset($_SESSION["nombre"])) {
                     <label>DNI / RUC:</label>
                     <input type="number" class="form-control" name="numDocBuscar" id="numDocBuscar" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="Ingrese el N° de documento." required>
                   </div>
-                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px;">
+                  <div class="form-group col-lg-3 col-md-3 col-sm-4 col-xs-12" style="padding: 5px; margin: 0px; display: none !important;">
                     <label>N° ticket:</label>
                     <input type="number" class="form-control" name="numTicketBuscar" id="numTicketBuscar" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="10" placeholder="Ingrese el N° de ticket." required>
                   </div>
@@ -179,6 +179,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Documento</th>
                       <th>Número Ticket</th>
                       <th>Total Venta</th>
+                      <th>Total Ganancia</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
@@ -195,6 +196,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Documento</th>
                       <th>Número Ticket</th>
                       <th>Total Venta</th>
+                      <th>Total Ganancia</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Estado</th>
@@ -227,7 +229,9 @@ if (!isset($_SESSION["nombre"])) {
                 <thead style="border-bottom: 1.5px solid black !important;">
                   <th>DESCRIPCIÓN DEL PRODUCTO</th>
                   <th>CANTIDAD</th>
-                  <th>PRECIO UNITARIO</th>
+                  <th style="white-space: nowrap;">PRECIO VENTA</th>
+                  <th style="white-space: nowrap;">PRECIO COMPRA</th>
+                  <th>GANANCIA</th>
                   <th>DESCUENTO</th>
                   <th>SUBTOTAL</th>
                 </thead>
@@ -236,6 +240,8 @@ if (!isset($_SESSION["nombre"])) {
                     <td style="width: 44%; min-width: 180px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL CANTIDAD</td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="total_cantidad"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL GANANCIA</td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_ganancia"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">SUBTOTAL</td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="subtotal_detalle"></td>
                   </tr>
@@ -243,11 +249,15 @@ if (!isset($_SESSION["nombre"])) {
                     <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">IGV</td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: center !important; font-weight: bold;" id="igv_detalle"></td>
                   </tr>
                   <tr>
                     <td style="width: 44%; min-width: 180px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
+                    <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap;"></td>
                     <td style="width: 14%; min-width: 40px; white-space: nowrap; text-align: end !important; font-weight: bold;">TOTAL</td>
@@ -302,7 +312,7 @@ if (!isset($_SESSION["nombre"])) {
   }
   require 'footer.php';
   ?>
-  <script type="text/javascript" src="scripts/reporteVenta.js"></script>
+  <script type="text/javascript" src="scripts/reporteVentaGanancia.js"></script>
 <?php
 }
 ob_end_flush();

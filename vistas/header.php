@@ -464,6 +464,21 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") {
+            echo '<li id="mReportesG" class="treeview">
+              <a href="#">
+                <i class="fa fa-pie-chart"></i>
+                <span>Reportes ganancias</span>
+                <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+              <li id="lReporteVentaGanancia"><a href="reporteVentaGanancia.php"><i class="fa fa-circle-o"></i> Reporte de ganancia en venta</a></li>
+              </ul>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['reportesP'] == 1) {
             echo '<li id="mReportesP" class="treeview">
               <a href="#">

@@ -2256,14 +2256,15 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 		tbody.empty();
 
 		let subtotal = 0;
+		let cantidadTotal = 0;
 
 		data.articulos.forEach(item => {
 			let descripcion = item.articulo ? item.articulo : item.servicio;
 			let codigo = item.codigo_articulo ? item.codigo_articulo : item.cod_servicio;
 			let precio = moneda == "soles" ? "S/. " + item.precio_venta : item.precio_venta + " $";
 			let descuento = moneda == "soles" ? "S/. " + item.descuento : item.descuento + " $";
-			let subtotal = ((item.cantidad * item.precio_venta) - item.descuento).toFixed(2);
-			let subtotalFinal = moneda == "soles" ? "S/. " + subtotal : subtotal + " $";
+			let subtotalFila = ((item.cantidad * item.precio_venta) - item.descuento).toFixed(2);
+			let subtotalFinal = moneda == "soles" ? "S/. " + subtotalFila : subtotalFila + " $";
 
 			let row = `
                 <tr>
@@ -2278,6 +2279,8 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 
 			// Calcular subtotal
 			subtotal += item.cantidad * item.precio_venta;
+			// Calcular cantidad
+			cantidadTotal += Number(item.cantidad);
 		});
 
 		let igv = subtotal * (impuesto);
@@ -2289,6 +2292,7 @@ function modalDetalles(idproforma, usuario, num_comprobante, cliente, cliente_ti
 		$('#subtotal_detalle').text(subtotal_detalle);
 		$('#igv_detalle').text(igv_detalle);
 		$('#total_detalle').text(total_detalle);
+		$('#total_cantidad').text(cantidadTotal.toFixed(2));
 
 		// Actualizar detalles de la tabla pagos
 		let tbodyPagos = $('#detallesPagosFinal tbody');
