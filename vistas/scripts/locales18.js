@@ -26,6 +26,7 @@ function limpiar() {
 
 	$("#idlocal").val("");
 	$("#titulo").val("");
+	$("#empresa").val("");
 	$("#local_ruc").val("");
 	$("#imagenmuestra").attr("src", "");
 	$("#imagenmuestra").hide();
@@ -151,6 +152,7 @@ function mostrar(idlocal) {
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#empresa").val(data.empresa);
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idlocal").val(data.idlocal);
@@ -171,6 +173,7 @@ function mostrar2(idlocal) {
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#empresa").val(data.empresa);
 		$("#local_ruc").val(data.local_ruc);
 		$("#descripcion").val(data.descripcion);
 		$("#idlocal").val(data.idlocal);

@@ -5,14 +5,14 @@ class LocalDisponible
 {
 	public function __construct() {}
 
-	public function agregar($titulo, $local_ruc, $descripcion, $imagen)
+	public function agregar($titulo, $empresa, $local_ruc, $descripcion, $imagen)
 	{
 		if (empty($imagen))
 			$imagen = "default.jpg";
 
 		date_default_timezone_set("America/Lima");
-		$sql = "INSERT INTO locales (idusuario, titulo, local_ruc, descripcion, imagen, fecha_hora, estado, eliminado)
-            VALUES (0,'$titulo','$local_ruc','$descripcion','$imagen', SYSDATE(), 'activado', '0')";
+		$sql = "INSERT INTO locales (idusuario, titulo, empresa, local_ruc, descripcion, imagen, fecha_hora, estado, eliminado)
+            VALUES (0,'$titulo','$empresa','$local_ruc','$descripcion','$imagen', SYSDATE(), 'activado', '0')";
 		return ejecutarConsulta($sql);
 	}
 
@@ -40,9 +40,9 @@ class LocalDisponible
 		return false;
 	}
 
-	public function editar($idlocal, $titulo, $local_ruc, $descripcion, $imagen)
+	public function editar($idlocal, $titulo, $empresa, $local_ruc, $descripcion, $imagen)
 	{
-		$sql = "UPDATE locales SET titulo='$titulo',local_ruc='$local_ruc',descripcion='$descripcion',imagen='$imagen' WHERE idlocal='$idlocal'";
+		$sql = "UPDATE locales SET titulo='$titulo',empresa='$empresa',local_ruc='$local_ruc',descripcion='$descripcion',imagen='$imagen' WHERE idlocal='$idlocal'";
 		return ejecutarConsulta($sql);
 	}
 
@@ -86,6 +86,7 @@ class LocalDisponible
 				  u.nombre AS nombre,
 				  u.cargo AS cargo,
 				  l.titulo,
+				  l.empresa,
 				  l.local_ruc,
 				  l.descripcion,
 				  l.imagen,
@@ -107,6 +108,7 @@ class LocalDisponible
 				  u.nombre AS nombre,
 				  u.cargo AS cargo,
 				  l.titulo,
+				  l.empresa,
 				  l.local_ruc,
 				  l.descripcion,
 				  l.imagen,

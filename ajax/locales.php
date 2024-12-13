@@ -29,6 +29,7 @@ if (!isset($_SESSION["nombre"])) {
 
 		$idlocal = isset($_POST["idlocal"]) ? limpiarCadena($_POST["idlocal"]) : "";
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
+		$empresa = isset($_POST["empresa"]) ? limpiarCadena($_POST["empresa"]) : "";
 		$local_ruc = isset($_POST["local_ruc"]) ? limpiarCadena($_POST["local_ruc"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$imagen = isset($_POST["imagen"]) ? limpiarCadena($_POST["imagen"]) : "";
@@ -65,7 +66,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El nombre del local ya existe.";
 					} else {
-						$rspta = $locales->agregar($idusuario, $titulo, $local_ruc, $descripcion, $imagen);
+						$rspta = $locales->agregar($idusuario, $titulo, $empresa, $local_ruc, $descripcion, $imagen);
 						echo $rspta ? "Local registrado" : "El local no se pudo registrar";
 						if ($rspta) {
 							$_SESSION['local'] = $titulo;
@@ -77,10 +78,11 @@ if (!isset($_SESSION["nombre"])) {
 					if ($nombreExiste) {
 						echo "El nombre del local ya existe.";
 					} else {
-						$rspta = $locales->editar($idlocal, $titulo, $local_ruc, $descripcion, $imagen);
+						$rspta = $locales->editar($idlocal, $titulo, $empresa, $local_ruc, $descripcion, $imagen);
 						echo $rspta ? "Local actualizado." : "El local no se pudo actualizar";
 						if ($rspta) {
 							$_SESSION['local'] = $titulo;
+							$_SESSION['empresa'] = $empresa;
 							$_SESSION['local_imagen'] = $imagen;
 						}
 					}
@@ -147,9 +149,10 @@ if (!isset($_SESSION["nombre"])) {
 								</a>',
 						"2" => $reg->titulo,
 						"3" => "N° " . $reg->local_ruc,
-						"4" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
-						"5" => $reg->fecha,
-						"6" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"4" => $reg->empresa,
+						"5" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"6" => $reg->fecha,
+						"7" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}

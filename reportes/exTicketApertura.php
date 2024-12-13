@@ -13,7 +13,7 @@ if (!isset($_SESSION["nombre"])) {
         $rspta = $perfil->mostrarReporte();
 
         # Datos de la empresa #
-        $empresa = $rspta["titulo"];
+        $empresa = $_SESSION['empresa'];
         $auspiciado = $rspta["auspiciado"];
         $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
         $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];

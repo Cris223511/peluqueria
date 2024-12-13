@@ -64,7 +64,6 @@ function mostrar() {
 		data = JSON.parse(data);
 		console.log(data);
 		$("#idreporte").val(data.idreporte);
-		$("#titulo").val(data.titulo);
 		$("#auspiciado").val(data.auspiciado);
 		$("#moneda").val(data.moneda);
 		$("#moneda").trigger("onchange");

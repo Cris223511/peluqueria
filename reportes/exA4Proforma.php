@@ -5,8 +5,12 @@ require('../modelos/Perfiles.php');
 $perfil = new Perfiles();
 $rspta = $perfil->mostrarReporte();
 
+if (strlen(session_id()) < 1) {
+    session_start(); //Validamos si existe o no la sesión
+}
+
 # Datos de la empresa #
-$empresa = $rspta["titulo"];
+$empresa = $_SESSION['empresa'];
 $auspiciado = $rspta["auspiciado"];
 $ruc = ($rspta["ruc"] == '') ? 'Sin registrar' : $rspta["ruc"];
 $direccion = ($rspta["direccion"] == '') ? 'Sin registrar' : $rspta["direccion"];

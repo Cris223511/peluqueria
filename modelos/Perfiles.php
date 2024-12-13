@@ -162,9 +162,9 @@ class Perfiles
 		return ejecutarConsultaSimpleFila($sql);
 	}
 
-	public function actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio)
+	public function actualizarBoleta($idreporte, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio)
 	{
-		$sql = "UPDATE reportes SET titulo='$titulo',ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',cambio='$cambio' WHERE idreporte='$idreporte'";
+		$sql = "UPDATE reportes SET ruc='$ruc',direccion='$direccion',telefono='$telefono',email='$email',auspiciado='$auspiciado',moneda='$moneda',cambio='$cambio' WHERE idreporte='$idreporte'";
 		return ejecutarConsulta($sql);
 	}
 }

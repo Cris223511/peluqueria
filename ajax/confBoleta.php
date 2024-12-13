@@ -8,7 +8,6 @@ require_once "../modelos/Perfiles.php";
 $perfil = new Perfiles();
 
 $idreporte = isset($_POST["idreporte"]) ? limpiarCadena($_POST["idreporte"]) : "";
-$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 $auspiciado = isset($_POST["auspiciado"]) ? limpiarCadena($_POST["auspiciado"]) : "";
 $moneda = isset($_POST["moneda"]) ? limpiarCadena($_POST["moneda"]) : "";
 $cambio = isset($_POST["cambio"]) ? limpiarCadena($_POST["cambio"]) : "";
@@ -27,7 +26,7 @@ switch ($_GET["op"]) {
 				$_SESSION["moneda"] = $moneda;
 				$_SESSION["cambio"] = $cambio;
 
-				$rspta = $perfil->actualizarBoleta($idreporte, $titulo, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio);
+				$rspta = $perfil->actualizarBoleta($idreporte, $ruc, $direccion, $telefono, $email, $auspiciado, $moneda, $cambio);
 				echo $rspta ? "Boleta actualizado correctamente" : "Boleta no se pudo actualizar";
 			} else {
 				require 'noacceso.php';

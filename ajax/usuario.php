@@ -165,7 +165,8 @@ switch ($_GET["op"]) {
 								((($reg->estado) ?
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .
-									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') : (($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '') :
+									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; padding: 0;" onclick="activar(' . $reg->idusuario . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idusuario . ')"><i class="fa fa-trash"></i></button>') : '')) . '</div>') : ("")),
 						"1" => $reg->nombre,
@@ -267,8 +268,15 @@ switch ($_GET["op"]) {
 		}
 
 		while ($reg = $rspta->fetch_object()) {
-			$sw = in_array($reg->idpermiso, $valores) ? 'checked' : '';
-			echo '<li> <input type="checkbox" ' . $sw . '  name="permiso[]" value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
+			// Verifica si es el permiso "Acceso"
+			if ($reg->nombre === "Acceso") {
+				// Siempre marcado y deshabilitado
+				echo '<li> <input type="checkbox" disabled name="permiso[]" checked value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
+			} else {
+				// Permisos normales (habilitados)
+				$sw = in_array($reg->idpermiso, $valores) ? 'checked' : '';
+				echo '<li> <input type="checkbox" ' . $sw . ' name="permiso[]" value="' . $reg->idpermiso . '">' . $reg->nombre . '</li>';
+			}
 		}
 		break;
 
@@ -315,6 +323,7 @@ switch ($_GET["op"]) {
 			$_SESSION['idusuario'] = $fetch->idusuario;
 			$_SESSION['idlocal'] = $fetch->idlocal;
 			$_SESSION['local'] = $fetch->local;
+			$_SESSION['empresa'] = $fetch->empresa;
 			$_SESSION['local_imagen'] = $fetch->local_imagen;
 			$_SESSION['nombre'] = $fetch->nombre;
 			$_SESSION['imagen'] = $fetch->imagen;

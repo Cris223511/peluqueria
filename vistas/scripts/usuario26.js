@@ -103,9 +103,11 @@ function mostrarform(flag) {
 		$("#btnagregar").show();
 		cargarLocalDisponible();
 
-		// desenmarcamos los selects
+		// Desmarcamos todos los selects excepto el de "Acceso"
 		$("#permisos input[type='checkbox']").each(function () {
-			$(this).prop('checked', false);
+			if ($(this).val() !== "2") {
+				$(this).prop('checked', false);
+			}
 		});
 	}
 }
@@ -182,7 +184,9 @@ function listar() {
 function guardaryeditar(e) {
 	e.preventDefault(); //No se activará la acción predeterminada del evento
 	$("#btnGuardar").prop("disabled", true);
+	$("input[name='permiso[]'][value='2']").prop("disabled", false);
 	var formData = new FormData($("#formulario")[0]);
+	$("input[name='permiso[]'][value='2']").prop("disabled", true);
 
 	$.ajax({
 		url: "../ajax/usuario.php?op=guardaryeditar",

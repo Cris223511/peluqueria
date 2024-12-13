@@ -41,6 +41,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Logo</th>
                     <th>Ubicación del local</th>
                     <th style="white-space: nowrap;">N° RUC</th>
+                    <th>Empresa del local</th>
                     <th style="width: 40%; min-width: 280px; white-space: nowrap;">Descripción del local</th>
                     <th style="white-space: nowrap;">Fecha y hora</th>
                     <th>Estado</th>
@@ -52,6 +53,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Logo</th>
                     <th>Ubicación del local</th>
                     <th>N° RUC</th>
+                    <th>Empresa del local</th>
                     <th>Descripción del local</th>
                     <th>Fecha y hora</th>
                     <th>Estado</th>
@@ -69,7 +71,11 @@ if (!isset($_SESSION["nombre"])) {
                     <label>RUC(*):</label>
                     <input type="number" class="form-control" name="local_ruc" id="local_ruc" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="11" placeholder="Ingrese el N° de RUC del local." required>
                   </div>
-                  <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <label>Empresa(*):</label>
+                    <input type="text" class="form-control" name="empresa" id="empresa" maxlength="40" placeholder="Ingrese el nombre de la empresa del local." required>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Imagen:</label>
                     <input type="file" class="form-control" name="imagen" id="imagen" accept="image/x-png,image/gif,image/jpeg">
                     <input type="hidden" name="imagenactual" id="imagenactual">

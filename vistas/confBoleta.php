@@ -34,12 +34,8 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="panel-body marco" id="formularioregistros">
                   <form name="formulario" id="formulario" method="POST" enctype="multipart/form-data">
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                      <label>Empresa(*):</label>
-                      <input type="hidden" name="idreporte" id="idreporte">
-                      <input type="text" class="form-control" name="titulo" id="titulo" maxlength="30" placeholder="Ingrese el nombre de la empresa." required>
-                    </div>
-                    <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <label>Desarrollado por:</label>
+                      <input type="hidden" name="idreporte" id="idreporte">
                       <input type="text" class="form-control" name="auspiciado" id="auspiciado" maxlength="25" placeholder="Ingrese el nombre de la empresa desarrolladora.">
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
@@ -79,8 +75,7 @@ if (!isset($_SESSION["nombre"])) {
             </div>
           </div>
         </div>
-    </div>
-    </section>
+      </section>
     </div>
   <?php
   } else {
