@@ -19,6 +19,7 @@ if (!isset($_SESSION["nombre"])) {
 		$idservicio = isset($_POST["idservicio"]) ? limpiarCadena($_POST["idservicio"]) : "";
 		$titulo = isset($_POST["titulo"]) ? limpiarCadena($_POST["titulo"]) : "";
 		$codigo = isset($_POST["codigo"]) ? limpiarCadena($_POST["codigo"]) : "";
+		$codigo_barra = isset($_POST["codigo_barra"]) ? limpiarCadena($_POST["codigo_barra"]) : "";
 		$descripcion = isset($_POST["descripcion"]) ? limpiarCadena($_POST["descripcion"]) : "";
 		$costo = isset($_POST["costo"]) ? limpiarCadena($_POST["costo"]) : "";
 
@@ -27,23 +28,30 @@ if (!isset($_SESSION["nombre"])) {
 				if (empty($idservicio)) {
 					$nombreExiste = $servicios->verificarNombreExiste($titulo);
 					$codigoExiste = $servicios->verficarCodigoExiste($codigo);
+					$codigoBarraExiste = $servicios->verificarCodigoBarraExiste($codigo_barra);
+
 					if ($nombreExiste) {
 						echo "El nombre del servicio ya existe.";
 					} else if ($codigoExiste) {
 						echo "El código del servicio ya existe.";
+					} else if ($codigoBarraExiste) {
+						echo "El código de barra del servicio que ha ingresado ya existe.";
 					} else {
-						$rspta = $servicios->agregar($idusuario, $titulo, $codigo, $descripcion, $costo);
+						$rspta = $servicios->agregar($idusuario, $titulo, $codigo, $codigo_barra, $descripcion, $costo);
 						echo $rspta ? "Servicio registrado" : "El servicio no se pudo registrar";
 					}
 				} else {
 					$nombreExiste = $servicios->verificarNombreEditarExiste($titulo, $idservicio);
 					$codigoExiste = $servicios->verficarCodigoEditarExiste($codigo, $idservicio);
+					$codigoBarraExiste = $servicios->verificarCodigoBarraEditarExiste($codigo_barra, $idservicio);
 					if ($nombreExiste) {
 						echo "El nombre del servicio ya existe.";
 					} else if ($codigoExiste) {
 						echo "El código del servicio ya existe.";
+					} else if ($codigoBarraExiste) {
+						echo "El código de barra del servicio que ha ingresado ya existe.";
 					} else {
-						$rspta = $servicios->editar($idservicio, $titulo, $codigo, $descripcion, $costo);
+						$rspta = $servicios->editar($idservicio, $titulo, $codigo, $codigo_barra, $descripcion, $costo);
 						echo $rspta ? "Servicio actualizado" : "El servicio no se pudo actualizar";
 					}
 				}
@@ -116,18 +124,18 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-warning" style="margin-right: 3px; height: 35px;" onclick="mostrar(' . $reg->idservicio . ')"><i class="fa fa-pencil"></i></button>') .
 							(($reg->estado == 'activado') ?
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idservicio . ')"><i class="fa fa-close"></i></button>')) :
-								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idservicio . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idservicio . ')"><i class="fa fa-close"></i></button>')) : (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px;" onclick="activar(' . $reg->idservicio . ')"><i style="margin-left: -2px" class="fa fa-check"></i></button>'))) .
 							mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="height: 35px;" onclick="eliminar(' . $reg->idservicio . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => $reg->titulo,
 						"2" => "N° " . $reg->codigo,
-						"3" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
-						"4" => "S/. " . number_format($reg->costo, 2, '.', ','),
-						"5" => ucwords($reg->nombre),
-						"6" => ucwords($cargo_detalle),
-						"7" => $reg->fecha,
-						"8" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
+						"3" => ($reg->codigo_barra != "") ? $reg->codigo_barra : "Sin registrar.",
+						"4" => "<textarea type='text' class='form-control' rows='2' style='background-color: white !important; cursor: default; height: 60px !important;'' readonly>" . (($reg->descripcion == '') ? 'Sin registrar.' : $reg->descripcion) . "</textarea>",
+						"5" => "S/. " . number_format($reg->costo, 2, '.', ','),
+						"6" => ucwords($reg->nombre),
+						"7" => ucwords($cargo_detalle),
+						"8" => $reg->fecha,
+						"9" => ($reg->estado == 'activado') ? '<span class="label bg-green">Activado</span>' :
 							'<span class="label bg-red">Desactivado</span>'
 					);
 				}
@@ -151,7 +159,7 @@ if (!isset($_SESSION["nombre"])) {
 				}
 				echo $last_codigo;
 				break;
-				
+
 				// case 'selectServicios':
 				// 	if ($cargo == "superadmin" || $cargo == "admin_total") {
 				// 		$rspta = $servicios->listar();

@@ -24,9 +24,13 @@ function init() {
 function limpiar() {
 	$("#idservicio").val("");
 	$("#titulo").val("");
+	$("#codigo_barra").val("");
 	$("#codigo").val(siguienteCorrelativo);
 	$("#descripcion").val("");
 	$("#costo").val("");
+
+	$(".btn1").show();
+	$(".btn2").hide();
 }
 
 function mostrarform(flag) {
@@ -107,6 +111,9 @@ function guardaryeditar(e) {
 	e.preventDefault();
 	$("#btnGuardar").prop("disabled", true);
 	formatearNumeroCorrelativo();
+
+	var codigoBarra = $("#codigo_barra").val();
+
 	var formData = new FormData($("#formulario")[0]);
 
 	$.ajax({
@@ -118,7 +125,7 @@ function guardaryeditar(e) {
 
 		success: function (datos) {
 			datos = limpiarCadena(datos);
-			if (datos == "El nombre del servicio ya existe." || datos == "El código del servicio ya existe.") {
+			if (datos == "El nombre del servicio ya existe." || datos == "El código de barra del servicio que ha ingresado ya existe." || datos == "El código del servicio ya existe.") {
 				bootbox.alert(datos);
 				$("#btnGuardar").prop("disabled", false);
 				return;
@@ -137,9 +144,13 @@ function mostrar(idservicio) {
 		data = JSON.parse(data);
 		mostrarform(true);
 
+		$(".btn1").show();
+		$(".btn2").hide();
+
 		console.log(data);
 
 		$("#titulo").val(data.titulo);
+		$("#codigo_barra").val(data.codigo_barra);
 		$("#codigo").val(data.codigo);
 		$("#descripcion").val(data.descripcion);
 		$("#costo").val(data.costo);
@@ -179,6 +190,149 @@ function eliminar(idservicio) {
 			});
 		}
 	})
+}
+
+var quaggaIniciado = false;
+
+function escanear() {
+
+	// Intentar acceder a la cámara
+	navigator.mediaDevices.getUserMedia({ video: true })
+		.then(function (stream) {
+			$(".btn1").hide();
+			$(".btn2").show();
+
+			// Acceso a la cámara exitoso, inicializa Quagga
+			Quagga.init({
+				inputStream: {
+					name: "Live",
+					type: "LiveStream",
+					target: document.querySelector('#camera')
+				},
+				decoder: {
+					readers: ["code_128_reader"]
+				}
+			}, function (err) {
+				if (err) {
+					console.log(err);
+					return;
+				}
+				console.log("Initialization finished. Ready to start");
+				Quagga.start();
+				quaggaIniciado = true;
+			});
+
+			$("#camera").show();
+
+			Quagga.onDetected(function (data) {
+				console.log(data.codeResult.code);
+				var codigoBarra = data.codeResult.code;
+				document.getElementById('codigo_barra').value = codigoBarra;
+			});
+		})
+		.catch(function (error) {
+			bootbox.alert("No se encontró una cámara conectada.");
+		});
+}
+
+function detenerEscaneo() {
+	if (quaggaIniciado) {
+		Quagga.stop();
+		$(".btn1").show();
+		$(".btn2").hide();
+		$("#camera").hide();
+		formatearNumero();
+		quaggaIniciado = false;
+	}
+}
+
+$("#codigo_barra").on("input", function () {
+	formatearNumero();
+});
+
+function formatearNumero() {
+	var codigo = $("#codigo_barra").val().replace(/\s/g, '').replace(/\D/g, '');
+	var formattedCode = '';
+
+	// for (var i = 0; i < codigo.length; i++) {
+	// 	if (i === 1 || i === 3 || i === 7 || i === 8 || i === 12 || i === 13) {
+	// 		formattedCode += ' ';
+	// 	}
+
+	// 	formattedCode += codigo[i];
+	// }
+
+	// var maxLength = parseInt($("#codigo_barra").attr("maxlength"));
+	// if (formattedCode.length > maxLength) {
+	// 	formattedCode = formattedCode.substring(0, maxLength);
+	// }
+
+	$("#codigo_barra").val(codigo);
+	generarbarcode(0);
+}
+
+function borrar() {
+	$("#codigo_barra").val("");
+	$("#codigo_barra").focus();
+	$("#print").hide();
+}
+
+//función para generar el número aleatorio del código de barra
+function generar() {
+	var codigo = "775";
+	codigo += generarNumero(10000, 999) + "";
+	codigo += Math.floor(Math.random() * 10) + "";
+	codigo += generarNumero(100, 9) + "";
+	codigo += Math.floor(Math.random() * 10);
+	$("#codigo_barra").val(codigo);
+	generarbarcode(1);
+}
+
+function generarNumero(max, min) {
+	var numero = Math.floor(Math.random() * (max - min + 1)) + min;
+	var numeroFormateado = ("0000" + numero).slice(-4);
+	return numeroFormateado;
+}
+
+// Función para generar el código de barras
+function generarbarcode(param) {
+
+	// if (param == 1) {
+	// 	var codigo = $("#codigo_barra").val().replace(/\s/g, '');
+	// 	console.log(codigo.length);
+
+	// 	if (!/^\d+$/.test(codigo)) {
+	// 		bootbox.alert("El código de barra debe contener solo números.");
+	// 		return;
+	// 	} else if (codigo.length !== 13) {
+	// 		bootbox.alert("El código de barra debe tener 13 dígitos.");
+	// 		return;
+	// 	} else {
+	// 		codigo = codigo.slice(0, 1) + " " + codigo.slice(1, 3) + " " + codigo.slice(3, 7) + " " + codigo.slice(7, 8) + " " + codigo.slice(8, 12) + " " + codigo.slice(12, 13);
+	// 	}
+	// } else {
+	// 	var codigo = $("#codigo_barra").val()
+	// }
+
+	var codigo = $("#codigo_barra").val().replace(/\s/g, '');
+
+	if (codigo != "") {
+		JsBarcode("#barcode", codigo);
+		$("#codigo_barra").val(codigo);
+		$("#print").show();
+	} else {
+		$("#print").hide();
+	}
+}
+
+function convertirMayus() {
+	var inputCodigo = document.getElementById("cod_part_1");
+	inputCodigo.value = inputCodigo.value.toUpperCase();
+}
+
+//Función para imprimir el código de barras
+function imprimir() {
+	$("#print").printArea();
 }
 
 init();

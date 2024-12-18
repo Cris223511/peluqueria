@@ -161,7 +161,7 @@ switch ($_GET["op"]) {
 
 					$data[] = array(
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
-							(!(($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin') || ($reg->cargo == "admin_total" && $_SESSION['cargo'] == 'admin') || ($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin_total')) ?
+							(!(($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin') || ($reg->cargo == "admin_total" && $_SESSION['cargo'] == 'admin') || ($reg->cargo == "superadmin" && $_SESSION['cargo'] == 'admin_total') || ($reg->idusuario == $_SESSION['idusuario'])) ?
 								((($reg->estado) ?
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-warning" style="margin-right: 3px;" onclick="mostrar(' . $reg->idusuario . '); verificarCargo(\'' . $reg->cargo . '\');"><i class="fa fa-pencil"></i></button>') : '') .
 									(($_SESSION['cargo'] == 'superadmin' || $_SESSION['cargo'] == 'admin_total' || $_SESSION['cargo'] == 'admin') ? ('<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="desactivar(' . $reg->idusuario . ')"><i class="fa fa-close"></i></button>') : '') .

@@ -138,10 +138,10 @@ if (!isset($_SESSION["nombre"])) {
                     <thead>
                       <th style="width: 1%;">Opciones</th>
                       <th>Imagen</th>
-                      <th style="width: 20%; min-width: 260px;">Nombre</th>
+                      <th style="width: 20%; min-width: 180px;">Nombre</th>
                       <th style="white-space: nowrap;">U. medida</th>
                       <th>Categoría</th>
-                      <th style="width: 15%; min-width: 200px;">Almacén</th>
+                      <th style="width: 15%; min-width: 180px;">Almacén</th>
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>Stock</th>

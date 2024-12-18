@@ -17,6 +17,18 @@ if (!isset($_SESSION["nombre"])) {
         font-size: 16px !important;
         align-content: center;
       }
+
+      #camera video {
+        width: 250px;
+        height: auto;
+        border-radius: 15px;
+        margin-top: 10px;
+      }
+
+      #camera canvas.drawingBuffer {
+        height: auto;
+        position: absolute;
+      }
     </style>
 
     <div class="content-wrapper">
@@ -47,6 +59,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="width: 1%;">Opciones</th>
                     <th style="width: 20%; min-width: 260px;">Nombre</th>
                     <th>Código servicio</th>
+                    <th>C. de barra</th>
                     <th style="width: 30%; min-width: 350px;">Descripción</th>
                     <th>Costo</th>
                     <th>Agregado por</th>
@@ -60,6 +73,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Opciones</th>
                     <th>Nombre</th>
                     <th>Código servicio</th>
+                    <th>C. de barra</th>
                     <th>Descripción</th>
                     <th>Costo</th>
                     <th>Agregado por</th>
@@ -84,6 +98,27 @@ if (!isset($_SESSION["nombre"])) {
                     <label>Costo de servicio(*):</label>
                     <input type="number" class="form-control" name="costo" id="costo" step="any" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="8" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" min="0" placeholder="Ingrese el costo de servicio." required>
                   </div>
+                  <div class="form-group col-lg-6 col-md-12 col-sm-12">
+                    <div>
+                      <label>Código de barra:</label>
+                      <input type="text" class="form-control" name="codigo_barra" id="codigo_barra" maxlength="13" placeholder="Ingrese el código de barra.">
+                    </div>
+                    <div style="margin-top: 10px; display: flex; gap: 5px; flex-wrap: wrap;">
+                      <button class="btn btn-info" type="button" onclick="generar()">Generar</button>
+                      <button class="btn btn-warning" type="button" onclick="imprimir()">Imprimir</button>
+                      <button class="btn btn-danger" type="button" onclick="borrar()">Borrar</button>
+                      <button class="btn btn-success btn1" type="button" onclick="escanear()">Escanear</button>
+                      <button class="btn btn-danger btn2" type="button" onclick="detenerEscaneo()">Detener</button>
+                    </div>
+                    <div id="print" style="overflow-y: hidden;">
+                      <img id="barcode">
+                    </div>
+                  </div>
+                  <div class="form-group col-lg-6 col-md-12 col-sm-12">
+                    <div style="display: flex; justify-content: start;">
+                      <div id="camera"></div>
+                    </div>
+                  </div>
                   <div class="form-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <label>Descripción:</label>
                     <textarea type="text" class="form-control" name="descripcion" id="descripcion" maxlength="10000" rows="4" placeholder="Ingrese una descripción."></textarea>
@@ -106,6 +141,8 @@ if (!isset($_SESSION["nombre"])) {
 
   require 'footer.php';
   ?>
+  <script type="text/javascript" src="../public/js/JsBarcode.all.min.js"></script>
+  <script type="text/javascript" src="../public/js/jquery.PrintArea.js"></script>
   <script type="text/javascript" src="scripts/servicios3.js"></script>
 <?php
 }
