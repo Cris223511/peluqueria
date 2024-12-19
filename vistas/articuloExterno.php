@@ -152,14 +152,14 @@ if (!isset($_SESSION["nombre"])) {
                       <th>P. venta por mayor</th>
                       <th>Comisión</th>
                       <th>C. de barra</th>
-                      <th style="width: 20%; min-width: 280px;">Descripción</th>
-                      <th style="width: 20%; min-width: 180px;">Talla</th>
-                      <th style="width: 20%; min-width: 180px;">Color</th>
+                      <th style="width: 20%; min-width: 180px;">Descripción</th>
+                      <th style="width: 20%; min-width: 160px;">Talla</th>
+                      <th style="width: 20%; min-width: 160px;">Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha vencimiento</th>
-                      <th style="width: 20%; min-width: 180px;">Item 1</th>
-                      <th style="width: 20%; min-width: 180px;">Item 2</th>
+                      <th style="width: 20%; min-width: 160px;">Item 1</th>
+                      <th style="width: 20%; min-width: 160px;">Item 2</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
                       <th>Estado</th>

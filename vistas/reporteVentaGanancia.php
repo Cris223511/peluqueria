@@ -7,7 +7,7 @@ if (!isset($_SESSION["nombre"])) {
   header("Location: login.html");
 } else {
   require 'header.php';
-  if ($_SESSION['reportesG'] == 1) {
+  if ($_SESSION['cargo'] == "superadmin" || $_SESSION['cargo'] == "admin_total") {
 ?>
     <style>
       @media (max-width: 991px) {
