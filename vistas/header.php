@@ -298,6 +298,17 @@ $local_login = $_SESSION['local'];
           ?>
 
           <?php
+          if ($_SESSION['carga_masiva'] == 1) {
+            echo '<li id="mCargaMasiva" class="treeview">
+              <a href="carga_masiva.php">
+                <i class="fa fa-download"></i>
+                <span>Carga masiva</span>
+              </a>
+            </li>';
+          }
+          ?>
+
+          <?php
           if ($_SESSION['almacen'] == 1) {
             echo '<li id="mAlmacen" class="treeview">
               <a href="#">
