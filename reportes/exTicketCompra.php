@@ -225,20 +225,22 @@ $total_compra = $reg1->total_compra ?? 0.00;
 $izquierda = floor($total_compra);
 $derecha = round(($total_compra - $izquierda) * 100);
 
-if ($reg1->moneda === 'dolares') {
-    $texto = $formatterES->format($izquierda) . " DÓLARES CON " . $formatterES->format($derecha) . " CENTAVOS";
-} else {
-    $texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+if ($reg1) {
+    if ($reg1->moneda === 'dolares') {
+        $texto = $formatterES->format($izquierda) . " DÓLARES CON " . $formatterES->format($derecha) . " CENTAVOS";
+    } else {
+        $texto = $formatterES->format($izquierda) . " NUEVOS SOLES CON " . $formatterES->format($derecha) . " CÉNTIMOS";
+    }
+
+    $textoEnMayusculas = mb_strtoupper($texto, 'UTF-8');
+    
+    $y = $pdf->cuerpo(
+        $y,
+        $totalProductos,
+        $totalUnidades,
+        $textoEnMayusculas,
+    );
 }
-
-$textoEnMayusculas = mb_strtoupper($texto, 'UTF-8');
-
-$y = $pdf->cuerpo(
-    $y,
-    $totalProductos,
-    $totalUnidades,
-    $textoEnMayusculas,
-);
 
 # Separador #
 $pdf->SetFont('hypermarket', '', 10);
