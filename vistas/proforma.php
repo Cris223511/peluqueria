@@ -494,11 +494,11 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma</th>
+                      <th>Total P.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
-                      <th>Fecha vencimiento</th>
+                      <th>Fecha ven.</th>
                       <th>Estado</th>
                     </thead>
                     <tbody>
@@ -511,11 +511,11 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Proforma</th>
+                      <th>Total P.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
-                      <th>Fecha vencimiento</th>
+                      <th>Fecha ven.</th>
                       <th>Estado</th>
                     </tfoot>
                   </table>
@@ -1042,7 +1042,7 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">
                   <div style="border: 1px solid #d2d6de; border-radius: 10px; min-height: 39px; padding: 5px 10px; font-weight: bold; text-align: center; display: flex; flex-direction: row; gap: 10px; justify-content: center; align-items: center;">
                     <h5 class="infotitulo" style="margin: 0; padding: 0; font-weight: bold; word-break: normal; text-wrap: nowrap;">FECHA VEN:</h5>
-                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento2" style="height: 28px; padding: 4px 10px; width: 130px;" required>
+                    <input type="date" class="form-control" name="fecha_vencimiento" id="fecha_vencimiento2" style="height: 28px; padding: 4px 10px; width: 130px;">
                   </div>
                 </div>
                 <div class="col-lg-3 col-md-3 col-sm-12" style="margin-bottom: 15px;">

@@ -483,7 +483,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 15%; min-width: 200px;">Almacén</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Compra</th>
+                      <th>Total C.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
@@ -498,7 +498,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Almacén</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Compra</th>
+                      <th>Total C.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
@@ -563,7 +563,7 @@ if (!isset($_SESSION["nombre"])) {
                         <thead>
                           <th>CÓDIGO</th>
                           <th style="width: 30%; min-width: 130px;">NOMBRE</th>
-                          <th>PRECIO</th>
+                          <th>PRECIO COMPRA</th>
                           <th>DESCUENTO</th>
                           <th>CANTIDAD</th>
                           <th>ELIMINAR</th>

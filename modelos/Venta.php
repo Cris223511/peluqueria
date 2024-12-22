@@ -86,10 +86,53 @@ class Venta
 
 			if ($moneda != "dolares") {
 				if ($esArticulo && $id != 0) {
-					$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
-					ejecutarConsulta($actualizar_art) or $sw = false;
+					// Verificar si la medida asociada al artículo es "Paquetes"
+					$consulta_medida = "SELECT me.titulo FROM medidas me 
+										INNER JOIN articulo a ON me.idmedida = a.idmedida 
+										WHERE a.idarticulo = '$id'";
+					$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
+
+					if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
+						// Si es "Paquetes", actualizar el precio_venta_mayor
+						$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaItem' WHERE idarticulo='$id'";
+					} else {
+						// De lo contrario, actualizar el precio_venta
+						$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
+						ejecutarConsulta($actualizar_art) or $sw = false;
+
+						// Actualizar la ganancia después de actualizar el precio_venta
+						$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
+						ejecutarConsulta($actualizar_ganancia) or $sw = false;
+					}
 				} elseif ($esServicio && $id != 0) {
 					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
+					ejecutarConsulta($actualizar_serv) or $sw = false;
+				}
+			} else {
+				// Convertir el precio de dólares a soles
+				$precioVentaEnSoles = number_format($precioVentaItem / VALOR_DOLAR, 2);
+
+				if ($esArticulo && $id != 0) {
+					// Verificar si la medida asociada al artículo es "Paquetes"
+					$consulta_medida = "SELECT me.titulo FROM medidas me 
+										INNER JOIN articulo a ON me.idmedida = a.idmedida 
+										WHERE a.idarticulo = '$id'";
+					$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
+
+					if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
+						// Si es "Paquetes", actualizar el precio_venta_mayor
+						$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaEnSoles' WHERE idarticulo='$id'";
+					} else {
+						// De lo contrario, actualizar el precio_venta
+						$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaEnSoles' WHERE idarticulo='$id'";
+						ejecutarConsulta($actualizar_art) or $sw = false;
+
+						// Actualizar la ganancia después de actualizar el precio_venta
+						$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
+						ejecutarConsulta($actualizar_ganancia) or $sw = false;
+					}
+				} elseif ($esServicio && $id != 0) {
+					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaEnSoles' WHERE idservicio='$id'";
 					ejecutarConsulta($actualizar_serv) or $sw = false;
 				}
 			}

@@ -157,7 +157,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 20%; min-width: 160px;">Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
-                      <th>Fecha vencimiento</th>
+                      <th>Fecha ven.</th>
                       <th style="width: 20%; min-width: 160px;">Item 1</th>
                       <th style="width: 20%; min-width: 160px;">Item 2</th>
                       <th>Agregado por</th>
@@ -188,7 +188,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Color</th>
                       <th>Peso</th>
                       <th>Fecha emisión</th>
-                      <th>Fecha vencimiento</th>
+                      <th>Fecha ven.</th>
                       <th>Item 1</th>
                       <th>Item 2</th>
                       <th>Agregado por</th>

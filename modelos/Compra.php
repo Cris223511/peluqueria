@@ -11,9 +11,7 @@ define('VALOR_DOLAR', $_SESSION["cambio"]);
 class Compra
 {
 	//Implementamos nuestro constructor
-	public function __construct()
-	{
-	}
+	public function __construct() {}
 
 	public function insertar($idusuario, $idlocal, $idproveedor, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_compra, $vuelto, $comentario_interno, $comentario_externo, $detalles, $cantidad, $precio_compra, $descuento, $metodo_pago, $monto)
 	{
@@ -67,10 +65,25 @@ class Compra
 
 			if ($moneda != "dolares") {
 				if ($esArticulo && $id != 0) {
+					// Actualizar directamente el precio_compra si es en soles
 					$actualizar_art = "UPDATE articulo SET precio_compra='$precioCompraItem' WHERE idarticulo='$id'";
 					ejecutarConsulta($actualizar_art) or $sw = false;
 				} elseif ($esServicio && $id != 0) {
+					// Actualizar el costo del servicio
 					$actualizar_serv = "UPDATE servicios SET costo='$precioCompraItem' WHERE idservicio='$id'";
+					ejecutarConsulta($actualizar_serv) or $sw = false;
+				}
+			} else {
+				// Convertir el precio de dólares a soles
+				$precioCompraEnSoles = number_format($precioCompraItem / VALOR_DOLAR, 2);
+
+				if ($esArticulo && $id != 0) {
+					// Actualizar el precio_compra en soles
+					$actualizar_art = "UPDATE articulo SET precio_compra='$precioCompraEnSoles' WHERE idarticulo='$id'";
+					ejecutarConsulta($actualizar_art) or $sw = false;
+				} elseif ($esServicio && $id != 0) {
+					// Actualizar el costo del servicio en soles
+					$actualizar_serv = "UPDATE servicios SET costo='$precioCompraEnSoles' WHERE idservicio='$id'";
 					ejecutarConsulta($actualizar_serv) or $sw = false;
 				}
 			}

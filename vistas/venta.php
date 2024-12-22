@@ -494,7 +494,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Venta</th>
+                      <th>Total V.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
@@ -510,7 +510,7 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total Venta</th>
+                      <th>Total V.</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
