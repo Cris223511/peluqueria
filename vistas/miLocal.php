@@ -113,7 +113,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Número Doc.</th>
                 <TH>TELÉFONO</TH>
                 <TH>EMAIL</TH>
-                <th style="width: 15%; min-width: 200px;">Almacén</th>
+                <th style="width: 15%; min-width: 200px;">Ubicación del local</th>
                 <th>RUC del local</th>
                 <TH>FOTO</TH>
                 <TH>ESTADO</TH>
@@ -128,7 +128,7 @@ if (!isset($_SESSION["nombre"])) {
                 <th>Número Doc.</th>
                 <TH>TELÉFONO</TH>
                 <TH>EMAIL</TH>
-                <th style="width: 15%; min-width: 200px;">Almacén</th>
+                <th style="width: 15%; min-width: 200px;">Ubicación del local</th>
                 <th>RUC del local</th>
                 <TH>FOTO</TH>
                 <TH>ESTADO</TH>

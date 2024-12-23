@@ -73,9 +73,10 @@ switch ($_GET["op"]) {
 		}
 
 		if (empty($idarticulo)) {
-			if ($_POST['param'] == '0') {
-				$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto, $idlocal);
+			$codigoProductoExiste = $articulo->verificarCodigoProductoExiste($codigo_producto, $idlocal);
+			$codigoExiste = $articulo->verificarCodigoExiste($codigo);
 
+			if ($_POST['param'] == '0') {
 				if ($codigoProductoExiste) {
 					$rspta = array(0, "El código del producto que ha ingresado ya existe en el local seleccionado.");
 				} else {
@@ -83,9 +84,9 @@ switch ($_GET["op"]) {
 				}
 				echo json_encode($rspta);
 			} else {
-				$codigoExiste = $articulo->verificarCodigoExiste($codigo);
-
-				if ($codigoExiste && $codigo != "") {
+				if ($codigoProductoExiste) {
+					echo "El código del producto que ha ingresado ya existe en el local seleccionado.";
+				} elseif ($codigoExiste && $codigo != "") {
 					echo "El código de barra del producto que ha ingresado ya existe.";
 				} else {
 					$rspta = $articulo->insertar($idusuario, $idcategoria, $idlocal, $idmarca, $idmedida, $codigo, $codigo_producto, $nombre, $stock, $stock_minimo, $descripcion, $talla, $color, $peso, $fecha_emision, $fecha_vencimiento, $nota_1, $nota_2, $imagen, $precio_compra, $precio_venta, $precio_venta_mayor, $ganancia, $comision);
@@ -281,10 +282,10 @@ switch ($_GET["op"]) {
 			if ($row && !empty($row["last_codigo"])) {
 				$last_codigo = $row["last_codigo"];
 			} else {
-				$last_codigo = 'PRO0000';
+				$last_codigo = 'PRO00000';
 			}
 		} else {
-			$last_codigo = 'PRO0000';
+			$last_codigo = 'PRO00000';
 		}
 		echo $last_codigo;
 		break;

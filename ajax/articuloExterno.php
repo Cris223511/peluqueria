@@ -268,10 +268,10 @@ if (!isset($_SESSION["nombre"])) {
 					if ($row && !empty($row["last_codigo"])) {
 						$last_codigo = $row["last_codigo"];
 					} else {
-						$last_codigo = 'PRO0000';
+						$last_codigo = 'PRO00000';
 					}
 				} else {
-					$last_codigo = 'PRO0000';
+					$last_codigo = 'PRO00000';
 				}
 				echo $last_codigo;
 				break;

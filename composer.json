@@ -1,6 +1,12 @@
 {
     "require": {
         "barcode-bakery/barcode-common": ">=7",
-        "barcode-bakery/barcode-1d": ">=7"
+        "barcode-bakery/barcode-1d": ">=7",
+        "phpoffice/phpspreadsheet": "^1.24" 
+    },
+    "config": {
+        "platform": {
+            "php": "8.0.28"
+        }
     }
 }

@@ -142,7 +142,7 @@ if (!isset($_SESSION["nombre"])) {
                   <thead>
                     <th style="width: 1%;">Opciones</th>
                     <th style="width: 20%; min-width: 220px;">Nombres</th>
-                    <th style="width: 30%; min-width: 200px;">Almacén</th>
+                    <th style="width: 30%; min-width: 200px;">Ubicación del local</th>
                     <th>Tipo Doc.</th>
                     <th>Número Doc.</th>
                     <th style="width: 30%; min-width: 200px;">Dirección</th>
@@ -160,7 +160,7 @@ if (!isset($_SESSION["nombre"])) {
                   <tfoot>
                     <th>Opciones</th>
                     <th>Nombres</th>
-                    <th>Almacén</th>
+                    <th>Ubicación del local</th>
                     <th>Tipo Doc.</th>
                     <th>Número Doc.</th>
                     <th>Dirección</th>
@@ -279,7 +279,7 @@ if (!isset($_SESSION["nombre"])) {
                   <th style="width: 1%;">Opciones</th>
                   <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th style="width: 15%; min-width: 200px;">Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Ubicación del local</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -294,7 +294,7 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Opciones</th>
                   <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th>Almacén</th>
+                  <th>Ubicación del local</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -420,7 +420,7 @@ if (!isset($_SESSION["nombre"])) {
                   <th style="width: 1%;">Opciones</th>
                   <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th style="width: 15%; min-width: 200px;">Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Ubicación del local</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>
@@ -435,7 +435,7 @@ if (!isset($_SESSION["nombre"])) {
                   <th>Opciones</th>
                   <th>PDF</th>
                   <th>Fecha y hora</th>
-                  <th style="width: 15%; min-width: 200px;">Almacén</th>
+                  <th style="width: 15%; min-width: 200px;">Ubicación del local</th>
                   <th>Caja</th>
                   <th>Documento</th>
                   <th>Número Ticket</th>

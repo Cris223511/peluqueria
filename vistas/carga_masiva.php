@@ -40,6 +40,65 @@ if (!isset($_SESSION["nombre"])) {
         align-content: start !important;
       }
     </style>
+
+    <style>
+      .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        margin: 0 10px;
+        margin-bottom: 8px;
+      }
+
+      .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 10px 12px;
+        transition: 0.3s;
+        font-size: 14px;
+        border: 1px solid #ccc;
+        border-radius: 0px !important;
+      }
+
+      .tab button:hover {
+        background-color: #ddd;
+      }
+
+      .tab button.active {
+        background-color: #ccc;
+        font-weight: 600;
+      }
+
+      .tabcontent {
+        display: none;
+        -webkit-animation: fadeEffect .7s;
+        animation: fadeEffect .7s;
+      }
+
+      /* Fade in tabs */
+      @-webkit-keyframes fadeEffect {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+
+      @keyframes fadeEffect {
+        from {
+          opacity: 0;
+        }
+
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
     <div class="content-wrapper">
       <section class="content">
         <div class="row">
@@ -49,11 +108,17 @@ if (!isset($_SESSION["nombre"])) {
                 <h1 class="box-title">Carga masiva de productos
                   <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { 
                   ?>
-                  <button class="btn btn-success" id="btndescargar" onclick="mostrarform(true)"><i class="fa fa-download"></i> Descargar plantilla</button>
-                  <button class="btn btn-warning" id="btnimportar" onclick="mostrarform(true)"><i class="fa fa-download"></i> Importar productos</button>
+                  <button class="btn btn-success" id="btndescargar" onclick="descargarPlantilla()"><i class="fa fa-download"></i> Descargar plantilla</button>
+                  <button class="btn btn-warning" id="btnimportar" onclick="importarProductos()"><i class="fa fa-upload"></i> Importar productos</button>
+                  <input type="file" id="fileInput" accept=".xlsx,.xls" style="display: none;" onchange="handleFile(event)">
+                  <a data-toggle="modal" href="#myModal">
+                    <button id="btninformacion" class="btn btn-info">
+                      <i class="fa fa-info-circle"></i> Información de datos
+                    </button>
+                  </a>
                   <?php // } 
                   ?>
-                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Carga masiva de productos</strong>" data-html="true" data-content="Este módulo permite la importación masiva de productos al sistema mediante un archivo Excel. Para utilizarlo, descargue la plantilla de Excel haciendo clic en el botón <strong>Descargar plantilla</strong>. Complete los campos requeridos en la plantilla y, una vez listo, utilice el botón <strong>Importar productos</strong> para cargar los datos al sistema." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
+                  <a href="#" data-toggle="popover" data-placement="bottom" title="<strong>Carga masiva de productos</strong>" data-html="true" data-content="Este módulo permite la importación masiva de productos al sistema mediante un archivo Excel. Para utilizarlo, descargue la plantilla de Excel haciendo clic en el botón <strong>Descargar plantilla</strong>. Complete los campos requeridos en la plantilla y, una vez listo, utilice el botón <strong>Importar productos</strong> para cargar los datos al sistema. El botón <strong>Información de datos</strong> proporciona detalles sobre los nombres de los campos que requieran de un ID, como <em>idlocal</em>, <em>idmedida</em>, <em>idmarca</em> e <em>idcategoria</em>." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a>
                 </h1>
                 <div class="box-tools pull-right"></div>
               </div>
@@ -61,43 +126,42 @@ if (!isset($_SESSION["nombre"])) {
                 <div class="table-responsive" style="padding: 8px !important; padding: 20px !important; background-color: white;">
                   <table id="tbllistado" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important">
                     <thead>
-                      <th style="width: 1%;">Opciones</th>
+                      <th style="width: 1%;">Estado</th>
                       <th>Imagen</th>
-                      <th style="width: 20%; min-width: 180px;">Nombre</th>
-                      <th style="white-space: nowrap;">U. medida</th>
-                      <th>Categoría</th>
-                      <th style="width: 15%; min-width: 180px;">Almacén</th>
-                      <th>Marca</th>
-                      <th>C. producto</th>
-                      <th>Stock</th>
-                      <th>Stock min.</th>
-                      <th>P. venta</th>
-                      <th>P. compra</th>
-                      <th>Ganancia</th>
-                      <th>P. venta por mayor</th>
-                      <th>Comisión</th>
-                      <th>C. de barra</th>
+                      <th style="width: 20%; min-width: 160px;">Nombre</th>
+                      <th style="width: 20%; min-width: 160px;">U. medida</th>
+                      <th style="width: 20%; min-width: 160px;">Categoría</th>
+                      <th style="width: 20%; min-width: 160px;">Ubicación del local</th>
+                      <th style="width: 20%; min-width: 160px;">Marca</th>
+                      <th style="width: 20%; min-width: 140px;">C. producto</th>
+                      <th style="width: 20%; min-width: 100px;">Stock</th>
+                      <th style="width: 20%; min-width: 100px;">Stock min.</th>
+                      <th style="width: 20%; min-width: 100px;">P. venta</th>
+                      <th style="width: 20%; min-width: 100px;">P. compra</th>
+                      <th style="width: 20%; min-width: 100px;">Ganancia</th>
+                      <th style="width: 20%; min-width: 100px;">P. venta por mayor</th>
+                      <th style="width: 20%; min-width: 100px;">Comisión</th>
+                      <th style="width: 20%; min-width: 160px;">C. de barra</th>
                       <th style="width: 20%; min-width: 180px;">Descripción</th>
                       <th style="width: 20%; min-width: 160px;">Talla</th>
                       <th style="width: 20%; min-width: 160px;">Color</th>
-                      <th>Peso</th>
+                      <th style="width: 20%; min-width: 100px;">Peso</th>
                       <th>Fecha emisión</th>
                       <th>Fecha ven.</th>
                       <th style="width: 20%; min-width: 160px;">Item 1</th>
                       <th style="width: 20%; min-width: 160px;">Item 2</th>
-                      <th>Agregado por</th>
-                      <th>Cargo</th>
-                      <th>Estado</th>
+                      <th style="width: 20%; min-width: 160px;">Agregado por</th>
+                      <th style="width: 20%; min-width: 160px;">Cargo</th>
                     </thead>
                     <tbody>
                     </tbody>
                     <tfoot>
-                      <th>Opciones</th>
+                      <th>Estado</th>
                       <th>Imagen</th>
                       <th>Nombre</th>
                       <th>U. medida</th>
                       <th>Categoría</th>
-                      <th>Almacén</th>
+                      <th>Ubicación del local</th>
                       <th>Marca</th>
                       <th>C. producto</th>
                       <th>Stock</th>
@@ -118,12 +182,11 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Item 2</th>
                       <th>Agregado por</th>
                       <th>Cargo</th>
-                      <th>Estado</th>
                     </tfoot>
                   </table>
                 </div>
               </div>
-              <div class="box-header with-border" style="border-top: 3px #002a8e solid !important;">
+              <div class="box-header with-border" id="section_btnguardar" style="border-top: 3px #002a8e solid !important;">
                 <h1 class="box-title">
                   <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { 
                   ?>
@@ -138,12 +201,136 @@ if (!isset($_SESSION["nombre"])) {
         </div>
       </section>
     </div>
+
+    <!-- Modal 1 -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 70%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title infotitulo" style="text-align: center; font-weight: bold;">INFORMACIÓN DE DATOS</h4>
+          </div>
+          <div class="panel-body">
+            <!-- Tabs -->
+            <div class="tab">
+              <button class="tablinks active" onclick="changeTables(event, 'categorias')">Categorías</button>
+              <button class="tablinks" onclick="changeTables(event, 'locales')">Locales</button>
+              <button class="tablinks" onclick="changeTables(event, 'marcas')">Marcas</button>
+              <button class="tablinks" onclick="changeTables(event, 'medidas')">Medidas</button>
+            </div>
+            <!-- Tab content -->
+            <div id="categorias" class="tabcontent">
+              <div class="modal-body table-responsive">
+                <table id="tbllistado_categorias" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
+                  <thead>
+                    <th>ID CATEGORÍA</th>
+                    <th style="width: 20%; min-width: 180px;">TÍTULO</th>
+                    <th style="width: 30%; min-width: 280px;">DESCRIPCIÓN</th>
+                  </thead>
+                  <tbody></tbody>
+                  <tfoot>
+                    <th>ID CATEGORÍA</th>
+                    <th>TÍTULO</th>
+                    <th>DESCRIPCIÓN</th>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div id="locales" class="tabcontent" style="display: none;">
+              <div class="modal-body table-responsive">
+                <table id="tbllistado_locales" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
+                  <thead>
+                    <th>ID LOCAL</th>
+                    <th>LOGO</th>
+                    <th>UBICACIÓN DEL LOCAL</th>
+                    <th style="white-space: nowrap;">N° RUC</th>
+                    <th>EMPRESA DEL LOCAL</th>
+                    <th style="width: 40%; min-width: 280px; white-space: nowrap;">DESCRIPCIÓN DEL LOCAL</th>
+                  </thead>
+                  <tbody></tbody>
+                  <tfoot>
+                    <th>ID LOCAL</th>
+                    <th>LOGO</th>
+                    <th>UBICACIÓN DEL LOCAL</th>
+                    <th>N° RUC</th>
+                    <th>EMPRESA DEL LOCAL</th>
+                    <th>DESCRIPCIÓN DEL LOCAL</th>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div id="marcas" class="tabcontent" style="display: none;">
+              <div class="modal-body table-responsive">
+                <table id="tbllistado_marcas" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
+                  <thead>
+                    <th>ID MARCA</th>
+                    <th style="width: 20%; min-width: 180px;">TÍTULO</th>
+                    <th style="width: 30%; min-width: 280px;">DESCRIPCIÓN</th>
+                  </thead>
+                  <tbody></tbody>
+                  <tfoot>
+                    <th>ID MARCA</th>
+                    <th>TÍTULO</th>
+                    <th>DESCRIPCIÓN</th>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+            <div id="medidas" class="tabcontent" style="display: none;">
+              <div class="modal-body table-responsive">
+                <table id="tbllistado_medidas" class="table table-striped table-bordered table-condensed table-hover w-100" style="width: 100% !important;">
+                  <thead>
+                    <th>ID MEDIDA</th>
+                    <th style="width: 20%; min-width: 180px;">TÍTULO</th>
+                    <th style="width: 30%; min-width: 280px;">DESCRIPCIÓN</th>
+                  </thead>
+                  <tbody></tbody>
+                  <tfoot>
+                    <th>ID MEDIDA</th>
+                    <th>TÍTULO</th>
+                    <th>DESCRIPCIÓN</th>
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-warning" type="button" data-dismiss="modal">
+              <i class="fa fa-arrow-circle-left"></i> Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 1 -->
+
   <?php
   } else {
     require 'noacceso.php';
   }
   require 'footer.php';
   ?>
+  <script>
+    function changeTables(e, table) {
+      var i, tabcontent, tablinks;
+
+      tabcontent = document.getElementsByClassName("tabcontent");
+      tablinks = document.getElementsByClassName("tablinks");
+
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      document.getElementById(table).style.display = "block";
+      e.currentTarget.className += " active";
+    }
+
+    document.getElementById("categorias").style.display = "block";
+  </script>
   <script type="text/javascript" src="scripts/carga_masiva.js"></script>
 <?php
 }

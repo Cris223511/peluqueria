@@ -855,7 +855,7 @@ function listarArticulos(articulos, servicios) {
 							<img src="../files/articulos/${articulo.imagen}" class="img-fluid">
 						</a>
 						<h1>${articulo.nombre}</h1>
-						<h4>${articulo.marca}</h4>
+						<h4>${articulo.marca ?? "Sin registrar."}</h4>
 						<div class="subcaja-gris">
 							<span>STOCK: <strong>${stockHtml}</strong></span>
 							${labelHtml}
@@ -881,7 +881,7 @@ function listarArticulos(articulos, servicios) {
 								<img src="../files/articulos/${servicio.imagen}" class="img-fluid">
 							</a>
 							<h1>${servicio.nombre}</h1>
-							<h4>${servicio.marca}</h4>
+							<h4>${servicio.marca ?? "Sin registrar."}</h4>
 							<div class="subcaja-gris">
 								<span><strong>ㅤ</strong></span>
 								<span class="label bg-green" style="width: min-content;">Disponible</span>

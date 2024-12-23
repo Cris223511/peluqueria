@@ -247,7 +247,7 @@
       }
 
       function nowrapCell() {
-        ["#tbllistado", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbldetalles", "#tbldetalles2"].forEach(selector => {
+        ["#tbllistado", "#detalles", "#tbllistado2", "#tbllistado3", "#tblarticulos", "#tbldetalles", "#tbldetalles2", "#tbllistado_categorias", "#tbllistado_locales", "#tbllistado_marcas", "#tbllistado_medidas"].forEach(selector => {
           addClassToCells(selector, "nowrap-cell");
         });
       }
@@ -273,7 +273,7 @@
       }
 
       $(document).on('draw.dt', function(e, settings) {
-        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#detalles') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbldetalles') || $(settings.nTable).is('#tbldetalles2')) {
+        if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#detalles') || $(settings.nTable).is('#tbllistado2') || $(settings.nTable).is('#tbllistado3') || $(settings.nTable).is('#tblarticulos') || $(settings.nTable).is('#tbldetalles') || $(settings.nTable).is('#tbldetalles2') || $(settings.nTable).is('#tbllistado_locales')) {
           const table = $(settings.nTable).DataTable();
           if (table.rows({
               page: 'current'

@@ -34,7 +34,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th style="width: 20%; min-width: 180px;">Nombre</th>
                     <th>usuario</th>
                     <th>cargo</th>
-                    <th style="width: 30%; min-width: 200px;">Almacén</th>
+                    <th style="width: 30%; min-width: 200px;">Ubicación del local</th>
                     <th>RUC del local</th>
                     <th>documento</th>
                     <th>Número Doc.</th>
@@ -49,7 +49,7 @@ if (!isset($_SESSION["nombre"])) {
                     <th>Nombre</th>
                     <th>usuario</th>
                     <th>cargo</th>
-                    <th>Almacén</th>
+                    <th>Ubicación del local</th>
                     <th>RUC del local</th>
                     <th>documento</th>
                     <th>Número Doc.</th>
