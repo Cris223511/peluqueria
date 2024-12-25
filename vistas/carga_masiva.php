@@ -129,10 +129,10 @@ if (!isset($_SESSION["nombre"])) {
                       <th style="width: 1%;">Estado</th>
                       <th>Imagen</th>
                       <th style="width: 20%; min-width: 160px;">Nombre</th>
-                      <th style="width: 20%; min-width: 160px;">U. medida</th>
-                      <th style="width: 20%; min-width: 160px;">Categoría</th>
-                      <th style="width: 20%; min-width: 160px;">Ubicación del local</th>
-                      <th style="width: 20%; min-width: 160px;">Marca</th>
+                      <th style="width: 20%; min-width: 60px;">IDMEDIDA</th>
+                      <th style="width: 20%; min-width: 60px;">IDCATEGORIA</th>
+                      <th style="width: 20%; min-width: 60px;">IDLOCAL</th>
+                      <th style="width: 20%; min-width: 60px;">IDMARCA</th>
                       <th style="width: 20%; min-width: 140px;">C. producto</th>
                       <th style="width: 20%; min-width: 100px;">Stock</th>
                       <th style="width: 20%; min-width: 100px;">Stock min.</th>
@@ -159,10 +159,10 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Estado</th>
                       <th>Imagen</th>
                       <th>Nombre</th>
-                      <th>U. medida</th>
-                      <th>Categoría</th>
-                      <th>Ubicación del local</th>
-                      <th>Marca</th>
+                      <th>IDMEDIDA</th>
+                      <th>IDCATEGORIA</th>
+                      <th>IDLOCAL</th>
+                      <th>IDMARCA</th>
                       <th>C. producto</th>
                       <th>Stock</th>
                       <th>Stock min.</th>

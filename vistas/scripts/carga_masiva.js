@@ -180,6 +180,7 @@ function handleFile(event) {
 		processData: false,
 		contentType: false,
 		success: function (data) {
+			console.log("OK");
 			try {
 				// Intenta parsear la respuesta como JSON
 				const response = JSON.parse(data);
@@ -190,20 +191,33 @@ function handleFile(event) {
 				} else {
 					// Actualizar la tabla con el formato esperado
 					const tabla = $('#tbllistado').DataTable();
-					tabla.clear().rows.add(response.aaData).draw(); // Añade los datos a la tabla y los renderiza
+
+					// Limpia completamente la tabla antes de cargar nuevos datos
+					tabla.clear().draw();
+
+					// Añadir los nuevos datos
+					tabla.rows.add(response.aaData).draw();
+
 					bootbox.alert("Datos cargados exitosamente.");
 					evitarCaracteresEspecialesCamposNumericos();
 					aplicarRestrictATodosLosInputs();
+
+					// Mostrar el botón de guardar
+					$("#section_btnguardar").show();
+					$("#btnguardar").show();
 				}
 			} catch (e) {
-				console.error("Respuesta no válida JSON:", data);
 				bootbox.alert("Error al procesar el archivo. Verifique el formato y los datos.");
+				console.log("Respuesta no válida JSON:", data);
 			}
 		},
 		error: function (err) {
 			bootbox.alert("Error al cargar el archivo. Intente nuevamente.");
-			console.error("Error del servidor:", err.responseText);
+			console.log("Error del servidor:", err.responseText);
 		},
+		complete: function () {
+			document.getElementById('fileInput').value = '';
+		}
 	});
 }
 

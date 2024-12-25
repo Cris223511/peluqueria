@@ -972,7 +972,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca ?? "Marca sin registrar."} - ${articulo.codigo?.replace(/\s/g, '') || "C. barra sin registrar."} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -980,7 +980,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')} - ${servicio.codigo_barra?.replace(/\s/g, '') ? `Código de barra: ${servicio.codigo_barra.replace(/\s/g, '')}` : "C. de barra sin registrar."}</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -991,7 +991,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca ?? "Marca sin registrar."} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -999,7 +999,7 @@ function listarSelects(articulos, servicios, clientes, personales, locales) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')} - ${servicio.codigo_barra?.replace(/\s/g, '') ? `Código de barra: ${servicio.codigo_barra.replace(/\s/g, '')}` : "C. de barra sin registrar."}</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -1110,7 +1110,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos1.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.codigo.replace(/\s/g, '')} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca ?? "Marca sin registrar."} - ${articulo.codigo?.replace(/\s/g, '') || "C. barra sin registrar."} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -1118,7 +1118,7 @@ function listarSelectsArticulos(articulos, servicios) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')} - ${servicio.codigo_barra?.replace(/\s/g, '') ? `Código de barra: ${servicio.codigo_barra.replace(/\s/g, '')}` : "C. de barra sin registrar."}</option>`;
 		selectProductos1.append(optionHtml);
 	});
 
@@ -1128,7 +1128,7 @@ function listarSelectsArticulos(articulos, servicios) {
 	selectProductos2.append('<option disabled>PRODUCTOS:</option>');
 
 	articulos.forEach((articulo) => {
-		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
+		let optionHtml = `<option data-tipo-producto="producto" data-nombre="${articulo.nombre}" data-local="${articulo.local}" data-stock="${articulo.stock}" data-precio-compra="${articulo.precio_compra}" data-precio-venta="${articulo.precio_venta}" data-comision="${articulo.comision}" data-codigo="${articulo.codigo_producto}" value="${articulo.id}">${articulo.nombre} - ${articulo.marca ?? "Marca sin registrar."} - ${articulo.local} - (STOCK: ${articulo.stock})</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -1136,7 +1136,7 @@ function listarSelectsArticulos(articulos, servicios) {
 
 	servicios.forEach((servicio, index) => {
 		let numeroCorrelativo = ('0' + (index + 1)).slice(-2);
-		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')}</option>`;
+		let optionHtml = `<option data-tipo-producto="servicio" data-nombre="${servicio.nombre}" data-local="Sin registrar" data-stock="${servicio.stock}" data-precio-compra="${servicio.precio_compra}" data-precio-venta="${servicio.precio_venta}" data-comision="${servicio.comision}" data-codigo="${servicio.codigo}" value="${servicio.id}">N° ${numeroCorrelativo}: ${capitalizarPrimeraLetra(servicio.nombre)} - Código de servicio: N° ${servicio.codigo.replace(/\s/g, '')} - ${servicio.codigo_barra?.replace(/\s/g, '') ? `Código de barra: ${servicio.codigo_barra.replace(/\s/g, '')}` : "C. de barra sin registrar."}</option>`;
 		selectProductos2.append(optionHtml);
 	});
 
@@ -2420,7 +2420,7 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, sto
 			'<td><input type="hidden" name="' + (tipoproducto == "producto" ? "idarticulo[]" : "idservicio[]") + '" value="' + idarticulo + '"><input type="hidden" step="any" name="precio_compra[]" value="' + precio_compra + '"><input type="hidden" step="any" name="idpersonal[]" value="' + idpersonal + '"><input type="hidden" name="comision[]" value="' + comision + '">' + codigo + '</td>' +
 			'<td>' + capitalizarTodasLasPalabras(nombre) + '</td>' +
 			'<td><input type="number" name="precio_venta[]" oninput="modificarSubototales();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></td>' +
-			'<td><input type="number" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" required value="' + descuento + '"></td>' +
+			'<td><input type="number" name="descuento[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + descuento + '"></td>' +
 			'<td><input type="number" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(1, ' + cont + ');"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
@@ -2431,7 +2431,7 @@ function agregarDetalle(tipoproducto, idarticulo, idpersonal, nombre, local, sto
 			'<td style="text-align: start !important;"><strong>' + capitalizarTodasLasPalabras(local) + '</strong></td>' +
 			'<td style="text-align: start !important;">' + (tipoproducto == "producto" ? stock : "") + '</td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="precio_venta[]" oninput="modificarSubototales2();" id="precio_venta[]" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + (precio_venta == '' ? parseFloat(0).toFixed(2) : precio_venta) + '"></div></td>' +
-			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" required value="' + descuento + '"></div></td>' +
+			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="descuento[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="0" required value="' + descuento + '"></div></td>' +
 			'<td><div style="display: flex; align-items: center; justify-content: center;"><input type="number" class="form-control" name="cantidad[]" id="cantidad[]" oninput="modificarSubototales2();" lang="en-US" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="6" onkeydown="evitarNegativo(event)" onpaste="return false;" onDrop="return false;" step="any" min="' + minCantidad + '" required value="' + cantidad + '"></div></td>' +
 			'<td style="text-align: center;"><button type="button" class="btn btn-danger" style="height: 33.6px;" onclick="eliminarDetalle(2, ' + cont + '); actualizarVuelto();"><i class="fa fa-trash"></i></button></td>' +
 			'</tr>';
