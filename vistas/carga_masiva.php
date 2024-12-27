@@ -98,6 +98,50 @@ if (!isset($_SESSION["nombre"])) {
           opacity: 1;
         }
       }
+
+      #tablaErrores thead,
+      #tablaErrores thead tr,
+      #tablaErrores thead th,
+      #tablaErrores tbody,
+      #tablaErrores tbody tr,
+      #tablaErrores tbody th {
+        border: none;
+        background-color: white;
+        font-size: 14px;
+        text-align: center;
+      }
+
+      .spinner-background {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.7);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+      }
+
+      .spinner {
+        border: 9px solid #f3f3f3;
+        border-top: 9px solid #002a8e;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        animation: spin 1.2s linear infinite;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+
+        100% {
+          transform: rotate(360deg);
+        }
+      }
     </style>
     <div class="content-wrapper">
       <section class="content">
@@ -190,7 +234,7 @@ if (!isset($_SESSION["nombre"])) {
                 <h1 class="box-title">
                   <?php // if ($_SESSION["cargo"] == "superadmin" || $_SESSION["cargo"] == "admin_total") { 
                   ?>
-                  <button class="btn btn-bcp" id="btnguardar" onclick="mostrarform(true)"><i class="fa fa-save"></i> Guardar productos</button>
+                  <button class="btn btn-bcp" id="btnguardar" onclick="validarYGuardarProductos()"><i class="fa fa-save"></i> Guardar productos</button>
                   <?php // } 
                   ?>
                 </h1>
@@ -303,6 +347,48 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </div>
     <!-- Fin Modal 1 -->
+
+    <!-- Modal 2 -->
+    <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 70%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title infotitulo" style="text-align: center; font-weight: bold;">INFORMACIÓN DE ERRORES</h4>
+          </div>
+          <div class="modal-body">
+            <div class="table-responsive" style="background-color: white; overflow: auto;">
+              <table id="tablaErrores" class="table w-100" style="width: 100% !important;">
+                <thead>
+                  <tr>
+                    <th>N°</th>
+                    <th>COLUMNA</th>
+                    <th>MENSAJE</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Los errores serán insertados dinámicamente aquí -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="modal-footer" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-warning" type="button" data-dismiss="modal">
+              <i class="fa fa-arrow-circle-left"></i> Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 2 -->
+
+    <!-- Spinner -->
+    <div id="spinnerLoader" style="display: none;">
+      <div class="spinner-background">
+        <div class="spinner"></div>
+      </div>
+    </div>
+    <!-- Fin Spinner -->
 
   <?php
   } else {
