@@ -44,7 +44,7 @@ if (!isset($_SESSION["nombre"])) {
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <label>Dirección:</label>
-                      <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="50">
+                      <input type="text" class="form-control" name="direccion" id="direccion" placeholder="Ingrese la dirección." maxlength="95">
                     </div>
                     <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                       <label>Teléfono:</label>

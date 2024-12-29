@@ -660,15 +660,15 @@ class PDF_Invoice extends FPDF
 		$this->Image($logo, 15, 10, 28, 28, $ext_logo);
 
 		# EMPRESA #
-		$this->SetXY(13.5, $y + 41);
+		$this->SetXY(13.5, $y + 38);
 		$this->SetFont('Arial', 'B', 12);
 		$this->SetTextColor(0, 0, 0);
 		$this->MultiCell(0, 5, mb_convert_encoding(mb_strtoupper("$empresa"), 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# DATOS DE LA EMPRESA #
-		$this->SetXY(13.5, $y + 47.5);
-		$this->SetFont('Arial', '', 9);
-		$this->MultiCell(130, 4, mb_convert_encoding($content2, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
+		$this->SetXY(13.5, $y + 44.5);
+		$this->SetFont('Arial', '', 10);
+		$this->MultiCell(190, 5, mb_convert_encoding($content2, 'ISO-8859-1', 'UTF-8'), 0, 'L', false);
 
 		# CAJA PARA TIPO COMPROBANTE, NUMERO COMPROBANTE Y RUC #
 		$this->SetFillColor(0, 112, 186);

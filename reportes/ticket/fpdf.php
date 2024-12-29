@@ -1129,7 +1129,7 @@ class FPDF
 			$this->Ln(3);
 			$this->SetFont('hypermarket', '', 9);
 			$this->SetTextColor(0, 0, 0);
-			$this->MultiCell(63, 5, "Powered by $auspiciado", 0, 'R', false);
+			$this->MultiCell(63, 5, "Powered by $auspiciado", 0, 'C', false);
 		}
 
 		return $y;

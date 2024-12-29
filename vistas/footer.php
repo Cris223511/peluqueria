@@ -207,17 +207,10 @@
       });
 
       $(document).on('draw.dt', function(e, settings) {
-        // Ajustar placeholder y estilo del buscador general
         $('.dataTables_filter input[type="search"]').attr('placeholder', 'Buscar en toda la tabla.').css({
           'font-weight': '500'
-        }).off('keyup change').on('keyup change', function() {
-          const table = $(settings.nTable).DataTable();
-          let valor = this.value;
-          let regex = valor ? `^.*${valor.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, '\\$1')}.*$` : '';
-          table.search(regex, true, false).draw(); // Aplicar búsqueda precisa con regex
         });
 
-        // Lógica adicional para tablas específicas
         if ($(settings.nTable).is('#tbllistado') || $(settings.nTable).is('#tblarticulos')) {
           const table = $(settings.nTable).DataTable();
           if (table.rows({

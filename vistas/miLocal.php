@@ -71,7 +71,7 @@ if (!isset($_SESSION["nombre"])) {
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Empresa(*):</label>
-                    <input type="text" class="form-control" name="empresa" id="empresa" maxlength="40" placeholder="Ingrese el nombre de la empresa del local." required>
+                    <input type="text" class="form-control" name="empresa" id="empresa" maxlength="45" placeholder="Ingrese el nombre de la empresa del local." required>
                   </div>
                   <div class="form-group col-lg-6 col-md-6 col-sm-6 col-xs-12">
                     <label>Imagen:</label>

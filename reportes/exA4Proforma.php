@@ -50,10 +50,7 @@ $pdf->encabezado(
   $reg1->estado ?? '',
   $reg1->caja ?? '',
   $reg1->usuario ?? '',
-  (($reg1->tipo_documento_usuario) ? ($reg1->tipo_documento_usuario . ": " . $reg1->num_documento_usuario) : ("Tipo y N° doc. sin registrar.")) . "\n" .
-    "Dirección: " . $reg1->direccion_usuario . "\n" .
-    "Teléfono: " . (($reg1->telefono_usuario != "") ? number_format($reg1->telefono_usuario, 0, '', ' ') : 'Sin registrar') . "\n" .
-    "Email: " . $reg1->email_usuario,
+  "",
   $empresa,
   "RUC: " . $ruc . "\n" .
     "Dirección: " . $direccion . "\n" .
