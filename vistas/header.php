@@ -94,7 +94,7 @@ $local_login = $_SESSION['local'];
     opacity: 1 !important;
   }
 
-  .modal-footer .btn+.btn,
+  .modal-footer .btn+.btn-primary,
   .btn-bcp {
     background-color: #3e79fd !important;
     outline: none !important;
@@ -104,7 +104,7 @@ $local_login = $_SESSION['local'];
     color: white;
   }
 
-  .modal-footer .btn+.btn:hover,
+  .modal-footer .btn+.btn-primary:hover,
   .btn-bcp:hover {
     background-color: #5288ff !important;
     transition: .3s ease all !important;

@@ -30,6 +30,8 @@ if (!isset($_SESSION["nombre"])) {
 		$vuelto = isset($_POST["vuelto"]) ? limpiarCadena($_POST["vuelto"]) : "";
 		$comentario_interno = isset($_POST["comentario_interno"]) ? limpiarCadena($_POST["comentario_interno"]) : "";
 		$comentario_externo = isset($_POST["comentario_externo"]) ? limpiarCadena($_POST["comentario_externo"]) : "";
+		$cantidad_cuotas = isset($_POST["cantidad_cuotas"]) ? limpiarCadena($_POST["cantidad_cuotas"]) : "";
+		$pagar_cuotas = isset($_POST["pagar_cuotas"]) ? limpiarCadena($_POST["pagar_cuotas"]) : "";
 
 		$estado = isset($_POST["estado"]) ? limpiarCadena($_POST["estado"]) : "";
 
@@ -42,7 +44,7 @@ if (!isset($_SESSION["nombre"])) {
 					if ($numeroExiste) {
 						echo "El número correlativo que ha ingresado ya existe en el local seleccionado.";
 					} else {
-						$rspta = $venta->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
+						$rspta = $venta->insertar($idusuario, (($idlocal != "") ? $idlocal : $idlocalSession), $idcliente, $idcaja, $tipo_comprobante, $num_comprobante, $moneda, $impuesto, $total_venta, $vuelto, $comentario_interno, $comentario_externo, $cantidad_cuotas, $pagar_cuotas, $_POST["detalles"], $_POST["idpersonal"], $_POST["cantidad"], $_POST["precio_compra"], $_POST["precio_venta"], $_POST["comision"], $_POST["descuento"], $_POST["metodo_pago"], $_POST["monto"]);
 						if (is_array($rspta) && $rspta[0] === true) {
 							echo json_encode($rspta);
 						} else {
@@ -51,6 +53,11 @@ if (!isset($_SESSION["nombre"])) {
 					}
 				} else {
 				}
+				break;
+
+			case 'mostrar':
+				$rspta = $venta->mostrar($idventa);
+				echo json_encode($rspta);
 				break;
 
 			case 'anular':
@@ -145,6 +152,9 @@ if (!isset($_SESSION["nombre"])) {
 				$totalPrecioVentaSoles = 0;
 				$totalPrecioVentaDolares = 0;
 
+				$totalMontoPagarSoles = 0;
+				$totalMontoPagarDolares = 0;
+
 				while ($reg = $rspta->fetch_object()) {
 					$cargo_detalle = "";
 
@@ -169,9 +179,12 @@ if (!isset($_SESSION["nombre"])) {
 						"0" => '<div style="display: flex; flex-wrap: nowrap; gap: 3px">' .
 							'<a data-toggle="modal" href="#myModal9"><button class="btn btn-success" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalImpresion(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-print"></i></button></a>' .
 							'<a data-toggle="modal" href="#myModal10"><button class="btn btn-info" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalDetalles(' . $reg->idventa . ', \'' . $reg->usuario . '\', \'' . $reg->num_comprobante . '\', \'' . $reg->cliente . '\', \'' . $reg->cliente_tipo_documento . '\', \'' . $reg->cliente_num_documento . '\', \'' . $reg->cliente_direccion . '\', \'' . $reg->impuesto . '\', \'' . $reg->total_venta . '\', \'' . $reg->vuelto . '\', \'' . $reg->comentario_interno . '\', \'' . $reg->moneda . '\')"><i class="fa fa-info-circle"></i></button></a>' .
-							(($reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
-								((($_SESSION["cargo"] == 'superadmin' || $_SESSION["cargo"] == 'admin_total') ? (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>')) : ("")) .
-									(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>'))) : ('')) .
+							(($reg->pagar_cuotas == 1) ?
+								'<a data-toggle="modal" href="#myModal13"><button class="btn btn-warning" style="margin-right: 3px; width: 35px; height: 35px; color: white !important;" onclick="modalCuotas(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i style="margin-left: -2px" class="fa fa-money"></i></button></a>'
+								: '') .
+							(($reg->estado == 'Completado' || $reg->estado == 'Pendiente' || $reg->estado == 'Iniciado' || $reg->estado == 'Entregado' || $reg->estado == 'Por entregar' || $reg->estado == 'En transcurso' || $reg->estado == 'Finalizado') ?
+								(($_SESSION["cargo"] == 'superadmin' || $_SESSION["cargo"] == 'admin_total') ? (($reg->pagar_cuotas == 0) ? (mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<a data-toggle="modal" href="#myModal11"><button class="btn btn-bcp" style="margin-right: 3px; height: 35px;" onclick="modalEstadoVenta(' . $reg->idventa . ', \'' . $reg->num_comprobante . '\')"><i class="fa fa-gear"></i></button></a>')) : "") : "") .
+								(mostrarBoton($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="anular(' . $reg->idventa . ')"><i class="fa fa-close"></i></button>')) : '') .
 							mostrarBoton2($reg->cargo, $cargo, $reg->idusuario, '<button class="btn btn-danger" style="margin-right: 3px; height: 35px;" onclick="eliminar(' . $reg->idventa . ')"><i class="fa fa-trash"></i></button>') .
 							'</div>',
 						"1" => '<a target="_blank" href="../reportes/exA4Venta.php?id=' . $reg->idventa . '"> <button class="btn btn-info" style="margin-right: 3px; height: 35px; color: white !important;"><i class="fa fa-save"></i></button></a>',
@@ -180,17 +193,20 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => $reg->caja,
 						"5" => $reg->tipo_comprobante,
 						"6" => 'N° ' . $reg->num_comprobante,
-						"7" => $reg->total_venta,
-						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
-						"9" => $reg->usuario . ' - ' . $cargo_detalle,
-						"10" => $reg->fecha,
-						"11" => ($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))),
+						"7" => $reg->monto_pagado,
+						"8" => $reg->total_venta,
+						"9" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
+						"10" => $reg->usuario . ' - ' . $cargo_detalle,
+						"11" => $reg->fecha,
+						"12" => ($reg->estado == 'Completado') ? '<span class="label bg-green">Completado</span>' : (($reg->estado == 'Pendiente') ? '<span class="label bg-orange">Pendiente</span>' : (($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? ('<span class="label bg-green">Finalizado</span>') : ('<span class="label bg-red">Anulado</span>'))))))),
 					);
 
 					if ($reg->moneda == 'soles') {
 						$totalPrecioVentaSoles += $reg->total_venta;
+						$totalMontoPagarSoles += $reg->monto_pagado;
 					} else {
 						$totalPrecioVentaDolares += $reg->total_venta;
+						$totalMontoPagarDolares += $reg->monto_pagado;
 					}
 
 					$firstIteration = false; // Marcar que ya no es la primera iteración
@@ -205,11 +221,12 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => "",
 						"5" => "",
 						"6" => "<strong>TOTAL EN SOLES</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
-						"8" => "",
+						"7" => '<strong>' . number_format($totalMontoPagarSoles, 2) . '</strong>',
+						"8" => '<strong>' . number_format($totalPrecioVentaSoles, 2) . '</strong>',
 						"9" => "",
 						"10" => "",
 						"11" => "",
+						"12" => "",
 					);
 
 					$data[] = array(
@@ -220,11 +237,12 @@ if (!isset($_SESSION["nombre"])) {
 						"4" => "",
 						"5" => "",
 						"6" => "<strong>TOTAL EN DÓLARES</strong>",
-						"7" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
-						"8" => "",
+						"7" => '<strong>' . number_format($totalMontoPagarDolares, 2) . '</strong>',
+						"8" => '<strong>' . number_format($totalPrecioVentaDolares, 2) . '</strong>',
 						"9" => "",
 						"10" => "",
 						"11" => "",
+						"12" => "",
 					);
 				}
 
@@ -236,6 +254,58 @@ if (!isset($_SESSION["nombre"])) {
 				);
 				echo json_encode($results);
 
+				break;
+
+				/* ======================= REGISTRO DE CUOTAS ======================= */
+
+			case 'registrarCuotas':
+				// Validar que los datos fueron enviados correctamente
+				if (empty($_POST['idventa']) || empty($_POST['montoCuota'])) {
+					echo json_encode(["status" => "error", "message" => "Datos insuficientes para registrar el pago."]);
+					exit;
+				}
+
+				$montoCuota = (float)$_POST['montoCuota'];
+
+				// Obtener la venta actual desde el modelo
+				$ventaActual = $venta->mostrar($idventa);
+
+				if (!$ventaActual) {
+					echo json_encode(["status" => "error", "message" => "Venta no encontrada."]);
+					exit;
+				}
+
+				$totalVenta = (float)$ventaActual['total_venta'];
+				$montoPagado = (float)$ventaActual['monto_pagado'];
+				$cantidadCuotas = (int)$ventaActual['cantidad_cuotas'];
+
+				// Validar el monto de la cuota
+				$residuo = $totalVenta - $montoPagado;
+				if ($montoCuota > $residuo) {
+					echo json_encode(["status" => "error", "message" => "El monto ingresado excede el total restante de la venta."]);
+					exit;
+				}
+
+				// Validar si es la última cuota
+				if ($cantidadCuotas === 1 && $montoCuota != $residuo) {
+					echo json_encode(["status" => "error", "message" => "Debido a que se encuentra en la última cuota, debe ingresar el monto exacto para completar el pago (el residuo debe ser 0)."]);
+					exit;
+				}
+
+				// Actualizar los valores
+				$nuevoMontoPagado = $montoPagado + $montoCuota;
+				$nuevaCantidadCuotas = ($nuevoMontoPagado >= $totalVenta) ? 0 : $cantidadCuotas - 1;
+
+				// Actualizar el estado solo si se completa el monto total
+				$estado = ($nuevoMontoPagado >= $totalVenta) ? "Completado" : $ventaActual['estado'];
+
+				$resultado = $venta->actualizarCuotas($idventa, $nuevoMontoPagado, $nuevaCantidadCuotas, $estado);
+
+				if ($resultado) {
+					echo json_encode(["status" => "success", "message" => "Pago registrado correctamente."]);
+				} else {
+					echo json_encode(["status" => "error", "message" => "Error al registrar el pago en la base de datos."]);
+				}
 				break;
 
 				/* ======================= SUNAT ======================= */

@@ -2169,23 +2169,58 @@ function guardaryeditar(e) {
 let lastNumCompVenta = 0;
 
 function enviar(idproforma, idlocal) {
-	bootbox.confirm("¿Está seguro de convertir la proforma en una venta?", function (result) {
-		if (result) {
-			$.post("../ajax/proforma.php?op=enviar", { idproforma: idproforma, idlocal: idlocal }, function (e) {
-				bootbox.alert(e);
-				tabla.ajax.reload();
-				$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
-					const obj = JSON.parse(data);
+	bootbox.confirm({
+		message: `
+            <p>¿Está seguro de convertir la proforma en una venta?, Si usted está seguro de realizar esta acción:</p>
+            <h5 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; margin-top: 10px; padding: 0; font-weight: bold;">¿Desea pagar en cuotas?</h5>
+            <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; margin: 0; margin-bottom: 10px; display: flex; flex-wrap: nowrap; gap: 8px; align-items: center;">
+                <label class="switch" style="display: flex; align-items: center;">
+                    <input type="checkbox" id="pagarCuotasToggle">
+                    <span class="slider"></span>
+                </label>
+                <input type="number" class="form-control" name="cantidad_cuotas" id="cantidadCuotas" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" placeholder="Cantidad de cuotas" disabled>
+            </div>`,
+		callback: function (result) {
+			if (result) {
+				// Validar que si está marcado el checkbox el campo sea obligatorio
+				const pagarCuotas = $("#pagarCuotasToggle").is(":checked") ? 1 : 0;
+				const cantidadCuotas = pagarCuotas ? parseInt($("#cantidadCuotas").val()) || 0 : 0;
 
-					let articulo = obj.articulo;
-					let servicio = obj.servicio;
+				if (pagarCuotas && cantidadCuotas === 0) {
+					bootbox.alert("Debe ingresar la cantidad de cuotas.");
+					return false;
+				}
 
-					listarSelectsArticulos(articulo, servicio);
-					listarArticulos(articulo, servicio);
+				// Enviar la solicitud al servidor
+				$.post("../ajax/proforma.php?op=enviar", {
+					idproforma: idproforma,
+					idlocal: idlocal,
+					pagar_cuotas: pagarCuotas,
+					cantidad_cuotas: cantidadCuotas
+				}, function (e) {
+					bootbox.alert(e);
+					tabla.ajax.reload();
+
+					$.post("../ajax/proforma.php?op=listarTodosLocalActivosPorUsuario", function (data) {
+						const obj = JSON.parse(data);
+						let articulo = obj.articulo;
+						let servicio = obj.servicio;
+						listarSelectsArticulos(articulo, servicio);
+						listarArticulos(articulo, servicio);
+					});
 				});
-			});
+			}
 		}
-	})
+	});
+
+	// Configurar la lógica del checkbox
+	$(document).on('change', '#pagarCuotasToggle', function () {
+		if ($(this).is(':checked')) {
+			$('#cantidadCuotas').prop('disabled', false).prop('required', true);
+		} else {
+			$('#cantidadCuotas').prop('disabled', true).prop('required', false).val('');
+		}
+	});
 }
 
 function modalPrecuentaFinal(idproforma) {

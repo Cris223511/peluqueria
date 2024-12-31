@@ -143,6 +143,15 @@ function init() {
 			localStorage.setItem('comisionarValor', $(this).val());
 		});
 	});
+
+	// Toggle para pagar en cuotas
+	$('#pagarCuotasToggle').on('change', function () {
+		if ($(this).is(':checked')) {
+			$('#cantidadCuotas').prop('disabled', false).prop('required', true);
+		} else {
+			$('#cantidadCuotas').prop('disabled', true).prop('required', false).val('');
+		}
+	});
 }
 
 function listarTodosActivos(selectId) {
@@ -439,6 +448,9 @@ function limpiar() {
 	$("#igvFinal").val("0.00");
 	$("#total_venta_final").val("");
 	$("#vuelto_final").val("");
+
+	$("#pagarCuotasToggle").prop("checked", false);
+	$("#cantidadCuotas").val("").prop("disabled", true).prop("required", false);
 }
 
 function limpiarTodo() {
@@ -2101,6 +2113,14 @@ function guardaryeditar(e) {
 	formData.append('num_comprobante', lastNumComp);
 	formData.append('idcaja', idCajaFinal);
 
+	// Verificar el estado del checkbox y agregar la clave pagar_cuotas y cantidad_cuotas
+	var pagarCuotas = $("#pagarCuotasToggle").is(":checked") ? 1 : 0;
+	formData.append('pagar_cuotas', pagarCuotas);
+
+	// Determinar el valor de cantidad_cuotas basado en el estado del checkbox
+	var cantidadCuotas = pagarCuotas ? parseInt($("#cantidadCuotas").val()) || 0 : 0;
+	formData.append('cantidad_cuotas', cantidadCuotas);
+
 	var detalles = [];
 
 	$('#detalles .filas').each(function () {
@@ -2159,7 +2179,6 @@ function guardaryeditar(e) {
 
 	});
 }
-
 
 function modalPrecuentaFinal(idventa) {
 	$('#myModal8').modal('show');
@@ -2402,6 +2421,139 @@ function eliminar(idventa) {
 			});
 		}
 	})
+}
+
+// Función para abrir el modal de cuotas y cargar la información
+function modalCuotas(idventa, num_comprobante) {
+	$("#num_comprobante_final4").text(num_comprobante);
+
+	// Llamar al servidor para obtener los datos de la venta
+	$.post("../ajax/venta.php?op=mostrar", { idventa: idventa }, function (data) {
+		try {
+			data = JSON.parse(data);
+			console.log(data);
+
+			// Asegurarse de convertir los valores a números
+			const totalVenta = parseFloat(data.total_venta) || 0;
+			const montoPagado = parseFloat(data.monto_pagado) || 0;
+			const cantidadCuotas = parseInt(data.cantidad_cuotas) || 0; // Cuotas restantes
+			const totalCuotas = parseInt(data.total_cuotas) || cantidadCuotas; // Total de cuotas inicial
+			const residuo = totalVenta - montoPagado;
+
+			// Calcular el número de la cuota actual
+			let cuotaActual = totalCuotas - cantidadCuotas + 1;
+			let cuotaTexto = `Cuota <strong>N° ${cuotaActual} / ${totalCuotas}</strong>`;
+
+			// Si ya se completaron las cuotas
+			if (cantidadCuotas === 0) {
+				cuotaTexto = `Cuota <strong>N° ${totalCuotas} / ${totalCuotas} (Completado)</strong>`;
+			}
+
+			// Mostrar la información de la venta
+			$("#total_venta2").text(totalVenta.toFixed(2));
+			$("#monto_pagado").text(montoPagado.toFixed(2));
+			$("#residuo").text(residuo.toFixed(2));
+			$("#numero_cuota").html(cuotaTexto);
+
+			// Mostrar la moneda
+			const moneda = data.moneda === "dolares" ? "Dólares ($)" : "Soles (S/.)";
+			$("#moneda2").text(moneda);
+
+			// Mostrar el estado
+			const estado =
+				montoPagado >= totalVenta
+					? '<span class="label bg-green">Completado</span>'
+					: '<span class="label bg-orange">Pendiente</span>';
+			$("#estado").html(estado);
+
+			// Lógica para ocultar el botón y deshabilitar el input si el estado es Completado
+			if (montoPagado >= totalVenta) {
+				$("#btnRegistrarPago").hide(); // Ocultar botón
+				$("#monto_cuota").prop("disabled", true); // Deshabilitar input
+			} else {
+				$("#btnRegistrarPago").show(); // Mostrar botón
+				$("#monto_cuota").prop("disabled", false); // Habilitar input y agregar required
+			}
+
+			// Inicializar input de monto de cuota
+			$("#monto_cuota").val("");
+
+			// Configurar el botón de registrar pago
+			$("#btnRegistrarPago").off("click").on("click", function () {
+				registrarCuotas(idventa, totalVenta, montoPagado, cantidadCuotas);
+			});
+		} catch (error) {
+			console.error("Error al procesar la respuesta:", error);
+			bootbox.alert("Error al cargar los datos de la venta.");
+		}
+	});
+}
+
+// Función para actualizar el residuo dinámicamente mientras se ingresa la cuota
+function actualizarResiduo() {
+	const totalVenta = parseFloat($("#total_venta2").text());
+	const montoPagado = parseFloat($("#monto_pagado").text());
+	const montoCuota = parseFloat($("#monto_cuota").val()) || 0;
+
+	const residuo = totalVenta - montoPagado - montoCuota;
+	$("#residuo").text(residuo.toFixed(2));
+}
+
+// Función para registrar el pago de la cuota
+function registrarCuotas(idventa, totalVenta, montoPagado, cantidadCuotas) {
+	const montoCuota = parseFloat($("#monto_cuota").val());
+
+	const residuo = totalVenta - (montoPagado + montoCuota);
+
+	console.log("residuo es: ", residuo);
+	console.log("cantidadCuotas es: ", cantidadCuotas);
+
+	// Si el residuo es 0 pero no está en la última cuota, mostrar un mensaje de confirmación
+	if (residuo === 0 && cantidadCuotas > 1) {
+		bootbox.confirm({
+			message: "Está a punto de completar el total de la venta antes de llegar a la última cuota. ¿Desea continuar?",
+			buttons: {
+				confirm: {
+					label: 'Guardar',
+					className: 'btn-bcp'
+				},
+				cancel: {
+					label: 'Cancelar',
+					className: 'btn-default'
+				}
+			},
+			callback: function (result) {
+				if (result) {
+					enviarCuota(idventa, montoCuota); // Llamar a la función que envía la cuota
+				}
+			}
+		});
+	} else {
+		// Enviar los datos al servidor directamente si no requiere confirmación
+		enviarCuota(idventa, montoCuota);
+	}
+}
+
+// Función para enviar el pago de la cuota al servidor
+function enviarCuota(idventa, montoCuota) {
+	$.post("../ajax/venta.php?op=registrarCuotas", { idventa: idventa, montoCuota: montoCuota }, function (response) {
+		try {
+			response = JSON.parse(response);
+			if (response.status === "success") {
+				bootbox.alert(response.message);
+				$("#myModal13").modal("hide");
+				tabla.ajax.reload(); // Actualizar la tabla si es necesario
+			} else {
+				bootbox.alert(response.message);
+			}
+		} catch (error) {
+			console.error("Error al procesar la respuesta:", error);
+			bootbox.alert("Error inesperado. Por favor, intente nuevamente.");
+		}
+	}).fail(function (jqXHR, textStatus, errorThrown) {
+		console.error("Error en el servidor:", textStatus, errorThrown);
+		bootbox.alert("Error de conexión con el servidor.");
+	});
 }
 
 var cont = 0;

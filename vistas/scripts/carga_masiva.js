@@ -333,13 +333,14 @@ function validarFila(boton) {
 	const tabla = $('#tbllistado').DataTable();
 	const filaIndex = tabla.row(fila).index(); // Obtener el índice de la fila
 
-	// Obtener todos los idlocal y codigo_producto de la tabla
+	// Obtener todos los idlocal, codigo_producto y codigo_barra de la tabla
 	const todosCodigos = [];
 	tabla.rows().every(function () {
 		const filaData = this.node();
 		todosCodigos.push({
 			idlocal: $(filaData).find('input[name="idlocal[]"]').val(),
 			codigo_producto: $(filaData).find('input[name="codigo_producto[]"]').val(),
+			codigo_barra: $(filaData).find('input[name="codigo_barra[]"]').val() // Agregar codigo_barra
 		});
 	});
 
@@ -379,6 +380,7 @@ function validarFila(boton) {
 		contentType: 'application/json',
 		data: JSON.stringify(datosAEnviar),
 		success: function (response) {
+			console.log(response);
 			response = JSON.parse(response); // Asegúrate de parsear la respuesta
 			console.log("Resultado de validación de fila:", response);
 
@@ -452,7 +454,27 @@ function mostrarBotonErrores(fila, mostrar) {
 	}
 }
 
-// Función para mostrar los errores en el modal
+const nombresColumnas = {
+	2: "Nombre del producto",
+	3: "Unidad de medida",
+	4: "Categoría",
+	5: "Local",
+	6: "Marca",
+	7: "Código del producto",
+	8: "Stock",
+	9: "Stock mínimo",
+	10: "Precio de venta",
+	11: "Precio de compra",
+	12: "Ganancia",
+	13: "Precio mayorista",
+	14: "Comisión",
+	15: "Código de barra",
+	19: "Peso",
+	20: "Fecha de emisión",
+	21: "Fecha de vencimiento",
+};
+
+// Función para mostrar los errores en el modal 
 function verErrores(boton) {
 	// Obtener la fila correspondiente al botón
 	const fila = $(boton).closest('tr');
@@ -467,14 +489,16 @@ function verErrores(boton) {
 
 	// Insertar los errores en la tabla
 	errores.forEach((mensaje, index) => {
-		const columna = columnas[index] || 'Desconocida'; // Obtén la columna correspondiente o muestra "Desconocida"
+		// Buscar el nombre de la columna correspondiente
+		const columna = nombresColumnas[columnas[index]] || "Desconocida";
+
 		const filaHtml = `
-			<tr>
-				<td>${index + 1}</td>
-				<td>${columna}</td>
-				<td>${mensaje}</td>
-			</tr>
-		`;
+            <tr>
+                <td>${index + 1}</td>
+                <td>${columna}</td>
+                <td>${mensaje}</td>
+            </tr>
+        `;
 		tablaErrores.append(filaHtml);
 	});
 }
@@ -487,11 +511,11 @@ function validarYGuardarProductos() {
 		buttons: {
 			confirm: {
 				label: 'Guardar',
-				className: 'btn-success'
+				className: 'btn-bcp'
 			},
 			cancel: {
 				label: 'Cancelar',
-				className: 'btn-danger'
+				className: 'btn-warning'
 			}
 		},
 		callback: function (result) {
@@ -619,6 +643,30 @@ function limpiarErroresTabla(tabla) {
 		const fila = this.node();
 		limpiarErroresFila($(fila)); // Reutilizamos la función existente
 	});
+}
+
+// Función para formatear los códigos de los productos.
+function formatearCodigoProducto(input) {
+	let codigoProducto = input.value.trim();
+
+	// Regex para capturar hasta la última letra como alfanuméricos y lo demás como números
+	const partes = codigoProducto.match(/^(.*[A-Za-z])?(.*)$/) || ["", "", ""];
+	const letras = partes[1] || ""; // Alfanuméricos (hasta la última letra)
+	let numeros = partes[2] || ""; // Números después de la última letra
+
+	// Si la parte numérica contiene solo ceros, o no hay números, establecer como 1
+	if (!numeros || /^0+$/.test(numeros)) {
+		numeros = "1";
+	}
+
+	// Asegurarse de que los números tengan al menos 5 dígitos
+	numeros = numeros.padStart(5, "0");
+
+	// Formatear el código final
+	const codigoFormateado = letras + numeros;
+
+	// Actualizar el valor del input
+	input.value = codigoFormateado;
 }
 
 // Ejecutar init al cargar la página

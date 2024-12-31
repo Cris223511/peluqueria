@@ -83,56 +83,58 @@ class Proforma
 				ejecutarConsulta($sql_detalle) or $sw = false;
 			}
 
-			if ($moneda != "dolares") {
-				if ($esArticulo && $id != 0) {
-					// Verificar si la medida asociada al artículo es "Paquetes"
-					$consulta_medida = "SELECT me.titulo FROM medidas me 
+			if ($_SESSION["cargo"] == "superadmin") {
+				if ($moneda != "dolares") {
+					if ($esArticulo && $id != 0) {
+						// Verificar si la medida asociada al artículo es "Paquetes"
+						$consulta_medida = "SELECT me.titulo FROM medidas me 
 										INNER JOIN articulo a ON me.idmedida = a.idmedida 
 										WHERE a.idarticulo = '$id'";
-					$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
+						$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
 
-					if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
-						// Si es "Paquetes", actualizar el precio_venta_mayor
-						$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaItem' WHERE idarticulo='$id'";
-					} else {
-						// De lo contrario, actualizar el precio_venta
-						$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
-						ejecutarConsulta($actualizar_art) or $sw = false;
+						if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
+							// Si es "Paquetes", actualizar el precio_venta_mayor
+							$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaItem' WHERE idarticulo='$id'";
+						} else {
+							// De lo contrario, actualizar el precio_venta
+							$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaItem' WHERE idarticulo='$id'";
+							ejecutarConsulta($actualizar_art) or $sw = false;
 
-						// Actualizar la ganancia después de actualizar el precio_venta
-						$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
-						ejecutarConsulta($actualizar_ganancia) or $sw = false;
+							// Actualizar la ganancia después de actualizar el precio_venta
+							$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
+							ejecutarConsulta($actualizar_ganancia) or $sw = false;
+						}
+					} elseif ($esServicio && $id != 0) {
+						$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
+						ejecutarConsulta($actualizar_serv) or $sw = false;
 					}
-				} elseif ($esServicio && $id != 0) {
-					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaItem' WHERE idservicio='$id'";
-					ejecutarConsulta($actualizar_serv) or $sw = false;
-				}
-			} else {
-				// Convertir el precio de dólares a soles
-				$precioVentaEnSoles = number_format($precioVentaItem / VALOR_DOLAR, 2);
+				} else {
+					// Convertir el precio de dólares a soles
+					$precioVentaEnSoles = number_format($precioVentaItem / VALOR_DOLAR, 2);
 
-				if ($esArticulo && $id != 0) {
-					// Verificar si la medida asociada al artículo es "Paquetes"
-					$consulta_medida = "SELECT me.titulo FROM medidas me 
+					if ($esArticulo && $id != 0) {
+						// Verificar si la medida asociada al artículo es "Paquetes"
+						$consulta_medida = "SELECT me.titulo FROM medidas me 
 										INNER JOIN articulo a ON me.idmedida = a.idmedida 
 										WHERE a.idarticulo = '$id'";
-					$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
+						$resultado_medida = ejecutarConsultaSimpleFila($consulta_medida);
 
-					if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
-						// Si es "Paquetes", actualizar el precio_venta_mayor
-						$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaEnSoles' WHERE idarticulo='$id'";
-					} else {
-						// De lo contrario, actualizar el precio_venta
-						$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaEnSoles' WHERE idarticulo='$id'";
-						ejecutarConsulta($actualizar_art) or $sw = false;
+						if ($resultado_medida && $resultado_medida['titulo'] === 'Paquetes') {
+							// Si es "Paquetes", actualizar el precio_venta_mayor
+							$actualizar_art = "UPDATE articulo SET precio_venta_mayor='$precioVentaEnSoles' WHERE idarticulo='$id'";
+						} else {
+							// De lo contrario, actualizar el precio_venta
+							$actualizar_art = "UPDATE articulo SET precio_venta='$precioVentaEnSoles' WHERE idarticulo='$id'";
+							ejecutarConsulta($actualizar_art) or $sw = false;
 
-						// Actualizar la ganancia después de actualizar el precio_venta
-						$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
-						ejecutarConsulta($actualizar_ganancia) or $sw = false;
+							// Actualizar la ganancia después de actualizar el precio_venta
+							$actualizar_ganancia = "UPDATE articulo SET ganancia = (precio_venta - precio_compra) WHERE idarticulo='$id'";
+							ejecutarConsulta($actualizar_ganancia) or $sw = false;
+						}
+					} elseif ($esServicio && $id != 0) {
+						$actualizar_serv = "UPDATE servicios SET costo='$precioVentaEnSoles' WHERE idservicio='$id'";
+						ejecutarConsulta($actualizar_serv) or $sw = false;
 					}
-				} elseif ($esServicio && $id != 0) {
-					$actualizar_serv = "UPDATE servicios SET costo='$precioVentaEnSoles' WHERE idservicio='$id'";
-					ejecutarConsulta($actualizar_serv) or $sw = false;
 				}
 			}
 		}
@@ -277,7 +279,7 @@ class Proforma
 	}
 
 
-	public function enviar($idproforma, $idlocal)
+	public function enviar($idproforma, $idlocal, $cantidad_cuotas, $pagar_cuotas)
 	{
 		// Consultar los datos de la proforma
 		$sql_proforma = "SELECT * FROM proforma WHERE idproforma = '$idproforma'";
@@ -303,9 +305,15 @@ class Proforma
 			// Obtener la fecha y hora actual
 			$fecha_hora = date('Y-m-d H:i:s');
 
+			// Determinar el valor de monto_pagado
+			$monto_pagado = ($pagar_cuotas == 0) ? "'{$datos_proforma['total_venta']}'" : "0.00";
+
+			// Determinar el estado según el valor de pagar_cuotas
+			$estado = ($pagar_cuotas == 1) ? 'Pendiente' : 'Finalizado';
+
 			// Insertar los datos en la tabla venta
-			$sql_insert_venta = "INSERT INTO venta (idusuario, idlocal, idcliente, idcaja, tipo_comprobante, num_comprobante, moneda, fecha_hora, impuesto, total_venta, vuelto, comentario_interno, comentario_externo, estado, eliminado)
-            VALUES ('{$datos_proforma['idusuario']}', '{$datos_proforma['idlocal']}', '{$datos_proforma['idcliente']}', '{$datos_proforma['idcaja']}', 'NOTA DE VENTA', '$nuevo_num_comprobante', '{$datos_proforma['moneda']}', '$fecha_hora', '{$datos_proforma['impuesto']}', '{$datos_proforma['total_venta']}', '{$datos_proforma['vuelto']}', '{$datos_proforma['comentario_interno']}', '{$datos_proforma['comentario_externo']}', '{$datos_proforma['estado']}', '{$datos_proforma['eliminado']}')";
+			$sql_insert_venta = "INSERT INTO venta (idusuario, idlocal, idcliente, idcaja, tipo_comprobante, num_comprobante, moneda, fecha_hora, impuesto, total_venta, vuelto, comentario_interno, comentario_externo, monto_pagado, cantidad_cuotas, total_cuotas, pagar_cuotas, estado, eliminado)
+			VALUES ('{$datos_proforma['idusuario']}', '{$datos_proforma['idlocal']}', '{$datos_proforma['idcliente']}', '{$datos_proforma['idcaja']}', 'NOTA DE VENTA', '$nuevo_num_comprobante', '{$datos_proforma['moneda']}', '$fecha_hora', '{$datos_proforma['impuesto']}', '{$datos_proforma['total_venta']}', '{$datos_proforma['vuelto']}', '{$datos_proforma['comentario_interno']}', '{$datos_proforma['comentario_externo']}', '$monto_pagado', '$cantidad_cuotas', '$cantidad_cuotas', '$pagar_cuotas', '$estado', '{$datos_proforma['eliminado']}')";
 
 			// Ejecutar la consulta de inserción
 			$idventa = ejecutarConsulta_retornarID($sql_insert_venta);

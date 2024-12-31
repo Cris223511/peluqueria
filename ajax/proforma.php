@@ -31,6 +31,9 @@ if (!isset($_SESSION["nombre"])) {
 		$comentario_externo = isset($_POST["comentario_externo"]) ? limpiarCadena($_POST["comentario_externo"]) : "";
 		$fecha_vencimiento = isset($_POST["fecha_vencimiento"]) ? limpiarCadena($_POST["fecha_vencimiento"]) : "";
 
+		$cantidad_cuotas = isset($_POST["cantidad_cuotas"]) ? limpiarCadena($_POST["cantidad_cuotas"]) : "";
+		$pagar_cuotas = isset($_POST["pagar_cuotas"]) ? limpiarCadena($_POST["pagar_cuotas"]) : "";
+
 		$estado = isset($_POST["estado"]) ? limpiarCadena($_POST["estado"]) : "";
 
 		$sunat = isset($_POST["sunat"]) ? limpiarCadena($_POST["sunat"]) : "";
@@ -59,7 +62,7 @@ if (!isset($_SESSION["nombre"])) {
 				break;
 
 			case 'enviar':
-				$rspta = $proforma->enviar($idproforma, $idlocal);
+				$rspta = $proforma->enviar($idproforma, $idlocal, $cantidad_cuotas, $pagar_cuotas);
 				echo $rspta ? "Proforma convertida en venta con éxito." : "Proforma no se pudo enviar";
 				break;
 
@@ -178,8 +181,8 @@ if (!isset($_SESSION["nombre"])) {
 						"8" => ($reg->moneda == 'soles') ? 'Soles' : 'Dólares',
 						"9" => $reg->usuario . ' - ' . $cargo_detalle,
 						"10" => $reg->fecha,
-						"11" => $reg->fecha_vencimiento,
-						"12" => (strtotime(date('Y-m-d H:i:s')) > strtotime($reg->fecha_vencimiento)) ? '<span class="label bg-red">Vencido</span>' : (($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? '<span class="label bg-green">Finalizado</span>' : '<span class="label bg-red">Anulado</span>')))))
+						"11" => ($reg->fecha_vencimiento === '00-00-0000') ? 'Sin registrar.' : $reg->fecha_vencimiento,
+						"12" => ($reg->fecha_vencimiento !== '00-00-0000' && strtotime(date('Y-m-d H:i:s')) > strtotime($reg->fecha_vencimiento)) ? '<span class="label bg-red">Vencido</span>' : (($reg->estado == 'Iniciado') ? '<span class="label bg-blue">Iniciado</span>' : (($reg->estado == 'Entregado') ? '<span class="label bg-green">Entregado</span>' : (($reg->estado == 'Por entregar') ? '<span class="label bg-orange">Por entregar</span>' : (($reg->estado == 'En transcurso') ? '<span class="label bg-yellow">En transcurso</span>' : (($reg->estado == 'Finalizado') ? '<span class="label bg-green">Finalizado</span>' : '<span class="label bg-red">Anulado</span>')))))
 					);
 
 					if ($reg->moneda == 'soles') {

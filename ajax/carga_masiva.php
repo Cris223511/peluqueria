@@ -235,6 +235,20 @@ switch ($_GET["op"]) {
 				exit();
 			}
 
+			function ajustarCodigoProducto($codigoProducto)
+			{
+				// Separar letras y números usando el regex
+				preg_match('/^(.*[A-Za-z])(\d*)$/', $codigoProducto, $partes);
+				$letras = $partes[1] ?? ''; // Letras o alfanuméricos hasta la última letra
+				$numeros = $partes[2] ?? ''; // Números después de la última letra
+
+				// Asegurarse de que los números tengan al menos 5 dígitos
+				$numeros = str_pad($numeros, 5, '0', STR_PAD_LEFT);
+
+				// Combinar letras y números ajustados
+				return $letras . $numeros;
+			}
+
 			// Obtener los datos desde la fila 4 hasta que encuentre una fila vacía en la columna B
 			$data = [];
 			$row = 4;
@@ -257,7 +271,7 @@ switch ($_GET["op"]) {
 					"4" => '<input type="number" name="idcategoria[]" value="' . (is_numeric($worksheet->getCell('D' . $row)->getValue()) ? (int)$worksheet->getCell('D' . $row)->getValue() : 0) . '" maxlength="6" class="form-control" min="0" placeholder="Categoría">',
 					"5" => '<input type="number" name="idlocal[]" value="' . (is_numeric($worksheet->getCell('E' . $row)->getValue()) ? (int)$worksheet->getCell('E' . $row)->getValue() : 0) . '" maxlength="6" class="form-control" min="0" placeholder="Local" required>',
 					"6" => '<input type="number" name="idmarca[]" value="' . (is_numeric($worksheet->getCell('F' . $row)->getValue()) ? (int)$worksheet->getCell('F' . $row)->getValue() : 0) . '" maxlength="6" class="form-control" min="0" placeholder="Marca">',
-					"7" => '<input type="text" name="codigo_producto[]" value="' . $worksheet->getCell('G' . $row)->getValue() . '" maxlength="15" class="form-control" placeholder="Código del producto" required>',
+					"7" => '<input type="text" name="codigo_producto[]" value="' . ajustarCodigoProducto($worksheet->getCell('G' . $row)->getValue()) . '" maxlength="20" class="form-control" placeholder="Código del producto" required onblur="formatearCodigoProducto(this)">',
 					"8" => '<input type="number" name="stock[]" value="' . (is_numeric($worksheet->getCell('H' . $row)->getValue()) ? number_format($worksheet->getCell('H' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="6" class="form-control" step="any" min="0" placeholder="Stock">',
 					"9" => '<input type="number" name="stock_minimo[]" value="' . (is_numeric($worksheet->getCell('I' . $row)->getValue()) ? number_format($worksheet->getCell('I' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="6" class="form-control" step="any" min="0" placeholder="Stock mínimo">',
 					"10" => '<input type="number" name="precio_venta[]" value="' . (is_numeric($worksheet->getCell('J' . $row)->getValue()) ? number_format($worksheet->getCell('J' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="8" class="form-control" step="any" min="0" oninput="calcularGanancia(this)" placeholder="Precio de venta">',
@@ -265,7 +279,7 @@ switch ($_GET["op"]) {
 					"12" => '<input type="number" name="ganancia[]" value="' . (is_numeric($worksheet->getCell('J' . $row)->getValue()) && is_numeric($worksheet->getCell('K' . $row)->getValue()) ? number_format((float)$worksheet->getCell('J' . $row)->getValue() - (float)$worksheet->getCell('K' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="8" class="form-control" step="any" min="0" readonly>',
 					"13" => '<input type="number" name="precio_venta_mayor[]" value="' . (is_numeric($worksheet->getCell('M' . $row)->getValue()) ? number_format($worksheet->getCell('M' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="8" class="form-control" step="any" min="0" placeholder="Precio mayorista">',
 					"14" => '<input type="number" name="comision[]" value="' . (is_numeric($worksheet->getCell('N' . $row)->getValue()) ? number_format($worksheet->getCell('N' . $row)->getValue(), 2, '.', '') : '0.00') . '" maxlength="8" class="form-control" step="any" min="0" placeholder="Comisión">',
-					"15" => '<input type="text" name="codigo_barra[]" value="' . (ctype_digit($worksheet->getCell('O' . $row)->getValue()) ? $worksheet->getCell('O' . $row)->getValue() : '') . '" maxlength="13" class="form-control" placeholder="Código de barra">',
+					"15" => '<input type="text" name="codigo_barra[]" value="' . htmlspecialchars($worksheet->getCell('O' . $row)->getValue()) . '" maxlength="13" oninput="onlyNumbers(this)" class="form-control" placeholder="Código de barra">',
 					"16" => '<textarea name="descripcion[]" class="form-control" maxlength="10000" rows="2" placeholder="Descripción">' . $worksheet->getCell('P' . $row)->getValue() . '</textarea>',
 					"17" => '<textarea name="talla[]" class="form-control" maxlength="10000" rows="2" placeholder="Talla">' . $worksheet->getCell('Q' . $row)->getValue() . '</textarea>',
 					"18" => '<textarea name="color[]" class="form-control" maxlength="10000" rows="2" placeholder="Color">' . $worksheet->getCell('R' . $row)->getValue() . '</textarea>',
@@ -355,13 +369,32 @@ switch ($_GET["op"]) {
 			$codigoProducto = $fila['codigo_producto'];
 			$idLocal = $fila['idlocal'];
 
-			if (
-				empty($codigoProducto) || strlen($codigoProducto) > 20 ||
-				!preg_match('/^[A-Z]{3}\d{5}$/', $codigoProducto) ||
-				$carga_masiva->verificarCodigoProductoExiste($codigoProducto, $idLocal) ||
-				(isset($codigosExistentes[$idLocal]) && in_array($codigoProducto, $codigosExistentes[$idLocal]))
-			) {
+			if (empty($codigoProducto)) {
 				$filaErrores[] = 7;
+			} else {
+				// Separar letras consecutivas y números consecutivos del código basado en la última letra
+				preg_match('/^(.*[A-Za-z])(.*)$/', $codigoProducto, $partes); // Divide en letras (hasta última letra) y números
+
+				$totalLetras = isset($partes[1]) ? strlen($partes[1]) : 0; // Letras hasta la última letra
+				$totalDigitos = isset($partes[2]) ? strlen($partes[2]) : 0; // Números después de la última letra
+
+				// Validar que las letras no superen 10
+				if ($totalLetras > 10) {
+					$filaErrores[] = 7;
+				}
+
+				// Validar que los dígitos no superen 10
+				if ($totalDigitos > 10) {
+					$filaErrores[] = 7;
+				}
+
+				// Validar que el código no existe en la base de datos o en la carga actual
+				if (
+					$carga_masiva->verificarCodigoProductoExiste($codigoProducto, $idLocal) ||
+					(isset($codigosExistentes[$idLocal]) && in_array($codigoProducto, $codigosExistentes[$idLocal]))
+				) {
+					$filaErrores[] = 7;
+				}
 			}
 
 			// Registrar el código procesado si es válido
@@ -369,6 +402,18 @@ switch ($_GET["op"]) {
 				$codigosExistentes[$idLocal] = [];
 			}
 			$codigosExistentes[$idLocal][] = $codigoProducto;
+
+			// Validaciones del índice 10 (Precio de venta menor que precio de compra)
+			if ($fila['precio_venta'] < $fila['precio_compra']) {
+				$filaErrores[] = 10; // Índice de precio venta
+				$filaErrores[] = 11; // Índice de precio compra
+			}
+
+			// Validación del índice 12 (Ganancia negativa)
+			$ganancia = $fila['precio_venta'] - $fila['precio_compra'];
+			if ($ganancia < 0) {
+				$filaErrores[] = 12; // Índice de ganancia
+			}
 
 			// Validaciones del índice 8 al 14
 			foreach (range(8, 14) as $col) {
@@ -378,9 +423,21 @@ switch ($_GET["op"]) {
 			}
 
 			// Validación del índice 15
-			if (!empty($fila['codigo_barra']) && (!is_numeric($fila['codigo_barra']) || strlen($fila['codigo_barra']) > 13 ||
-				$carga_masiva->verificarCodigoBarraExiste($fila['codigo_barra']))) {
-				$filaErrores[] = 15;
+			$codigoBarra = $fila['codigo_barra'];
+
+			if (!empty($codigoBarra)) {
+				if (
+					!is_numeric($codigoBarra) || strlen($codigoBarra) > 13 ||
+					$carga_masiva->verificarCodigoBarraExiste($codigoBarra) ||
+					in_array($codigoBarra, $codigosExistentes)
+				) {
+					$filaErrores[] = 15;
+				}
+
+				// Registrar el código de barra procesado si es válido
+				if (!in_array($codigoBarra, $codigosExistentes)) {
+					$codigosExistentes[] = $codigoBarra;
+				}
 			}
 
 			// Validación del índice 19
@@ -490,17 +547,45 @@ switch ($_GET["op"]) {
 		$codigoProducto = $fila['codigo_producto'];
 		$idLocal = $fila['idlocal'];
 
+		function formatearCodigoProducto($codigoProducto)
+		{
+			// Separar letras consecutivas y números consecutivos del código basado en la última letra
+			preg_match('/^(.*[A-Za-z])(.*)$/', $codigoProducto, $partes); // Divide en letras (hasta última letra) y números
+
+			$letras = isset($partes[1]) ? $partes[1] : ''; // Letras hasta la última letra
+			$numeros = isset($partes[2]) ? $partes[2] : ''; // Números después de la última letra
+
+			// Formatear números para que sean al menos de 5 dígitos
+			$numerosFormateados = str_pad($numeros, 5, '0', STR_PAD_LEFT);
+
+			// Reconstruir el código
+			return $letras . $numerosFormateados;
+		}
+
+		// Formatear el código antes de validar
+		$codigoProducto = formatearCodigoProducto($codigoProducto);
+
 		if (empty($codigoProducto)) {
 			$errores[] = 7;
 			$mensajeErrores[] = "El código del producto es obligatorio.";
-		} elseif (strlen($codigoProducto) > 20) {
-			$errores[] = 7;
-			$mensajeErrores[] = "El código del producto no puede superar los 20 caracteres.";
-		} elseif (!preg_match('/^[A-Z]{3}\d{5}$/', $codigoProducto)) {
-			$errores[] = 7;
-			$mensajeErrores[] = "El código del producto debe tener el formato 'XXX00000' (tres letras seguidas de cinco dígitos).";
 		} else {
-			$encontradoAnteriormente = false;
+			// Separar letras consecutivas y números consecutivos del código basado en la última letra
+			preg_match('/^(.*[A-Za-z])(.*)$/', $codigoProducto, $partes); // Divide en letras (hasta última letra) y números
+
+			// Validar las partes
+			$totalLetras = isset($partes[1]) ? strlen($partes[1]) : 0; // Letras hasta la última letra
+			$totalDigitos = isset($partes[2]) ? strlen($partes[2]) : 0; // Números después de la última letra
+
+			// Validar los límites
+			if ($totalLetras > 10) {
+				$errores[] = 7;
+				$mensajeErrores[] = "El código del producto no puede tener más de 10 letras.";
+			}
+
+			if ($totalDigitos > 10) {
+				$errores[] = 7;
+				$mensajeErrores[] = "El código del producto no puede tener más de 10 dígitos.";
+			}
 
 			// Verificar si ya existe en la base de datos
 			if ($carga_masiva->verificarCodigoProductoExiste($codigoProducto, $idLocal)) {
@@ -509,6 +594,7 @@ switch ($_GET["op"]) {
 			}
 
 			// Verificar si ya existe en las filas anteriores
+			$encontradoAnteriormente = false;
 			foreach ($todosCodigos as $index => $codigo) {
 				if (
 					$codigo['codigo_producto'] === $codigoProducto &&
@@ -522,7 +608,7 @@ switch ($_GET["op"]) {
 
 			if ($encontradoAnteriormente) {
 				$errores[] = 7;
-				$mensajeErrores[] = "El código del producto ya fue registrado con el idlocal previamente en esta carga.";
+				$mensajeErrores[] = "El código del producto ya fue registrado con el idlocal previamente en esta carga, no debe repetirse.";
 			}
 		}
 
@@ -542,17 +628,52 @@ switch ($_GET["op"]) {
 			}
 		}
 
+		// Validación del índice 10 (Precio de venta menor que precio de compra)
+		if ($fila['precio_venta'] < $fila['precio_compra']) {
+			$errores[] = 10; // Índice de precio venta
+			$mensajeErrores[] = "El precio de venta no puede ser menor que el precio de compra.";
+			$errores[] = 11; // Índice de precio compra
+			$mensajeErrores[] = "El precio de compra no puede ser mayor que el precio de venta.";
+		}
+
+		// Validación del índice 12 (Ganancia negativa)
+		$ganancia = $fila['precio_venta'] - $fila['precio_compra'];
+		if ($ganancia < 0) {
+			$errores[] = 12; // Índice de ganancia
+			$mensajeErrores[] = "La ganancia no puede ser negativa.";
+		}
+
 		// Validación del índice 15 (Código de barra)
-		if (!empty($fila['codigo_barra'])) {
-			if (!is_numeric($fila['codigo_barra'])) {
+		$codigoBarra = $fila['codigo_barra'];
+
+		if (!empty($codigoBarra)) {
+			if (!is_numeric($codigoBarra)) {
 				$errores[] = 15;
 				$mensajeErrores[] = "El código de barra debe ser numérico.";
-			} elseif (strlen($fila['codigo_barra']) > 13) {
+			} elseif (strlen($codigoBarra) > 13) {
 				$errores[] = 15;
 				$mensajeErrores[] = "El código de barra no puede superar los 13 dígitos.";
-			} elseif ($carga_masiva->verificarCodigoBarraExiste($fila['codigo_barra'])) {
-				$errores[] = 15;
-				$mensajeErrores[] = "El código de barra ya existe.";
+			} else {
+				$encontradoAnteriormente = false;
+
+				// Verificar si ya existe en la base de datos
+				if ($carga_masiva->verificarCodigoBarraExiste($codigoBarra)) {
+					$errores[] = 15;
+					$mensajeErrores[] = "El código de barra ya existe en la base de datos.";
+				}
+
+				// Verificar si ya existe en las filas anteriores
+				foreach ($todosCodigos as $index => $codigo) {
+					if ($codigo['codigo_barra'] === $codigoBarra && $index < $filaIndex) {
+						$encontradoAnteriormente = true;
+						break;
+					}
+				}
+
+				if ($encontradoAnteriormente) {
+					$errores[] = 15;
+					$mensajeErrores[] = "El código de barra ya fue registrado previamente en esta carga, no debe repetirse.";
+				}
 			}
 		}
 
@@ -611,8 +732,11 @@ switch ($_GET["op"]) {
 			$codigo_producto = $fila['codigo_producto'];
 			$codigo_barra = isset($fila['codigo_barra']) ? $fila['codigo_barra'] : "";
 
-			// Asignar la imagen por defecto
-			$imagen = $imagenPorDefecto;
+			// Formatear el código de producto
+			preg_match('/^(.*[A-Za-z])(.*)$/', $codigo_producto, $partes);
+			$letras = isset($partes[1]) ? $partes[1] : '';
+			$numeros = isset($partes[2]) ? str_pad($partes[2], 5, '0', STR_PAD_LEFT) : '00000';
+			$codigo_producto = $letras . $numeros;
 
 			// Validaciones previas al guardado
 			if ($carga_masiva->verificarCodigoProductoExiste($codigo_producto, $idlocal)) {
@@ -630,6 +754,9 @@ switch ($_GET["op"]) {
 				];
 				continue;
 			}
+
+			// Asignar la imagen por defecto
+			$imagen = $imagenPorDefecto;
 
 			// Verificar si se envió una imagen y procesarla
 			if (!empty($fila['imagen']) && strpos($fila['imagen'], 'data:image') === 0) {

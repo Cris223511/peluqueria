@@ -427,6 +427,51 @@ if (!isset($_SESSION["nombre"])) {
         width: 90px;
         height: 30px;
       }
+
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+      }
+
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 20px;
+      }
+
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+
+      input:checked+.slider {
+        background-color: #4caf50;
+      }
+
+      input:checked+.slider:before {
+        transform: translateX(15px);
+      }
     </style>
 
     <!--Contenido-->
@@ -494,7 +539,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total V.</th>
+                      <th>Monto Pagado</th>
+                      <th>Total venta</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
@@ -510,7 +556,8 @@ if (!isset($_SESSION["nombre"])) {
                       <th>Caja</th>
                       <th>Documento</th>
                       <th>Número Ticket</th>
-                      <th>Total V.</th>
+                      <th>Monto Pagado</th>
+                      <th>Total venta</th>
                       <th>Moneda</th>
                       <th>Agregado por</th>
                       <th>Fecha y hora</th>
@@ -932,7 +979,7 @@ if (!isset($_SESSION["nombre"])) {
             <form name="formulario7" id="formulario7" method="POST">
               <div class="col-lg-4 col-md-12 col-sm-12">
                 <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; padding: 0; font-weight: bold;">DETALLE DE PRODUCTOS (Items: <span id="totalItems"></span>)</h4>
-                <div id="tablaPrecuenta" class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 0; padding-top: 0px; background-color: white; max-height: 290px; overflow: auto; margin-bottom: 15px;">
+                <div id="tablaPrecuenta" class="col-lg-12 col-md-12 col-sm-12 table-responsive" style="padding: 0; padding-top: 0px; background-color: white; max-height: 277px; height: max-content; overflow: auto; margin-bottom: 15px;">
                   <table id="detallesProductosPrecuenta" class="table w-100" style="width: 100% !important; margin-bottom: 0;">
                     <thead>
                       <th style="text-align: start !important;">CÓDIGO</th>
@@ -947,6 +994,14 @@ if (!isset($_SESSION["nombre"])) {
                     <tbody>
                     </tbody>
                   </table>
+                </div>
+                <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; margin-top: 10px; padding: 0; font-weight: bold;">¿Pagar en cuotas?</h4>
+                <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0; margin: 0; margin-bottom: 10px; display: flex; flex-wrap: nowrap; gap: 8px; align-items: center;">
+                  <label class="switch" style="display: flex; align-items: center;">
+                    <input type="checkbox" id="pagarCuotasToggle">
+                    <span class="slider"></span>
+                  </label>
+                  <input type="number" class="form-control" name="cantidad_cuotas" id="cantidadCuotas" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" maxlength="4" placeholder="Cantidad de cuotas" disabled>
                 </div>
               </div>
               <div class="col-lg-4 col-md-6 col-sm-6">
@@ -972,7 +1027,7 @@ if (!isset($_SESSION["nombre"])) {
                   <h4 class="modal-title infotitulo totalFinal1" style="margin: 0; padding: 0; margin-right: 20px; font-weight: bold;"></h4>
                   <h4 class="modal-title" style="margin: 0; padding: 0; font-weight: bold;">TIPO DE MONEDA: <?php echo ($_SESSION["moneda"] == "soles") ? "SOLES." : "DÓLARES."; ?></h4>
                 </div>
-                <div id="montoMetodoPago" style="max-height: 204px; overflow: auto;">
+                <div id="montoMetodoPago" style="max-height: 224px; overflow: auto;">
                 </div>
                 <div style="margin-bottom: 10px; display: flex; justify-content: start; flex-wrap: wrap; align-items: center; gap: 5px;">
                   <h4 class="modal-title infotitulo" style="margin: 0; margin-bottom: 10px; margin-top: 10px; padding: 0; font-weight: bold;">VUELTOS</h4>
@@ -1376,6 +1431,67 @@ if (!isset($_SESSION["nombre"])) {
       </div>
     </div>
     <!-- Fin modal 12 -->
+
+    <!-- Modal 13 -->
+    <div class="modal fade" id="myModal13" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog smallModal" style="width: 50%; max-height: 95vh; margin: 0 !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); overflow-x: auto;">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: #f2d150 !important; border-bottom: 2px solid #C68516 !important;">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title infotitulo" style="text-align: center; font-weight: bold;">PAGO POR CUOTAS DE LA VENTA N° <span id="num_comprobante_final4"></span></h4>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 15px; background-color: white; overflow: auto; font-size: 16px; padding-bottom: 0px; padding-top: 0px;">
+                <div style="display: flex; gap: 5px; flex-direction: column;">
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">CUOTA:</div>
+                    <div class="nowrap-cell" id="numero_cuota"></div>
+                  </div>
+                  <hr style="margin: 5px 0;">
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO TOTAL:</div>
+                    <div class="nowrap-cell" id="total_venta2"></div>
+                  </div>
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">MONTO PAGADO:</div>
+                    <div class="nowrap-cell" id="monto_pagado"></div>
+                  </div>
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">RESIDUO:<a href="#" data-toggle="popover" data-placement="right" title="<strong>Residuo</strong>" data-html="true" data-content="Es la cantidad que te faltaría pagar en la(s) siguiente(s) cuota(s) para completar el <strong>monto total</strong>." style="color: #002a8e; font-size: 18px;">&nbsp;<i class="fa fa-question-circle"></i></a></div>
+                    <div class="nowrap-cell" id="residuo"></div>
+                  </div>
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">MONEDA:</div>
+                    <div class="nowrap-cell" id="moneda2"></div>
+                  </div>
+                  <div style="display: flex; justify-content: start;">
+                    <div style="width: 200px; min-width: 200px; font-weight: bold;">ESTADO:</div>
+                    <div class="nowrap-cell" id="estado" style="margin-top: 5px;"></div>
+                  </div>
+                  <hr style="margin: 5px 0;">
+                  <div class="col-lg-12 col-md-12 col-sm-12" style="padding: 0px;">
+                    <div class="form-group" style="margin: 0;">
+                      <label for="monto_cuota">Monto de la Cuota:</label>
+                      <input type="number" class="form-control" id="monto_cuota" placeholder="Ingrese el monto de la cuota" oninput="actualizarResiduo()">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer" style="background-color: #f2d150 !important; border-top: 2px solid #C68516 !important;">
+            <button class="btn btn-bcp" id="btnRegistrarPago" type="button">
+              <i class="fa fa-save"></i> Registrar Pago
+            </button>
+            <button class="btn btn-warning" type="button" data-dismiss="modal">
+              <i class="fa fa-arrow-circle-left"></i> Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Fin Modal 13 -->
 
     <!-- Form categoría -->
     <form name="formularioCategoria" id="formularioCategoria" method="POST" style="display: none;">

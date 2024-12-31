@@ -108,6 +108,20 @@
     </script>
 
     <script>
+      $(document).on('hidden.bs.modal', '.modal', function() {
+        // Buscar el botón que abrió este modal
+        const triggeringElement = $('[data-target="#' + $(this).attr('id') + '"], [href="#' + $(this).attr('id') + '"]');
+
+        // Si existe, mover el foco al botón; de lo contrario, moverlo al body
+        if (triggeringElement.length > 0) {
+          triggeringElement.focus();
+        } else {
+          $('body').focus();
+        }
+      });
+    </script>
+
+    <script>
       function formatHora(hora) {
         let partes = hora.split(':');
         let h = parseInt(partes[0], 10);

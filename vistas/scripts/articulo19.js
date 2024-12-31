@@ -540,13 +540,11 @@ function mostrar(idarticulo) {
 		$('#idmedida').selectpicker('refresh');
 		$("#codigo_barra").val(data.codigo);
 
-		const partes = data.codigo_producto.match(/([a-zA-Z]+)(\d+)/) || ["", "", ""];
+		const { letras, numeros } = separarCodigoProducto(data.codigo_producto);
 
-		const letras = partes[1];
-		const numeros = partes[2];
-
-		$("#cod_part_1").val(letras);
-		$("#cod_part_2").val(numeros);
+		// Actualizar los valores en los campos
+		$("#cod_part_1").val(letras); // Alfanuméricos hasta la última letra
+		$("#cod_part_2").val(numeros); // Números restantes
 
 		$("#nombre").val(data.nombre);
 		$("#stock").val(data.stock);
@@ -571,6 +569,16 @@ function mostrar(idarticulo) {
 		generarbarcode(0);
 		actualizarRUC();
 	})
+}
+
+function separarCodigoProducto(codigoProducto) {
+	// Regex para capturar hasta la última letra como alfanuméricos y lo demás como números
+	const partes = codigoProducto.match(/^(.*[A-Za-z])(\d*)$/) || ["", "", ""];
+
+	const letras = partes[1] || ""; // Todo hasta la última letra
+	const numeros = partes[2] || ""; // Números después de la última letra
+
+	return { letras, numeros };
 }
 
 function limpiarModalComision() {
