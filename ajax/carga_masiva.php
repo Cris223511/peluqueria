@@ -262,7 +262,11 @@ switch ($_GET["op"]) {
 				}
 
 				$data[] = array(
-					"0" => '<button type="button" class="btn btn-bcp" onclick="validarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;"><i style="margin-left: -4px" class="fa fa-eye"></i></button>',
+					"0" => '
+							<div style="display: flex; gap: 5px; flex-wrap: nowrap;">
+								<button type="button" class="btn btn-bcp" onclick="validarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;"><i style="margin-left: -4px" class="fa fa-eye"></i></button>
+								<button type="button" class="btn btn-danger" onclick="eliminarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;"><i style="margin-left: -3px" class="fa fa-trash"></i></button>
+							</div>',
 					"1" => '<a href="../files/articulos/product.jpg" class="galleria-lightbox" style="z-index: 10000 !important;">
 								<img src="../files/articulos/product.jpg" height="50px" width="50px" class="img-fluid">
 							</a>',

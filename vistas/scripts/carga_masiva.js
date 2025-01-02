@@ -438,13 +438,19 @@ function limpiarErroresFila(fila) {
 
 // Función para mostrar u ocultar el botón de ver errores
 function mostrarBotonErrores(fila, mostrar) {
-	let botonErrores = fila.find('.btn-info'); // Buscar si ya existe el botón de ver errores
+	const contenedorBotones = fila.find('td:eq(0) > div'); // Seleccionar el div que contiene los botones
+	let botonErrores = contenedorBotones.find('.btn-info'); // Buscar si ya existe el botón de ver errores
 
 	if (mostrar) {
 		// Si debe mostrar el botón y no existe, agregarlo
 		if (botonErrores.length === 0) {
-			const nuevoBoton = `<a data-toggle="modal" href="#myModal2"><button type="button" class="btn btn-info" onclick="verErrores(this)" style="width: 30px; height: 30px; border-radius: 50%; margin-left: 5px;"><i style="margin-left: -3px" class="fa fa-info-circle"></i></button></a>`;
-			fila.find('td:eq(0)').append(nuevoBoton); // Agregar el botón en la primera columna
+			const nuevoBoton = `
+                <a data-toggle="modal" href="#myModal2">
+                    <button type="button" class="btn btn-info" onclick="verErrores(this)" style="width: 30px; height: 30px; border-radius: 50%;">
+                        <i style="margin-left: -3px" class="fa fa-info-circle"></i>
+                    </button>
+                </a>`;
+			contenedorBotones.append(nuevoBoton); // Agregar el botón dentro del div
 		}
 	} else {
 		// Si no debe mostrar el botón y existe, eliminarlo
@@ -628,11 +634,16 @@ function restablecerEstadoBotones(tabla) {
 		const fila = this.node();
 		const columnaEstado = $(fila).find('td:eq(0)'); // Primera columna (Estado)
 
-		// Reemplazar el contenido de la columna por el botón inicial
+		// Reemplazar el contenido de la columna por los botones iniciales
 		columnaEstado.html(`
-            <button type="button" class="btn btn-bcp" onclick="validarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;">
-                <i style="margin-left: -4px" class="fa fa-eye"></i>
-            </button>
+            <div style="display: flex; gap: 5px; flex-wrap: nowrap;">
+                <button type="button" class="btn btn-bcp" onclick="validarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <i style="margin-left: -4px" class="fa fa-eye"></i>
+                </button>
+                <button type="button" class="btn btn-danger" onclick="eliminarFila(this)" style="width: 30px; height: 30px; border-radius: 50%;">
+                    <i style="margin-left: -3px" class="fa fa-trash"></i>
+                </button>
+            </div>
         `);
 	});
 }
@@ -667,6 +678,36 @@ function formatearCodigoProducto(input) {
 
 	// Actualizar el valor del input
 	input.value = codigoFormateado;
+}
+
+/* ===================  ELIMINAR LA FILA CORRESPONDIENTE DE LA TABLA ====================== */
+
+function eliminarFila(boton) {
+	bootbox.confirm({
+		message: "¿Estás seguro de que deseas eliminar esta fila?",
+		buttons: {
+			confirm: {
+				label: 'Eliminar',
+				className: 'btn-bcp'
+			},
+			cancel: {
+				label: 'Cancelar',
+				className: 'btn-warning'
+			}
+		},
+		callback: function (result) {
+			if (result) {
+				// Obtener la referencia de la fila desde el botón
+				const tabla = $('#tbllistado').DataTable();
+				const fila = $(boton).closest('tr'); // Fila correspondiente al botón
+				const rowIndex = tabla.row(fila).index(); // Índice en el DataTable
+
+				// Eliminar la fila del DataTable
+				tabla.row(rowIndex).remove().draw(); // Actualizar el DataTable
+				bootbox.alert("Fila eliminada correctamente.");
+			}
+		}
+	});
 }
 
 // Ejecutar init al cargar la página
